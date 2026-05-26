@@ -1,0 +1,12 @@
+epoll_pwait raw syscall sigsetsize matrix
+sizeof(sigset_t)=128
+columns: size | ret_nonnull errno_nonnull | ret_null errno_null
+   0 |          -1            22 (Invalid argument) |        0         0 (OK)
+   1 |          -1            22 (Invalid argument) |        0         0 (OK)
+   7 |          -1            22 (Invalid argument) |        0         0 (OK)
+   8 |           0             0 (OK) |        0         0 (OK)
+   9 |          -1            22 (Invalid argument) |        0         0 (OK)
+  16 |          -1            22 (Invalid argument) |        0         0 (OK)
+  17 |          -1            22 (Invalid argument) |        0         0 (OK)
+  32 |          -1            22 (Invalid argument) |        0         0 (OK)
+ 128 |          -1            22 (Invalid argument) |        0         0 (OK)

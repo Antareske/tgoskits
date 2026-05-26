@@ -1,0 +1,859 @@
+=== compile musl test-epoll-pwait-sigsetsize rc=0 ===
+
+=== compile gcc test-epoll-pwait-sigsetsize rc=0 ===
+
+=== run musl test-epoll-pwait-sigsetsize rc=1 ===
+================================================
+  TEST: epoll_pwait: sigsetsize 兼容 musl/glibc
+  FILE: /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c
+================================================
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:28 | epoll_create1 ok
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:31 | pipe created
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:36 | epoll_ctl ADD (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:43 | NULL sigmask, size=0 accepted (no events, immediate)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:50 | NULL sigmask, size=16 accepted
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:58 | sigmask + size=8 (glibc) accepted
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:66 | sigmask + size=16 (musl) accepted | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:74 | sigmask + size=4 rejected with EINVAL
+------------------------------------------------
+  DONE: 7 pass, 1 fail
+================================================
+
+
+=== run gcc test-epoll-pwait-sigsetsize rc=1 ===
+================================================
+  TEST: epoll_pwait: sigsetsize 兼容 musl/glibc
+  FILE: /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c
+================================================
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:28 | epoll_create1 ok
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:31 | pipe created
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:36 | epoll_ctl ADD (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:43 | NULL sigmask, size=0 accepted (no events, immediate)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:50 | NULL sigmask, size=16 accepted
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:58 | sigmask + size=8 (glibc) accepted
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:66 | sigmask + size=16 (musl) accepted | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait-sigsetsize/c/src/main.c:74 | sigmask + size=4 rejected with EINVAL
+------------------------------------------------
+  DONE: 7 pass, 1 fail
+================================================
+
+
+=== compile musl test-epoll-pwait2 rc=0 ===
+
+=== compile gcc test-epoll-pwait2 rc=0 ===
+
+=== run musl test-epoll-pwait2 rc=1 ===
+================================================
+  TEST: epoll_pwait2 Linux semantics
+  FILE: /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c
+================================================
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:35 | invalid epfd returns EBADF
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:39 | epoll_create1 ok
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:45 | maxevents == 0 returns EINVAL
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:49 | maxevents < 0 returns EINVAL
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:59 | epoll_create1 ok (timeout tests)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:66 | pipe created
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:76 | epoll_ctl ADD read end (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:81 | zero timeout returns 0 when no fd is ready (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:84 | write one byte to pipe (ret=1)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:86 | NULL timeout waits and returns ready event
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:98 | epoll_create1 ok (sigsetsize tests)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:108 | NULL sigmask ignores sigsetsize and times out (ret=0)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:111 | sigmask + sizeof(sigset_t) accepted | expected=0 got=-1 | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:115 | sigmask with too small sigsetsize returns EINVAL
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:125 | epoll_create1 ok (EFAULT test)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:132 | pipe created (EFAULT test)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:142 | epoll_ctl ADD read end (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:143 | write one byte to make event ready (ret=1)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:147 | invalid events pointer returns EFAULT
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:158 | epoll_create1 ok (timeout duration)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:167 | clock_gettime start ok
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:170 | no event with 100ms timeout returns 0
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:172 | clock_gettime end ok
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:176 | timeout waits roughly expected duration (>=60ms)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:186 | epoll_create1 ok (maxevents boundary)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:194 | pipe1 created
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:195 | pipe2 created
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:211 | add pipe1 read end (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:212 | add pipe2 read end (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:213 | write pipe1 (ret=1)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:214 | write pipe2 (ret=1)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:218 | maxevents=1 returns exactly one ready event
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:222 | large maxevents can fetch remaining ready events
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:238 | install SIGUSR1 handler
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:241 | epoll_create1 ok (signal tests)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:251 | fork sender for masked wait
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:263 | masked SIGUSR1 does not interrupt epoll_pwait2 timeout | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:267 | fork sender for unmasked wait
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:276 | unmasked signal interrupts with EINTR
+------------------------------------------------
+  DONE: 37 pass, 2 fail
+================================================
+
+
+=== run gcc test-epoll-pwait2 rc=1 ===
+================================================
+  TEST: epoll_pwait2 Linux semantics
+  FILE: /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c
+================================================
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:35 | invalid epfd returns EBADF
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:39 | epoll_create1 ok
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:45 | maxevents == 0 returns EINVAL
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:49 | maxevents < 0 returns EINVAL
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:59 | epoll_create1 ok (timeout tests)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:66 | pipe created
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:76 | epoll_ctl ADD read end (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:81 | zero timeout returns 0 when no fd is ready (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:84 | write one byte to pipe (ret=1)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:86 | NULL timeout waits and returns ready event
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:98 | epoll_create1 ok (sigsetsize tests)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:108 | NULL sigmask ignores sigsetsize and times out (ret=0)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:111 | sigmask + sizeof(sigset_t) accepted | expected=0 got=-1 | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:115 | sigmask with too small sigsetsize returns EINVAL
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:125 | epoll_create1 ok (EFAULT test)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:132 | pipe created (EFAULT test)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:142 | epoll_ctl ADD read end (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:143 | write one byte to make event ready (ret=1)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:147 | invalid events pointer returns EFAULT
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:158 | epoll_create1 ok (timeout duration)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:167 | clock_gettime start ok
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:170 | no event with 100ms timeout returns 0
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:172 | clock_gettime end ok
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:176 | timeout waits roughly expected duration (>=60ms)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:186 | epoll_create1 ok (maxevents boundary)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:194 | pipe1 created
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:195 | pipe2 created
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:211 | add pipe1 read end (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:212 | add pipe2 read end (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:213 | write pipe1 (ret=1)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:214 | write pipe2 (ret=1)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:218 | maxevents=1 returns exactly one ready event
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:222 | large maxevents can fetch remaining ready events
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:238 | install SIGUSR1 handler
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:241 | epoll_create1 ok (signal tests)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:251 | fork sender for masked wait
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:263 | masked SIGUSR1 does not interrupt epoll_pwait2 timeout | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:267 | fork sender for unmasked wait
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-epoll-pwait2/c/src/main.c:276 | unmasked signal interrupts with EINTR
+------------------------------------------------
+  DONE: 37 pass, 2 fail
+================================================
+
+
+=== compile musl test-pselect-ppoll rc=0 ===
+
+=== compile gcc test-pselect-ppoll rc=0 ===
+
+=== run musl test-pselect-ppoll rc=1 ===
+================================================
+  TEST: pselect/ppoll semantics
+  FILE: /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c
+================================================
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:47 | pselect empty fds with timeout returns 0 | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:52 | pipe created (ret=0)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:67 | pselect empty pipe returns 0 (timeout) | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:70 | write 1 byte to pipe (ret=1)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:79 | pselect pipe with data returns 1 | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:80 | FD_ISSET is true for read fd
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:95 | ppoll empty fds with timeout returns 0 | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:100 | pipe created (ret=0)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:115 | ppoll empty pipe returns 0 (timeout) | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:118 | write 1 byte to pipe (ret=1)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:122 | ppoll pipe with data returns 1 | errno=22 (Invalid argument)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:123 | POLLIN is set in revents | errno=22 (Invalid argument)
+------------------------------------------------
+  DONE: 5 pass, 7 fail
+================================================
+
+
+=== run gcc test-pselect-ppoll rc=1 ===
+================================================
+  TEST: pselect/ppoll semantics
+  FILE: /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c
+================================================
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:47 | pselect empty fds with timeout returns 0 | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:52 | pipe created (ret=0)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:67 | pselect empty pipe returns 0 (timeout) | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:70 | write 1 byte to pipe (ret=1)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:79 | pselect pipe with data returns 1 | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:80 | FD_ISSET is true for read fd
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:95 | ppoll empty fds with timeout returns 0 | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:100 | pipe created (ret=0)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:115 | ppoll empty pipe returns 0 (timeout) | errno=22 (Invalid argument)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:118 | write 1 byte to pipe (ret=1)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:122 | ppoll pipe with data returns 1 | errno=22 (Invalid argument)
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-pselect-ppoll/c/src/main.c:123 | POLLIN is set in revents | errno=22 (Invalid argument)
+------------------------------------------------
+  DONE: 5 pass, 7 fail
+================================================
+
+
+=== compile musl test-rt_sigpending rc=0 ===
+
+=== compile gcc test-rt_sigpending rc=0 ===
+
+=== run musl test-rt_sigpending rc=0 ===
+================================================
+  TEST: rt_sigpending syscall semantics
+  FILE: /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c
+================================================
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:106 | block SIGUSR1 and SIGUSR2 (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:88 | install SIGUSR1 handler (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:89 | install SIGUSR2 handler (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:111 | rt_sigpending initially succeeds (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:79 | initially no signal is pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:115 | send blocked SIGUSR1 (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:117 | SIGUSR1 handler is deferred while blocked
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:120 | rt_sigpending after SIGUSR1 succeeds (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:53 | SIGUSR1 is pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:53 | SIGUSR2 is not pending yet
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:79 | only SIGUSR1 is pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:126 | send blocked SIGUSR2 (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:128 | SIGUSR2 handler is also deferred while blocked
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:131 | rt_sigpending after SIGUSR1 and SIGUSR2 succeeds (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:53 | SIGUSR1 remains pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:53 | SIGUSR2 is pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:79 | only SIGUSR1 and SIGUSR2 are pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:137 | restore original signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:140 | unblocking delivers one handler call for each pending signal
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:143 | restore SIGUSR1 handler (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:144 | restore SIGUSR2 handler (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:149 | rt_sigpending invalid sigset pointer returns EFAULT
+------------------------------------------------
+  DONE: 22 pass, 0 fail
+================================================
+
+
+=== run gcc test-rt_sigpending rc=0 ===
+================================================
+  TEST: rt_sigpending syscall semantics
+  FILE: /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c
+================================================
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:106 | block SIGUSR1 and SIGUSR2 (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:88 | install SIGUSR1 handler (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:89 | install SIGUSR2 handler (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:111 | rt_sigpending initially succeeds (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:79 | initially no signal is pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:115 | send blocked SIGUSR1 (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:117 | SIGUSR1 handler is deferred while blocked
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:120 | rt_sigpending after SIGUSR1 succeeds (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:53 | SIGUSR1 is pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:53 | SIGUSR2 is not pending yet
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:79 | only SIGUSR1 is pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:126 | send blocked SIGUSR2 (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:128 | SIGUSR2 handler is also deferred while blocked
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:131 | rt_sigpending after SIGUSR1 and SIGUSR2 succeeds (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:53 | SIGUSR1 remains pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:53 | SIGUSR2 is pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:79 | only SIGUSR1 and SIGUSR2 are pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:137 | restore original signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:140 | unblocking delivers one handler call for each pending signal
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:143 | restore SIGUSR1 handler (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:144 | restore SIGUSR2 handler (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigpending/c/src/main.c:149 | rt_sigpending invalid sigset pointer returns EFAULT
+------------------------------------------------
+  DONE: 22 pass, 0 fail
+================================================
+
+
+=== compile musl test-rt_sigprocmask rc=0 ===
+
+=== compile gcc test-rt_sigprocmask rc=0 ===
+
+=== run musl test-rt_sigprocmask rc=0 ===
+================================================
+  TEST: rt_sigprocmask syscall semantics
+  FILE: /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c
+================================================
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:64 | install signal handler (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:100 | SIG_BLOCK adds SIGUSR1 to the mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:102 | SIG_BLOCK oldset reports SIGUSR1 was unblocked
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:80 | query current signal mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:104 | SIGUSR1 is blocked after SIG_BLOCK
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:107 | send SIGUSR1 while blocked (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:109 | blocked SIGUSR1 is not delivered immediately
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:112 | query pending signal set (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:113 | blocked SIGUSR1 becomes pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:116 | SIG_UNBLOCK removes SIGUSR1 from the mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:118 | SIG_UNBLOCK oldset reports SIGUSR1 was blocked
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:121 | pending SIGUSR1 is delivered after unblock
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:137 | block SIGUSR1 before SIG_SETMASK (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:143 | SIG_SETMASK replaces the current mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:145 | SIG_SETMASK oldset contains the previous SIGUSR1 mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:147 | SIG_SETMASK oldset does not contain the new SIGUSR2 mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:80 | query current signal mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:149 | SIG_SETMASK removed SIGUSR1
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:80 | query current signal mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:150 | SIG_SETMASK installed SIGUSR2
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:164 | block SIGUSR2 before NULL set query (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:168 | NULL set query ignores how (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:170 | NULL set query returns current blocked signals
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:80 | query current signal mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:172 | NULL set query leaves the current mask unchanged
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:185 | invalid how with non-NULL set returns EINVAL
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:188 | invalid set pointer returns EFAULT
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:192 | invalid oldset pointer returns EFAULT
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:196 | too-small sigsetsize returns EINVAL
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+------------------------------------------------
+  DONE: 37 pass, 0 fail
+================================================
+
+
+=== run gcc test-rt_sigprocmask rc=0 ===
+================================================
+  TEST: rt_sigprocmask syscall semantics
+  FILE: /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c
+================================================
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:64 | install signal handler (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:100 | SIG_BLOCK adds SIGUSR1 to the mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:102 | SIG_BLOCK oldset reports SIGUSR1 was unblocked
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:80 | query current signal mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:104 | SIGUSR1 is blocked after SIG_BLOCK
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:107 | send SIGUSR1 while blocked (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:109 | blocked SIGUSR1 is not delivered immediately
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:112 | query pending signal set (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:113 | blocked SIGUSR1 becomes pending
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:116 | SIG_UNBLOCK removes SIGUSR1 from the mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:118 | SIG_UNBLOCK oldset reports SIGUSR1 was blocked
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:121 | pending SIGUSR1 is delivered after unblock
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:137 | block SIGUSR1 before SIG_SETMASK (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:143 | SIG_SETMASK replaces the current mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:145 | SIG_SETMASK oldset contains the previous SIGUSR1 mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:147 | SIG_SETMASK oldset does not contain the new SIGUSR2 mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:80 | query current signal mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:149 | SIG_SETMASK removed SIGUSR1
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:80 | query current signal mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:150 | SIG_SETMASK installed SIGUSR2
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:164 | block SIGUSR2 before NULL set query (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:168 | NULL set query ignores how (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:170 | NULL set query returns current blocked signals
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:80 | query current signal mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:172 | NULL set query leaves the current mask unchanged
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:185 | invalid how with non-NULL set returns EINVAL
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:188 | invalid set pointer returns EFAULT
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:192 | invalid oldset pointer returns EFAULT
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:196 | too-small sigsetsize returns EINVAL
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-rt_sigprocmask/c/src/main.c:71 | clear signal mask (ret=0)
+------------------------------------------------
+  DONE: 37 pass, 0 fail
+================================================
+
+
+=== compile musl test-select-poll-family rc=0 ===
+
+=== compile gcc test-select-poll-family rc=0 ===
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/ppoll_no_sigmask.c: In function ‘sigusr1_handler’:
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/ppoll_no_sigmask.c:19:9: warning: ignoring return value of ‘write’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+   19 |         write(sig_pipe[1], &c, 1);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/ppoll_sigmask_block.c: In function ‘run_ppoll_sigmask_block’:
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/ppoll_sigmask_block.c:38:9: warning: ignoring return value of ‘write’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+   38 |         write(fds[1], &c, 1);
+      |         ^~~~~~~~~~~~~~~~~~~~
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/ppoll_sigmask_restore.c: In function ‘run_ppoll_sigmask_restore’:
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/ppoll_sigmask_restore.c:31:9: warning: ignoring return value of ‘write’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+   31 |         write(fds[1], &c, 1);
+      |         ^~~~~~~~~~~~~~~~~~~~
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/pselect_no_sigmask.c: In function ‘sigusr1_handler’:
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/pselect_no_sigmask.c:19:9: warning: ignoring return value of ‘write’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+   19 |         write(sig_pipe[1], &c, 1);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/pselect_sigmask_block.c: In function ‘run_pselect_sigmask_block’:
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/pselect_sigmask_block.c:38:9: warning: ignoring return value of ‘write’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+   38 |         write(fds[1], &c, 1);
+      |         ^~~~~~~~~~~~~~~~~~~~
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/pselect_sigmask_restore.c: In function ‘run_pselect_sigmask_restore’:
+/workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-select-poll-family/c/src/pselect_sigmask_restore.c:31:9: warning: ignoring return value of ‘write’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+   31 |         write(fds[1], &c, 1);
+      |         ^~~~~~~~~~~~~~~~~~~~
+
+=== run musl test-select-poll-family rc=0 ===
+================================================
+  TEST: select/poll/pselect6/ppoll deep suite
+  43 modules, ~300+ checkpoints
+================================================
+
+=== Phase 1: select basics ===
+
+--- module: select_zero_timeout ---
+  select_zero_timeout: 5 pass, 0 fail
+  [PASS] module: select_zero_timeout
+
+--- module: select_null_timeout ---
+  select_null_timeout: 4 pass, 0 fail
+  [PASS] module: select_null_timeout
+
+--- module: select_empty_all ---
+  select_empty_all: 3 pass, 0 fail
+  [PASS] module: select_empty_all
+
+--- module: select_read_pipe ---
+  select_read_pipe: 6 pass, 0 fail
+  [PASS] module: select_read_pipe
+
+--- module: select_write_pipe ---
+  select_write_pipe: 5 pass, 0 fail
+  [PASS] module: select_write_pipe
+
+--- module: select_rw_simultaneous ---
+  select_rw_simultaneous: 4 pass, 0 fail
+  [PASS] module: select_rw_simultaneous
+
+--- module: select_exceptfds ---
+  select_exceptfds: 5 pass, 0 fail
+  [PASS] module: select_exceptfds
+
+--- module: select_multiple_fds ---
+  select_multiple_fds: 11 pass, 0 fail
+  [PASS] module: select_multiple_fds
+
+--- module: select_fd_set_cleared ---
+  select_fd_set_cleared: 5 pass, 0 fail
+  [PASS] module: select_fd_set_cleared
+
+--- module: select_must_reinit ---
+  select_must_reinit: 4 pass, 0 fail
+  [PASS] module: select_must_reinit
+
+--- module: select_nfds_semantics ---
+  select_nfds_semantics: 4 pass, 0 fail
+  [PASS] module: select_nfds_semantics
+
+--- module: select_regular_file ---
+  select_regular_file: 4 pass, 0 fail
+  [PASS] module: select_regular_file
+
+--- module: select_devnull ---
+  select_devnull: 4 pass, 0 fail
+  [PASS] module: select_devnull
+
+--- module: select_closed_fd ---
+  select_closed_fd: 4 pass, 0 fail
+  [PASS] module: select_closed_fd
+
+--- module: select_bad_nfds ---
+  select_bad_nfds: 3 pass, 0 fail
+  [PASS] module: select_bad_nfds
+
+=== Phase 2: poll basics ===
+
+--- module: poll_timeout_zero ---
+  poll_timeout_zero: 5 pass, 0 fail
+  [PASS] module: poll_timeout_zero
+
+--- module: poll_timeout_negative ---
+  poll_timeout_negative: 3 pass, 0 fail
+  [PASS] module: poll_timeout_negative
+
+--- module: poll_null_fds ---
+  poll_null_fds: 4 pass, 0 fail
+  [PASS] module: poll_null_fds
+
+--- module: poll_pipe_read ---
+  poll_pipe_read: 7 pass, 0 fail
+  [PASS] module: poll_pipe_read
+
+--- module: poll_pipe_write ---
+  poll_pipe_write: 5 pass, 0 fail
+  [PASS] module: poll_pipe_write
+
+--- module: poll_multiple_events ---
+  poll_multiple_events: 9 pass, 0 fail
+  [PASS] module: poll_multiple_events
+
+--- module: poll_negative_fd ---
+  poll_negative_fd: 8 pass, 0 fail
+  [PASS] module: poll_negative_fd
+
+--- module: poll_events_zero ---
+  poll_events_zero: 6 pass, 0 fail
+  [PASS] module: poll_events_zero
+
+--- module: poll_multiple_fds ---
+  poll_multiple_fds: 11 pass, 0 fail
+  [PASS] module: poll_multiple_fds
+
+--- module: poll_regular_file ---
+  poll_regular_file: 9 pass, 0 fail
+  [PASS] module: poll_regular_file
+
+--- module: poll_closed_fd ---
+  poll_closed_fd: 5 pass, 0 fail
+  [PASS] module: poll_closed_fd
+
+--- module: poll_pipe_hup ---
+  poll_pipe_hup: 13 pass, 0 fail
+  [PASS] module: poll_pipe_hup
+
+=== Phase 3: signal interaction ===
+
+--- module: pselect_sigmask_block ---
+  pselect_sigmask_block: 4 pass, 0 fail
+  [PASS] module: pselect_sigmask_block
+
+--- module: pselect_sigmask_restore ---
+  pselect_sigmask_restore: 5 pass, 0 fail
+  [PASS] module: pselect_sigmask_restore
+
+--- module: pselect_no_sigmask ---
+  pselect_no_sigmask: 4 pass, 0 fail
+  [PASS] module: pselect_no_sigmask
+
+--- module: ppoll_sigmask_block ---
+  ppoll_sigmask_block: 4 pass, 0 fail
+  [PASS] module: ppoll_sigmask_block
+
+--- module: ppoll_sigmask_restore ---
+  ppoll_sigmask_restore: 5 pass, 0 fail
+  [PASS] module: ppoll_sigmask_restore
+
+--- module: ppoll_no_sigmask ---
+  ppoll_no_sigmask: 4 pass, 0 fail
+  [PASS] module: ppoll_no_sigmask
+
+=== Phase 4: error paths ===
+
+--- module: select_err_ebadf ---
+  select_err_ebadf: 7 pass, 0 fail
+  [PASS] module: select_err_ebadf
+
+--- module: select_err_einval ---
+  select_err_einval: 3 pass, 0 fail
+  [PASS] module: select_err_einval
+
+--- module: poll_err_einval ---
+  poll_err_einval: 2 pass, 0 fail
+  [PASS] module: poll_err_einval
+
+--- module: ppoll_err_einval ---
+  ppoll_err_einval: 4 pass, 0 fail
+  [PASS] module: ppoll_err_einval
+
+--- module: poll_err_eintr ---
+  poll_err_eintr: 6 pass, 0 fail
+  [PASS] module: poll_err_eintr
+
+=== Phase 5: matrix & stress ===
+
+--- module: poll_events_matrix ---
+  poll_events_matrix: 20 pass, 0 fail
+  [PASS] module: poll_events_matrix
+
+--- module: select_fds_bits_matrix ---
+  select_fds_bits_matrix: 20 pass, 0 fail
+  [PASS] module: select_fds_bits_matrix
+
+--- module: stress_many_fds ---
+  stress_many_fds: 54 pass, 0 fail
+  [PASS] module: stress_many_fds
+
+--- module: stress_loop ---
+  stress_loop: 6 pass, 0 fail
+  [PASS] module: stress_loop
+
+--- module: timeout_precision ---
+  timeout_precision: 4 pass, 0 fail
+  [PASS] module: timeout_precision
+
+================================================
+  SUMMARY: 43 modules passed, 0 modules failed
+================================================
+
+=== run gcc test-select-poll-family rc=0 ===
+================================================
+  TEST: select/poll/pselect6/ppoll deep suite
+  43 modules, ~300+ checkpoints
+================================================
+
+=== Phase 1: select basics ===
+
+--- module: select_zero_timeout ---
+  select_zero_timeout: 5 pass, 0 fail
+  [PASS] module: select_zero_timeout
+
+--- module: select_null_timeout ---
+  select_null_timeout: 4 pass, 0 fail
+  [PASS] module: select_null_timeout
+
+--- module: select_empty_all ---
+  select_empty_all: 3 pass, 0 fail
+  [PASS] module: select_empty_all
+
+--- module: select_read_pipe ---
+  select_read_pipe: 6 pass, 0 fail
+  [PASS] module: select_read_pipe
+
+--- module: select_write_pipe ---
+  select_write_pipe: 5 pass, 0 fail
+  [PASS] module: select_write_pipe
+
+--- module: select_rw_simultaneous ---
+  select_rw_simultaneous: 4 pass, 0 fail
+  [PASS] module: select_rw_simultaneous
+
+--- module: select_exceptfds ---
+  select_exceptfds: 5 pass, 0 fail
+  [PASS] module: select_exceptfds
+
+--- module: select_multiple_fds ---
+  select_multiple_fds: 11 pass, 0 fail
+  [PASS] module: select_multiple_fds
+
+--- module: select_fd_set_cleared ---
+  select_fd_set_cleared: 5 pass, 0 fail
+  [PASS] module: select_fd_set_cleared
+
+--- module: select_must_reinit ---
+  select_must_reinit: 4 pass, 0 fail
+  [PASS] module: select_must_reinit
+
+--- module: select_nfds_semantics ---
+  select_nfds_semantics: 4 pass, 0 fail
+  [PASS] module: select_nfds_semantics
+
+--- module: select_regular_file ---
+  select_regular_file: 4 pass, 0 fail
+  [PASS] module: select_regular_file
+
+--- module: select_devnull ---
+  select_devnull: 4 pass, 0 fail
+  [PASS] module: select_devnull
+
+--- module: select_closed_fd ---
+  select_closed_fd: 4 pass, 0 fail
+  [PASS] module: select_closed_fd
+
+--- module: select_bad_nfds ---
+  select_bad_nfds: 3 pass, 0 fail
+  [PASS] module: select_bad_nfds
+
+=== Phase 2: poll basics ===
+
+--- module: poll_timeout_zero ---
+  poll_timeout_zero: 5 pass, 0 fail
+  [PASS] module: poll_timeout_zero
+
+--- module: poll_timeout_negative ---
+  poll_timeout_negative: 3 pass, 0 fail
+  [PASS] module: poll_timeout_negative
+
+--- module: poll_null_fds ---
+  poll_null_fds: 4 pass, 0 fail
+  [PASS] module: poll_null_fds
+
+--- module: poll_pipe_read ---
+  poll_pipe_read: 7 pass, 0 fail
+  [PASS] module: poll_pipe_read
+
+--- module: poll_pipe_write ---
+  poll_pipe_write: 5 pass, 0 fail
+  [PASS] module: poll_pipe_write
+
+--- module: poll_multiple_events ---
+  poll_multiple_events: 9 pass, 0 fail
+  [PASS] module: poll_multiple_events
+
+--- module: poll_negative_fd ---
+  poll_negative_fd: 8 pass, 0 fail
+  [PASS] module: poll_negative_fd
+
+--- module: poll_events_zero ---
+  poll_events_zero: 6 pass, 0 fail
+  [PASS] module: poll_events_zero
+
+--- module: poll_multiple_fds ---
+  poll_multiple_fds: 11 pass, 0 fail
+  [PASS] module: poll_multiple_fds
+
+--- module: poll_regular_file ---
+  poll_regular_file: 9 pass, 0 fail
+  [PASS] module: poll_regular_file
+
+--- module: poll_closed_fd ---
+  poll_closed_fd: 5 pass, 0 fail
+  [PASS] module: poll_closed_fd
+
+--- module: poll_pipe_hup ---
+  poll_pipe_hup: 13 pass, 0 fail
+  [PASS] module: poll_pipe_hup
+
+=== Phase 3: signal interaction ===
+
+--- module: pselect_sigmask_block ---
+  pselect_sigmask_block: 4 pass, 0 fail
+  [PASS] module: pselect_sigmask_block
+
+--- module: pselect_sigmask_restore ---
+  pselect_sigmask_restore: 5 pass, 0 fail
+  [PASS] module: pselect_sigmask_restore
+
+--- module: pselect_no_sigmask ---
+  pselect_no_sigmask: 4 pass, 0 fail
+  [PASS] module: pselect_no_sigmask
+
+--- module: ppoll_sigmask_block ---
+  ppoll_sigmask_block: 4 pass, 0 fail
+  [PASS] module: ppoll_sigmask_block
+
+--- module: ppoll_sigmask_restore ---
+  ppoll_sigmask_restore: 5 pass, 0 fail
+  [PASS] module: ppoll_sigmask_restore
+
+--- module: ppoll_no_sigmask ---
+  ppoll_no_sigmask: 4 pass, 0 fail
+  [PASS] module: ppoll_no_sigmask
+
+=== Phase 4: error paths ===
+
+--- module: select_err_ebadf ---
+  select_err_ebadf: 7 pass, 0 fail
+  [PASS] module: select_err_ebadf
+
+--- module: select_err_einval ---
+  select_err_einval: 3 pass, 0 fail
+  [PASS] module: select_err_einval
+
+--- module: poll_err_einval ---
+  poll_err_einval: 2 pass, 0 fail
+  [PASS] module: poll_err_einval
+
+--- module: ppoll_err_einval ---
+  ppoll_err_einval: 4 pass, 0 fail
+  [PASS] module: ppoll_err_einval
+
+--- module: poll_err_eintr ---
+  poll_err_eintr: 6 pass, 0 fail
+  [PASS] module: poll_err_eintr
+
+=== Phase 5: matrix & stress ===
+
+--- module: poll_events_matrix ---
+  poll_events_matrix: 20 pass, 0 fail
+  [PASS] module: poll_events_matrix
+
+--- module: select_fds_bits_matrix ---
+  select_fds_bits_matrix: 20 pass, 0 fail
+  [PASS] module: select_fds_bits_matrix
+
+--- module: stress_many_fds ---
+  stress_many_fds: 54 pass, 0 fail
+  [PASS] module: stress_many_fds
+
+--- module: stress_loop ---
+  stress_loop: 6 pass, 0 fail
+  [PASS] module: stress_loop
+
+--- module: timeout_precision ---
+  timeout_precision: 4 pass, 0 fail
+  [PASS] module: timeout_precision
+
+================================================
+  SUMMARY: 43 modules passed, 0 modules failed
+================================================
+
+=== compile musl test-signalfd4 rc=0 ===
+
+=== compile gcc test-signalfd4 rc=0 ===
+In file included from /usr/include/features.h:502,
+                 from /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:33,
+                 from /usr/include/stdio.h:28,
+                 from /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/test_framework.h:7,
+                 from /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:20:
+In function ‘read’,
+    inlined from ‘test_buffer_size’ at /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:190:5,
+    inlined from ‘main’ at /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:335:5:
+/usr/include/x86_64-linux-gnu/bits/unistd.h:28:10: warning: call to ‘__read_chk_warn’ declared with attribute warning: read called with bigger length than size of the destination buffer [-Wattribute-warning]
+   28 |   return __glibc_fortify (read, __nbytes, sizeof (char),
+      |          ^~~~~~~~~~~~~~~
+
+=== run musl test-signalfd4 rc=1 ===
+================================================
+  TEST: signalfd4
+  FILE: /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c
+================================================
+--- 1. create & flags ---
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:96 | signalfd4(0, 0)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:100 | signalfd4(0, SFD_CLOEXEC)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:104 | signalfd4(0, SFD_NONBLOCK)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:108 | signalfd4(0, SFD_CLOEXEC|SFD_NONBLOCK)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:112 | signalfd4 with invalid flags → EINVAL (errno=22 as expected)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:114 | signalfd4 with flags=-1 → EINVAL (errno=22 as expected)
+
+--- 2. sigsetsize validation ---
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:123 | sigsetsize=4 → EINVAL (errno=22 as expected)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:125 | sigsetsize=7 → EINVAL (errno=22 as expected)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:130 | sigsetsize=8 succeeds
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:135 | sigsetsize=0 succeeds | errno=22 (Invalid argument)
+
+--- 3. modify mask ---
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:143 | create signalfd with SIGUSR1 mask
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:147 | modify mask to SIGUSR2 returns same fd
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:151 | modify mask to SIGUSR1|SIGUSR2 returns same fd
+
+--- 4. SFD_CLOEXEC conflict ---
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:160 | create signalfd
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:162 | modify with SFD_CLOEXEC → EINVAL | expected errno=22 got ret=3 errno=0 (No error information)
+
+--- 5. nonblocking empty read ---
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:172 | create nonblocking signalfd
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:175 | nonblocking read on empty signalfd → EAGAIN (errno=11 as expected)
+
+--- 6. buffer size validation ---
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:185 | create signalfd for buffer test
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:188 | read with 64-byte buffer → EINVAL (errno=22 as expected)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:190 | read with 127-byte buffer → EINVAL (errno=22 as expected)
+
+--- 7. write rejected ---
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:200 | create signalfd for write test
+  FAIL | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:203 | write to signalfd → EBADF | expected errno=9 got ret=-1 errno=22 (Invalid argument)
+
+--- 8. signal delivery ---
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:218 | block SIGUSR1
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:222 | create nonblocking signalfd for SIGUSR1
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:225 | kill(getpid(), SIGUSR1)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:228 | read returns 128 bytes (ret=128)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:230 | ssi_signo == SIGUSR1
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:233 | second read → EAGAIN (signal consumed) (errno=11 as expected)
+
+--- 9. multiple signals ---
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:250 | block SIGUSR1 and SIGUSR2
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:254 | create nonblocking signalfd for SIGUSR1|SIGUSR2
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:257 | send SIGUSR1
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:258 | send SIGUSR2
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:261 | read first signal (ret=128)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:263 | first signal is SIGUSR1 or SIGUSR2
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:268 | read second signal (ret=128)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:270 | second signal is the other one
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:275 | third read → EAGAIN (errno=11 as expected)
+
+--- 10. sender info (ssi_pid/ssi_uid) ---
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:290 | block SIGUSR1
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:293 | create nonblocking signalfd for SIGUSR1
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:296 | kill(getpid(), SIGUSR1)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:298 | read signal info (ret=128)
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:300 | ssi_signo == SIGUSR1
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:303 | ssi_pid == getpid()
+  PASS | /workspace/tgoskits/test-suit/starryos/normal/qemu-smp1/syscall/test-signalfd4/c/src/main.c:307 | ssi_uid == getuid()
+------------------------------------------------
+  DONE: 41 pass, 3 fail
+================================================
+
+
+=== run gcc test-signalfd4 rc=-6 ===
+*** buffer overflow detected ***: terminated
+

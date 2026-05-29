@@ -76,19 +76,6 @@ cargo xtask starry app run -t gdb-smoke --arch riscv64 \
   --qemu-config qemu-riscv64-gdbserver.toml
 ```
 
-## MariaDB
-
-The `mariadb` case is a QEMU app workflow that installs MariaDB in the guest,
-initializes a fresh data directory, runs an InnoDB SQL workload, and checks that
-the data survives a server restart.
-
-```bash
-cargo xtask starry app run -t mariadb --arch aarch64
-cargo xtask starry app run -t mariadb --arch loongarch64
-cargo xtask starry app run -t mariadb --arch x86_64
-cargo xtask starry app run -t mariadb --arch riscv64
-```
-
 ## jcode
 
 The `jcode` case is an x86_64 QEMU app workflow that downloads the jcode AI coding
@@ -106,6 +93,18 @@ cargo xtask starry qemu \
 
 See `jcode/README.md` for interactive usage and troubleshooting.
 
+## Nginx
+
+The `nginx` case is a QEMU app integration workflow. It installs Alpine nginx
+packages in a staging root during prebuild, injects runtime artifacts to the
+app overlay, then runs nginx smoke tests inside StarryOS.
+
+```bash
+cargo xtask starry app run -t nginx --arch x86_64
+```
+
+`apps/starry/nginx` maintains four directories: `smoke`, `phase`, `stress`, and
+`debug`. Currently only smoke is connected as nginx test entry in tgoskits workflows.
 
 ## Orange Pi 5 Plus UVC
 

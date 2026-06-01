@@ -25,6 +25,7 @@ case "$cmd" in
         ;;
     *)
         printf 'usage: %s [smoke|phase12|phase1|phase2|all]\n' "$0"
+        printf 'usage: %s [smoke|phase12|phase1|phase2|all]\n' "$0"
         exit 2
         ;;
 esac

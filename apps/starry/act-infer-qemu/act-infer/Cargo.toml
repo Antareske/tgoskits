@@ -7,11 +7,16 @@ publish = false
 [workspace]
 
 [[bin]]
-name = "act-infer"
-path = "src/main.rs"
+name = "act-infer-golden"
+path = "src/bin/golden.rs"
+
+[[bin]]
+name = "act-infer-review"
+path = "src/bin/review.rs"
 
 [dependencies]
 anyhow = "1"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tract-onnx = "0.21"

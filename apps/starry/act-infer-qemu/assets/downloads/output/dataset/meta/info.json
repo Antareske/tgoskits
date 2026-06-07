@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "dataset_name": "aka-sim",
+  "fps": 10,
+  "total_frames": 666,
+  "total_episodes": 30,
+  "chunk_size": 1000,
+  "action_dim": 3,
+  "features": {
+    "observation": {
+      "image": {
+        "dtype": "jpeg",
+        "shape": [
+          240,
+          320,
+          3
+        ]
+      },
+      "state": {
+        "dtype": "float32",
+        "shape": [
+          2
+        ]
+      }
+    },
+    "action": {
+      "dtype": "float32",
+      "shape": [
+        3
+      ]
+    }
+  }
+}

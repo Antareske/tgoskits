@@ -10,6 +10,11 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
+  "runArgs": [
+    "--privileged",
+    "--device=/dev/ttyUSB0",
+    "--network=host"
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
@@ -18,5 +23,6 @@
       ]
     }
   },
-  "postCreateCommand": "rustc --version && docker --version"
+  "postCreateCommand": "rustc --version && docker --version",
+  "postStartCommand": "if [ -e /dev/ttyUSB0 ]; then sudo chmod a+rw /dev/ttyUSB0; fi && if [ -d /dev/bus/usb ]; then sudo chmod -R a+rw /dev/bus/usb; fi"
 }

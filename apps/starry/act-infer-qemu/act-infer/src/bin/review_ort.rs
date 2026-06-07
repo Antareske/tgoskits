@@ -2,7 +2,7 @@ use std::{env, process};
 
 use act_infer::{
     cli::{parse_common_args, print_common_usage, write_json_if_requested},
-    infer::run_model_timed,
+    infer_ort::run_model_timed,
     preprocess::{
         denormalize_action, normalize_state, preprocess_image_file, read_state_file, read_stats,
     },
@@ -20,7 +20,7 @@ fn main() {
 fn run() -> Result<()> {
     let args = env::args().skip(1).collect::<Vec<_>>();
     if args.is_empty() || args.len() % 2 != 0 {
-        print_common_usage("act-infer-review");
+        print_common_usage("act-infer-review-ort");
         process::exit(2);
     }
     let parsed = parse_common_args(&args)?;
@@ -33,6 +33,7 @@ fn run() -> Result<()> {
     };
     let state = normalize_state(state_raw, &stats)?;
     let image = preprocess_image_file(&parsed.image_path)?;
+    // ORT review 模式输出宿主机 ONNX Runtime 的动作结果，便于和 tract 输出横向比较。
     let (raw_action, timing_ms) = run_model_timed(&parsed.model_path, &image, &state)?;
     let action_denorm = denormalize_action(&raw_action, &stats)?;
 
@@ -42,7 +43,7 @@ fn run() -> Result<()> {
     let right_wheel = action_denorm.get(1).copied().unwrap_or_default();
 
     let result = ReviewOutput {
-        mode: "review",
+        mode: "review-ort",
         model_path: parsed.model_path.display().to_string(),
         image_path: parsed.image_path.display().to_string(),
         normalize_path: parsed.normalize_path.display().to_string(),

@@ -20,7 +20,7 @@ if [ -f /opt/act/input_state.bin ]; then
     state_args="--state /opt/act/input_state.bin"
 fi
 
-if /usr/bin/act_infer_review \
+if /usr/bin/act_infer_review_tract \
     --model /opt/act/model.onnx \
     --image /opt/act/input.jpg \
     --normalize /opt/act/stats.json \

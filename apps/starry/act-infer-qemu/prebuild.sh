@@ -47,23 +47,23 @@ find_musl_linker() {
 
 build_infer_bins() {
     local manifest="$app_dir/act-infer/Cargo.toml"
-    cargo build --release --manifest-path "$manifest" --bin act-infer-golden --bin act-infer-review
+    cargo build --release --manifest-path "$manifest" --bin act-infer-golden-tract --bin act-infer-review-tract
 
     local linker
     linker="$(find_musl_linker)"
     CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_MUSL_LINKER="$linker" \
-        cargo build --release --target riscv64gc-unknown-linux-musl --manifest-path "$manifest" --bin act-infer-golden --bin act-infer-review
+        cargo build --release --target riscv64gc-unknown-linux-musl --manifest-path "$manifest" --bin act-infer-golden-tract --bin act-infer-review-tract
 }
 
 copy_overlay() {
     install -Dm0755 "$app_dir/act-infer-golden.sh" "$overlay_dir/usr/bin/act-infer-golden.sh"
     install -Dm0755 "$app_dir/act-infer-review.sh" "$overlay_dir/usr/bin/act-infer-review.sh"
     install -Dm0755 \
-        "$app_dir/act-infer/target/riscv64gc-unknown-linux-musl/release/act-infer-golden" \
-        "$overlay_dir/usr/bin/act_infer_golden"
+        "$app_dir/act-infer/target/riscv64gc-unknown-linux-musl/release/act-infer-golden-tract" \
+        "$overlay_dir/usr/bin/act_infer_golden_tract"
     install -Dm0755 \
-        "$app_dir/act-infer/target/riscv64gc-unknown-linux-musl/release/act-infer-review" \
-        "$overlay_dir/usr/bin/act_infer_review"
+        "$app_dir/act-infer/target/riscv64gc-unknown-linux-musl/release/act-infer-review-tract" \
+        "$overlay_dir/usr/bin/act_infer_review_tract"
 
     install -Dm0644 "$assets_dir/model.onnx" "$overlay_dir/opt/act/model.onnx"
     install -Dm0644 "$assets_dir/stats.json" "$overlay_dir/opt/act/stats.json"

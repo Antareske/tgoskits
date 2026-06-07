@@ -148,6 +148,18 @@ cargo xtask starry app run -t nginx --arch x86_64
 `apps/starry/nginx` maintains four directories: `smoke`, `phase`, `stress`, and
 `debug`. Currently only smoke is connected as nginx test entry in tgoskits workflows.
 
+## ACT Inference QEMU
+
+The `act-infer-qemu` case is a standalone StarryOS QEMU riscv64 CI scenario for
+running ACT model inference from ONNX artifacts and checking output against a
+golden action vector.
+
+```bash
+env -u LD_PRELOAD cargo xtask starry app run -t act-infer-qemu --arch riscv64
+```
+
+See `act-infer-qemu/README.md` for asset layout and `ACT4STARRY_ROOT` usage.
+
 ## Orange Pi 5 Plus UVC
 
 The `orangepi-5-plus-uvc` case needs `/usr/bin/uvc-fps` to be installed in the

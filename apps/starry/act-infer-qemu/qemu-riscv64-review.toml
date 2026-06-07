@@ -17,6 +17,6 @@ uefi = false
 to_bin = true
 shell_prefix = "root@starry:"
 shell_init_cmd = "/usr/bin/act-infer-review.sh"
-success_regex = ["(?m)^ACT_REVIEW_DONE\\s*$", "(?m)^ACT_REVIEW_READY\\s*$"]
+success_regex = ["(?m)^ACT_REVIEW_DONE\\s*$"]
 fail_regex = ['(?i)\\bpanic(?:ked)?\\b', "(?m)^ACT_INFER_FAILED\\s*$"]
 timeout = 1800

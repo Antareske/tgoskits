@@ -54,8 +54,8 @@ echo "info: running review case=$case_name expected=$expected_direction"
 echo "info: log will be saved to $log_file"
 
 env -u LD_PRELOAD \
-    ACT_ASSETS_DIR="$assets_dir" \
-    bash -c "cp '$app_dir/qemu-riscv64.toml' '$app_dir/qemu-riscv64.toml.bak' && cp '$app_dir/qemu-riscv64-review.toml' '$app_dir/qemu-riscv64.toml' && trap 'mv \"$app_dir/qemu-riscv64.toml.bak\" \"$app_dir/qemu-riscv64.toml\"' EXIT && cargo xtask starry app run -t act-infer-qemu --arch riscv64" \
+    ACT_ASSETS_DIR="$deploy_dir" \
+    cargo xtask starry app run -t act-infer-qemu --arch riscv64 --qemu-config "$app_dir/qemu-riscv64-review.toml" \
     | tee "$log_file"
 
 echo "info: review log saved at $log_file"

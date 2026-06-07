@@ -14,7 +14,10 @@ import torch
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Verify parity between PyTorch and ONNX")
-    parser.add_argument("--proj57-root", required=True, help="Absolute path to www/proj57/proj57")
+    parser.add_argument(
+        "--proj57-root",
+        help="Absolute path to proj57 source root; default resolves from app third_party clone",
+    )
     parser.add_argument("--model-pt", required=True, help="Absolute path to model.pt")
     parser.add_argument("--model-onnx", required=True, help="Absolute path to model.onnx")
     parser.add_argument("--stats", required=True, help="Absolute path to stats.json")
@@ -22,6 +25,23 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--state-bin", required=True, help="Absolute path to input_state.bin")
     parser.add_argument("--atol", type=float, default=1e-4)
     return parser.parse_args()
+
+
+def resolve_proj57_root(raw: str | None, script_dir: Path) -> Path:
+    if raw:
+        root = Path(raw)
+    else:
+        app_dir = script_dir.parent.parent
+        candidates = [
+            app_dir / "third_party" / "proj57" / "proj57",
+            app_dir / "third_party" / "proj57",
+        ]
+        root = next((p for p in candidates if (p / "act").is_dir()), candidates[0])
+    if not root.is_absolute():
+        raise SystemExit(f"path must be absolute: {root}")
+    if not (root / "act").is_dir():
+        raise SystemExit(f"proj57 root missing act package: {root}")
+    return root
 
 
 def preprocess_image(path: Path) -> np.ndarray:
@@ -50,13 +70,14 @@ def normalize_state(state_raw: np.ndarray, stats: dict) -> np.ndarray:
 
 def main() -> None:
     args = parse_args()
-    proj57_root = Path(args.proj57_root)
+    script_dir = Path(__file__).resolve().parent
+    proj57_root = resolve_proj57_root(args.proj57_root, script_dir)
     model_pt = Path(args.model_pt)
     model_onnx = Path(args.model_onnx)
     stats_path = Path(args.stats)
     image_path = Path(args.image)
     state_path = Path(args.state_bin)
-    for p in [proj57_root, model_pt, model_onnx, stats_path, image_path, state_path]:
+    for p in [model_pt, model_onnx, stats_path, image_path, state_path]:
         if not p.is_absolute():
             raise SystemExit(f"path must be absolute: {p}")
 

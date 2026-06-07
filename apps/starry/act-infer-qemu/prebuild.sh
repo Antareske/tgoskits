@@ -3,7 +3,7 @@ set -euo pipefail
 
 app_dir="${STARRY_APP_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 overlay_dir="${STARRY_OVERLAY_DIR:-}"
-workspace="${STARRY_WORKSPACE:-$(cd "$app_dir/../../.." && pwd)}"
+assets_dir="${ACT_ASSETS_DIR:-$app_dir/assets/prepare}"
 
 require_env() {
     local name="$1"
@@ -14,33 +14,20 @@ require_env() {
     fi
 }
 
-find_default_act4starry_root() {
-    local parent
-    parent="$(cd "$workspace/.." && pwd)"
-    if [[ -d "$parent/ACT4starry/AKA-Sim2Real" ]]; then
-        printf '%s\n' "$parent/ACT4starry/AKA-Sim2Real"
-        return 0
-    fi
-    return 1
-}
-
 ensure_assets() {
-    local root="$1"
-    local deploy_dir="$root/deploy"
-
-    if [[ ! -f "$deploy_dir/model.onnx" ]]; then
-        echo "info: model.onnx not found, trying export_act_onnx.py" >&2
-        python3 "$root/scripts/export_act_onnx.py"
-    fi
-
-    local required=(model.onnx stats.json golden.json input_image.bin input_state.bin)
+    local required=(
+        "$assets_dir/model.onnx"
+        "$assets_dir/stats.json"
+        "$assets_dir/golden.json"
+        "$assets_dir/input.jpg"
+    )
     local missing=()
-    local f
-    for f in "${required[@]}"; do
-        [[ -f "$deploy_dir/$f" ]] || missing+=("$deploy_dir/$f")
+    local path
+    for path in "${required[@]}"; do
+        [[ -f "$path" ]] || missing+=("$path")
     done
     if [[ ${#missing[@]} -gt 0 ]]; then
-        echo "error: missing ACT deploy assets:" >&2
+        echo "error: missing prepared assets:" >&2
         printf '  %s\n' "${missing[@]}" >&2
         exit 1
     fi
@@ -60,42 +47,38 @@ find_musl_linker() {
 
 build_infer_bins() {
     local manifest="$app_dir/act-infer/Cargo.toml"
-    cargo build --release --manifest-path "$manifest"
+    cargo build --release --manifest-path "$manifest" --bin act-infer-golden --bin act-infer-review
 
     local linker
     linker="$(find_musl_linker)"
     CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_MUSL_LINKER="$linker" \
-        cargo build --release --target riscv64gc-unknown-linux-musl --manifest-path "$manifest"
+        cargo build --release --target riscv64gc-unknown-linux-musl --manifest-path "$manifest" --bin act-infer-golden --bin act-infer-review
 }
 
 copy_overlay() {
-    local act_root="$1"
-    local deploy_dir="$act_root/deploy"
-
-    install -Dm0755 "$app_dir/act-infer-smoke.sh" "$overlay_dir/usr/bin/act-infer-smoke.sh"
+    install -Dm0755 "$app_dir/act-infer-golden.sh" "$overlay_dir/usr/bin/act-infer-golden.sh"
+    install -Dm0755 "$app_dir/act-infer-review.sh" "$overlay_dir/usr/bin/act-infer-review.sh"
     install -Dm0755 \
-        "$app_dir/act-infer/target/riscv64gc-unknown-linux-musl/release/act-infer" \
-        "$overlay_dir/usr/bin/act_infer"
+        "$app_dir/act-infer/target/riscv64gc-unknown-linux-musl/release/act-infer-golden" \
+        "$overlay_dir/usr/bin/act_infer_golden"
+    install -Dm0755 \
+        "$app_dir/act-infer/target/riscv64gc-unknown-linux-musl/release/act-infer-review" \
+        "$overlay_dir/usr/bin/act_infer_review"
 
-    install -Dm0644 "$deploy_dir/model.onnx" "$overlay_dir/opt/act/model.onnx"
-    install -Dm0644 "$deploy_dir/stats.json" "$overlay_dir/opt/act/stats.json"
-    install -Dm0644 "$deploy_dir/golden.json" "$overlay_dir/opt/act/golden.json"
-    install -Dm0644 "$deploy_dir/input_image.bin" "$overlay_dir/opt/act/input_image.bin"
-    install -Dm0644 "$deploy_dir/input_state.bin" "$overlay_dir/opt/act/input_state.bin"
+    install -Dm0644 "$assets_dir/model.onnx" "$overlay_dir/opt/act/model.onnx"
+    install -Dm0644 "$assets_dir/stats.json" "$overlay_dir/opt/act/stats.json"
+    install -Dm0644 "$assets_dir/golden.json" "$overlay_dir/opt/act/golden.json"
+    install -Dm0644 "$assets_dir/input.jpg" "$overlay_dir/opt/act/input.jpg"
+    if [[ -f "$assets_dir/input_state.bin" ]]; then
+        install -Dm0644 "$assets_dir/input_state.bin" "$overlay_dir/opt/act/input_state.bin"
+    fi
+    if [[ -f "$assets_dir/review_meta.env" ]]; then
+        install -Dm0644 "$assets_dir/review_meta.env" "$overlay_dir/opt/act/review_meta.env"
+    fi
 }
 
 require_env STARRY_OVERLAY_DIR "$overlay_dir"
 
-act4starry_root="${ACT4STARRY_ROOT:-}"
-if [[ -z "$act4starry_root" ]]; then
-    if act4starry_root="$(find_default_act4starry_root)"; then
-        echo "info: ACT4STARRY_ROOT defaulted to $act4starry_root"
-    else
-        echo "error: ACT4STARRY_ROOT is required when ACT4starry is not next to tgoskits" >&2
-        exit 1
-    fi
-fi
-
-ensure_assets "$act4starry_root"
+ensure_assets
 build_infer_bins
-copy_overlay "$act4starry_root"
+copy_overlay

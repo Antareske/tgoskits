@@ -2,7 +2,7 @@ use std::{env, process};
 
 use act_infer::{
     cli::{parse_golden_args, print_golden_usage, write_json_if_requested},
-    infer::run_model_timed,
+    infer_tract::run_model_timed,
     preprocess::{
         denormalize_action, normalize_state, preprocess_image_file, read_golden, read_state_file,
         read_stats,
@@ -21,7 +21,7 @@ fn main() {
 fn run() -> Result<()> {
     let args = env::args().skip(1).collect::<Vec<_>>();
     if args.is_empty() || args.len() % 2 != 0 {
-        print_golden_usage("act-infer-golden");
+        print_golden_usage("act-infer-golden-tract");
         process::exit(2);
     }
     let parsed = parse_golden_args(&args)?;
@@ -34,6 +34,7 @@ fn run() -> Result<()> {
     };
     let state = normalize_state(state_raw, &stats)?;
     let image = preprocess_image_file(&parsed.common.image_path)?;
+    // golden 模式执行一次推理，并与离线生成的反归一化动作进行误差对比。
     let (raw_action, timing_ms) = run_model_timed(&parsed.common.model_path, &image, &state)?;
     let action_denorm = denormalize_action(&raw_action, &stats)?;
     let golden = read_golden(&parsed.golden_path)?;
@@ -55,7 +56,7 @@ fn run() -> Result<()> {
     let action_dim = stats.action.q01.len();
     let chunk_steps = action_denorm.len().checked_div(action_dim).unwrap_or(0);
     let result = GoldenOutput {
-        mode: "golden",
+        mode: "golden-tract",
         model_path: parsed.common.model_path.display().to_string(),
         image_path: parsed.common.image_path.display().to_string(),
         normalize_path: parsed.common.normalize_path.display().to_string(),

@@ -7,12 +7,20 @@ publish = false
 [workspace]
 
 [[bin]]
-name = "act-infer-golden"
-path = "src/bin/golden.rs"
+name = "act-infer-golden-tract"
+path = "src/bin/golden_tract.rs"
 
 [[bin]]
-name = "act-infer-review"
-path = "src/bin/review.rs"
+name = "act-infer-review-tract"
+path = "src/bin/review_tract.rs"
+
+[[bin]]
+name = "act-infer-golden-ort"
+path = "src/bin/golden_ort.rs"
+
+[[bin]]
+name = "act-infer-review-ort"
+path = "src/bin/review_ort.rs"
 
 [dependencies]
 anyhow = "1"
@@ -20,3 +28,6 @@ image = { version = "0.25", default-features = false, features = ["jpeg", "png"]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tract-onnx = "0.21"
+
+[target.'cfg(not(target_arch = "riscv64"))'.dependencies]
+ort = { version = "2.0.0-rc.12", default-features = false, features = ["std", "download-binaries", "tls-rustls"] }

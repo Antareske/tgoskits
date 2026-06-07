@@ -21,9 +21,9 @@ find_musl_linker() {
 mkdir -p "$out_dir"
 linker="$(find_musl_linker)"
 CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_MUSL_LINKER="$linker" \
-    cargo build --release --target riscv64gc-unknown-linux-musl --manifest-path "$manifest" --bin act-infer-golden --bin act-infer-review
+    cargo build --release --target riscv64gc-unknown-linux-musl --manifest-path "$manifest" --bin act-infer-golden-tract --bin act-infer-review-tract
 
-install -Dm0755 "$app_dir/act-infer/target/riscv64gc-unknown-linux-musl/release/act-infer-golden" "$out_dir/act-infer-golden"
-install -Dm0755 "$app_dir/act-infer/target/riscv64gc-unknown-linux-musl/release/act-infer-review" "$out_dir/act-infer-review"
+install -Dm0755 "$app_dir/act-infer/target/riscv64gc-unknown-linux-musl/release/act-infer-golden-tract" "$out_dir/act-infer-golden-tract"
+install -Dm0755 "$app_dir/act-infer/target/riscv64gc-unknown-linux-musl/release/act-infer-review-tract" "$out_dir/act-infer-review-tract"
 
 echo "built starry riscv64 binaries in $out_dir"

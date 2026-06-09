@@ -18,6 +18,8 @@
 /apps/starry/act-infer-qemu/.venv/
 /apps/starry/act-infer-qemu/output/
 /apps/starry/act-infer-qemu/assets/prepare/runtime-tmp/
+/apps/starry/act-infer-qemu/assets/downloads/output/train/model.pt
+/apps/starry/act-infer-qemu/assets/prepare/model.onnx
 /env/
 /venv/
 /ENV/

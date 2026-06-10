@@ -17,7 +17,7 @@ Linux 开发机或虚拟机（含交叉构建 StarryOS 的 tgoskits 工作区）
 安装以下工具：
 
 ```bash
-apt install -y gdisk parted fdisk mtools dosfstools u-boot-tools \
+apt install -y gdisk fdisk mtools dosfstools u-boot-tools \
                device-tree-compiler xz-utils
 ```
 
@@ -63,7 +63,19 @@ dd if=$ARMBIAN of=u-boot.itb    bs=512 skip=16384 count=8192
 
 ### 2.3 设备树（DTB）
 
-从 Armbian 镜像的 `/boot` 中取 `rk3588-orangepi-5-plus.dtb`，作为 StarryOS 设备树的基底。后续会修改其 `/chosen/bootargs`（见 4.1）。
+从 Armbian 镜像根分区的 `/boot/dtb/rockchip/rk3588-orangepi-5-plus.dtb`（即 `/boot/dtb-<内核版本>-current-rockchip64/rockchip/rk3588-orangepi-5-plus.dtb`）取出，作为 StarryOS 设备树的基底。后续会修改其 `/chosen/bootargs`（见 4.1）。
+
+挂载 Armbian 根分区（p1，起始 sector 32768）后拷出：
+
+```bash
+ARMBIAN=Armbian_26.5.1_Orangepi5-plus_resolute_current_6.18.33_minimal.img
+
+OFF=$((32768*512))
+mkdir -p mnt
+mount -o loop,offset=$OFF,ro "$ARMBIAN" mnt
+cp mnt/boot/dtb/rockchip/rk3588-orangepi-5-plus.dtb .
+umount mnt
+```
 
 ### 2.4 StarryOS 内核
 
@@ -75,15 +87,31 @@ max_cpu_num = 1
 plat_dyn = true
 ```
 
-> 修改后若曾构建过，需删除缓存模板 `tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml`，否则仍会沿用旧的核数。
+> 构建前核对缓存模板 `tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml` 的核数，与源配置不一致时删除，下次构建会按源配置重新生成：
+>
+> ```bash
+> grep max_cpu_num tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml
+> rm -f tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml
+> ```
 
-在 tgoskits 工作区编译内核，并转成裸 aarch64 二进制：
+在 tgoskits 工作区根目录编译内核：
 
 ```bash
 cargo xtask starry quick-start orangepi-5-plus build
+```
+
+内核 ELF 产物位于 `target/aarch64-unknown-linux-musl/release/starryos`，构建末尾已自动生成同目录的 `starryos.bin`。如需手动转换，在工作区根目录执行：
+
+```bash
 rust-objcopy -O binary \
-  target/aarch64-unknown-none-softfloat/release/starryos \
+  target/aarch64-unknown-linux-musl/release/starryos \
   starryos.bin
+```
+
+构建后校验 SMP 为单核：
+
+```bash
+grep max_cpu_num tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml   # 1
 ```
 
 启动后串口 banner 的 `smp = 1` 即反映此编译值。
@@ -94,7 +122,12 @@ rust-objcopy -O binary \
 
 ```bash
 cargo xtask starry rootfs --arch aarch64
-# 产物位于 tmp/axbuild/rootfs/ 下，作为后文 starry-rootfs.ext4
+```
+
+产物路径见命令输出末尾的 `rootfs ready at ...` 行，位于 `/tmp/.tgos-images/rootfs-aarch64-alpine.img/rootfs-aarch64-alpine.img`。拷出作为后文的 `starry-rootfs.ext4`：
+
+```bash
+cp /tmp/.tgos-images/rootfs-aarch64-alpine.img/rootfs-aarch64-alpine.img starry-rootfs.ext4
 ```
 
 ---
@@ -121,13 +154,24 @@ StarryOS 在运行时从设备树 `/chosen/bootargs` 读取内核命令行，因
 dtc -I dtb -O dts rk3588-orangepi-5-plus.dtb -o starry.dts
 ```
 
-将 `/chosen` 节点的 `bootargs` 设为：
+基底 DTB 的 `/chosen` 节点形如：
 
 ```text
-root=PARTLABEL=starry-rootfs earlycon=uart8250,mmio32,0xfeb50000 rootwait rootfstype=ext4
+chosen {
+    stdout-path = "serial2:1500000n8";
+};
 ```
 
-并删除无效的 `linux,initrd-start` / `linux,initrd-end`，然后回编：
+向其中添加 `bootargs`：
+
+```text
+chosen {
+    stdout-path = "serial2:1500000n8";
+    bootargs = "root=PARTLABEL=starry-rootfs earlycon=uart8250,mmio32,0xfeb50000 rootwait rootfstype=ext4";
+};
+```
+
+然后回编：
 
 ```bash
 dtc -I dts -O dtb starry.dts -o starry.dtb
@@ -231,6 +275,8 @@ sgdisk -n 1:32768:262143  -t 1:0700 -c 1:boot          "$IMG"
 sgdisk -n 2:262144:0      -t 2:8300 -c 2:starry-rootfs "$IMG"
 ```
 
+> `sgdisk -n 2:262144:0` 会把 p2 拉伸到磁盘末尾。若希望分区与 ext4 文件系统大小对齐，可按 rootfs 实际扇区数指定 p2 终点（rootfs 字节数 ÷ 512 + 262144 − 1），或在写入后用 `resize2fs` 把文件系统扩展到占满分区。
+
 ### 5.3 写入启动链
 
 ```bash
@@ -251,16 +297,18 @@ mcopy -i "$IMG@@$FAT_OFF" starry.dtb       ::starry.dtb
 mcopy -i "$IMG@@$FAT_OFF" boot.scr         ::boot.scr
 ```
 
+> p1 为 112 MiB。内核增大导致 FIT 接近该上限时，需相应增大 p1。
+
 ### 5.5 填充 starry-rootfs 分区
 
 将 2.5 节由 tgoskits 下载的 StarryOS 根文件系统镜像（ext4）写入 p2（起始 sector 262144）：
 
 ```bash
-dd if=tmp/axbuild/rootfs/rootfs-aarch64-alpine.img \
+dd if=starry-rootfs.ext4 \
    of="$IMG" bs=512 seek=262144 conv=notrunc
 ```
 
-> 该镜像的卷为 ext4，已包含 StarryOS 所需的用户态（busybox 等）。写入后需确认 p2 的 GPT 标签为 `starry-rootfs`，与命令行 `root=PARTLABEL=starry-rootfs` 对应。
+> 写入前确认 rootfs 不超过 p2 容量（p2 扇区数 = p2 终点 − 262144 + 1）。该镜像的卷为 ext4，已包含 StarryOS 所需的用户态（busybox 等）。写入后需确认 p2 的 GPT 标签为 `starry-rootfs`，与命令行 `root=PARTLABEL=starry-rootfs` 对应。
 
 ### 5.6 压缩（可选）
 
@@ -273,6 +321,9 @@ xz -T0 -6 -k "$IMG"
 ## 6. 校验
 
 ```bash
+# SMP 单核
+grep max_cpu_num tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml   # 1
+
 # 分区与标签
 sgdisk -p "$IMG"          # p1 boot / p2 starry-rootfs
 sgdisk -i 2 "$IMG"        # Partition name: 'starry-rootfs'

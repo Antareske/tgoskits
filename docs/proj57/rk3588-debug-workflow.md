@@ -5,7 +5,7 @@
 - **整盘镜像自启动**：把内核与用户态做成 TF 卡镜像，板子上电自动引导。适合稳定验收、脱机运行。
 - **`loady` 串口加载**：用 tgoskits 经串口把内核直接送进板子 U-Boot 运行，不动 TF 卡内容。适合快速迭代调试。
 
-环境与硬件准备见 `rk3588-env-prepare.md`，镜像制作细节见 `rk3588-pure-starryos-build-manual.md`，本文不再赘述。
+环境与硬件准备见 `rk3588-env-prepare.md`，镜像制作细节见 `rk3588-starryos-build-manual.md`，本文不再赘述。
 
 ---
 
@@ -135,7 +135,7 @@ StarryOS 启动成功后，可向 StarryOS 上传和测试用户态程序。
 | 场景 | 推荐路径 | 说明 |
 | --- | --- | --- |
 | 频繁改内核、快速看效果 | `loady` run | 改完 `run` 直接构建 & 加载新内核 |
-| 稳定验收、脱机运行、交付镜像 | 整盘镜像自启动 | 见 `rk3588-pure-starryos-build-manual.md` |
+| 稳定验收、脱机运行、交付镜像 | 整盘镜像自启动 | 见 `rk3588-starryos-build-manual.md` |
 | 只想看串口输出 / 打断 U-Boot | picocom | 独立串口终端 |
 
 典型调试循环：

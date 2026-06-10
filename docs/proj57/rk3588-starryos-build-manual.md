@@ -1,6 +1,6 @@
-# RK3588 纯 StarryOS 整盘镜像构建文
+# RK3588 StarryOS SMP1 整盘镜像构建文
 
-本文说明如何为 Orange Pi 5 Plus（RK3588）构建一张可直接上电启动的纯 StarryOS 整盘 TF 卡镜像。镜像自带完整启动链（idbloader + U-Boot），从 TF 卡自主引导，板上只运行 StarryOS，不含 Linux 运行时。
+本文说明如何为 Orange Pi 5 Plus（RK3588）构建一张可直接上电启动的 StarryOS 整盘 TF 卡镜像。镜像自带完整启动链（idbloader + U-Boot），从 TF 卡自主引导，板上只运行 StarryOS，不含 Linux 运行时。本文产物按 `smp=1` 命名为 `rk3588-starryos-smp1`。
 
 背景：RK3588 开发板的 uboot 版本过旧（如 uboot 2017.09），不支持 tgoskits 的板测命令。一种方案是使用官方工具刷写 SPI 更新 uboot，一劳永逸但是过程较复杂；本方案则是直接构建带有新 uboot 和引导链的整盘 TF 卡镜像，由烧录好的镜像主导加载。
 
@@ -220,7 +220,7 @@ p2 @ sector 262144 : ext4  "starry-rootfs" (StarryOS 根文件系统)
 ### 5.2 创建镜像与分区表
 
 ```bash
-IMG=rk3588-pure-starry.img
+IMG=rk3588-starryos-smp1.img
 
 # 1.25 GiB 空镜像
 truncate -s 1280M "$IMG"
@@ -294,9 +294,9 @@ mdir -i "$IMG@@$((32768*512))" ::
 
 ```bash
 # 如已压缩则先解压
-xz -dk rk3588-pure-starry.img.xz
+xz -dk rk3588-starryos-smp1.img.xz
 
-sudo dd if=rk3588-pure-starry.img of=/dev/sdX bs=4M conv=fsync
+sudo dd if=rk3588-starryos-smp1.img of=/dev/sdX bs=4M conv=fsync
 sync
 ```
 

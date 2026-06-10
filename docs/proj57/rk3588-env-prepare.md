@@ -1,6 +1,6 @@
 # RK3588 开发环境准备
 
-本文说明在 Orange Pi 5 Plus（RK3588）上开发、调试 StarryOS 前的环境、串口连接与镜像烧录准备。本文将镜像视为已事先准备好的资产，镜像制作见 `rk3588-pure-starryos-build-manual.md`，开发/调试工作流见 `rk3588-debug-workflow.md`。
+本文说明在 Orange Pi 5 Plus（RK3588）上开发、调试 StarryOS 前的环境、串口连接与镜像烧录准备。本文将镜像视为已事先准备好的资产，镜像制作见 `rk3588-starryos-build-manual.md`，开发/调试工作流见 `rk3588-debug-workflow.md`。
 
 ---
 

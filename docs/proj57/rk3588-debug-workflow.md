@@ -30,11 +30,11 @@ features = [                                # RK3588 板级驱动
   "rknpu",
 ]
 log = "Info"                                # 日志级别
-max_cpu_num = 1                             # SMP 核数（编译期固化）
+max_cpu_num = 8                             # SMP 核数（编译期固化）
 plat_dyn = true                             # 动态平台
 ```
 
-- `max_cpu_num`：内核的 SMP 核数是**编译期**写死的，运行时不可改。修改后需重新 build。目前 RK3588 真机上多核 + `plat_dyn` 可能触发栈保护页 TLB 失效等不稳定，调试时可临时设为 `1` 排除多核干扰。
+- `max_cpu_num`：内核的 SMP 核数是**编译期**写死的，运行时不可改。修改后需重新 build。
 - 改动这些值后若之前构建过，需删除缓存模板 `tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml`，否则沿用旧值。
 
 ### 1.2 运行配置 `orangepi-5-plus-uboot.toml`
@@ -156,4 +156,3 @@ StarryOS 启动成功后，可向 StarryOS 上传和测试用户态程序。
 - **`run` 卡在 `Waiting for board...`**：还没给板子上电，或上电时机早于该提示。先确认看到提示再上电。
 - **`run` 紧接着报错返回**：串口被占用 / 握手失败 / 上电时机不对。断电 → 重跑命令 → 见提示后再上电。
 - **串口无输出**：TTL 引脚接线、波特率（1500000）、串口是否被其他进程占用、USB 是否已映射到当前环境（见 `rk3588-env-prepare.md`）。
-- **多核启动不稳定**：把 `orangepi-5-plus.toml` 的 `max_cpu_num` 临时设为 `1`，删缓存模板后重新 build，排除 SMP 干扰。

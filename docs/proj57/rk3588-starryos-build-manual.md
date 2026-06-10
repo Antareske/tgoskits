@@ -1,6 +1,6 @@
-# RK3588 StarryOS SMP1 整盘镜像构建文
+# RK3588 StarryOS SMP8 整盘镜像构建文
 
-本文说明如何为 Orange Pi 5 Plus（RK3588）构建一张可直接上电启动的 StarryOS 整盘 TF 卡镜像。镜像自带完整启动链（idbloader + U-Boot），从 TF 卡自主引导，板上只运行 StarryOS，不含 Linux 运行时。本文产物按 `smp=1` 命名为 `rk3588-starryos-smp1`。
+本文说明如何为 Orange Pi 5 Plus（RK3588）构建一张可直接上电启动的 StarryOS 整盘 TF 卡镜像。镜像自带完整启动链（idbloader + U-Boot），从 TF 卡自主引导，板上只运行 StarryOS，不含 Linux 运行时。本文产物按 `smp=8` 命名为 `rk3588-starryos-smp8`。
 
 背景：RK3588 开发板的 uboot 版本过旧（如 uboot 2017.09），不支持 tgoskits 的板测命令。一种方案是使用官方工具刷写 SPI 更新 uboot，一劳永逸但是过程较复杂；本方案则是直接构建带有新 uboot 和引导链的整盘 TF 卡镜像，由烧录好的镜像主导加载。
 
@@ -79,11 +79,11 @@ umount mnt
 
 ### 2.4 StarryOS 内核
 
-内核的 SMP（CPU 核数）是**编译期**固化进二进制的，由板级构建配置 `os/StarryOS/configs/board/orangepi-5-plus.toml` 中的 `max_cpu_num` 决定。编译时该值会转成 `SMP` 环境变量并写入内核，运行时不可更改。目前 RK3588 真机上多核 + 动态平台（`plat_dyn = true`）可能触发栈保护页 TLB 失效等问题导致启动失败，为稳妥起见可设为单核：
+内核的 SMP（CPU 核数）是**编译期**固化进二进制的，由板级构建配置 `os/StarryOS/configs/board/orangepi-5-plus.toml` 中的 `max_cpu_num` 决定。编译时该值会转成 `SMP` 环境变量并写入内核，运行时不可更改。本文使用八核：
 
 ```toml
 # os/StarryOS/configs/board/orangepi-5-plus.toml
-max_cpu_num = 1
+max_cpu_num = 8
 plat_dyn = true
 ```
 
@@ -108,13 +108,13 @@ rust-objcopy -O binary \
   starryos.bin
 ```
 
-构建后校验 SMP 为单核：
+构建后校验 SMP 为八核：
 
 ```bash
-grep max_cpu_num tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml   # 1
+grep max_cpu_num tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml   # 8
 ```
 
-启动后串口 banner 的 `smp = 1` 即反映此编译值。
+启动后串口 banner 的 `smp = 8` 即反映此编译值。
 
 ### 2.5 StarryOS 根文件系统
 
@@ -264,7 +264,7 @@ p2 @ sector 262144 : ext4  "starry-rootfs" (StarryOS 根文件系统)
 ### 5.2 创建镜像与分区表
 
 ```bash
-IMG=rk3588-starryos-smp1.img
+IMG=rk3588-starryos-smp8.img
 
 # 1.25 GiB 空镜像
 truncate -s 1280M "$IMG"
@@ -321,8 +321,8 @@ xz -T0 -6 -k "$IMG"
 ## 6. 校验
 
 ```bash
-# SMP 单核
-grep max_cpu_num tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml   # 1
+# SMP 八核
+grep max_cpu_num tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml   # 8
 
 # 分区与标签
 sgdisk -p "$IMG"          # p1 boot / p2 starry-rootfs
@@ -345,9 +345,9 @@ mdir -i "$IMG@@$((32768*512))" ::
 
 ```bash
 # 如已压缩则先解压
-xz -dk rk3588-starryos-smp1.img.xz
+xz -dk rk3588-starryos-smp8.img.xz
 
-sudo dd if=rk3588-starryos-smp1.img of=/dev/sdX bs=4M conv=fsync
+sudo dd if=rk3588-starryos-smp8.img of=/dev/sdX bs=4M conv=fsync
 sync
 ```
 

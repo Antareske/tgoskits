@@ -1,4 +1,4 @@
-use alloc::{vec, vec::Vec};
+use alloc::{sync::Arc, vec, vec::Vec};
 use core::{
     net::{IpAddr, Ipv4Addr, SocketAddr},
     task::Context,
@@ -18,12 +18,11 @@ use smoltcp::{
 use spin::RwLock;
 
 use crate::{
-    RecvFlags, RecvOptions, SOCKET_SET, SendFlags, SendOptions, Shutdown, SocketAddrEx, SocketOps,
+    RecvFlags, RecvOptions, SendFlags, SendOptions, Shutdown, SocketAddrEx, SocketOps,
     consts::{UDP_RX_BUF_LEN, UDP_TX_BUF_LEN},
     general::GeneralOptions,
-    get_service,
+    net_stack::NetStack,
     options::{Configurable, GetSocketOption, SetSocketOption},
-    poll_interfaces,
 };
 
 /// Buffered state for MSG_MORE corking: captures the target endpoint
@@ -51,17 +50,17 @@ pub struct UdpSocket {
     peer_addr: RwLock<Option<(IpEndpoint, IpAddress)>>,
 
     general: GeneralOptions,
-    /// MSG_MORE corking state: captures endpoint at first MSG_MORE
-    /// so the merged datagram always goes to the correct peer.
+    /// MSG_MORE corking state.
     cork: Mutex<Option<CorkState>>,
+    stack: Arc<NetStack>,
 }
 
 impl UdpSocket {
     /// Creates a new UDP socket.
     #[allow(clippy::new_without_default)]
-    pub fn new() -> Self {
+    pub fn new(stack: Arc<NetStack>) -> Self {
         let socket = new_udp_socket();
-        let handle = SOCKET_SET.add(socket);
+        let handle = stack.socket_set.add(socket);
 
         Self {
             handle,
@@ -70,11 +69,14 @@ impl UdpSocket {
 
             general: GeneralOptions::new(2, 2, 17), // SOCK_DGRAM
             cork: Mutex::new(None),
+            stack,
         }
     }
 
     fn with_smol_socket<R>(&self, f: impl FnOnce(&mut smol::Socket) -> R) -> R {
-        SOCKET_SET.with_socket_mut::<smol::Socket, _, _>(self.handle, f)
+        self.stack
+            .socket_set
+            .with_socket_mut::<smol::Socket, _, _>(self.handle, f)
     }
 
     fn remote_endpoint(&self) -> AxResult<(IpEndpoint, IpAddress)> {
@@ -132,7 +134,7 @@ impl SocketOps for UdpSocket {
         let mut guard = self.local_addr.write();
 
         if local_addr.port() == 0 {
-            local_addr.set_port(get_ephemeral_port()?);
+            local_addr.set_port(get_ephemeral_port(&self.stack)?);
         }
         if guard.is_some() {
             ax_bail!(InvalidInput, "already bound");
@@ -145,8 +147,9 @@ impl SocketOps for UdpSocket {
         };
 
         if !self.general.reuse_address() {
-            // Check if the address is already in use
-            SOCKET_SET.udp_bind_check(local_endpoint.addr, local_endpoint.port)?;
+            self.stack
+                .socket_set
+                .udp_bind_check(local_endpoint.addr, local_endpoint.port)?;
         }
 
         self.with_smol_socket(|socket| {
@@ -156,7 +159,7 @@ impl SocketOps for UdpSocket {
             })
         })?;
         self.general
-            .set_device_mask(get_service().device_mask_for(&endpoint));
+            .set_device_mask(self.stack.get_service().device_mask_for(&endpoint));
 
         *guard = Some(local_endpoint);
         info!("UDP socket {}: bound on {}", self.handle, endpoint);
@@ -174,10 +177,15 @@ impl SocketOps for UdpSocket {
         }
 
         let remote_addr = IpEndpoint::from(remote_addr);
-        let src = get_service().get_source_address(&remote_addr.addr);
+        let src = self
+            .stack
+            .get_service()
+            .get_source_address(&remote_addr.addr);
         *guard = Some((remote_addr, src));
         self.general.set_device_mask(
-            get_service().device_mask_for(&endpoint_from_ip_endpoint(remote_addr)),
+            self.stack
+                .get_service()
+                .device_mask_for(&endpoint_from_ip_endpoint(remote_addr)),
         );
         debug!("UDP socket {}: connected to {}", self.handle, remote_addr);
         Ok(())
@@ -205,7 +213,7 @@ impl SocketOps for UdpSocket {
             let (remote_addr, source_addr) = match options.to {
                 Some(addr) => {
                     let addr = IpEndpoint::from(addr.into_ip()?);
-                    let src = get_service().get_source_address(&addr.addr);
+                    let src = self.stack.get_service().get_source_address(&addr.addr);
                     (addr, src)
                 }
                 None => match self.remote_endpoint() {
@@ -246,7 +254,7 @@ impl SocketOps for UdpSocket {
         let resolved = match options.to {
             Some(addr) => {
                 let addr = IpEndpoint::from(addr.into_ip()?);
-                let src = get_service().get_source_address(&addr.addr);
+                let src = self.stack.get_service().get_source_address(&addr.addr);
                 Some((addr, src))
             }
             None => self.remote_endpoint().ok(),
@@ -254,7 +262,7 @@ impl SocketOps for UdpSocket {
 
         let extra_nb = options.flags.contains(SendFlags::DONTWAIT);
         self.general.send_poller_with(self, extra_nb, || {
-            poll_interfaces();
+            self.stack.poll_interfaces();
             let mut cork_guard = self.cork.lock();
             // When flushing corked data, always use the endpoint captured
             // at the first MSG_MORE call (matching Linux semantics).
@@ -340,7 +348,7 @@ impl SocketOps for UdpSocket {
                 }
             })?;
             // Flush TX so loopback packets reach the receiver immediately.
-            poll_interfaces();
+            self.stack.poll_interfaces();
             Ok(result)
         })
     }
@@ -361,7 +369,7 @@ impl SocketOps for UdpSocket {
 
         let extra_nb = options.flags.contains(RecvFlags::DONTWAIT);
         self.general.recv_poller_with(self, extra_nb, || {
-            poll_interfaces();
+            self.stack.poll_interfaces();
             self.with_smol_socket(|socket| {
                 if !socket.can_recv() {
                     Err(AxError::WouldBlock)
@@ -433,7 +441,7 @@ impl SocketOps for UdpSocket {
 
     fn shutdown(&self, _how: Shutdown) -> AxResult {
         // TODO(mivik): shutdown
-        poll_interfaces();
+        self.stack.poll_interfaces();
 
         self.with_smol_socket(|socket| {
             debug!("UDP socket {}: shutting down", self.handle);
@@ -445,7 +453,7 @@ impl SocketOps for UdpSocket {
 
 impl Pollable for UdpSocket {
     fn poll(&self) -> IoEvents {
-        poll_interfaces();
+        self.stack.poll_interfaces();
         if self.local_addr.read().is_none() {
             return IoEvents::empty();
         }
@@ -460,7 +468,7 @@ impl Pollable for UdpSocket {
 
     fn register(&self, context: &mut Context<'_>, events: IoEvents) {
         if events.intersects(IoEvents::IN | IoEvents::OUT) {
-            self.general.register_waker(context.waker());
+            self.general.register_waker(context.waker(), &self.stack);
         }
     }
 }
@@ -468,7 +476,7 @@ impl Pollable for UdpSocket {
 impl Drop for UdpSocket {
     fn drop(&mut self) {
         self.shutdown(Shutdown::Both).ok();
-        SOCKET_SET.remove(self.handle);
+        self.stack.socket_set.remove(self.handle);
     }
 }
 
@@ -479,11 +487,10 @@ fn endpoint_from_ip_endpoint(endpoint: IpEndpoint) -> IpListenEndpoint {
     }
 }
 
-fn get_ephemeral_port() -> AxResult<u16> {
+fn get_ephemeral_port(stack: &NetStack) -> AxResult<u16> {
     const PORT_START: u16 = 0xc000;
     const PORT_END: u16 = 0xffff;
-    static CURR: Mutex<u16> = Mutex::new(PORT_START);
-    let mut curr = CURR.lock();
+    let mut curr = stack.udp_ephemeral_port.lock();
 
     let port = *curr;
     if *curr == PORT_END {
@@ -506,9 +513,9 @@ mod tests {
     #[test]
     fn connect_uses_peer_route_for_device_mask() {
         let _guard = network_test_guard();
-        init_split_route_network();
+        let stack = init_split_route_network();
 
-        let socket = UdpSocket::new();
+        let socket = UdpSocket::new(stack);
         socket
             .bind(SocketAddrEx::Ip(SocketAddr::new(IpAddr::V4(LOCAL_ADDR), 0)))
             .unwrap();

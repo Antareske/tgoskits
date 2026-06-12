@@ -3,13 +3,6 @@
 //! It provides unified networking primitives for TCP/UDP communication
 //! using various underlying network stacks. Currently, only [smoltcp] is
 //! supported.
-//!
-//! # Organization
-//!
-//! - [`tcp::TcpSocket`]: A TCP socket that provides POSIX-like APIs.
-//! - [`udp::UdpSocket`]: A UDP socket that provides POSIX-like APIs.
-//!
-//! [smoltcp]: https://github.com/smoltcp-rs/smoltcp
 
 #![no_std]
 
@@ -23,6 +16,8 @@ mod consts;
 mod device;
 mod general;
 mod listen_table;
+/// Per-namespace network stack.
+pub mod net_stack;
 /// Socket option types and the [`Configurable`](options::Configurable) trait.
 pub mod options;
 /// Raw socket implementation.
@@ -43,49 +38,31 @@ pub mod vsock;
 mod wrapper;
 
 use alloc::{borrow::ToOwned, boxed::Box, vec::Vec};
-use core::{
-    sync::atomic::{AtomicBool, Ordering},
-    time::Duration,
-};
+use core::time::Duration;
 
 use ax_sync::Mutex;
 use smoltcp::wire::{EthernetAddress, Ipv4Address, Ipv4Cidr};
-use spin::{LazyLock, Once};
 
 #[cfg(feature = "vsock")]
 pub use self::device::{VsockDevice, VsockDeviceList};
 use self::{
     consts::{GATEWAY, IP, IP_PREFIX},
     device::{EthernetDevice, LoopbackDevice},
-    listen_table::ListenTable,
+    net_stack::ROOT_NET_STACK,
     router::{Router, Rule},
     service::Service,
-    wrapper::SocketSetWrapper,
 };
 pub use self::{
     device::{
         ArpEntry, EthernetDeviceList, EthernetDriver, NetDeviceError, NetDeviceResult,
         NetIrqEvents, NetRxBuffer, NetTxBuffer, RdNetDriver,
     },
+    net_stack::NetStack,
     socket::*,
 };
 
-static LISTEN_TABLE: LazyLock<ListenTable> = LazyLock::new(ListenTable::new);
-static SOCKET_SET: LazyLock<SocketSetWrapper> = LazyLock::new(SocketSetWrapper::new);
-
-static SERVICE: Once<Mutex<Service>> = Once::new();
-static POLLING_INTERFACES: AtomicBool = AtomicBool::new(false);
-static POLL_AGAIN: AtomicBool = AtomicBool::new(false);
-
 const DHCP_BOOTSTRAP_ATTEMPTS: usize = 200;
 const DHCP_BOOTSTRAP_POLL_INTERVAL: Duration = Duration::from_millis(10);
-
-fn get_service() -> ax_sync::MutexGuard<'static, Service> {
-    SERVICE
-        .get()
-        .expect("Network service not initialized")
-        .lock()
-}
 
 /// Initializes the network subsystem by NIC devices.
 pub fn init_network(mut net_devs: EthernetDeviceList) {
@@ -160,7 +137,7 @@ pub fn init_network(mut net_devs: EthernetDeviceList) {
         service.enable_dhcp(dhcp_dev, dhcp_mac);
     }
     let dhcp_enabled = service.dhcp_enabled();
-    SERVICE.call_once(|| Mutex::new(service));
+    ROOT_NET_STACK.service.call_once(|| Mutex::new(service));
     if dhcp_enabled {
         ax_task::spawn_with_name(dhcp_bootstrap, "dhcp-bootstrap".to_owned());
     }
@@ -181,35 +158,19 @@ pub fn init_vsock(mut vsock_devs: device::VsockDeviceList) {
     }
 }
 
-/// Poll all network interfaces for new events.
+/// Poll all network interfaces for new events (root namespace only).
 pub fn poll_interfaces() {
-    POLL_AGAIN.store(true, Ordering::Release);
-    loop {
-        if POLLING_INTERFACES
-            .compare_exchange(false, true, Ordering::Acquire, Ordering::Acquire)
-            .is_err()
-        {
-            return;
-        }
-
-        while POLL_AGAIN.swap(false, Ordering::AcqRel) {
-            while get_service().poll(&mut SOCKET_SET.inner.lock()) {}
-        }
-        POLLING_INTERFACES.store(false, Ordering::Release);
-        if !POLL_AGAIN.load(Ordering::Acquire) {
-            return;
-        }
-    }
+    ROOT_NET_STACK.poll_interfaces();
 }
 
 pub fn arp_entries() -> Vec<ArpEntry> {
-    get_service().arp_entries()
+    ROOT_NET_STACK.get_service().arp_entries()
 }
 
 fn dhcp_bootstrap() {
     for _ in 0..DHCP_BOOTSTRAP_ATTEMPTS {
         poll_interfaces();
-        if get_service().dhcp_configured() {
+        if ROOT_NET_STACK.get_service().dhcp_configured() {
             return;
         }
         ax_task::sleep(DHCP_BOOTSTRAP_POLL_INTERVAL);
@@ -219,14 +180,14 @@ fn dhcp_bootstrap() {
 
 #[cfg(test)]
 pub(crate) mod test_support {
-    use alloc::boxed::Box;
+    use alloc::{boxed::Box, sync::Arc};
     use std::sync::{Mutex as StdMutex, MutexGuard, Once};
 
     use ax_sync::Mutex;
     use smoltcp::wire::{IpAddress, Ipv4Address, Ipv4Cidr};
 
     use crate::{
-        SERVICE,
+        NetStack,
         device::LoopbackDevice,
         router::{Router, Rule},
         service::Service,
@@ -243,36 +204,43 @@ pub(crate) mod test_support {
         NETWORK_TEST_LOCK.lock().unwrap()
     }
 
-    pub(crate) fn init_split_route_network() {
-        static INIT: Once = Once::new();
-
-        INIT.call_once(|| {
-            let mut router = Router::new();
-            let local_dev = router.add_device(Box::new(LoopbackDevice::new()));
-            let peer_dev = router.add_device(Box::new(LoopbackDevice::new()));
-            let local_cidr = Ipv4Cidr::new(LOCAL_ADDR, 24);
-            let peer_cidr = Ipv4Cidr::new(PEER_ADDR, 24);
-
-            router.add_rule(Rule::new(
-                local_cidr.into(),
-                None,
-                local_dev,
-                IpAddress::Ipv4(LOCAL_ADDR),
-            ));
-            router.add_rule(Rule::new(
-                peer_cidr.into(),
-                None,
-                peer_dev,
-                IpAddress::Ipv4(PEER_ADDR),
-            ));
-
-            let mut service = Service::new(router);
-            service.iface.update_ip_addrs(|ip_addrs| {
-                ip_addrs.push(local_cidr.into()).unwrap();
-                ip_addrs.push(peer_cidr.into()).unwrap();
-            });
-
-            SERVICE.call_once(|| Mutex::new(service));
+    pub(crate) fn init_split_route_network() -> Arc<NetStack> {
+        let stack = Arc::new(NetStack {
+            listen_table: crate::listen_table::ListenTable::new(),
+            socket_set: crate::wrapper::SocketSetWrapper::new(),
+            service: spin::Once::new(),
+            polling: core::sync::atomic::AtomicBool::new(false),
+            poll_again: core::sync::atomic::AtomicBool::new(false),
+            udp_ephemeral_port: Mutex::new(0xc000),
+            tcp_ephemeral_port: Mutex::new(0xc000),
+            tcp_bound_ports: Mutex::new(hashbrown::HashMap::new()),
         });
+
+        let mut router = Router::new();
+        let local_dev = router.add_device(Box::new(LoopbackDevice::new()));
+        let peer_dev = router.add_device(Box::new(LoopbackDevice::new()));
+        let local_cidr = Ipv4Cidr::new(LOCAL_ADDR, 24);
+        let peer_cidr = Ipv4Cidr::new(PEER_ADDR, 24);
+
+        router.add_rule(Rule::new(
+            local_cidr.into(),
+            None,
+            local_dev,
+            IpAddress::Ipv4(LOCAL_ADDR),
+        ));
+        router.add_rule(Rule::new(
+            peer_cidr.into(),
+            None,
+            peer_dev,
+            IpAddress::Ipv4(PEER_ADDR),
+        ));
+
+        let mut service = Service::new(router);
+        service.iface.update_ip_addrs(|ip_addrs| {
+            ip_addrs.push(local_cidr.into()).unwrap();
+            ip_addrs.push(peer_cidr.into()).unwrap();
+        });
+        stack.service.call_once(|| Mutex::new(service));
+        stack
     }
 }

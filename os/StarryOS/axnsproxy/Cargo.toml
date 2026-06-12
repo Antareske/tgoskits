@@ -12,6 +12,7 @@ authors.workspace = true
 ax-config = { workspace = true }
 ax-errno = { workspace = true }
 ax-kspin = { workspace = true }
+axnet = { version = "0.7.0", path = "../../arceos/modules/axnet-ng", package = "ax-net-ng" }
 linux-raw-sys = { version = "0.12", default-features = false, features = [
     "general",
     "no_std",

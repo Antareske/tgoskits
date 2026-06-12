@@ -10,8 +10,8 @@ use smoltcp::{
 };
 
 use crate::{
-    SOCKET_SET,
     consts::{LISTEN_QUEUE_SIZE, TCP_RX_BUF_LEN, TCP_TX_BUF_LEN},
+    wrapper::SocketSetWrapper,
 };
 
 const PORT_NUM: usize = 65536;
@@ -23,7 +23,7 @@ struct ListenTableEntryInner {
 }
 
 #[derive(Clone, Copy)]
-pub(crate) struct AcceptedTcp {
+pub struct AcceptedTcp {
     pub(crate) handle: SocketHandle,
     pub(crate) local_endpoint: IpEndpoint,
     pub(crate) remote_endpoint: IpEndpoint,
@@ -100,7 +100,7 @@ impl ListenTable {
         }
     }
 
-    pub fn unlisten(&self, port: u16) {
+    pub fn unlisten(&self, port: u16, socket_set: &SocketSetWrapper) {
         debug!("TCP socket unlisten on {}", port);
         let handles = self.tcp[port as usize]
             .lock()
@@ -108,7 +108,7 @@ impl ListenTable {
             .map(|entry| (*entry).into_handles())
             .unwrap_or_default();
         for handle in handles {
-            SOCKET_SET.remove(handle);
+            socket_set.remove(handle);
         }
     }
 

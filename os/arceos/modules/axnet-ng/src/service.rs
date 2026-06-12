@@ -17,7 +17,10 @@ use smoltcp::{
     },
 };
 
-use crate::{SOCKET_SET, consts::STANDARD_MTU, device::ArpEntry, router::Router};
+use crate::{
+    consts::STANDARD_MTU, device::ArpEntry, listen_table::ListenTable, router::Router,
+    wrapper::SocketSetWrapper,
+};
 
 fn now() -> Instant {
     Instant::from_micros_const((wall_time_nanos() / NANOS_PER_MICROS) as i64)
@@ -222,20 +225,26 @@ impl Service {
             .is_some_and(|state| state.address.is_some())
     }
 
-    pub fn poll(&mut self, sockets: &mut SocketSet) -> bool {
+    pub fn poll(&mut self, socket_set: &SocketSetWrapper, listen_table: &ListenTable) -> bool {
+        let sockets = &mut socket_set.inner.lock();
+        self.poll_inner(sockets, listen_table)
+    }
+
+    fn poll_inner(&mut self, sockets: &mut SocketSet, listen_table: &ListenTable) -> bool {
         let timestamp = now();
         let mut dhcp_events = Vec::new();
 
         {
             let dhcp = &mut self.dhcp;
-            self.router.poll(timestamp, sockets, |dev, packet| {
-                if let Some(event) = dhcp
-                    .as_mut()
-                    .and_then(|state| state.process_packet(dev, packet, timestamp))
-                {
-                    dhcp_events.push(event);
-                }
-            });
+            self.router
+                .poll(timestamp, sockets, listen_table, |dev, packet| {
+                    if let Some(event) = dhcp
+                        .as_mut()
+                        .and_then(|state| state.process_packet(dev, packet, timestamp))
+                    {
+                        dhcp_events.push(event);
+                    }
+                });
         }
         for event in dhcp_events {
             self.handle_dhcp_event(event);
@@ -338,8 +347,8 @@ impl Service {
         }
     }
 
-    pub fn register_waker(&mut self, mask: u32, waker: &Waker) {
-        let next = self.iface.poll_at(now(), &SOCKET_SET.inner.lock());
+    pub fn register_waker(&mut self, mask: u32, waker: &Waker, socket_set: &SocketSetWrapper) {
+        let next = self.iface.poll_at(now(), &socket_set.inner.lock());
 
         if let Some(t) = next {
             let next = TimeValue::from_micros(t.total_micros() as _);

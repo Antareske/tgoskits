@@ -12,9 +12,9 @@ use smoltcp::{
 };
 
 use crate::{
-    LISTEN_TABLE,
     consts::{SOCKET_BUFFER_SIZE, STANDARD_MTU},
     device::{ArpEntry, Device},
+    listen_table::ListenTable,
 };
 
 #[derive(Debug)]
@@ -134,11 +134,12 @@ impl Router {
         &mut self,
         timestamp: Instant,
         sockets: &mut SocketSet<'_>,
+        listen_table: &ListenTable,
         mut snoop: impl FnMut(usize, &[u8]),
     ) {
         for (dev_idx, dev) in self.devices.iter_mut().enumerate() {
             let mut packet_snoop = |packet: &[u8]| {
-                snoop_tcp_packet(packet, sockets);
+                snoop_tcp_packet(packet, sockets, listen_table);
                 snoop(dev_idx, packet);
             };
             while !self.rx_buffer.is_full()
@@ -231,7 +232,7 @@ impl smoltcp::phy::TxToken for TxToken<'_> {
     }
 }
 
-fn snoop_tcp_packet(buf: &[u8], sockets: &mut SocketSet<'_>) {
+fn snoop_tcp_packet(buf: &[u8], sockets: &mut SocketSet<'_>, listen_table: &ListenTable) {
     let (protocol, src_addr, dst_addr, payload) = match IpVersion::of_packet(buf).unwrap() {
         IpVersion::Ipv4 => {
             let packet = Ipv4Packet::new_unchecked(buf);
@@ -258,7 +259,7 @@ fn snoop_tcp_packet(buf: &[u8], sockets: &mut SocketSet<'_>) {
         let dst_addr = (dst_addr, tcp_packet.dst_port()).into();
         let is_first = tcp_packet.syn() && !tcp_packet.ack();
         if is_first {
-            LISTEN_TABLE.incoming_tcp_packet(src_addr, dst_addr, sockets);
+            listen_table.incoming_tcp_packet(src_addr, dst_addr, sockets);
         }
     }
 }

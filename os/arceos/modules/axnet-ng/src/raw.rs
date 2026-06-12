@@ -4,7 +4,7 @@
 
 //! Raw IP socket implementation for ICMP-style traffic.
 
-use alloc::vec;
+use alloc::{sync::Arc, vec};
 use core::{
     net::{Ipv4Addr, Ipv6Addr, SocketAddr},
     sync::atomic::{AtomicBool, Ordering},
@@ -25,12 +25,11 @@ use smoltcp::{
 use spin::RwLock;
 
 use crate::{
-    RecvFlags, RecvOptions, SOCKET_SET, SendFlags, SendOptions, Shutdown, SocketAddrEx, SocketOps,
+    RecvFlags, RecvOptions, SendFlags, SendOptions, Shutdown, SocketAddrEx, SocketOps,
     consts::{RAW_RX_BUF_LEN, RAW_TX_BUF_LEN},
     general::GeneralOptions,
-    get_service,
+    net_stack::NetStack,
     options::{Configurable, GetSocketOption, SetSocketOption},
-    poll_interfaces,
 };
 
 pub(crate) fn new_raw_socket(
@@ -46,6 +45,7 @@ pub(crate) fn new_raw_socket(
 }
 
 /// A raw IP socket used for ICMP and ICMPv6 traffic.
+/// A raw IP socket used for ICMP and ICMPv6 traffic.
 pub struct RawSocket {
     handle: SocketHandle,
     ip_version: IpVersion,
@@ -56,12 +56,15 @@ pub struct RawSocket {
     rx_closed: AtomicBool,
     tx_closed: AtomicBool,
     general: GeneralOptions,
+    stack: Arc<NetStack>,
 }
 
 impl RawSocket {
     /// Creates a raw socket for the given IP version and protocol.
-    pub fn new(ip_version: IpVersion, ip_protocol: IpProtocol) -> Self {
-        let handle = SOCKET_SET.add(new_raw_socket(ip_version, ip_protocol));
+    pub fn new(ip_version: IpVersion, ip_protocol: IpProtocol, stack: Arc<NetStack>) -> Self {
+        let handle = stack
+            .socket_set
+            .add(new_raw_socket(ip_version, ip_protocol));
         let general = GeneralOptions::new(3, 2, u8::from(ip_protocol) as i32); // SOCK_RAW
         general.set_device_mask(u32::MAX);
         Self {
@@ -74,11 +77,14 @@ impl RawSocket {
             rx_closed: AtomicBool::new(false),
             tx_closed: AtomicBool::new(false),
             general,
+            stack,
         }
     }
 
     fn with_smol_socket<R>(&self, f: impl FnOnce(&mut smol::Socket) -> R) -> R {
-        SOCKET_SET.with_socket_mut::<smol::Socket, _, _>(self.handle, f)
+        self.stack
+            .socket_set
+            .with_socket_mut::<smol::Socket, _, _>(self.handle, f)
     }
 
     fn check_ip_version(&self, addr: IpAddress) -> AxResult<IpAddress> {
@@ -107,7 +113,7 @@ impl RawSocket {
         if is_loopback_address(remote) {
             return remote;
         }
-        get_service().get_source_address(&remote)
+        self.stack.get_service().get_source_address(&remote)
     }
 
     fn parse_ip_packet<'a>(&self, packet: &'a [u8]) -> AxResult<(IpAddress, &'a [u8])> {
@@ -213,7 +219,7 @@ impl SocketOps for RawSocket {
         let device_mask = if local.is_unspecified() {
             u32::MAX
         } else {
-            get_service().device_mask_for(&IpListenEndpoint {
+            self.stack.get_service().device_mask_for(&IpListenEndpoint {
                 addr: Some(local),
                 port: 0,
             })
@@ -226,11 +232,11 @@ impl SocketOps for RawSocket {
         let remote_addr = remote_addr.into_ip()?;
         let remote = self.check_ip_version(remote_addr.ip().into())?;
         if self.local_addr.read().is_none() {
-            *self.local_addr.write() = Some(get_service().get_source_address(&remote));
+            *self.local_addr.write() = Some(self.stack.get_service().get_source_address(&remote));
         }
         *self.peer_addr.write() = Some(remote);
         self.general
-            .set_device_mask(get_service().device_mask_for(&IpListenEndpoint {
+            .set_device_mask(self.stack.get_service().device_mask_for(&IpListenEndpoint {
                 addr: Some(remote),
                 port: 0,
             }));
@@ -253,7 +259,7 @@ impl SocketOps for RawSocket {
         let loopback_ipv4 = self.ip_version == IpVersion::Ipv4 && is_loopback_address(remote);
 
         self.general.send_poller_with(self, extra_nb, || {
-            poll_interfaces();
+            self.stack.poll_interfaces();
             self.with_smol_socket(|socket| {
                 if !socket.can_send() {
                     return Err(AxError::WouldBlock);
@@ -361,7 +367,7 @@ impl SocketOps for RawSocket {
         let mut options = options;
 
         self.general.recv_poller_with(self, extra_nb, || {
-            poll_interfaces();
+            self.stack.poll_interfaces();
             self.with_smol_socket(|socket| {
                 loop {
                     if let Some((source, packet)) = if options.flags.contains(RecvFlags::PEEK) {
@@ -447,7 +453,7 @@ impl SocketOps for RawSocket {
 
 impl Pollable for RawSocket {
     fn poll(&self) -> IoEvents {
-        poll_interfaces();
+        self.stack.poll_interfaces();
         let mut events = IoEvents::empty();
         self.with_smol_socket(|socket| {
             events.set(
@@ -468,7 +474,7 @@ impl Pollable for RawSocket {
 
     fn register(&self, context: &mut Context<'_>, events: IoEvents) {
         if events.intersects(IoEvents::IN | IoEvents::OUT) {
-            self.general.register_waker(context.waker());
+            self.general.register_waker(context.waker(), &self.stack);
         }
     }
 }
@@ -476,6 +482,6 @@ impl Pollable for RawSocket {
 impl Drop for RawSocket {
     fn drop(&mut self) {
         self.shutdown(Shutdown::Both).ok();
-        SOCKET_SET.remove(self.handle);
+        self.stack.socket_set.remove(self.handle);
     }
 }

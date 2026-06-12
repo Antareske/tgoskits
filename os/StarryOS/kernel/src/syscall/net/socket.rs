@@ -32,6 +32,19 @@ use crate::{
     task::AsThread,
 };
 
+/// Returns the `Arc<NetStack>` backing the calling process's network namespace.
+fn current_net_stack() -> alloc::sync::Arc<axnet::NetStack> {
+    current()
+        .as_thread()
+        .proc_data
+        .nsproxy
+        .lock()
+        .net_ns
+        .lock()
+        .stack
+        .clone()
+}
+
 pub fn sys_socket(domain: u32, raw_ty: u32, proto: u32) -> AxResult<isize> {
     debug!("sys_socket <= domain: {domain}, ty: {raw_ty}, proto: {proto}");
     let ty = raw_ty & 0xFF;
@@ -59,18 +72,20 @@ pub fn sys_socket(domain: u32, raw_ty: u32, proto: u32) -> AxResult<isize> {
         AF_INET
     };
 
+    let stack = current_net_stack();
+
     let socket = match (domain, ty) {
         (AF_INET | AF_INET6, SOCK_STREAM) => {
             if proto != 0 && proto != IPPROTO_TCP as _ {
                 return Err(AxError::from(LinuxError::EPROTONOSUPPORT));
             }
-            TcpSocket::new().into()
+            TcpSocket::new(stack).into()
         }
         (AF_INET | AF_INET6, SOCK_DGRAM) => {
             if proto != 0 && proto != IPPROTO_UDP as _ {
                 return Err(AxError::from(LinuxError::EPROTONOSUPPORT));
             }
-            UdpSocket::new().into()
+            UdpSocket::new(stack).into()
         }
         (AF_UNIX, SOCK_STREAM) => UnixSocket::new(StreamTransport::new(pid)).into(),
         (AF_UNIX, SOCK_DGRAM) => UnixSocket::new(DgramTransport::new(pid)).into(),
@@ -98,7 +113,11 @@ pub fn sys_socket(domain: u32, raw_ty: u32, proto: u32) -> AxResult<isize> {
             if !current().as_thread().cred().has_cap_net_raw() {
                 return Err(AxError::from(LinuxError::EPERM));
             }
-            SocketInner::Raw(Box::new(RawSocket::new(IpVersion::Ipv4, IpProtocol::Icmp)))
+            SocketInner::Raw(Box::new(RawSocket::new(
+                IpVersion::Ipv4,
+                IpProtocol::Icmp,
+                stack,
+            )))
         }
         (AF_INET | AF_INET6, _) | (AF_UNIX, _) | (AF_NETLINK, _) | (AF_VSOCK, _) => {
             warn!("Unsupported socket type: domain: {domain}, ty: {ty}");

@@ -35,6 +35,7 @@ use crate::{
         DirMaker, DirMapping, NodeOpsMux, RwFile, SeqObject, SimpleDir, SimpleDirOps, SimpleFile,
         SimpleFileOperation, SimpleFs, SpecialFsFile,
     },
+    syscall::in_root_net_ns,
     task::{
         AsThread, ProcessData, TaskStat, Thread, get_process_data, get_task, processes, tasks,
         tick_cpu_time,
@@ -312,11 +313,17 @@ fn render_proc_net_arp() -> String {
 }
 
 fn render_proc_net_dev() -> String {
-    "Inter-|   Receive                                                |  Transmit\n\
+    let mut out = "Inter-|   Receive                                                |  Transmit\n\
       face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed\n\
-        lo:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0\n\
-      eth0:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0\n"
-        .to_string()
+        lo:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0\n"
+        .to_string();
+    if in_root_net_ns() {
+        out.push_str(
+            "      eth0:       0       0    0    0    0     0          0         0        0       \
+             0    0    0    0     0       0          0\n",
+        );
+    }
+    out
 }
 
 pub fn new_procfs() -> Filesystem {

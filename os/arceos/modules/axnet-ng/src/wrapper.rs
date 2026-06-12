@@ -9,7 +9,7 @@ use smoltcp::{
     wire::IpAddress,
 };
 
-pub(crate) struct SocketSetWrapper<'a> {
+pub struct SocketSetWrapper<'a> {
     pub inner: Mutex<SocketSet<'a>>,
     pub new_socket: Event,
 }

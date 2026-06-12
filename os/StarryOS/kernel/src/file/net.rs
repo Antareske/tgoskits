@@ -173,10 +173,9 @@ fn write_eth0_ifconf(arg: usize) -> AxResult<()> {
     } else {
         // SIOCGIFCONF sizing call (ifc_buf == NULL): Linux's dev_ifconf returns
         // the number of bytes needed to hold all interfaces so the caller can
-        // size its buffer. Returning 0 made OpenJDK's
-        // NetworkInterface.enumIPv4Interfaces malloc a 0-byte buffer and find no
-        // interfaces. Report space for eth0 + lo.
-        len = (2 * IFREQ_COMPAT_LEN as i32).to_ne_bytes();
+        // size its buffer. Non-root namespaces see only lo; root ns sees eth0+lo.
+        let count = if in_root_net_ns() { 2 } else { 1 };
+        len = (count * IFREQ_COMPAT_LEN as i32).to_ne_bytes();
     }
     vm_write_slice((arg + IFCONF_LEN_OFFSET) as *mut u8, &len)?;
     Ok(())

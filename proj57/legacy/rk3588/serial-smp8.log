@@ -1,0 +1,931 @@
+    Updating crates.io index
+  Downloaded tracing-core v0.1.36
+  Downloaded twox-hash v2.1.2
+  Downloaded wezterm-dynamic v0.2.1
+  Downloaded tracing-log v0.2.0
+  Downloaded tracing-attributes v0.1.31
+  Downloaded block-buffer v0.12.0
+  Downloaded bytecheck v0.6.12
+  Downloaded cfg-if v1.0.4
+  Downloaded tracing-subscriber v0.3.23
+  Downloaded addr2line v0.26.1
+  Downloaded tungstenite v0.28.0
+  Downloaded base64 v0.22.1
+  Downloaded unicode-segmentation v1.13.3
+  Downloaded typed-arena v2.0.2
+  Downloaded uboot-shell v0.2.4
+  Downloaded unescaper v0.1.8
+  Downloaded typenum v1.20.1
+  Downloaded unicode-width v0.1.14
+  Downloaded ucd-trie v0.1.7
+  Downloaded try-lock v0.2.5
+  Downloaded unicode-truncate v2.0.1
+  Downloaded utf8-width v0.1.8
+  Downloaded untrusted v0.9.0
+  Downloaded utf-8 v0.7.6
+  Downloaded unicode-width v0.2.2
+  Downloaded vtparse v0.6.2
+  Downloaded bit-vec v0.6.3
+  Downloaded bitflags v1.3.2
+  Downloaded unicase v2.9.0
+  Downloaded atomic v0.6.1
+  Downloaded ahash v0.8.12
+  Downloaded yoke v0.8.3
+  Downloaded cargo-platform v0.3.3
+  Downloaded xi-unicode v0.3.0
+  Downloaded cc v1.2.63
+  Downloaded compact_str v0.9.1
+  Downloaded wezterm-color-types v0.3.0
+  Downloaded axum-core v0.5.6
+  Downloaded uuid v1.23.2
+  Downloaded bytes v1.11.1
+  Downloaded bytecheck_derive v0.6.12
+  Downloaded zerofrom v0.1.8
+  Downloaded atomic-waker v1.1.2
+  Downloaded zerofrom-derive v0.1.7
+  Downloaded utf8-zero v0.8.1
+  Downloaded bit-set v0.5.3
+  Downloaded adler2 v2.0.1
+  Downloaded castaway v0.2.4
+  Downloaded cfg_aliases v0.2.1
+  Downloaded approx v0.5.1
+  Downloaded xattr v1.6.1
+  Downloaded wezterm-dynamic-derive v0.1.1
+  Downloaded block-buffer v0.10.4
+  Downloaded want v0.3.1
+  Downloaded yoke-derive v0.8.2
+  Downloaded by_address v1.2.1
+  Downloaded cmake v0.1.58
+  Downloaded version_check v0.9.5
+  Downloaded async-trait v0.1.89
+  Downloaded walkdir v2.5.0
+  Downloaded zeroize v1.8.2
+  Downloaded utf8_iter v1.0.4
+  Downloaded bitmaps v3.2.1
+  Downloaded arrayvec v0.7.6
+  Downloaded unit-prefix v0.5.2
+  Downloaded wezterm-blob-leases v0.1.1
+  Downloaded autocfg v1.5.1
+  Downloaded wyz v0.5.1
+  Downloaded zerovec-derive v0.11.3
+  Downloaded clap_derive v4.6.1
+  Downloaded colored v3.1.1
+  Downloaded cargo_metadata v0.23.1
+  Downloaded writeable v0.6.3
+  Downloaded wezterm-input-types v0.1.0
+  Downloaded xz2 v0.1.7
+  Downloaded ahash v0.7.8
+  Downloaded ureq-proto v0.6.0
+  Downloaded bitflags v2.13.0
+  Downloaded allocator-api2 v0.2.21
+  Downloaded borsh-derive v1.6.1
+  Downloaded vm-fdt v0.3.0
+  Downloaded bytemuck v1.25.0
+  Downloaded byteorder v1.5.0
+  Downloaded zerotrie v0.2.4
+  Downloaded byte-unit v5.2.0
+  Downloaded chrono v0.4.45
+  Downloaded url v2.5.8
+  Downloaded borsh v1.6.1
+  Downloaded compact_str v0.8.2
+  Downloaded wezterm-bidi v0.2.3
+  Downloaded ureq v3.3.0
+  Downloaded zerovec v0.11.6
+  Downloaded webpki-roots v1.0.7
+  Downloaded axum v0.8.9
+  Downloaded winnow v1.0.3
+  Downloaded memmem v0.1.1
+  Downloaded mac_address v1.1.8
+  Downloaded lazy_static v1.5.0
+  Downloaded vcpkg v0.2.15
+  Downloaded libudev v0.3.0
+  Downloaded zerocopy v0.8.50
+  Downloaded aws-lc-rs v1.17.0
+  Downloaded bitvec v1.0.1
+  Downloaded lab v0.11.0
+  Downloaded lru-slab v0.1.2
+  Downloaded lzma-rs v0.3.0
+  Downloaded lru v0.18.0
+  Downloaded litemap v0.8.2
+  Downloaded kasuari v0.4.12
+  Downloaded console v0.16.3
+  Downloaded line-clipping v0.3.7
+  Downloaded libudev-sys v0.1.4
+  Downloaded powerfmt v0.2.0
+  Downloaded lock_api v0.4.14
+  Downloaded litrs v1.0.0
+  Downloaded phf_generator v0.11.3
+  Downloaded rand_chacha v0.3.1
+  Downloaded mime v0.3.17
+  Downloaded proc-macro-crate v3.5.0
+  Downloaded num-derive v0.4.2
+  Downloaded phf_shared v0.11.3
+  Downloaded percent-encoding v2.3.2
+  Downloaded ptr_meta v0.1.4
+  Downloaded radium v0.7.0
+  Downloaded memoffset v0.9.1
+  Downloaded md5 v0.8.0
+  Downloaded openssl-probe v0.2.1
+  Downloaded ptr_meta_derive v0.1.4
+  Downloaded ratatui-macros v0.7.1
+  Downloaded rend v0.4.2
+  Downloaded num-iter v0.1.45
+  Downloaded num v0.4.3
+  Downloaded ref-cast-impl v1.0.25
+  Downloaded phf_codegen v0.11.3
+  Downloaded num_threads v0.1.7
+  Downloaded potential_utf v0.1.5
+  Downloaded num-conv v0.2.2
+  Downloaded rand_core v0.9.5
+  Downloaded jobserver v0.1.34
+  Downloaded num-complex v0.4.6
+  Downloaded matchit v0.8.4
+  Downloaded quinn-udp v0.5.14
+  Downloaded jkconfig v0.1.8
+  Downloaded jkconfig v0.2.4
+  Downloaded pkg-config v0.3.33
+  Downloaded ratatui-crossterm v0.1.1
+  Downloaded num-integer v0.1.46
+  Downloaded rand_chacha v0.9.0
+  Downloaded ppv-lite86 v0.2.21
+  Downloaded ref-cast v1.0.25
+  Downloaded mio-serial v5.0.6
+  Downloaded rand_core v0.6.4
+  Downloaded phf_macros v0.11.3
+  Downloaded pin-project-lite v0.2.17
+  Downloaded network-interface v2.0.5
+  Downloaded phf v0.11.3
+  Downloaded palette_derive v0.7.6
+  Downloaded nu-ansi-term v0.50.3
+  Downloaded log v0.4.32
+  Downloaded ordered-float v4.6.0
+  Downloaded quinn v0.11.9
+  Downloaded parking_lot_core v0.9.12
+  Downloaded once_cell v1.21.4
+  Downloaded memmap2 v0.9.10
+  Downloaded pest_generator v2.8.6
+  Downloaded num-rational v0.4.2
+  Downloaded parking_lot v0.12.5
+  Downloaded pest_derive v2.8.6
+  Downloaded ratatui-termwiz v0.1.1
+  Downloaded mime_guess v2.0.5
+  Downloaded miniz_oxide v0.8.9
+  Downloaded num-traits v0.2.19
+  Downloaded pest_meta v2.8.6
+  Downloaded ratatui v0.30.1
+  Downloaded rand v0.8.6
+  Downloaded minimal-lexical v0.2.1
+  Downloaded rand v0.9.4
+  Downloaded libm v0.2.16
+  Downloaded mio v1.2.1
+  Downloaded nom v7.1.3
+  Downloaded raw-cpuid v11.6.0
+  Downloaded time-macros v0.2.27
+  Downloaded rustversion v1.0.22
+  Downloaded signal-hook-registry v1.4.8
+  Downloaded seahash v4.1.0
+  Downloaded reqwest v0.13.4
+  Downloaded pest v2.8.6
+  Downloaded itertools v0.14.0
+  Downloaded ostool v0.22.1
+  Downloaded ratatui-core v0.1.1
+  Downloaded portable-atomic v1.13.1
+  Downloaded ratatui-widgets v0.3.1
+  Downloaded palette v0.7.6
+  Downloaded cursive-macros v0.1.0
+  Downloaded darling_macro v0.21.3
+  Downloaded toml_edit v0.25.12+spec-1.1.0
+  Downloaded quinn-proto v0.11.14
+  Downloaded tokio-util v0.7.18
+  Downloaded crossbeam-channel v0.5.15
+  Downloaded generic-array v0.14.7
+  Downloaded nix v0.26.4
+  Downloaded filetime v0.2.29
+  Downloaded aws-lc-sys v0.41.0
+  Downloaded nix v0.29.0
+  Downloaded indicatif v0.18.4
+  Downloaded const-oid v0.10.2
+  Downloaded enumset v1.1.13
+  Downloaded convert_case v0.10.0
+  Downloaded derive_more v2.1.1
+  Downloaded either v1.16.0
+  Downloaded dyn-clone v1.0.20
+  Downloaded digest v0.10.7
+  Downloaded digest v0.11.3
+  Downloaded env_logger v0.11.10
+  Downloaded fast-srgb8 v1.0.0
+  Downloaded finl_unicode v1.4.0
+  Downloaded funty v2.0.0
+  Downloaded object v0.38.1
+  Downloaded fnv v1.0.7
+  Downloaded futures-executor v0.3.32
+  Downloaded object v0.39.1
+  Downloaded getrandom v0.2.17
+  Downloaded futures-task v0.3.32
+  Downloaded futures v0.3.32
+  Downloaded getrandom v0.3.4
+  Downloaded tinyvec_macros v0.1.1
+  Downloaded subtle v2.6.1
+  Downloaded indoc v2.0.7
+  Downloaded serde_path_to_error v0.1.20
+  Downloaded stable_deref_trait v1.2.1
+  Downloaded signal-hook-mio v0.2.5
+  Downloaded siphasher v1.0.3
+  Downloaded serialport v4.9.0
+  Downloaded sha2 v0.11.0
+  Downloaded rustls-pki-types v1.14.1
+  Downloaded thiserror-impl v2.0.18
+  Downloaded iana-time-zone v0.1.65
+  Downloaded ryu v1.0.23
+  Downloaded icu_properties v2.2.0
+  Downloaded hyper v1.10.1
+  Downloaded thiserror v2.0.18
+  Downloaded http-range-header v0.4.2
+  Downloaded hex v0.4.3
+  Downloaded rustc-hash v2.1.2
+  Downloaded ident_case v1.0.1
+  Downloaded strum_macros v0.28.0
+  Downloaded ruzstd v0.8.3
+  Downloaded hyper-rustls v0.27.9
+  Downloaded rkyv_derive v0.7.46
+  Downloaded rustix v0.38.44
+  Downloaded strum_macros v0.27.2
+  Downloaded icu_properties_data v2.2.0
+  Downloaded same-file v1.0.6
+  Downloaded hashbrown v0.16.1
+  Downloaded toml v1.1.2+spec-1.1.0
+  Downloaded tokio-serial v5.4.5
+  Downloaded serde_spanned v1.1.1
+  Downloaded darling v0.23.0
+  Downloaded darling v0.21.3
+  Downloaded displaydoc v0.2.6
+  Downloaded toml_parser v1.1.2+spec-1.1.0
+  Downloaded termios v0.3.3
+  Downloaded crc32fast v1.5.0
+  Downloaded cpufeatures v0.2.17
+  Downloaded tower-layer v0.3.3
+  Downloaded csscolorparser v0.6.2
+  Downloaded crossterm v0.28.1
+  Downloaded deranged v0.5.8
+  Downloaded signal-hook v0.3.18
+  Downloaded env_filter v1.0.1
+  Downloaded enum-map v2.7.3
+  Downloaded fs_extra v1.3.0
+  Downloaded http-body v1.0.1
+  Downloaded futures-util v0.3.32
+  Downloaded filedescriptor v0.8.3
+  Downloaded futures-io v0.3.32
+  Downloaded fitimage v0.1.4
+  Downloaded futures-timer v3.0.4
+  Downloaded icu_provider v2.2.0
+  Downloaded icu_collections v2.2.0
+  Downloaded simdutf8 v0.1.5
+  Downloaded tokio-tungstenite v0.28.0
+  Downloaded crypto-common v0.1.7
+  Downloaded serde_derive_internals v0.29.1
+  Downloaded static_assertions v1.1.0
+  Downloaded tinystr v0.8.3
+  Downloaded terminfo v0.9.0
+  Downloaded enum-map-derive v0.17.0
+  Downloaded time-core v0.1.8
+  Downloaded instability v0.3.12
+  Downloaded tokio-rustls v0.26.4
+  Downloaded http v1.4.1
+  Downloaded rustls-platform-verifier v0.7.0
+  Downloaded rust_decimal v1.42.0
+  Downloaded darling_macro v0.23.0
+  Downloaded schemars v1.2.1
+  Downloaded tower v0.5.3
+  Downloaded cpp_demangle v0.5.1
+  Downloaded thread_local v1.1.9
+  Downloaded critical-section v1.2.0
+  Downloaded data-encoding v2.11.0
+  Downloaded sync_wrapper v1.0.2
+  Downloaded sha1 v0.10.6
+  Downloaded crypto-common v0.2.2
+  Downloaded shlex v2.0.1
+  Downloaded encoding_rs v0.8.35
+  Downloaded find-msvc-tools v0.1.9
+  Downloaded euclid v0.22.14
+  Downloaded futures-macro v0.3.32
+  Downloaded form_urlencoded v1.2.2
+  Downloaded crc-catalog v2.5.0
+  Downloaded futures-core v0.3.32
+  Downloaded fixedbitset v0.4.2
+  Downloaded toml v0.9.12+spec-1.1.0
+  Downloaded ipnet v2.12.0
+  Downloaded tracing v0.1.44
+  Downloaded derive_more-impl v2.1.1
+  Downloaded jiff v0.2.28
+  Downloaded syn v1.0.109
+  Downloaded rustls-webpki v0.103.13
+  Downloaded lzma-sys v0.1.20
+  Downloaded hashbrown v0.12.3
+  Downloaded hyper-util v0.1.20
+  Downloaded tower-http v0.6.11
+  Downloaded cursive_core v0.4.6
+  Downloaded document-features v0.2.12
+  Downloaded tokio-macros v2.7.0
+  Downloaded futures-sink v0.3.32
+  Downloaded tower-service v0.3.3
+  Downloaded serde_urlencoded v0.7.1
+  Downloaded crc v3.4.0
+  Downloaded gimli v0.33.0
+  Downloaded heck v0.5.0
+  Downloaded hybrid-array v0.4.12
+  Downloaded strum v0.27.2
+  Downloaded dunce v1.0.5
+  Downloaded sha1 v0.11.0
+  Downloaded libz-sys v1.1.29
+  Downloaded socket2 v0.6.4
+  Downloaded smallvec v1.15.1
+  Downloaded idna_adapter v1.2.2
+  Downloaded icu_normalizer v2.2.0
+  Downloaded simd-adler32 v0.3.9
+  Downloaded slab v0.4.12
+  Downloaded foldhash v0.2.0
+  Downloaded crossbeam-utils v0.8.21
+  Downloaded getrandom v0.4.2
+  Downloaded serde_repr v0.1.20
+  Downloaded httparse v1.10.1
+  Downloaded sharded-slab v0.1.7
+  Downloaded tar v0.4.46
+  Downloaded tinyvec v1.11.0
+  Downloaded darling_core v0.23.0
+  Downloaded darling_core v0.21.3
+  Downloaded tap v1.0.1
+  Downloaded rkyv v0.7.46
+  Downloaded toml_datetime v0.7.5+spec-1.1.0
+  Downloaded enumset_derive v0.15.0
+  Downloaded futures-channel v0.3.32
+  Downloaded idna v1.1.0
+  Downloaded scopeguard v1.2.0
+  Downloaded crossterm v0.29.0
+  Downloaded icu_locale_core v2.2.0
+  Downloaded device_tree v1.1.0
+  Downloaded toml_writer v1.1.1+spec-1.1.0
+  Downloaded rustls v0.23.40
+  Downloaded rustls-native-certs v0.8.4
+  Downloaded synstructure v0.13.2
+  Downloaded ring v0.17.14
+  Downloaded h2 v0.4.14
+  Downloaded termwiz v0.23.3
+  Downloaded cpufeatures v0.3.0
+  Downloaded tftpd v0.5.3
+  Downloaded icu_normalizer_data v2.2.0
+  Downloaded fancy-regex v0.11.0
+  Downloaded tokio v1.52.3
+  Downloaded linux-raw-sys v0.4.15
+  Downloaded httpdate v1.0.3
+  Downloaded flate2 v1.1.9
+  Downloaded strum v0.28.0
+  Downloaded sha2 v0.10.9
+  Downloaded toml_datetime v1.1.1+spec-1.1.0
+  Downloaded cursive v0.21.1
+  Downloaded fallible-iterator v0.3.0
+  Downloaded http-body-util v0.1.3
+  Downloaded schemars_derive v1.2.1
+  Downloaded time v0.3.47
+  Downloaded deltae v0.3.2
+  Downloaded 388 crates (39.2MiB) in 2.95s (largest was `aws-lc-sys` at 9.1MiB)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.80s
+     Running `target/debug/tg-xtask starry quick-start orangepi-5-plus run --serial /dev/ttyUSB0`
+[2026-06-06T16:50:57Z INFO  axbuild::context] Workspace root: /workspace/wt-proj57
+Using build config: /workspace/wt-proj57/tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml
+[2026-06-06T16:50:57Z INFO  axbuild::build] Found build config at /workspace/wt-proj57/tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml
+sh -c rm -f '/workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos' '/workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos.bin'
+AX_ARCH=aarch64
+AX_LOG=info
+AX_TARGET=aarch64-unknown-none-softfloat
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+SMP=8
+cargo build -p starryos --target scripts/targets/pie/aarch64-unknown-none-softfloat.json -Z unstable-options --target-dir /workspace/wt-proj57/target --features ax-driver/list-pci-devices,ax-driver/realtek-rtl8125,ax-driver/rk3588-pcie,ax-driver/rockchip-dwc-xhci,ax-driver/rockchip-dwmmc,ax-driver/rockchip-sdhci,ax-driver/rockchip-soc,ax-feat/smp,rknpu,plat-dyn -Z json-target-spec -Z build-std=core,alloc --bin starryos --release --message-format json-render-diagnostics
+  Downloaded aliasable v0.1.3
+  Downloaded as-any v0.3.2
+  Downloaded aarch64-cpu v10.0.0
+  Downloaded accessor v0.3.3
+  Downloaded clear-cache v0.1.3
+  Downloaded ptr_meta v0.3.1
+  Downloaded rand_core v0.10.1
+  Downloaded ptr_meta_derive v0.3.1
+  Downloaded base64 v0.13.1
+  Downloaded axerrno v0.2.2
+  Downloaded aarch64-cpu-ext v0.1.4
+  Downloaded ansi_rgb v0.2.0
+  Downloaded num_enum_derive v0.7.6
+  Downloaded ax-errno v0.6.0
+  Downloaded async-channel v2.5.0
+  Downloaded aarch64-cpu v11.2.0
+  Downloaded acpi v6.1.1
+  Downloaded aml v0.16.4
+  Downloaded fdt-edit v0.2.3
+  Downloaded darling v0.13.4
+  Downloaded lenient_semver_parser v0.4.2
+  Downloaded combine v4.6.7
+  Downloaded const-default v1.0.0
+  Downloaded crossbeam v0.8.4
+  Downloaded lenient_semver_version_builder v0.4.2
+  Downloaded darling_core v0.13.4
+  Downloaded cexpr v0.6.0
+  Downloaded event-listener-strategy v0.5.4
+  Downloaded kernel-elf-parser v0.3.4
+  Downloaded fdt-raw v0.3.0
+  Downloaded inherit-methods-macro v0.1.0
+  Downloaded managed v0.8.0
+  Downloaded rand v0.10.1
+  Downloaded raw-cpuid v10.7.0
+  Downloaded typeid v1.0.3
+  Downloaded yansi v1.0.1
+  Downloaded extern-trait-impl v0.4.3
+  Downloaded darling_macro v0.13.4
+  Downloaded bit v0.1.1
+  Downloaded svgbobdoc v0.3.0
+  Downloaded volatile v0.6.1
+  Downloaded smccc v0.2.3
+  Downloaded x2apic v0.5.0
+  Downloaded strsim v0.10.0
+  Downloaded mbarrier v0.1.3
+  Downloaded proc-macro2-diagnostics v0.10.1
+  Downloaded uluru v3.1.0
+  Downloaded x86_rtc v0.1.1
+  Downloaded kmacro-tools v0.2.0
+  Downloaded ucs2 v0.3.3
+  Downloaded const-str v1.1.0
+  Downloaded trait-ffi v0.2.11
+  Downloaded xmas-elf v0.9.1
+  Downloaded multiboot v0.8.0
+  Downloaded defmt-macros v1.1.0
+  Downloaded kapi v0.2.0
+  Downloaded int-enum v1.2.0
+  Downloaded uefi-macros v0.19.0
+  Downloaded hash32 v0.3.1
+  Downloaded scroll_derive v0.13.1
+  Downloaded num-derive v0.3.3
+  Downloaded convert_case v0.8.0
+  Downloaded proc-macro-error2 v2.0.1
+  Downloaded bytemuck_derive v1.10.2
+  Downloaded printf-compat v0.4.0
+  Downloaded volatile-macro v0.6.0
+  Downloaded weak-map v0.1.2
+  Downloaded id-arena v2.3.0
+  Downloaded tock-registers v0.10.1
+  Downloaded zero v0.1.3
+  Downloaded function_name v0.3.0
+  Downloaded ouroboros v0.18.5
+  Downloaded uart_16550 v0.4.0
+  Downloaded volatile v0.4.6
+  Downloaded rgb v0.8.53
+  Downloaded scroll v0.13.0
+  Downloaded extern-trait v0.4.3
+  Downloaded unicode-xid v0.2.6
+  Downloaded tp-lexer v0.5.5
+  Downloaded kbpf-basic v0.5.7
+  Downloaded flatten_objects v0.2.4
+  Downloaded tock-registers v0.9.0
+  Downloaded shlex v1.3.0
+  Downloaded heck v0.4.1
+  Downloaded kmod-tools v0.2.0
+  Downloaded uguid v2.2.1
+  Downloaded ringbuf v0.4.8
+  Downloaded crossbeam-queue v0.3.12
+  Downloaded defmt-parser v1.0.0
+  Downloaded const_fn v0.4.12
+  Downloaded spin v0.10.0
+  Downloaded xhci v0.9.2
+  Downloaded uart_16550 v0.5.0
+  Downloaded buddy_system_allocator v0.12.0
+  Downloaded clang-sys v1.8.1
+  Downloaded num-align v0.1.0
+  Downloaded downcast-rs v2.0.2
+  Downloaded yaxpeax-arch v0.3.2
+  Downloaded ksym v0.6.0
+  Downloaded proc-macro-error-attr2 v2.0.0
+  Downloaded defmt v0.3.100
+  Downloaded function_name-proc-macro v0.3.0
+  Downloaded static-keys v0.8.2
+  Downloaded spin v0.12.0
+  Downloaded ddebug v0.5.5
+  Downloaded lru v0.16.4
+  Downloaded pci_types v0.10.1
+  Downloaded ouroboros_macro v0.18.5
+  Downloaded plain v0.2.3
+  Downloaded nb v1.1.0
+  Downloaded spinning_top v0.2.5
+  Downloaded rlsf v0.2.2
+  Downloaded paste v1.0.15
+  Downloaded concurrent-queue v2.5.0
+  Downloaded enum_dispatch v0.3.13
+  Downloaded spinning_top v0.3.0
+  Downloaded uefi-raw v0.14.0
+  Downloaded ktracepoint v0.6.0
+  Downloaded numeric-enum-macro v0.2.0
+  Downloaded glob v0.3.3
+  Downloaded embedded-hal v1.0.0
+  Downloaded crossbeam-skiplist v0.1.3
+  Downloaded libloading v0.8.9
+  Downloaded num_enum v0.7.6
+  Downloaded bit_field v0.10.3
+  Downloaded kprobe v0.5.5
+  Downloaded syscalls v0.8.1
+  Downloaded bitfield-struct v0.13.0
+  Downloaded x86_64 v0.15.4
+  Downloaded crossbeam-epoch v0.9.18
+  Downloaded fdt-parser v0.4.19
+  Downloaded zerocopy-derive v0.8.50
+  Downloaded kmod-loader v0.2.1
+  Downloaded rbpf v0.4.1
+  Downloaded bitfield-struct v0.11.0
+  Downloaded defmt v1.1.0
+  Downloaded intrusive-collections v0.9.7
+  Downloaded event-listener v5.4.1
+  Downloaded portable-atomic-util v0.2.7
+  Downloaded prettyplease v0.2.37
+  Downloaded uefi v0.37.0
+  Downloaded heapless v0.9.3
+  Downloaded itertools v0.13.0
+  Downloaded bindgen v0.72.1
+  Downloaded smoltcp v0.13.1
+  Downloaded goblin v0.10.7
+  Downloaded kbindings v0.2.0
+  Downloaded lenient_semver v0.4.2
+  Downloaded lwprintf-rs v0.3.3
+  Downloaded yaxpeax-x86 v2.1.1
+  Downloaded x86 v0.52.0
+  Downloaded 151 crates (8.9MiB) in 4.40s (largest was `x86` at 1.9MiB)
+    Updating crates.io index
+  Downloaded addr2line v0.25.1
+  Downloaded getopts v0.2.24
+  Downloaded memchr v2.7.6
+  Downloaded rustc-literal-escaper v0.0.7
+  Downloaded gimli v0.32.3
+  Downloaded object v0.37.3
+  Downloaded libc v0.2.185
+  Downloaded 7 crates (1.6MiB) in 0.46s
+warning: value assigned to `vaddr` is never read
+  --> components/someboot/src/acpi/earlycon.rs:39:21
+   |
+39 |     let mut vaddr = None;
+   |                     ^^^^ this value is reassigned later and never used
+...
+62 |                     vaddr = Some(mapped);
+   |                     -------------------- `vaddr` is overwritten here before the previous value is read
+   |
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `is_mmio` is never read
+  --> components/someboot/src/acpi/earlycon.rs:40:23
+   |
+40 |     let mut is_mmio = false;
+   |                       ^^^^^ this value is reassigned later and never used
+...
+63 |                     is_mmio = true;
+   |                     -------------- `is_mmio` is overwritten here before the previous value is read
+
+warning: `someboot` (lib) generated 2 warnings
+warning: constant `RKNPU_DEVICE_ID` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/card1.rs:42:11
+   |
+42 | pub const RKNPU_DEVICE_ID: DeviceId = DeviceId::new(251, 0);
+   |           ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `rknpu_submit_ioctl` is never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/card1.rs:385:8
+    |
+385 | pub fn rknpu_submit_ioctl(arg: usize) -> VfsResult<usize> {
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `rknpu_mem_create_ioctl` is never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/card1.rs:407:8
+    |
+407 | pub fn rknpu_mem_create_ioctl(arg: usize) -> VfsResult<usize> {
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `drm_set_unique` is never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/card1.rs:627:8
+    |
+627 | pub fn drm_set_unique(data: &mut [u8]) -> VfsResult<()> {
+    |        ^^^^^^^^^^^^^^
+
+warning: constant `DRM0_NAME` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:17:7
+   |
+17 | const DRM0_NAME: &str = "rockchip";
+   |       ^^^^^^^^^
+
+warning: constant `DRM0_DATE` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:19:7
+   |
+19 | const DRM0_DATE: &str = "20140818";
+   |       ^^^^^^^^^
+
+warning: constant `DRM0_DESC` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:21:7
+   |
+21 | const DRM0_DESC: &str = "RockChip Soc DRM";
+   |       ^^^^^^^^^
+
+warning: constant `RKNPU_DEVICE_ID` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:24:11
+   |
+24 | pub const RKNPU_DEVICE_ID: DeviceId = DeviceId::new(251, 0);
+   |           ^^^^^^^^^^^^^^^
+
+warning: constant `CARD0_SYSTEM_DEVICE_ID` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:27:11
+   |
+27 | pub const CARD0_SYSTEM_DEVICE_ID: DeviceId = DeviceId::new(0xe2, 0);
+   |           ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `Card0` is never constructed
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:30:12
+   |
+30 | pub struct Card0;
+   |            ^^^^^
+
+warning: associated function `new` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:34:12
+   |
+32 | impl Card0 {
+   | ---------- associated function in this implementation
+33 |     /// Creates a new /dev/dri/card0 device.
+34 |     pub fn new() -> Card0 {
+   |            ^^^
+
+warning: function `drm_copy_field` is never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:115:11
+    |
+115 | unsafe fn drm_copy_field(
+    |           ^^^^^^^^^^^^^^
+
+warning: function `drm_version` is never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:159:4
+    |
+159 | fn drm_version(data: &mut [u8]) -> VfsResult<()> {
+    |    ^^^^^^^^^^^
+
+warning: struct `DrmUnique` is never constructed
+   --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:273:12
+    |
+273 | pub struct DrmUnique {
+    |            ^^^^^^^^^
+
+warning: associated items `new`, `with_buffer`, `is_null`, `len`, and `set_len` are never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:283:18
+    |
+281 | impl DrmUnique {
+    | -------------- associated items in this implementation
+282 |     /// Creates a new DrmUnique with default values
+283 |     pub const fn new() -> Self {
+    |                  ^^^
+...
+291 |     pub fn with_buffer(buffer: *mut c_char, len: c_ulong) -> Self {
+    |            ^^^^^^^^^^^
+...
+299 |     pub fn is_null(&self) -> bool {
+    |            ^^^^^^^
+...
+304 |     pub fn len(&self) -> c_ulong {
+    |            ^^^
+...
+309 |     pub fn set_len(&mut self, len: c_ulong) {
+    |            ^^^^^^^
+
+warning: `starry-kernel` (lib) generated 15 warnings
+    Finished `release` profile [optimized] target(s) in 6.16s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-05-28-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+sh -c sh '/workspace/wt-proj57/scripts/axbuild/scripts/starry-kallsyms.sh'
+Installing ksym (gen_ksym) via cargo...
+    Updating crates.io index
+  Installing ksym v0.6.0
+warning: default toolchain implicitly overridden with `nightly-2026-05-28-x86_64-unknown-linux-gnu` by environment variable
+  |
+  = help: use `cargo +stable install` if you meant to use the stable toolchain
+  = note: rustup selects the toolchain based on the parent environment and not the environment of the package being installed
+    Updating crates.io index
+   Compiling ksym v0.6.0
+    Finished `release` profile [optimized] target(s) in 2.35s
+  Installing /opt/cargo/bin/gen_ksym
+   Installed package `ksym v0.6.0` (executable `gen_ksym`)
+Converting ELF to BIN format...
+  elf: /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos
+  bin: /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos.bin
+rust-objcopy --strip-all -O binary /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[2026-06-06T16:51:11Z INFO  ostool::run::uboot] Starting U-Boot runner...
+[2026-06-06T16:51:11Z INFO  ostool::run::uboot] kernel from: /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[2026-06-06T16:51:11Z INFO  ostool::run::uboot] Opening serial port: /dev/ttyUSB0 @ 1500000
+Waiting for board on power or reset...
+[2026-06-06T16:51:49Z INFO  uboot_shell] cmd: setenv autoload yes
+[2026-06-06T16:51:50Z INFO  uboot_shell] cmd: echo $fdt_addr_r
+[2026-06-06T16:51:50Z INFO  uboot_shell] cmd: echo $ramdisk_addr_r
+[2026-06-06T16:51:51Z INFO  uboot_shell] cmd: echo $kernel_addr_r
+[2026-06-06T16:51:51Z INFO  ostool::run::uboot] Using $kernel_addr_r as kernel entry: 0x2000000
+[2026-06-06T16:51:51Z INFO  uboot_shell] cmd: echo $kernel_comp_addr_r
+[2026-06-06T16:51:51Z INFO  ostool::run::uboot] image load to kernel_comp_addr_r: 0xa000000
+[2026-06-06T16:51:51Z INFO  uboot_shell] cmd: setenv loadaddr 0xa000000
+[2026-06-06T16:51:52Z INFO  ostool::run::uboot] fitimage loadaddr: 0xa000000
+[2026-06-06T16:51:52Z INFO  ostool::run::uboot] kernel entry: 0x2000000
+[2026-06-06T16:51:52Z INFO  ostool::run::uboot] Using DTB from: /workspace/wt-proj57/os/StarryOS/configs/board/orangepi-5-plus.dtb
+[2026-06-06T16:51:52Z INFO  ostool::boot::fit] Making FIT image...
+[2026-06-06T16:51:52Z INFO  ostool::boot::fit] kernel: /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos.bin (size: 13234176)
+[2026-06-06T16:51:52Z INFO  ostool::boot::fit] 已读取 DTB 文件: /workspace/wt-proj57/os/StarryOS/configs/board/orangepi-5-plus.dtb (大小: 280066)
+[2026-06-06T16:51:52Z INFO  ostool::boot::fit] FIT image ok: /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/image.fit
+[2026-06-06T16:51:52Z INFO  ostool::run::uboot] No TFTP config, using loady to upload FIT image...
+
+send file
+loady 0xa000000
+## Ready for binary (ymodem) download to 0x0A000000 at 1500000 bps...
+[2026-06-06T16:51:52Z INFO  uboot_shell::ymodem] Sending file: image.fit
+  [00:04:06] [##################################################################################################################################################] 12.89 MiB/12.89 MiB (0.0s)C## Total Size      = 0x00ce3910 = 13515024 Bytes
+## Start Addr      = 0x0A000000
+=>
+send ok
+[2026-06-06T16:55:48Z INFO  ostool::run::uboot] Booting kernel with command: bootm
+Interacting with U-Boot shell...
+bootm
+## Loading kernel (any) from FIT Image at 0a000000 ...
+   Using 'config-ostool' configuration
+   Verifying Hash IntegriOK
+   Trying 'kernel' kernel subimage
+     Description:  This
+     Type:         Kernel ImagArchitecture: AArch64
+     OS:   Load Address: 0x02000000
+     Entry Point:  0x02000000
+   Veh Integrity ... OK
+   Trying 'fdt' fdt subimage
+     Description:  This fdt
+     Type:         Flat Device Tree
+     Compres:   0x0ac9f1e8
+     Data Size:    280066 Bytes = 273.5 KiB
+   OK
+   Loading fdt from 0x0ac9f1e8 to 0x12000000
+   Booting usi Kernel Image to 2000000
+   Loading Device Tree to 00000000ecb90000, end 00000000ecbd7601 ... OK
+Working FDT set to ecb90000
+
+Starting kernel ...
+
+root=UUID=3ab40e80-4239-4764-b8ff-c58ee0759ad8 earlycon=uart8250,mmio32,0xfeb50000 rootwait rootfstype=ext4 splash=verbose consoVM Load Offset: 0x82000000
+Memory Map:
+  Rsv    0x00000000110000 - 0x00000000200000 (960 KiB)
+  Free   0x00000000200000 - 0x00000002000000 (30 MiB)
+  KI00 (73.63 MiB)
+  Rsv    0x00000010000000 - 0x00000020000000 (25Initializing per-CPU data
+Per-CPU data one cpu size: 0x41000 bytes
+Total per-CPU data size for secondary CPUs: 0x208000 bytes (8 CPUs)
+Flushed RAM used emory map: 0x200000..0x245000, current: 0x245000
+Flushed RAM usd000, current: 0x44d000
+Per-CPU data allocated at 0x245000 - 0x44d000
+Initializing per-CPU RAM for CPU0 - hard id 0x0 @ 0x245000
+Initializing per-CPU RAM for CPU1 - hard id 0x100 @ 0x286000
+Initializing per-CPU RAM for CPU2 - hard id 0x200 @ 0x2c7000
+Initializing per-CPU RAM for CPU3 - hard id 0x300 @ 0x308000
+Initializing per-CPU RAM for CPU4 - hard id 0x400 @ 0x349000
+Initializing per-CPU RAM for CPU5 - hard id 0x500 @ 0x38a000
+Initializing per-CPU RAM for CPU6 - hard id 0x600 @ 0x3cb000
+Initializing per-CPU RAM for CPU7 - hard id 0x700 @ 0x40c000
+CPU0 - hard id 0x0, stack top @0x286000, stack top virt @0xffffff0000286000, entry virt @0xffffffff801da0e4
+CPU1 - hard id 0x107000, stack top virt @0xffffff00, stack top @0x308000, stack top virt @0xffffff0000308000, entry virt @0xffffffff801da0e4
+CPU3 - hard id 0x300, stack top @0x340xffffffff801da0e4
+CPU4 - hard id 0x400, stack top @0x38a000, s3cb000, stack top virt @0xffffff00003cb000, entry virt @0xffffff hard id 0x600, stack top @0x40c000, stack top virt @0xffffff000 entry virt @0xfrd id 0x700, stack top @0x44d000ffff000044d000, entry virt @0xffffffff801da0e4
+EL: 1
+Mapping ey regions...
+Ram                 : [0xffff000000200000, 0xffff0000f0000000) -> [0x0000000000200000, 0x00000000f0000000) (3.75 GiB)
+Ram                 : [0xffff000100000000KImage              : [0xffffffff80000000, 0xffffffff80e00000) -PerCpu              : [0xffffff0000245000, 0xffffff000044d000) -eb50000, 0xffff0000feb51000) -> [0x00000000feb50000, 0x00000000fhysical address: 0x44d000
+Setting up table registers...
+MMU EnEnabling MMU...
+MMU enabled, jumping to 0xffffffff801d7f04, sp=0xffffff0000286000
+Trap vector at 0xffffffff80002800
+Memory Map:
+  Rsv    0x00000000110000 - 0x00000000245000 (1.21 MiB)
+  PerCPU 0x00000000245000 - 0x0000000044d000 (2.03 MiB)
+  Rsv    0x0000000044d000 - 0x00000000459000 (48 KiB)
+  Free   0x00000000459000 - 0x00000002000000 (27.65 MiB)
+  KImg   0x00000002000000 - 0x00000002e00000 (14 MiB)
+  Free   0x00000002e00000 - 0x0000000a100000 (115 MiB)
+  Rsv    0x0000000a100000 - 0x0000000a145000 (276 KiB)
+  Free   0x0000000a145000 - 0x0000000a200000 (748 KiB)
+  Rsv    0x0000000a200000 - 0x0000000b65f000 (20.37 MiB)
+000 - 0x00000010000000 (73.63 Mix00000010000000 - 0x0000002000000000020000000 - 0x000000f0000000 (3.25 GiB)
+  MMIO   0x000000feb50000 - 0x000000feb51000 (4 KiB)
+  Free   0x00000100000000 - 0x00000200000000 (4 GiB)
+  Free   0x000002f0000000 - 0x00000300000000 (256 MiB)
+Jumping to main88b.
+      d88888                           d88P" "Y88b d88P  Y888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888 88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = aarch64
+platform = aarch64-generic
+target = aarch64-unknown-none-softfloat
+build_mode =
+log_level = info
+backtrace = false
+smp = 8
+
+[242.472526 ax_runtime:189] Logging is enabled.
+[242.11 ax_runtime:190] Primary CPU 0 started, arg = 0x200000.
+[242.473641 ax_runtime:192] Found physcial memor   [PA:0x44d000, PA:0x45900erved (READ | WRITE | EXECUTE | RESERVED)
+[242.47690.478631 ax_runtime:194]   [PA:0x2e00000, PA:0xa100000) free456 ax_runtime:194]   [PA:0   [PA:0xa145000, PA:0xa200000) free memory (READ | WRITE |2.481188 ax_runtime:194]   [PA:0xa200000, PA:0xb65f000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[242.482096 ax_runtime:194]   [PA:0xb65f000, PA:0x10000000) free memory (READ | WRITE | FREE)
+[242.482928 ax_runtime:194]   [PA:0x10000000, PA:0x20000000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[242.483851 ax_runtime:194]   [PA:0x20000000, PA:0xf0000000) free memory (READ | WRITE | FREE)
+[242.484691 ax_runtime:194]   [PA:0xfeb50000, PA:0xfeb51000) mmio (READ | WRITE | DEVICE | RESERVED)
+[242.485576 ax_runtime:194]   [PA:0x100000000, PA:0x200000000) free memory (READ | WRITE | FREE)
+[242.486431 ax_runtime:194]   [PA:0x2f0000000, PA:0x300000000) free memory (READ | WRITE | FREE)
+[242.487286 ax_runtime:356] Initialize global memory allocator...
+[242.487909 ax_runtime:357]   use buddy-slab-allocator allocator.
+[242.488532 ax_alloc::buddy_slab:147] Initialize global memory allocator, start_vaddr: 0xffff000100000000, size: 0x100000000
+[242.493457 ax_alloc::buddy_slab:390] global allocator initialized
+[242.494079 ax_alloc::buddy_slab:157] Add memory region, start_vaddr: 0xffff000000459000, size: 0x1ba7000
+[242.495028 ax_alloc::buddy_slab:157] Af000002e00000, size: 0x7300000
+[242.496052 ax_alloc::buddy_slab:157] Add memory region, start_vaddr: 0xffff00000a145000, size: 0xbb000
+[242.496952 buddy_slab_allocator::global:143] GlobalAllor: skip region 0xffff00000a145000+0xbb000, no allocator-visible memory after 2097152 alignment
+[242.498242 ax_alloc::buddy_slab:157] Add memory region, start_vaddr: 0xffff00000b65f000, size: 0x49a1000
+[242.503293 ax_alloc::buddy_slab:157] Add memory region, start_vaddr: 0xffff0002f0000000, size: 0x10000000
+x_mm:91] Initialize virtual memory management...[242.953830 ax_runtime:241] Initialize platform devices...
+[242.998219 someboot::arch::power:23] Power management method : SMC
+[242.998858 somehal::driver:5] In000000200000
+[243.126449 ax_task::api:135] Initialize scheduling...
+[243.127039 ax_task::api:140]   use Round-robi[243.134649 ax_driver::soc::rockchip::pm:51] Rockchip power manager registered successfully
+[243.146605 ax_driver::soc::rockchip::clk::rk3588:58] RK3588 CRU reg: addr=0xfd7c0000, size=0x5c000, rockchip,grf=<0x77>
+[243.147684 rockchip_soc::variants::rk3588::cru:1d7c0000: Initializing and verifyg clock configuration...
+[243.148749 rockchip_soc::v0fd7c0000: ACLK_BUS_ROOT div misf0000fd7c0000: Clock configuratiriver::soc::rockchip::clk::rk3588:73] RK3588 CRU clock regiered successfully
+[243.157366 ax_driver::soc::scmi:54] [scmi] SCMI shmem phandle 71 cannot be resolved by rdrive; using RK3588 shmem fallback 0x10f000+0x100
+                                                                                                                                                                                            SMC registered: smc_id=0x82000010, shmem_phandle=71, shmem=0x10f000+0x100
+[243.211007 ax_driver::soc::rockchip::pinctrl:183] Rockchip RK3588 pinctrl registered successfully
+[243.382877 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe180000: assert PERST via GPIO3 pin 11[243.566474 ax_driver::pci::fdt::rk3588::body:245] RK3588 Naneng combphy phy@fee20000 initialized for PCIe, refclk=100[243.590357 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe host 0xfe180000: FDT resources node=pcie@fe18000s=6, resets=2, power-d[244.596231 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe180000: link down, LTSSM=0x3, DEBUG1=0x8100000:body:119] Rockchip RK3588 PCIe host 0xfe180000: release PERST after 200ms
+[INTx unmasked
+[244.598151 ax_driver::pci:269] P[244.648170 ax_driver::usb::dwc:425] DWC xHCI power domain 31 enabled
+[244.648828 ax_driver::usb::dwc:430][244.698866 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixed regulator vcc5v0-host enabled via pinctrl
+[244.723732 crab_usb::backend::kmod::dwc::udphy:118] U:dwc:172] DWC xHCI driver initialized successfully for usb@[244.754074 ax_driver::rknpu:56] NPU power enabled
+[244.754586 ax_driver::rknpu:61] NPU registered su[245.007158 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe190000: assert PERST via GPIO4 pin 2[245.191619 ax_driver::pci::fdt::rk3588::body:245] RK3588 Naneng combphy phy@fee00000 initialized for PCIe, refclk=100[245.215358 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe host 0xfe190000: FDT resources node=pcie@fe19000locks=6, resets=2, power-domainspply=None, pipe-grf=Some(Phandle[245.218158 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe19000[245.419172[246.221212 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe190000: link down, LTSSM=0x3, DEBUG1=0x8000000
+[ IRQs [282]
+[246.223924 ax_driver::pci::fdt::rk3588:PCIe host 0xfe190000: registeringical buses 0..=15
+[246.232174 ax_driver::block::rockchip_sd:78] rockchip-dwmmc probe: node=mmc@fe2c0000, addr=0xfe2c0000, size=0x4000[246.233241 ax_driver::soc::scmi:122] SCMI clock rate  rate=50000000 Hz
+[246.234041 ax_driver::block::rockchip_sd:89] rockchip-dwmmc: using ciu reference clock 50000x_driver::block::rockchip_sd::ph32mrockchip-dwmmc: RK3588 SDMMC phase configured: drive=90deg saz
+[246.236215 ax_driver::block::rockchip_sd:103] [246.250654 sdmmc_protocol::sdio:1098] sdio: detected Sd ocr=0xc1ff8000
+[246.253975 sdmmc_protocol::sdio:1243] sdio: CSD capacity_blocks=Some(124735488)
+[246.255277 sdmmc_protocol::sdio:1257] sdio: switch SD bus width to 4-bit
+[246.259686 sdmmc_protocol::sdio:1624] sdio: SD speed selected HighSpeed
+[246.260356 sdmmc_protocol::sdio:1643] sdio: init done kind=Sd sd_v2=true high_capacity=true rca=0xaaaa ocr=0xc1ff8000
+[246.261380 ax_driver::block::rockchip_sd:115] rockchip-dwmmc card: kind=Sd high_capacity=true rca=43690 ocr=0xc1ff8000 capacity_blocks=Some(124735488) cid=true ext_csd=false
+[246.263837 ax_driver::block::rockchip_sd::phase:67] rockchip-dwmmc: sample phase probe 0deg: block0_ok=true mbr_sig=aa55 block0_head=[00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00] block1_ok=true gpt_head=[45, 46, 49, 20, 50, 41, 52, 54]
+[246.265890 ax_driver::block::rockchip_sd::phase:81] rockchip-dwmmc: selected RK3588 SDMMC sample phase 0deg
+[246.266858 ax_driver::block::rockchip_sd:143] rockchip-sd block device registered irq=Some(235)
+[246.273902 ax_driver::block::rockchip_mmc:78] rockchip-sdhci probe: node=mmc@fe2e0000, addr=0xfe2e0000, size=0x10000
+[246.274964 ax_driver::block::rockchip_mmc:187] rockchip-sdhci clock: phandle <<0x2>>, name: Some("core"), cells: 1
+[246.275973 ax_driver::block::rockchip_mmc:90] rockchip-sdhci: using external CRU clock
+[246.276754 ax_driver::block::rockchip_mmc:95] rockchip-sdhci: reset controller
+[246.277482 ax_driver::block::rockchip_mmc:102] rockchip-sdhci: initialize card
+[246.278236 ax_driver::block::rockchip_mmc:223] rockchip-sdhci: core clock set to 400000 Hz
+[246.279053 ax_driver::block::rockchip_mmc:223] rockchip-sdhci: core clock set to 400000 Hz
+[246.280353 sdhci_host::command:246] sdhci: command wait failed CMD1 present=0x03f700f1 normal=0x0100 error=0x0000 clock=0x0007 power=0x0f host1=0x00 host2=0x0000 reset=0x00
+[246.281791 sdmmc_protocol::sdio:1016] sdio: init aborted (Timeout(ErrorContext { phase: ResponseWait, cmd: Some(1) })), resetting host
+[246.282942 ax_driver::block::rockchip_mmc:223] rockchip-sdhci: core clock set to 400000 Hz
+[246.283756 ax_driver::block::rockchip_mmc:160] rockchip-sdhci: no responsive card at [PA:4264427520, SZ:0x10000); skipping controller: Timeout(ErrorContext { phase: ResponseWait, cmd: Some(1) })
+[246.671369 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe150000: assert PERST via GPIO4 pin 14[246.717412 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixed regulator vcc3v3-pcie30 enabled via pinctrl
+[246.923539 ax_driver::pci::fdt::rk3588::body:151] RK3588 PCIe3 PHY phy@fee80000 initialized, mode=4
+[246.947141 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe host 0xfe150000: FDT resources node=pcie@fe15000[246.957146 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCI[247.960206 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe150000: link down, LTSSM=0x0, DEBUG1=0x8200000hip RK3588 PCIe host 0xfe150000: release PERST after 200ms
+[[248.464476 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe170000: assert PERST via GPIO4 pin 5[248.555659 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixed regulator vcc3v3-pcie2x1l0 enabled via pinctrl
+[248.761397 ax_driver::pci::fdt::rk3588::body:245] RK3588 Naneng combphy phy@fee10000 initialized for PCIe, refclk=100f=Some(Phandle(119)), reset-gpio=GPIO4 pin 5 active-high
+[248.788012 ax_driver::pci::fdt::rk3588::body:111] Roce170000: assert PERST via GPIO4 [248.989026 ax_driver::pci::fdt::rk3588::body:119] Rockchip RK3588 PCIe host 0xfe170000: release PERST[249.791066 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe170000: link down, LTSSM=0x3, DEBUG1=0x8100000
+[Boot at 1970-01-01 00:04:10.318508375 UTC
+
+[250.357930 ax_runtime::block::root:138]     partition 1 name=None fs=Some(Ext4) lba 32768..123469824
+[250ax_fs_ng:35] Initialize filesystem subsystem...
+[250.381734 rsext4::ext4::mount:278] /lost+found exists (superblock hint inode=11)
+[250.383941 rsext4::ext4::mount:407] Ext4 filesystem mounted
+[250.384520 rsext4::ext4::mount:408]   - block size: 4096 bytes
+rsext4::ext4::mount:409]   - total blocks: 15429632
+[250.385734 rsext4::ext4::mnt:410]   - free blocks: 14831052
+[250.386334 rsext4::ext4::mount:411]   - total inodes: 3609744
+[250.386935 rsext4::ext4::mount:412]   - free inodes: 3576961
+[250.387527 rs::sync:13] Syncing filesystem...
+[250.433038 rsext4::ext4::mount:482] Ext4 filesystem mounted
+[250.433629 ax_fs_ng:44]   filesystem ty[250.435070 ax_net_ng:144] ce: lo
+[250.437369 ax_runtime::mp:146] Secondary CPU 1 started.
+[250.437961 ax_ipi:80] Send IPI event to CPU 0
+[250.438627 ax_runtime::mp:146] Secondary CPU 2 started.
+PI event to CPU 0
+[250.439884 ax_runtime::mp:146] econdary CPU 3 started.
+[250.440465 ax_ipi:80]
+                       [250.441139 ax_runtime::mp:146] Secondary CPU 4 started.
+[250.441703 ax_ipi:80] Send IPI event to442395 ax_runtime::mp:146] Secondary CPU 5 started.
+x_ipi:80] Send IPI event to CPU 0
+[250.443651 ax_runtime::mp:146] Secondary CPU 6 started.
+[250.444214 ax_ipi:80] Send IPI event to CPU 0
+[250.444907 ax_runtime::mp:146] Secondary CPU 7 started.
+[250.444908 ax_runtime:335] Primary CPU 0 init OK.
+[250.445471 ax_ipi:80] Send IPI event to CPU 0
+panicked at os/arceos/modules/axtask/src/task.rs:818:13:
+task s
+      === FAIL PATTERN MATCHED: panicked at
+                                           tack guard page TLB shootdown timeout
+BACKTRACE_BEGIN kind=pani
+✓ 已退出串口终端模式
+Error: Fail pattern matched 'panicked at': ...condary CPU 7 started. [250.444908 ax_runtime:335] Primary CPU 0 init OK. [250.445471 ax_ipi:80] Send IPI event to CPU 0 panicked at

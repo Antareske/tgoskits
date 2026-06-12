@@ -1,0 +1,426 @@
+root@docker-desktop:/workspace/wt-proj57# cargo xtask starry quick-start orangepi-5-plus run --serial /dev/ttyUSB0
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.85s
+     Running `target/debug/tg-xtask starry quick-start orangepi-5-plus run --serial /dev/ttyUSB0`
+[2026-06-07T08:18:23Z INFO  axbuild::context] Workspace root: /workspace/wt-proj57
+Using build config: /workspace/wt-proj57/tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml
+[2026-06-07T08:18:23Z INFO  axbuild::build] Found build config at /workspace/wt-proj57/tmp/axbuild/config/starryos/quick-start/orangepi-5-plus.toml
+AX_LOG=info
+AX_ARCH=aarch64
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+AX_TARGET=aarch64-unknown-none-softfloat
+SMP=1
+cargo build -p starryos --target scripts/targets/pie/aarch64-unknown-none-softfloat.json -Z unstable-options --target-dir /workspace/wt-proj57/target --features ax-driver/list-pci-devices,ax-driver/realtek-rtl8125,ax-driver/rk3588-pcie,ax-driver/rockchip-dwc-xhci,ax-driver/rockchip-dwmmc,ax-driver/rockchip-sdhci,ax-driver/rockchip-soc,rknpu,plat-dyn -Z json-target-spec -Z build-std=core,alloc --bin starryos --release --message-format json-render-diagnostics
+warning: unused imports: `AtomicPtr` and `Ordering`
+ --> platforms/axplat-dyn/src/irq.rs:1:26
+  |
+1 | use core::sync::atomic::{AtomicPtr, Ordering};
+  |                          ^^^^^^^^^  ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `cpu_id`
+  --> platforms/axplat-dyn/src/init.rs:12:19
+   |
+12 |     fn init_early(cpu_id: usize, _dtb: usize) {
+   |                   ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cpu_id`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `cpu_id`
+  --> platforms/axplat-dyn/src/init.rs:26:29
+   |
+26 |     fn init_early_secondary(cpu_id: usize) {
+   |                             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_cpu_id`
+
+warning: `axplat-dyn` (lib) generated 3 warnings (run `cargo fix --lib -p axplat-dyn` to apply 3 suggestions)
+warning: constant `RKNPU_DEVICE_ID` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/card1.rs:42:11
+   |
+42 | pub const RKNPU_DEVICE_ID: DeviceId = DeviceId::new(251, 0);
+   |           ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `rknpu_submit_ioctl` is never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/card1.rs:385:8
+    |
+385 | pub fn rknpu_submit_ioctl(arg: usize) -> VfsResult<usize> {
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `rknpu_mem_create_ioctl` is never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/card1.rs:407:8
+    |
+407 | pub fn rknpu_mem_create_ioctl(arg: usize) -> VfsResult<usize> {
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `drm_set_unique` is never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/card1.rs:627:8
+    |
+627 | pub fn drm_set_unique(data: &mut [u8]) -> VfsResult<()> {
+    |        ^^^^^^^^^^^^^^
+
+warning: constant `DRM0_NAME` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:17:7
+   |
+17 | const DRM0_NAME: &str = "rockchip";
+   |       ^^^^^^^^^
+
+warning: constant `DRM0_DATE` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:19:7
+   |
+19 | const DRM0_DATE: &str = "20140818";
+   |       ^^^^^^^^^
+
+warning: constant `DRM0_DESC` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:21:7
+   |
+21 | const DRM0_DESC: &str = "RockChip Soc DRM";
+   |       ^^^^^^^^^
+
+warning: constant `RKNPU_DEVICE_ID` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:24:11
+   |
+24 | pub const RKNPU_DEVICE_ID: DeviceId = DeviceId::new(251, 0);
+   |           ^^^^^^^^^^^^^^^
+
+warning: constant `CARD0_SYSTEM_DEVICE_ID` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:27:11
+   |
+27 | pub const CARD0_SYSTEM_DEVICE_ID: DeviceId = DeviceId::new(0xe2, 0);
+   |           ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `Card0` is never constructed
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:30:12
+   |
+30 | pub struct Card0;
+   |            ^^^^^
+
+warning: associated function `new` is never used
+  --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:34:12
+   |
+32 | impl Card0 {
+   | ---------- associated function in this implementation
+33 |     /// Creates a new /dev/dri/card0 device.
+34 |     pub fn new() -> Card0 {
+   |            ^^^
+
+warning: function `drm_copy_field` is never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:115:11
+    |
+115 | unsafe fn drm_copy_field(
+    |           ^^^^^^^^^^^^^^
+
+warning: function `drm_version` is never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:159:4
+    |
+159 | fn drm_version(data: &mut [u8]) -> VfsResult<()> {
+    |    ^^^^^^^^^^^
+
+warning: struct `DrmUnique` is never constructed
+   --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:273:12
+    |
+273 | pub struct DrmUnique {
+    |            ^^^^^^^^^
+
+warning: associated items `new`, `with_buffer`, `is_null`, `len`, and `set_len` are never used
+   --> os/StarryOS/kernel/src/pseudofs/dev/rknpu_card.rs:283:18
+    |
+281 | impl DrmUnique {
+    | -------------- associated items in this implementation
+282 |     /// Creates a new DrmUnique with default values
+283 |     pub const fn new() -> Self {
+    |                  ^^^
+...
+291 |     pub fn with_buffer(buffer: *mut c_char, len: c_ulong) -> Self {
+    |            ^^^^^^^^^^^
+...
+299 |     pub fn is_null(&self) -> bool {
+    |            ^^^^^^^
+...
+304 |     pub fn len(&self) -> c_ulong {
+    |            ^^^
+...
+309 |     pub fn set_len(&mut self, len: c_ulong) {
+    |            ^^^^^^^
+
+warning: `starry-kernel` (lib) generated 15 warnings
+    Finished `release` profile [optimized] target(s) in 0.65s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-05-28-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+sh -c sh '/workspace/wt-proj57/scripts/axbuild/scripts/starry-kallsyms.sh'
+Converting ELF to BIN format...
+  elf: /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos
+  bin: /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos.bin
+rust-objcopy --strip-all -O binary /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[2026-06-07T08:18:24Z INFO  ostool::run::uboot] Starting U-Boot runner...
+[2026-06-07T08:18:24Z INFO  ostool::run::uboot] kernel from: /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[2026-06-07T08:18:24Z INFO  ostool::run::uboot] Opening serial port: /dev/ttyUSB0 @ 1500000
+Waiting for board on power or reset...
+[2026-06-07T08:18:38Z INFO  uboot_shell] cmd: setenv autoload yes
+[2026-06-07T08:18:39Z INFO  uboot_shell] cmd: echo $fdt_addr_r
+[2026-06-07T08:18:39Z INFO  uboot_shell] cmd: echo $ramdisk_addr_r
+[2026-06-07T08:18:39Z INFO  uboot_shell] cmd: echo $kernel_addr_r
+[2026-06-07T08:18:40Z INFO  ostool::run::uboot] Using $kernel_addr_r as kernel entry: 0x2000000
+[2026-06-07T08:18:40Z INFO  uboot_shell] cmd: echo $kernel_comp_addr_r
+[2026-06-07T08:18:40Z INFO  ostool::run::uboot] image load to kernel_comp_addr_r: 0xa000000
+[2026-06-07T08:18:40Z INFO  uboot_shell] cmd: setenv loadaddr 0xa000000
+[2026-06-07T08:18:41Z INFO  ostool::run::uboot] fitimage loadaddr: 0xa000000
+[2026-06-07T08:18:41Z INFO  ostool::run::uboot] kernel entry: 0x2000000
+[2026-06-07T08:18:41Z INFO  ostool::run::uboot] Using DTB from: /workspace/wt-proj57/os/StarryOS/configs/board/orangepi-5-plus.dtb
+[2026-06-07T08:18:41Z INFO  ostool::run::uboot] Making FIT image...
+[2026-06-07T08:18:41Z INFO  ostool::run::uboot] kernel: /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/starryos.bin (size: 12754944)
+[2026-06-07T08:18:41Z INFO  ostool::run::uboot] 已读取 DTB 文件: /workspace/wt-proj57/os/StarryOS/configs/board/orangepi-5-plus.dtb (大小: 280066)
+[2026-06-07T08:18:41Z INFO  ostool::run::uboot] FIT image ok: /workspace/wt-proj57/target/aarch64-unknown-none-softfloat/release/image.fit
+[2026-06-07T08:18:41Z INFO  ostool::run::uboot] No TFTP config, using loady to upload FIT image...
+
+send file
+loady 0xa000000
+## Ready for binary (ymodem) download to 0x0A000000 at 1500000 bps...
+[2026-06-07T08:18:41Z INFO  uboot_shell::ymodem] Sending file: image.fit
+  [00:03:07] [##################################################################################################################################################] 12.43 MiB/12.43 MiB (0.0s)C## Total Size      = 0x00c6e910 = 13035792 Bytes
+## Start Addr      = 0x0A000000
+=>
+send ok
+[2026-06-07T08:22:06Z INFO  ostool::run::uboot] Booting kernel with command: bootm
+Interacting with U-Boot shell...
+bootm
+## Loading kernel (any) from FIT Image at 0a000000 ...
+   Using 'config-ostool' configuration
+   Verifying Hash IntegriOK
+   Trying 'kernel' kernel subimage
+     Description:  This kernel
+     Type:         Kerne Bytes = 12.2 MiB
+     Architecture: AArch64
+     OS:         ntry Point:  0x02000000
+   Verifying Hash Integrity ... OK
+## Loading fdt (any) from FIT Image at 0a000000 ...
+   Using 'config-ostool' configuration
+   Verifying Hash Integrity ... OK
+   Trying 'fdt' fdt subimage
+     Description:  This fdt
+     Type:         Flat Device Tree
+  ecture: AArch64
+     Load Address: 0x12000000
+   Verifying HasOK
+   Loading fdt from 0x0ac2a1e8 to 0x12000000
+   Booting using the fdt blob at 0x12000000
+Working FDT set to 12000000
+   Loading Kernel Image to 2000000
+   Loading Device Tree to 00000000ecb90000, end 00000000ecbd7601 ... OK
+Working FDT set to ecb90000
+
+Starting kernel ...
+
+root=UUID=3ab40e80-4239-4764-b8ff-c58ee0759ad8 earlycon=uart8250,mmio32,0xfeb50000 rootwait rootfstype=ext4 splash=verbose consoMemory Map:
+  Rsv    0x00000000110000 - 0x00000000200000 (960 KiB)
+  Free   0x00000000200000 - 0x00000002000000 (30 MiB)
+  KIInitializing per-CPU data
+Per-CPU data one cpu size: 0x41000 bytes
+Total per-CPU data size for secondary CPUs: 0x208000 bytes (8 CPUs)
+Per-CPU data allocated at 0x245000 - 0x44d000000
+Initializing per-CPU RAM for CPU0 - hard id 0x0 @ 0x245000
+Initializing per-CPU RAM for CPU1 - hard id 0x100 @ 0x286000
+Initializing per-CPU RAM for CPU2 - hard id 0x200 @ 0x2c7000
+Initializing per-CPU RAM for CPU3 - hard id 0x300 @ 0x308000
+Initializing per-CPU RAM for CPU4 - hard id 0x400 @ 0x349000
+Initializing per-CPU RAM for CPU5 - hard id 0x500 @ 0x38a000
+Initializing per-CPU RAM for CPU6 - hard id 0x600 @ 0x3cb000
+Initializing per-CPU RAM for CPU7 - hard id 0x700 @ 0x40c000
+CPU0 - hard id 0x0, stack top @0x286000, stack top virt @0xffffff0000286000, entry virt @0xffffffff801a17d4
+CPU1 - hard id 0x10ffffffff801a17d4
+CPU2 - hard id 0x200, stack top @0x308000, sta @0x349000, stack top virt @0xffffff0000349000, entry virt @0xffack top @0x38a000, stack top virf801a17d4
+CPU5 - hard id 0x500, stack top @0x3cb000, stack top rt @0xffffff00003cb000, entry virt @0xffffffff801a17d4
+CPU6 - h, stack top @0x40c000, stack top virt @0xffffff000040c000, entryfffff801a17d4
+CPU7 - hard id 0x700, stack top @0x44d000, stack rt @0xffffffff801a17d4
+EL: 1
+Mapping early memory regions...
+Ram                 : [0xffff000000200000, 0xffff0000f0000000) -> [0x0000000000200000, 0x00000000f0000000) (3.75 GiB)
+Ram      , 0x0000000200000000) (4 GiB)
+Ram                 : [0xffff0002Debug serial        : [0xffff0000feb50000, 0xffff0000feb51000) -Enabling MMU...
+MMU enabled, jumping to 0xffffffff8019db8c, sp=0xffffff0000286000
+Trap vector at 0xffffffff80002800
+Memory Map:
+  Rsv    0x00000000110000 - 0x00000000245000 (1.21 MiB)
+  PerCPU 0x00000000245000 - 0x00000MiB)
+  Rsv    0x0000000044d000 - 0x00000000459000 (48 KiB)
+  F000000459000 - 0x00000002000000 (27.65 MiB)
+  KImg   0x00000002000000 - 0x00000002e00000 (14 MiB)
+  Free   0x00000002e00000 - 0x0000000a100000 (115 MiB)
+  Rsv    0x0000000a100000 - 0x0000005000 (276 KiB)
+  Free   0x0000000a145000 - 0x0000000a200000 (748 KiB)
+  Rsv    0x0000000a200000 - 0x0000000b65f000 (20.37 MiB)
+  Free   0x0000000b65f000 - 0x00000010000000 (73.63 MiB)
+  Rsv    0x00000010000000 - 0x00000020000000 (256 MiB)
+  Free   0x00000020000000 - 0x000000f0000000 (3.25 GiB)
+  MMIO   0x000000feb50000 - 0x000000feb51000 (4 KiB)
+  Free   0x00000100000000 - 0x00000200000000 (4 GiB)
+  Free   0x000002f0000000 - 0x00000300000000 (256 MiB)
+Jumping to main entry point at 0xffffffff800ee8ac with SP 0xffffff0000286000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888   Y88b. .d88P Y88b  d88P
+d88P  "Y88888P"   "Y8888P"
+
+arch = aarch64
+platform = aarch64-generic
+target = aarch64-unknown-none-softfloat
+build_mode =
+log_level = info
+backtrace = false
+smp = 1
+
+Boot at 1970-01-01 00:03:32.387396291 UTC
+
+[212.387735 ax_runtime:195] Logging is enabled.
+[212.388221 ax_runtime:196] Primary CPU 0 started, arg = 0x200000.
+[212.388851 a| EXECUTE | RESERVED)
+[212.390318 ax_runtime:200]   [PA:0x245000, PA:0x44d000) ed (READ | WRITE | EXECUTE | RESERVED)
+[212.391211 ax_runtime:200]   [PA:0x44d000, PA:0x459000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[212.392104 ax_runtime:200]   [PA:0x459000, PA:0x2000000) free memory (READ | WRITE | FREE)
+[212.392921 ax_runtime:200]   [PA:0x2000000, PA:0x2e00000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[212.393828 ax_runtime:200]   [PA:0x2e00000, PA:0xa100000) free memory (READ | WRITE | FREE)
+[212.394653 ax_runtime:200]   [PA:0xa100000, PA:0xa145000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[212.395561 ax_runtime:200]   [PA:0xa145000, PA:0xa200000) free memory (READ | WRITE | FREE)
+[212.396386 ax_runtime:200]   [PA:0xa200000, PA:0xb65f000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[212.397294 ax_runtime:200]   [PA:0xb65f000, PA:0x10000000) free memory (READ | WRITE | FREE)
+[212.398126 ax_runtime:200]   [PA:0x10000000, PA:0x20000000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[212.399048 ax_runtime:200]   [PA:0x20000000, PA:0xf0000000) free memory (READ | WRITE | FREE)
+[212.399888 ax_runtime:200]   [PA:0xfeb50000, PA:0xfeb51000) mmio (READ | WRITE | DEVICE | RESERVED)
+[212.400773 ax_runtime:200]   [PA:0x100000000
+[212.401629 ax_runtime:200]   [PA:0x2f0000000, PA0000) free memory (READ | WRITE r...
+[212.403106 ax_runtime:352]   use buddy-sl[212.403730 ax_alloc::buddy_slab:147] Initialize gl0x100000000
+[212.408654 ax_alloc::buddy_slab:371] global allocator initialized
+[212.409272 ax_alloc::buddy_slab:157] Add memory region, start_vaddr: 0xffff000000459000, size: 0x1ba7000
+[212.410220 ax_alloc::buddy_slab:157] Add memory region, start_vaddr: 0xffff000002e00000, size: 0x7300000
+[212.411238 ax_alloc::buddy_slab:157] Add memory region, start_vaddr: 0xffff00000a145000, size: 0xbb000
+[212.412133 buddy_slab_allocator::global:143] GlobalAllocator: skip region 0xffff00000a145000+0xbb000, no allocator-visible memory after 2097152 alignment
+[212.413422 ax_alloc::buddy_slab:157] Add memory region, start_vaddr: 0xffff00000b65f000, size: 0x49a1000
+[212.414415 ax_alloc::buddy_slab:157] Add memory region, start_vaddr: 0xffff000020000000, size: 0xd0000000
+[212.418467 ax_alloc::buddy_slab:157] Add memory region, start_vaddr: 0xffff0002f0000000, size: 0x10000000
+[212.419627 ax_runtime:234] kernel aspace: [VA:0xffff000000000000, VA:0xffffffffffffffff)
+[212.420416 ax_mm:91] Initialize virtual memory management...
+[212.853687 ax_runtime:246] Initialize platform devices...
+[212.898059 someboot::arch::power:23] Power management method : SMC
+[212.898688 somehal::driver:5] In[213.026709 ax_task::api:135] Initialize scheduling...
+[213.027287 ax_task::api:140]   use Round-robi interrupt handlers...
+[213.034722 ax_driver::soc::scmi:54] [scmi] SCMI shmem phandle 71 cannot be resolved bc_id=0x82000010, shmem_phandle=7[213.042641 ax_driver::soc::rockchip::clk::rk3588:58] RK3588 CRU reg:addr=0xfd7c0000, size=0x5c000, rockchip,grf=<0x7[213.043703 rockchip_soc::variants::rk3588::cru:120] Cg and verifying clock configurat3.044757 rockchip_soc::variants::rk3588::cru:171] ⚠ CRU@ff0000fd7c0000: ACLK_BUS_ROOT div mismatch! u-boot: 3, current: 4213.045860 rockchip_soc::variants::rk3588::cru:245] ✓ CRU[213.099178 ax_driver::soc::rockchip::pinctrl:183] Rockchip RK3588 pinctrl registered successfully
+[213.133113 ax_driver::soc::rockchip::pm:51] Rockchip power manager registered successfully
+[213.149713 ax_driver::rknpu:56] NPU power enabled
+[213.150214 ax_driver::rknpu:61] NPU registered su[213.280038 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe180000: assert PERST via GPIO3 pin 11[213.464740 ax_driver::pci::fdt::rk3588::body:245] RK3588 Naneng combphy phy@fee20000 initialized for PCIe, refclk=100[213.488675 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe host 0xfe180000: FDT resources node=pcie@fe18000000, cfg=0xf3000000/0x100000, buses 0x30..=0x3f, clocks=6, reset=None, pipe-grf=Some(Phandle(119)), reset-gpio=GPIO3 pin 11 acti[213.491453 ax_driver::pci::fdt:[214.494490 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe180000: link down, LTSSM=0x3, DEBUG1=0x8000000 Rockchip RK3588 PCIe host 0xfe180000: release PERST after 200ms
+[_driver::pci::fdt::rk3588::body:301] Rockchip RK3588 PCIe huses 0x30..=0x3f, logical buses [214.505241 ax_driver::block::rockchip_mmc:78] rockchip-sdhci probe: node=mmc@fe2e0000, addr=0xfe2e0000, size=0x10000p_mmc:102] rockchip-sdhci: initialize card
+[21:block::rockchip_mmc:223] rockchip-sdhci: core clock set to[214.511651 sdhci_host::com: init aborted (Timeout(ErrorCon24 ax_driver::block::rockchip_mmlock set to 400000 Hz
+x_driver::block::rockchip_mmc:160] rockchip-sdhci: no re SZ:0x10000); skipping controller: Timeout(ErrorContext { phase:[214.563876 ax_driver::usb::dwc:425] DWC xHCI power domain 31 enabled
+[214.564519 ax_driver::usb::dwc:430][214.614727 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixed regulator vcc5v0-host enabled via pinctrl
+ured for USB+DP mode with 2 DP l:dwc:172] DWC xHCI driver i00 with irq Some(253)(AC64) = false (32-bit addressing)
+[214.917254 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe190000: assert PERST via GPIO4 pin 2[215.102873 ax_driver::pci::fdt::rk3588::body:245] RK3588 Naneng combphy phy@fee00000 initialized for PCIe, refclk=100[215.126699 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe host 0xfe190000: FDT resources node=pcie@fe19000[215.129473 ax_driver::pci::fdt::rk3588::body:111] Roca GPIO4 pin 2
+[216.132503 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe190000: link down, LTSSM=0x3, DEBUG1=0x8100000fter 200ms
+[[216.143446 ax_driver::block::rockchip_sd:78] rockchip-dwmmc probe: node=mmc@fe2c0000, addr=0xfe2c0000, size=0x4000[216.161887 sdmmc_protocol::sdio:1098] sdio: detected Sd ocr=0xc1ff8000
+[216.165209 sdmmc_protocol:dio:1243] sdio: CSD capacity_blocks=Some(124735488)
+[216.170922 sdmmc_protocol::sdio:1624] sdio: SD speed selected HighSpeed
+[216.171586 sdmmc_protocol::sdio:
+[216.175058 ax_driver::block::rockchip_sd::phase:67] rockchip-dwmmc: sample phase probe 0deg: block0_ok=true m device registered irq=Some(235)
+[216.571968 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe150000: assert PERST via GPIO4 pin 14[216.618121 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixed regulator vcc3v3-pcie30 enabled via pinctrl
+[216.824443 ax_driver::pci::fdt::rk3588::body:151] RK3588 PCIe3 PHY phy@fee80000 initialized, mode=4
+[216.848107 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe host 0xfe150000: FDT resources node=pcie@fe15000e-grf=Some(Phandle(119)), reset-gpio=GPIO4 pin 14 active-high[216.858113 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe150000: assert PERST via GPIO4 pin 14[217.059122 ax_driver::pci::fdt::rk3588::body:119] Rockchip RK3588 PCIe host 0x[217.861152 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe150000: link down, LTSSM=0x0, DEBUG1=0x8200000
+[37m[217.863069 ax_driver::pci:25[32mPCIe legacy IRQ route: logicr::pci::fdt::rk3588::body:301] 0: registering config window 0xf0000000/1048576 bytes, DT buses[218.377767 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe170000: assert PERST via GPIO4 pin 5[218.469104 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixed regulator vcc3v3-pcie2x1l0 enabled via pinctrl
+[218.675883 ax_driver::pci::fdt::rk3588::body:245] RK3588 Naneng combphy phy@fee10000 initialized for PCIe, refclk=100[218.699684 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIehost 0xfe170000: FDT resources node=pcie@fe17000=0, phys=1, supply=Some(Phandle([218.702564 ax_driver::pci:[218.903565 ax_driver::pci::fdt::rk3588::body:119] Rockchip RK3588 PCIe host 0xfe[219.705593 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe170000: link down, LTSSM=0x3, DEBUG1=0x8100000
+[0..=0x2f, logical buses 0..=15
+[220.255229 ax_runtime::block::root:138]     partition 1 name=None fs=Some(Ext4) lba 32768..123469824
+[220rockchip-sd) has Gpt partition table with 1 partitions
+[220.257104 ax_runtime::block::root:333]   only one supported filesystem partition is available; using it as root
+[220.258082 ax_fs_ng:35] Initialize filesystem subsystem...
+[220.258654 ax_fs_ng:36]   selected root device: disk0 partition 1 (<unnamed>, fs=ext4, lba 32768..123469824)
+[220.260207 rsext4::crc32c::arm64:32] ID_AA64ISAR0_EL1[19:16]: 0x1
+[220.260825 rsext4::crc32c::arm64:35] Hardware CRC32C support detected.
+[220.277343 rsext4::ext4::mount:278] /lost+found exists (superblock hint inode=11)
+[220.279522 rsext4::ext4::mount:407] Ext4 filesystem mounted
+[220.280095 rsext4::ext4::mount:408]   - block size: 4096 bytes
+[220.280703 rsext4::ext4::mount:409]   - total blocks: 15429632
+nodes: 3609744ext4::ext4::mount:410]   - free blocks: 14830761
+[220.282510 rsext4::ext4::mount:412] [220.327863 rsext4::ext4::mount:482] Ext4 filesystem mounted
+[220.328449 ax_fs_ng:44]   filesystem ty subsystem...
+[220.329613 ax_net_ng:144]   No network device found!
+[220.330133 ax_net_ng:149]  Primary CPU 0 init OK.
+[220.331098 0:2 ktracepoint:282] tracepoint_data_start: 0xffffffff803e8b28, t[220.436806 0:2 starry_kernel::pseudofs::dev::dma_heap:17] dma_heap: Creating new DmaHeapSystem instance
+[50 0:2 starry_kernel::pseudofs::usbfs::manager:1340] usbfs:.445147 0:2 crab_usb::backend::kmod::dwc:629] DWC3: Startinization
+[220.446959 0:2 crab_usb::backend::kmod::dwc::usb2phy:151] USB2PHY: Starting initialization
+[220.447764 0:2 crab_usb::backend::kmod::dwc::usb2phy:260] lying RK3588-specific tuning
+[220.448770 0:2 crab_umod::dwc::usb2phy:288] USB2
+[220.449679 0:2 crab_usb::backend::kmod::dwc::usb2phy:205] === USB2 PHY Regist=
+[220.450482 0:2 crsb::backend::kmod::dwc::usb2phy:::dwc::usb2phy:210] CLK_CONTROL (0x0008) = 0x00000d10
+[220.452094 0:2 crab_usb::backend::kmod::dwc::usb2phy:2119)    = 0 (正常工作模式 ✅)
+[220.453024 0:2 crab_usb::backend::kmod::dwc::usb2phy:220]   HS_TX_PREEMP (b9) = 0 (0x)
+[220.453873 0:2 crab_usb::backend::kmod: HS_DC_LEVEL (0x0004) = 0x00007933
+[220.454697 0:2 crab_usb::backend::kmod::dwc::usb2phy:235]   HS_DC_LEVEL (bits 27:24) = 0x0 (其他值)end::kmod::dwc::usb2phy:248] =========================
+ck to stabilize
+[220.461722 0:2 crab_usb::backend::kmod::dwc::udphy:156] Starting initialization
+[220.463928 0:2 crab_usb::backend::kmod::dwc::udphy:212] Udphy initialized
+[220.464608 0:2 crab_usb::backend::kmod::dwc::udphy:406] === USB3/DP PHY Register Dump ===
+[220.465415 0:2 crab_usb::backend::kmod::dwc::udp:udphy:470]   AFC_DONE = Locked ✅
+[220.475720 0:2 crab_usb::backend::kmod::dwc::udphy:478]   LOCK_DONE = Locked ✅
+[220.476ckend::kmod::dwc::udphy:502] 0000000f
+[220.477265 0:2 crab_usb::backend::kmod::dwc::udphy:503]   LOCK_DONE ✅
+[220.478076 0:2 crab_usb::backend::kmod::dwc::u32mCMN_DP_RSTN = 0x0000000a
+[220.478824 0:2 crab_usb::backend::kmod::dwc::udphy:517]   DP_CMN_RSTN = Assertedmod::dwc::udphy:526]   DP_INIT_RSTN = Released ✅
+d::kmod::dwc::udphy:536]   U3 Port Disable = false
+[220.481090 0:2 crab_usb::backend::kmod::dwc::udphy:540] ================================
+[220.481927 0:2 crab_usb::backend::kmod::dwc:251] DWC3: Starting core soft reset (includes PHY soft reset)
+[220.682849 0:2 crab_usb::backend::kmod::dwc:257] DWC3: After core_soft_reset - GUSB3PIPECTL=0x010c0002, GUSB2PHYCFG=0:dwc:386] DWC3: Initial GUSB3PIPECTL = 0x010c0002 before co[220.786378 0:2 crab_usb::backend::kmod::dwc:451] DWC3: Initial GUSB2PHYCFG = 0x40101408 before config
+[220.887266 0:2 crab_usb::backend::kmod::dwc:535] DWC3: Initializing in HOST mode
+[220.887996 0:2 crab_usb[221.089456 0:2 crab_usb::backend::kmod::dwc:553] === DWC3 寄存器状态 ===
+[221.090163 0:2 crab_usb::b  = false
+[221.092916 0:2 crab_usb::backend::kmod::dm[221.093583 0:2 crab_usb::backend::kmod::dwc:575]   REQP0Pue
+[221.094243 0:2 c::dwc:579]   DEP1P2P3    = true
+[221.094903 0:2GUSB2PHYCFG  = 0x00101408
+[221.095601 0:2 crab_usb::PHY      = false
+[226268 0:2 crab_usb::backend::kmod::dwc:586]   ENBLSLPM    = d::dwc:588]   PHYIF       = 1 (16-bit)
+[221.097crab_usb::backend::kmod::dwc:594]   USBTRDTIM   = 5
+598] GHWPARAMS0   = 0x2020400a
+[221.098977 0:2 2)
+[221.099659 0:2 crab_usb::backend::kmod::dwc:611] 0x0160c93b
+[221.100356 0:2 crab_usb::backend::kmod::dwc:612]   NUM_EVENT_BUFFERS = 1
+[221.101038 0 crab_usb::backend::kmod::dwc:614] ======================tarry_kernel::pseudofs::usbfs::manager:1218] usbft on bus 1 initialized
+[221.102581 0:2 starry_kernel[221.103342 0:2 starry_kernmusbfs: spawning refresh task
+[221.104092 0:2 starrying filesystem instance
+[221.104913 0:2 starry_kerne usbfs at /dev/bus/usb
+[221.105616 0:2 starry_kernelshm
+[221.107184 0:2 starry_kernel::pseudofs:76] Mounted tmpfs at /tmp
+[221.107860 0:2 starry_kernel::dyn_debug:61] debug_init: initializing dynamic debug site[221.109242 0:2 starry_kernel::dyn_debug:64] debug_init: found 150 dynamic debug sites
+[221.110019 0:2 70] Read kallsyms, size: 599KB
+[221.121889 0:2 starry_kernel::pseudofs:76] Mounted proc at /proc
+[221.123233 0:2 starry_kernel::pseudofs:mMounted sysfs at /sys
+[221.123892 0:2 starry_kernelfs:76] Mounted sysfs at /sys/bus/usb
+[221.124723 0:2 starry_kernel::pseudofs:76] Mounted debug at /sys/kernel/debug
+[221.125506 0:2 starry_kernel::task::timer[221.139463 0:8 starry_kernel::task::user:25] Enter user space: ip=0x6011c640, sp=0x7ffefffffab0
+Welcome to Starry OS!
+[221.354741 0:9 starry_kernel::task::user:25] Enter user space: ip=0x122820, sp=0x7ffefffff4e0
+[221.551821 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[222.023589 0:9 starry_kernel::syscall::task::ctl:230] sys_prctl: unsupported option 1096112214
+[222.028500 0:9 starry_kernel::task::user:89] Process { pid: 9, parent: 8, group: ProcessGroup(8, session=8) }: segment VA:0x0 READ | USER
+[222.029764 0:9 starry_kernel:: tid=9
+[222.030708 0:9 starry_kernel::task::user:89]gmentation fault at VA:0x0 READ | USER
+[222.031970 0y_kernel::task::signal:590] Synchronous-exception fatal sig032862 0:9 starry_kernel::task::signal:140] user register d0000000 x1=0x0000000000000000 x2=0x0000000000000000 x3=0x0000000[222.193984 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+Segmentation fault (core dumped)
+[222.200772 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, opti[222.220297 0:10 starry_ker[222.411433 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[222.884771 0:5 crab_usb::backend::kmod::kcore:118] Added new hub with id Id { idx: 1 }
+[222.931454 0:10 starry_kernel::syscall::task::ctl:230] sys_prctl: unsupported option 1096112214
+[222.936337 0:10 starry_kernel::task::user:89] Process { pid: 10, parent: 8, group: ProcessGroup(8, session=8) }: segmignal:590] Synchronous-exception fatal signal SIGSEGV on ti: 8, group: ProcessGroup(8, session=8) }: segmentation fault at  SIGSEGV on tid=10
+[222.940761 0:10 starry_kernel::t=0x0000000080000340
+  x0=0x0000000000000000 x1=0x00000000000000[223.103967 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)[223.295773 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[223.767361 0:11 starry_kernel::syscall::task::ctl:230] sys_prctl: unsupported option 1096112214
+[223.7721ignal:590] Synchronous-exception fatal signal SIGSEGV on ti6586 0:11 starry_kernel::task::snal:140] user register dump:
+  pc(elr)=0x0000000000c3a6d0 00000000 x3=0x0000000000000000
+  x29(fp)=0x00007ffefffffbf0 x30[223.938182 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+pace: ip=0x122820, sp=0x7ffefffff4e0
+[224.129860 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[224.600335 0:12 starry_kernel::syscall::task::ctl:230] sys_prctl: unsupported option 1096112214
+[224.605219 0:12 starry_kernel::task::user:89] Process { pid: 12, parent: 8, group: ProcessGroup(8, session=8) }: segm
+                                                                                                                      [224.607457 0:12 starry_kernel::task::user:89] Proask::signal:590] Synchronous-exception fatal signal SIGSEGV[224.775088 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+in/sh: 26: cannot create /run/udev/data/c226:0: Directory none[224.782088 0:8 starry_kernel::task::ops:470] Task(8, "dash") exit with code: 512
+[224.821826 0:2 starry_kernel::entry:93] Init process exited with code: 0

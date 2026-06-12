@@ -1,0 +1,304 @@
+
+= Introduction =
+
+Rockchip use&nbsp;[https://en.wikipedia.org/wiki/GUID_Partition_Table GPT]&nbsp;as its main partition table in open source support. We store GPT at LBA0 ~ LBA63.
+
+= GPT partition table in U-boot =
+
+U-boot supports standard&nbsp;[https://github.com/rockchip-linux/u-boot/blob/android/doc/README.gpt GPT partition table format].
+
+&nbsp;
+
+
+
+
+= Default storage map =
+
+{| border="1" class="table_style"
+|-
+! Partition
+! colspan="2" | Start Sector
+! colspan="2" | Number of Sectors
+! colspan="2" | Partition Size
+! PartNum in GPT
+! Requirements
+|-
+| MBR
+| 0
+| 00000000
+| 1
+| 00000001
+| 512
+| 0.5KB
+| &nbsp;
+| &nbsp;
+|-
+| Primary GPT
+| 1
+| 00000001
+| 63
+| 0000003F
+| 32256
+| 31.5KB
+| &nbsp;
+| &nbsp;
+|-
+| '''loader1'''
+| '''64'''
+| '''00000040'''
+| '''7104'''
+| '''00001bc0'''
+| '''4096000'''
+| '''2.5MB'''
+| '''1'''
+| '''preloader (miniloader or U-Boot SPL)'''
+|-
+| Vendor Storage
+| 7168
+| 00001c00
+| 512
+| 00000200
+| 262144
+| 256KB
+| &nbsp;
+| SN, MAC and etc.
+|-
+| Reserved Space
+| 7680
+| 00001e00
+| 384
+| 00000180
+| 196608
+| 192KB
+| &nbsp;
+| Not used
+|-
+| reserved1
+| 8064
+| 00001f80
+| 128
+| 00000080
+| 65536
+| 64KB
+| &nbsp;
+| legacy DRM key
+|-
+| U-Boot ENV
+| 8128
+| 00001fc0
+| 64
+| 00000040
+| 32768
+| 32KB
+| &nbsp;
+| &nbsp;
+|-
+| reserved2
+| 8192
+| 00002000
+| 8192
+| 00002000
+| 4194304
+| 4MB
+| &nbsp;
+| legacy parameter
+|-
+| '''loader2'''
+| '''16384'''
+| '''00004000'''
+| '''8192'''
+| '''00002000'''
+| '''4194304'''
+| '''4MB'''
+| '''2'''
+| '''U-Boot or UEFI'''
+|-
+| '''trust'''
+| '''24576'''
+| '''00006000'''
+| '''8192'''
+| '''00002000'''
+| '''4194304'''
+| '''4MB'''
+| '''3'''
+| '''trusted-os like ATF, OP-TEE'''
+|-
+| '''boot（bootable must be set）'''
+| '''32768'''
+| '''00008000'''
+| '''229376'''
+| '''00038000'''
+| '''117440512'''
+| '''112MB'''
+| '''4'''
+| '''kernel, dtb, extlinux.conf, ramdisk'''
+|-
+| '''rootfs'''
+| '''262144'''
+| '''00040000'''
+| '''-'''
+| '''-'''
+| '''-'''
+| '''-MB'''
+| '''5'''
+| '''Linux system'''
+|-
+| Secondary GPT
+| 16777183
+| 00FFFFDF
+| 33
+| 00000021
+| 16896
+| 16.5KB
+| &nbsp;
+| &nbsp;
+|}
+
+Note 1: If preloader is miniloader, loader2 partition available for uboot.img and trust partition available for trust.img; if preloader is SPL without trust support, loader2 partition is available for u-boot.bin and&nbsp;trust partition not available; If preloader is SPL with trust support(ATF or OPTEE), loader2 is available for u-boot.itb(including u-boot.bin and trust binary) and trust partition not available.
+
+
+= Write GPT partition table through rkdeveloptool =
+<pre>rkdeveloptool db rkxx_loader_vx.xx.bin
+rkdeveloptool gpt parameter_gpt.txt</pre>
+
+where the sample parameter_gpt.txt including partition information:
+<pre>CMDLINE: mtdparts=rk29xxnand:0x00001f40@0x00000040(loader1),0x00000080@0x00001f80(reserved1),0x00002000@0x00002000(reserved2),0x00002000@0x00004000(loader2),0x00002000@0x00006000(atf),0x00038000@0x00008000(boot:bootable),-@0x0040000(rootfs)
+</pre>
+
+= Write GPT partition table through U-boot =
+
+In u-boot console, the "gpt" command can be used to write the gpt partition table:
+<pre>gpt - GUID Partition Table
+
+Usage:
+gpt <command> <interface> <dev> <partitions_list>
+ - GUID partition table restoration and validity check
+ Restore or verify GPT information on a device connected
+ to interface
+ Example usage:
+ gpt write mmc 0 $partitions
+ gpt verify mmc 0 $partitions</code>
+</pre>
+
+for exsample:
+<pre>=> env set partitions name=rootfs,size=-,type=system
+=> gpt write mmc 0 $partitions
+Writing GPT: success!
+</pre>
+
+<br/> NOTE: the partitions env can be set in the u-boot console(using "env set" command), or in u-boot's source code,<br/> for exsample:
+<pre>include/configs/kylin_rk3036.h
+#define PARTS_DEFAULT \
+        "uuid_disk=${uuid_gpt_disk};" \
+...
+
+#undef CONFIG_EXTRA_ENV_SETTINGS
+#define CONFIG_EXTRA_ENV_SETTINGS \
+        "partitions=" PARTS_DEFAULT \
+</pre>
+
+&nbsp;
+
+= Write GPT partition table through U-Boot's fastboot =
+
+The current upstream u-boot contains fastboot protocol support. And this version of fastboot supports 2 ways to modify gpt partition table:
+
+&nbsp;
+
+== fastboot oem format ==
+
+It's the same as "gpt write mmc 0 $partitions" in u-boot console:
+<pre>#ifdef CONFIG_FASTBOOT_FLASH_MMC_DEV
+        if (strncmp("format", cmd + 4, 6) == 0) {
+                char cmdbuf[32];
+                sprintf(cmdbuf, "gpt write mmc&nbsp;%x $partitions",
+                        CONFIG_FASTBOOT_FLASH_MMC_DEV);
+                if (run_command(cmdbuf, 0))
+                        fastboot_tx_write_str("FAIL");
+                else
+                        fastboot_tx_write_str("OKAY");
+        } else
+#endif
+</pre>
+
+PC command:
+<pre>$ fastboot oem format -i 0x2207
+...
+OKAY [  0.015s]
+finished. total time: 0.015s
+</pre>
+
+== fastboot flash gpt <gpt partition image> ==
+<pre>        if (strcmp(cmd, CONFIG_FASTBOOT_GPT_NAME) == 0) {
+                printf("%s: updating MBR, Primary and Backup GPT(s)\n",
+                       __func__);
+                if (is_valid_gpt_buf(dev_desc, download_buffer)) {
+                        printf("%s: invalid GPT - refusing to write to flash\n",
+                               __func__);
+                        fastboot_fail(response_str, "invalid GPT partition");
+                        return;
+                }
+                if (write_mbr_and_gpt_partitions(dev_desc, download_buffer)) {
+                        printf("%s: writing GPT partitions failed\n", __func__);
+                        fastboot_fail(response_str,
+                                      "writing GPT partitions failed");
+                        return;
+                }
+                printf("........ success\n");
+                fastboot_okay(response_str, "");
+                return;
+</pre>
+
+The gpt partition image can be generated by PC's gdisk tool,<br/> for exsample:
+<pre>$ dd if=/dev/zero of=disk.img bs=1M count=256
+256+0 records in
+256+0 records out
+268435456 bytes (268 MB) copied, 0.151867 s, 1.8 GB/s
+
+$ gdisk disk.img
+GPT fdisk (gdisk) version 0.8.1
+
+Partition table scan:
+  MBR: not present
+  BSD: not present
+  APM: not present
+  GPT: not present
+
+Creating new GPT entries.
+
+Command (? for help): n
+Partition number (1-128, default 1):
+First sector (34-524254, default = 34) or {+-}size{KMGTP}:
+Information: Moved requested sector from 34 to 2048 in
+order to align on 2048-sector boundaries.
+Use 'l' on the experts' menu to adjust alignment
+Last sector (2048-524254, default = 524254) or {+-}size{KMGTP}:
+Current type is 'Linux filesystem'
+Hex code or GUID (L to show codes, Enter = 8300):
+Changed type of partition to 'Linux filesystem'
+
+Command (? for help): w
+
+Final checks complete. About to write GPT data. THIS WILL OVERWRITE EXISTING
+PARTITIONS!!
+
+Do you want to proceed? (Y/N): y
+OK; writing new GUID partition table (GPT).
+Warning: The kernel is still using the old partition table.
+The new table will be used at the next reboot.
+The operation has completed successfully.
+
+$ dd if=disk.img of=gpt.img count=64
+64+0 records in
+64+0 records out
+32768 bytes (33 kB) copied, 0.00075438 s, 43.4 MB/s
+</pre>
+
+PC command:
+<pre>$ fastboot flash gpt gpt.img
+target reported max download size of 117440512 bytes
+sending 'gpt' (32 KB)...
+OKAY [  0.006s]
+writing 'gpt'...
+OKAY [  0.025s]
+finished. total time: 0.030s</pre>

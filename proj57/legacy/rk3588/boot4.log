@@ -1,0 +1,413 @@
+root@docker-desktop:/workspace/wt-proj57# picocom -b 1500000 /dev/ttyUSB0
+picocom v3.1
+
+port is        : /dev/ttyUSB0
+flowcontrol    : none
+baudrate is    : 1500000
+parity is      : none
+databits are   : 8
+stopbits are   : 1
+escape is      : C-a
+local echo is  : no
+noinit is      : no
+noreset is     : no
+hangup is      : no
+nolock is      : no
+send_cmd is    : sz -vv
+receive_cmd is : rz -vv -E
+imap is        :
+omap is        :
+emap is        : crcrlf,delbs,
+logfile is     : none
+initstring     : none
+exit_after is  : not set
+exit is        : no
+
+Type [C-a] [C-h] to see available commands
+Terminal ready
+DDR 9fffbe1e78 cym 24/02/04-10:09:20,fwver: v1.16
+LPDDR5, 2400MHz
+channel[0] BW=16 Col=10 Bk=16 CS0 Row=15 CS1 Row=15 CS=2 Die BW=16 Size=2048MB
+channel[1] BW=16 Col=10 Bk=16 CS0 Row=15 CS1 Row=15 CS=2 Die BW=16 Size=2048MB
+channel[2] BW=16 Col=10 Bk=16 CS0 Row=15 CS1 Row=15 CS=2 Die BW=16 Size=2048MB
+channel[3] BW=16 Col=10 Bk=16 CS0 Row=15 CS1 Row=15 CS=2 Die BW=16 Size=2048MB
+Manufacturer ID:0xff
+CH0 RX Vref:28.8%, TX Vref:20.0%,19.0%
+CH1 RX Vref:26.7%, TX Vref:22.0%,22.0%
+CH2 RX Vref:27.9%, TX Vref:20.0%,19.0%
+CH3 RX Vref:30.6%, TX Vref:20.0%,20.0%
+change to F1: 534MHz
+change to F2: 1320MHz
+change to F3: 1968MHz
+change to F0: 2400MHz
+out
+U-Boot SPL board init
+U-Boot SPL 2017.09-orangepi (Aug 30 2024 - 22:09:16)
+Trying to boot from MMC1
+Trying fit image at 0x4000 sector
+## Verified-boot: 0
+## Checking atf-1 0x00040000 ... sha256(76c60de4ac...) + OK
+## Checking u-boot 0x00800000 ... sha256(dacb3f1dfb...) + OK
+## Checking fdt-1 0x008d3978 ... sha256(7ac0f174fa...) + OK
+## Checking atf-2 0x0005f000 ... sha256(dc0b3c15d8...) + OK
+## Checking atf-3 0xff100000 ... sha256(23a09356c5...) + OK
+Jumping to U-Boot(0x00800000) via ARM Trusted Firmware(0x00040000)
+Total: 817.942 ms
+
+NOTICE:  BL31: v2.13.0(release):armbian
+NOTICE:  BL31: Built : 05:22:31, May 24 2026
+INFO:    GICv3 without legacy support detL31: Initializing runtime services
+INFO:    BL31: Preparing forFO:    SPSR = 0x3c9
+
+
+U-Boot 2026.01_armbian-2026.01-S127a-Pbf64-He141-Vc0e0-Bd0d2-R448a (May 24 2026 - 05:25:06 +0000)
+
+Model: Xunlong Orange Pi 5 Plus
+SoC:   RK3588
+DRAM:  8 GiB
+Core:  361 devices, 31 uclasses, devicetree: separate
+MMC:   mmc@fe2c0000: 1, mmc@fe2e0000: 0
+Loading Environment from nowhere... OK
+In:    serial@feb50000
+Out:   serial@feb50000
+Err:   serial@feb50000
+Model: Xunlong Orange Pi 5 Plus
+SoC:   RK3588
+Net:   No ethernet found.
+Hit any key to stop autoboot: 0
+Scanning for bootflows in all bootdevs
+Seq  Method       State   Uclass    Part  Name     Scanning global bootmeth 'efi_mgr':
+Card did not respond to voltage select! : -110
+Cannot persist EFI variables without system partition
+  0  efi_mgr      ready   (none)       0  <NULL>
+** Booting bootflowwith efi_mgr
+Loading Boot0000 'mmc 1' failed
+EFI boot manager: Cannot load any image
+Boot failed (err=-14)
+Scanning bootdev 'mmc@fe2c0000.  1  script       ready   mmc          1  mmc@fe2c0000.bootdev.part /boot.scr
+** Booting bootflow 'mmc@fe2c0000.bootdev.part_1'13523140 bytes read in 1162 ms (11.1 MiB/s)
+## Loading kernel (any) from FIT Image at 0a000000 ...
+   Using 'config-1' configuOK
+   Trying 'kernel-1' kernel subimage
+     Description:  StarryOS kernel
+     Type:        ernel Image
+     Compression:  uncompressed
+     Data Start:  000e4
+     Data Size:    132423
+                              Architecture: AArch64
+     OS:           Linux
+     Loadddress: 0x02000000
+sha256+ OK P4931355f04361bac18529f8cf2cec405607ac3dd8a163f9fbd3c1079f392e33
+## Loading fdt (any) from FIT Image at 0a000000 ...
+   Using 'config-1' configuration
+   Verifying Hash Integrity ... OK
+   Trying 'fdt-1' fdt subimage
+     Description:  Orange Pi 5 Plus DTB
+     Type:         Flice Tree
+     Compression:  unc  Data Start:   0x0aca11e4
+     Data Size:    279746 Bytes = 273.2 KiB
+     Architecture: AArch64
+     Hash algo:    sha256
+     Hash value:   89f48fb37e3172c362bb6683939682327ac82e282ff2425cb7092875a262bc60
+   Verifying Hash Integrity ... sha256+ OK
+   Booting using the fdt blob at 0xaca11e4
+Working FDT set to aca11e4
+   Loading Kernel Image to 2000000
+   Loading Device Tree to 00000000ecb64000, end 00000000ecbab4c1 ... OK
+Working FDT set to ecb64000
+
+Starting kernel ...
+
+root=PARTLABEL=starry-rootfs earlycon=uart8250,mmio32,0xfeb50000 rootwait rootfstype=ext4
+VM Load @0x2000000
+VM Load Offset: 0Memory Map:
+  Rsv    0x00000000110000 - 0x00000000200000 (960 KiB)
+  Free   0x00000000200000 - 0x00000002000000 (30 MiB)
+  KI  Rsv    0x0000000a100000 - 0x0000000a145000 (276 KiB)
+  Free  00 (20.37 MiB)
+  Free   0x0000000b65f000 - 0x00000010000000 (7300010000000 - 0x00000020000000 (256 MiB)
+  Free   0x000000200003.25 GiB)
+  Free   0x00000100000000 - 0x00000200000000 (4 GiB)
+  Free   0x000002f0000000 - 0x00000300000000 (256 MiB)
+Initialx2000000
+Initializing per-CPU data
+Per-CPU data one cpu size: 0x41000 bytes
+Total per-CPU data size for secondary CPUs: 0x208000 bytes (8 CPUs)
+Flushed RAM used nt: 0x245000
+Flushed RAM used range to memory map: 0x245000..0x44d000, current: 0x44d000
+Per-CPU data allocated at 0x245000 - 0x44d000
+Initializing per-CPU RAM for CPU0 - hard id 0x0 @ 0x245000
+Initializing per-CPU RAM for CPU1 - hard id 0x100 @ 0x286000
+Initializing per-CPU RAM for CPU2 - hard id 0x200 @ 0x2c7000
+Initializing per-CPU RAM for CPU3 - hard id 0x300 @ 0x308000
+Initializing per-CPU RAM for CPU4 - hard id 0x400 @ 0x349000
+Initializing per-CPU RAM for CPU5 - hard id 0x500 @ 0x38a000
+Initializing per-CPU RAM for CPU6 - hard id 0x600 @ 0x3cb000
+Initializing per-CPU RAM for CPU7 - hard id 0x700 @ 0x40c000
+CPU0 - hard id 0x0, stack top @0x286000, stack top virt @0xffffff0000286000, entry virt @0xffffffff801d8cac
+CPU1 - hard id 0x10p virt @0xffffff00002c7000, entry virt @0xffffffff801d8cac
+CPU2ard id 0x200, stack top @0x308000, stack top virt @0xffffff00003ntry virt @0xffffffff801d8cac
+C- hard id 0x300, stack top @0x349000, stack top virt @0xffffff00349000, entry virt @0xffffffff801d8cac
+CPU4 - hard id 0x400, stack top @0x38a000, stack top virt @0xffffff000038a000, entry virt @0xffffffff801d8cac
+CPU5 - hard id 0x500, stack top @0x3cb000, stack top virt @0xffffff00003cb000, entry virt @0xffffffff801d8cac
+CPU6 - hard id 0x600, stack top @0x40c000, stack top virt @0xffffff000040c000, entry virt @0xffffffff801d8cac
+CPU7 - hard id 0x700, stack top @0x44d000, 0044d000, entry virt @0xffffffff801d8cac
+EL: 1
+Mapping early mRam                 : [0xffff000000200000, 0xffff0000f0000000) -> [0x0000000000200000, 0x00000000f0000000) (3.75 GiB)
+Ram                 : [0xffff000100000000, 0xffff000200000000) -> [0x0000000100000000, 0x0000000200000000) (4 GiB)
+Ram                 : [0xffff0002f0000000, 0xffff0003 [0x00000002f0000000, 0x0000000300000000) (256 MiB)
+KImage              : [0xffffffff80000000, 0000000002e00000) (14 MiB)
+PerCpu              : [0xffffff0000245000, 0xffffff000044d000) -> [0x0000000000245000, 0x000000000044d000) (2.03 MiB)
+Debug serial        : [0xffff0000feb50000, 0xffff0000feb51000) -> [0x00000000feb50000, 0x00000000feb51000) (4Boot page table at physical address: 0x44d000
+Setting up table ..
+MMU Entry point at physical dress: 0x21d6e10
+Enabling MMU...
+MMU enabled, jumping to 0xffffffff801d6e10, sp=0xffffff0000286000
+Trap vector at 0xffffffff80002800
+Memory Ma  Rsv    0x00000000110000 - 0x00000000245000 (1.21 MiB)
+  PerCP00 - 0x0000000044d000 (2.03 MiB)00044d000 - 0x00000000459000 (480000459000 - 0x00000002000000 (202000000 - 0x00000002e00000 (14 5 MiB)
+  Rsv    0x0000000a10000- 0x0000000a145000 (276 KiB)
+  f000 (20.37 MiB)
+  Free   0x0000000b65f000 - 0x00000010000000 (
+  Free   0x00000020000000 - 0x000000f0000000 (3.25 GiB)
+  MMI 0x000000feb51000 (4 KiB)
+  Free   0x00000100000000 - 0x000002002f0000000 - 0x00000300000000 (256 MiB)
+Jumping to main entry point at 0xffffffff8010065c with SP 0xffffff0000286000
+
+                        .d88888b.   .d8888b.
+      d88888                                    888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P    "Y88b.
+  d88P   888 888     888      88888888 888     888  "Y88888P"   "Y8888P"
+
+arch = aarch64
+platform = aarch64-generuild_mode =
+log_level = info
+backtrace = false
+smp = 1
+
+x_runtime:189] Logging is enabled.
+[  6.10085rimary CPU 0 started, arg = 0x200000.
+[  6.101482 axnd physcial memory regions:
+[  6.102075 ax_runtime:1 PA:0x245000) reserved (READ | WRITE | EXECUTE | RESERVED)
+94]   [PA:0x245000, PA:0x44d000) reserved (READ | WRITE | )
+[  6.103856 ax_runtime:194]   [PA:0x44d000, PTE | RESERVED)
+[  6.104748 ax_runtime:194]   [Pee memory (READ | WRITE | FREE)[  6.105566 ax_runtime:194]   [PA:0x2000000, PA:0x2e000[  6.106474 ax_runtime:194]   [PA:0x2e00000, PA:0xa100mory (READ | WRITE | FREE)
+[  6.107298 ax_runtime:194]   [PA:0xa100000, PA:0xa1000) reserved (READ | WRITE | EXSERVED)
+[  6.108206 me:194]   [PA:0xa145000, PAemory (READ | WRITE | FREE)
+[  6.109031 ax_runtime:1PA:0xa200000, PA:0xb65f000) reserved (READ | WRITE | EXECUTE | R37m[  6.109938 ax_runtime:194]   [PA:0xb65f000, PA:0x100000WRITE | FREE)
+[  6.110771 ax_runtime:194]   [PAVED)
+[  6.111694 ax_runtime:194]   [PA:0x200000e memory (READ | WRITE | FREE)
+[  6.112534 ax_runtime:194]   [PA:0xfeb50000, PA:0xfeb51000) mmio (READ | WRITE ESERVED)
+[  6.113419TE | FREE)
+[  6.114273 ax_runtime:194]   [PA:0xry (READ | WRITE | FREE)
+[  6.115129 ax_runtime:356] global memory allocator...
+[  6.115751 ax_runtime:3[m[  6.116375 ax_alloc::buddy_slab:147] Initialize gloddr: 0xffff000100000000, size: 0x100000000
+[  6.121300 ax_alloc::buddy_slab:390] global allocator initialized
+[  6.121923 ax_alloc::buddy_slab:157] art_vaddr: 0xffff000000459000, size: 0x1ba7000
+[  6buddy_slab:157] Add memory region, start_vaddr: 0xffff00000[  6.123896 ax_alloc::buddy_slab:157] Add memory regiodr: 0xffff00000a145000, size: 0xbb000
+[  6.124796 bullocator::global:143] GlobalAllocator: skip region 0xffff00b000, no allocator-visible memory after 2097152 alignment
+uddy_slab:157] Add memor1000
+[  6.127078 ax_alloc::buddy_slab:157] Add dr: 0xffff000020000000, size: 0xd0000000
+[  6.131136 ax_alloc::buddy_slab:157] Add memory region, start_vaddr: 0xffff0002f0000000, size: 0x10000000
+[  6.132302 ax_runtime:229] kernel aspace: [VA:0xffff000000000000, VA:0xffffffffffffffff)m[  6.133098 ax_mm:91] Initialize virtual memory managemen[  6.576850 ax_runtime:241] Initialize platform devices...
+[  6.620997 someboot::arch::power:23] Power management method : SMC
+[  6.621638 somehal::driver:5] In[  6.748826 ax_task::api:135] Initialize scheduling...
+[  6.749416 ax_task::api:140]   use Round-robidlers...
+[  6.750585 ax_runtime::devices:2] Pro[  6.757101 ax_driver::soc::rockchip::pm:51] Rockchip power manager registered successfully
+[  6.769200 ax_driver::soc::rockchip::clk::rk3588:58] RK3588 CRU reg: addr=0xfd7c0000, size=0x5c000, rockchip,grf=<0x7ariants::rk3588::cru:120] CRU@ffff0000fd7c0000: Initializinclock configuration...
+ockchip_soc::variants:8::cru:171] ⚠ CRU@ffff0000fd7c0000: ACLK_BUS_ROOT div mis  6.772442 rockchip_soc::variants::rk3588::cru:245] ✓ CRUified
+[  6.773377 ax_driver::soc::rockchip::clk::rk3K3588 CRU clock registered successfully
+[  6.780020 ax_driver::soc::scmi:54] [scmi] SCMI shmem phandle 71 cannot be resolved by rdrive; using RK3588 shmem falm
+[  6.781202 ax_driver::soc::scmi:75] SCMI SMC re=0x82000010, shmem_phandle=71, shmem=0x10f000+0x100
+[  6.833083 ax_driver::soc::rockchip::pinctrl:183] Rockchip RK3588 pinctrl registered successfully
+[  7.004827 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe180000: assert PERST via GPIO3 pin 11[  7.188133 ax_driver::pci::fdt::rk3588::body:245] RK3588 Naneng combphy phy@fee20000 initialized for PCIe, refclk=100[  7.211967 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe host 0xfe180000: FDT resources node=pcie@fe180000000, buses 0x30..=0x3f, clocks=6, resets=2, power-domains=0, phipe-grf=Some(Phandle(119)), reset-gpio=GPIO3 pin 11 active-high[  7.214779 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe180000: assert PERST via GPIO3 pin 11
+[  8.217836 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe180000: link down, LTSSM=0x3, DEBUG1=0x8100000fter 200ms
+[e host 0xfe180000: registering config window 0xf3000000/1048576 [  8.269845 ax_driver::usb::dwc:425] DWC xHCI power domain 31 enabled
+[  8.270499 ax_driver::usb::dwc:430][  8.320437 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixed regulator vcc5v0-host enabled via pinctrl
+5287 crab_usb::backend::kmod::dwc::udphy:118] Udphy: Configiver::usb::dwc:172] DWC xHCb@fc400000 with irq Some(253)[  8.375566 ax_driver::rknpu:56] NPU power enabled
+[  8.376078 ax_driver::rknpu:61] NPU registered su[  8.628501 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe190000: assert PERST via GPIO4 pin 2[  8.812408 ax_driver::pci::fdt::rk3588::body:245] RK3588 Naneng combphy phy@fee00000 initialized for PCIe, refclk=100[  8.836119 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe host 0xfe190000: FDT resources node=pcie@fe19000=0, phys=1, supply=None, pipe-grf=Some(Phandle(119)), reset-gpio[  8.838912 ax_driver::pci:88::body:111] Rockchip RK3588 PCIe host 0xfe190000: assert [  9.039923[  9.841964 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe190000: link down, LTSSM=0x3, DEBUG1=0x8100000
+[ legacy INTx unmasked
+[  9.843887 ax_driver::pci:269[m[  9.844678 ax_driver::pci::fdt::rk3588::body:301] Rxf4000000/1048576 bytes, DT buses 0x40..=0x4f, logical buses 0..[  9.852860 ax_driver::block::rockchip_sd:78] rockchip-dwmmc probe: node=mmc@fe2c0000, addr=0xfe2c0000, size=0x4000er::soc::scmi:122] SCMI clock rate set: clock_id=0x9, rate=:block::rockchip_sd:89] rockchip-dwmmc: using ciu reference855710 ax_driver::block::rockchip_sd::phase:43] rockchip-dwed: drive=90deg sample=0deg parent=50000000Hz
+[  9.8_sd:103] rockchip-dwmmc: reset controller
+[  9.x_driver::block::rockchip_sd:108] rockchip-dwmmc: initializ[  9.871342 sdmmc_protocol::sdio:1098] sdio: detected Sd ocr=0xc1ff8000
+[  9.874658 sdmmc_protocol::sdio:1243] sdio: CSD capacity_blocks=Some(124735488)
+[  9.875959 sdmmc_protocol::sdio:1257] sdio: switch SD bus width to 4-bit
+[  9.880563 sdmmc_protocol::sdio:1624] sdio: SD speed selected HighSpeed
+[  9.881236 sdmmc_protocol::sdio:Sd sd_v2=true high_capacity=true rca=0xaaaa ocr=0xc1ff8000
+rockchip-dwmmc card: kind=Sd high_capacity=true rca=43690 ocr=0se
+[  9.884498 ax_driver::block::rockchip_sd::phase:67] rockchip-dwmmc: sample phase probe 0deg: block0_ok=trueock0_head=[00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 0 00] block1_ok=true gpt_head=[45[  9.886550 ax_driver::block::rockchip_sd::phase:81] hase 0deg
+
+acepoint:297] tracepoint_data_len: 5ip_svice registered irq=Some(235)
+[ 14.023672 0:2 ktracepoint:314] tracepoint registered: sched:sched_process_exit2e0000, addr=0xfe2e0000, size=0x10000x_driver::block::rockchip_mmc:187] rockchip-sdhci clock: : 1
+[ 14.02 0:2 ktracepoint:314] tracepoint registered: sched:sched_prtracepoint:314] tracepoint registered: sched:sched_switch
+[ 14.025831 0:2 ktracepoint:314] tracepoint regiracepointsontroller
+kmod subsystem initializedchip-sdhci: initialize card
+[ 14.027775 0:2 starry_kernel::kprobe:590] kprobe selftest failed: hit=false, 028575 0:2 starry_kernel::kprobe: hit=false, val=42
+eudofs...77 sdhci_host::command:246] sdhci: command wait failed CMD1 present=0x03f700f1 normal=0x0000 erro007 power=0x0f host1=0x00 host2=0x0000 reset=0x00
+[ 14.033541 0:2 starry_kernel::pseudofs::dev::dma_heap:17] dma_heap: Creating new DmaHeapSystem instance
+[ 14.036395 0:2 starry_kernel::pseudofs:76] Mounted devfs at /dev000 Hz
+[ 14.0374 0:2 starry_kernel::pseudofs::usbfs:53] usbfs: initializingerd at [PA:4264427520, SZ:0x10000)imeout(ErrorContext { phase: ResponseWait, cmd: Some(1) })
+[ 14.037739 0:2 starry_kernel::pseudofs::usbfs::ing host 1106 as bus 1e host 0xfe150000: assert PERST via GPIO4 pin 14[ 10.338188 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixed regu
+[ 14.038598 0:2 starry_kernelg event handler for bus 1
+[ 14.039497 0:2 starry_ker:usbfs::manager:1363] usbfs: discovered 1 USB host(s)0 initialized, mode=4
+arry_kernel::pseudofs::usbfs::irq:94] usbfs: registering Iallback for IRQ 253 (bus 1, hostrry_kernel::pseudofs::usbfs::manager:1202] usbfs: initializs 16, resets=2, power-domains=1, e(450)
+[ 14.042212 0:2 crab_usb::backend::kmod::dwc:629controller initialization
+[ 14.044024 0:2 crab_usb::backend::kmod::dwc::usb2phy:151] USB2PHY: Starting initializationsert PERST via GPIO4 pin 14[ 10.778241 ax_driver::pci::fdt::rk3588::body:119] Rockchip RK3588 PCI
+[ 14.044835 0:2 crab_usb::backend::kmod::dwc::usb2phy:260] USB2PHY: Applying RK3588-specific tuning00000
+[ 14.045840 0:2 crab_usb::backend::kmod::dwc::usb2phy:288] USB2PHY: HS transmitter et to 2x
+[ 14.046755 0:2 crab_usb::backend::kmod::dwRegister Dump ===
+[ 14.047558 0:2 crab_usb::backend:00fd5d40008 PCIe host 0xfe150000: registering config window 0xfal buses 0..=15
+[ 14.048346 0:2 crab_usb::backend::kmod::2phy:210] CLK_CONTROL (0x000d10host 0xfe170000: assert PERST via GPIO4 pin 5[ 12.176035 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixed regul
+[ 14.049170 0:2 crab_usb::backend::kmod::dwc::u]   IDDQ (biX_PREEMP (bits 20:19) = 0 (0x)
+[ 14.050973 0:2 crab_usb::backend::kmod::dwc::usb2phy:234] HS_DC_LEVEL (0x0004) = 0x00007933lized for PCIe, refclk=100[ 12.404806 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe
+[ 14.051792 0:2 crab_usb::backend::kmod::dwc::usb2phy:235]   HS_D 0x0 (其他值)pply=Some(Phandle(454)), pipe-grf==GPIO4 pin 5 active-high
+[ 1:backend::kmod::dwc::usb2phy:246] SUSPEND_CONTROL (0x000c) = 0x00000200 0xfe170000:5
+[ 14.053555 0:2 crab_usb::backend::kmod::dwc::usb2phy:247]   PHY_St 11) = 0, LTSSM=0x3, DEBUG1=0x8000000fter 200ms
+[ 14.054327 0:2 crab_usb::backend::kmod::dwc::usb2phy:248] =========================
+[ 14.055093 0:2 crab_usb::backend::kmod::dwc::usb2phy:163] USB2PHY: init with port kind Otg
+[ 14.055910 0:2 crab_usb::backend::kmod::dwc::usb2phy:1[m
+[ 14.058818 0:2 crab_usb::backend::kmod::dwc::udphy:156] Starting initialization
+[ 14.061039 0:2 crab_usb::backend::kmod::dwc::udphy:212] Udphy initialized fs=None lba 32768..262144
+[ 14.061724 0:2 crab_usb::backmod::dwc::udphy:406] === USB3/DP PHY Register Dump ===
+[ 14.062532 0:2 crab_us:backend::kmod::dwc::udphy:407] PHY ID: 1partitionsx_runtime::block::root:252]   matched root by Psk0 partition 2 (starry-rootfs, =ext4, lba 262144..2359296)
+[ 14.dwc::udphy:408] PHY Mode: UdphyMode(USB | DP)system...
+[UX_AND_EN = 0x000000cc]   selected root device: disk0 partition 2 (starry-rootfs, fs=ext4, lba 262144..2359296)
+[ 14.065517 0:2 crab_usb::bacdphy:414]   LANE0_MUX = 0 (USB)erblock hint inode=11)
+[ 14.066237 0:2 crab_usb::backend::kmod::dwc::udphy:419]   LANE1_MUX = 0 (USB)
+[ 14.066957 0:2 crab_usb::backend::kmod::dwc::u:424]   LANE2_MUX = 1 (DP)
+[ 14.067669 0:2 crab_usb::backend::kmod::dwc::udphy:429]   LANE3_MUX = 1 (DP)
+[ 14.068382 0:2 crab_usb::backend::kmod::dwc::udphy:4Disabled
+[ 14.069102 0:2 crab_usb::backend::kmod::dwc::udphy:442]   LANE1_EN = Disabled
+[ 14.069822 0:2 crab_usb::backend::kmod::dwc::udphy:450]   LANE2_EN = ✅
+[ 14.070564 0:2 crab_usb::backend::kmod::dwc::udphy:458]   LANE3_EN = Enabled ✅
+[ 14.071310 0:2 crab_usb::backend::kmod::dwc::udphy:469] CMN_ANA_LCPLL_D0x000000denet_ng:144]   No network device found!21568 ax_runtime:335] Primary CPU 0 init OK.
+[ 14.072102 0:2 crab_usb::backend::kmod::hy:470]   AFC_DONE = Locked ✅
+[ 14.072837 0:2kend::kmod::dwc::udphy:478]   LOCK_DONE = Locked ✅
+ b_usb::backend::kmod::dwc::udphy:502] TRSV_LN0_MON_RX_CDR 0f
+[ 14.074382 0:2 crab_usb::backend::kmod::dwc::udp]   LOCK_DONE (Lane 0) = Locked ✅
+[ 14.075193 0:2 crab_usb::backend::kmod::dwc::udphy:516] CMN_DP_RSTN = 0x0000000a
+[ 14.075935 0:2 crab_usb::backend::kmod::dwc::udphy:517]   DP_CMN_RSTN = Asserted
+[ 14.076677 0:2 crab_usb::backend::kmod::dwc::udphy:526]   DP_INIT_RSTN = Released ✅
+[ 14.077456 0:2 crab_usb::bacod::dwc::udphy:536]   U3 Port Disable = false
+[ 0:2 crab_usb::backend::kmod::dwc::udphy:540] ==================
+[ 14.079119 0:2 crab_usb::backend::kmod::dwc:251] DWC3: Starting core soft reset (includes PHY soft reset[ 14.280048 0:2 crab_usb::backend::kmod::dwc:257] DWC3: After core_soft_reset - GUSB3PIPECTL=0x010c0002, GUSB2PHYCFG=010 0:2 crab_usb::backend::kmod::dwc:373] DWC3: Configuring wc:386] DWC3: Initial GUSB3PIPECTL = 0x010c0002 before conf[ 14.383584 0:2 crab_usb::backend::kmod::dwc:451] DWC3: Initial GUSB2PHYCFG = 0x40101408 before config
+[ 14.484479 0:2 crab_usb::backend::kmod::dwc:535] DWC3: Initializing in HOST mode
+[ 14.485215 0:2 crab_usb6051 0:2 crab_usb::backend::kmod::xhci::host:477] Running[ 14.686684 0:2 crab_usb::backend::kmod::dwc:553] === DWC3 寄存器状态 ===
+[ 14.687398 0:2 crab_usb::b[m
+[ 14.688096 0:2 crab::backend::kmod::dwc:567]  14.688785 0:2 crab_usb::backend::dwc:572] GUSB3PIPECTL = 0x00
+[ 14.689483 0:2 cnd::kmod::dwc:573]   SUSPHY      = false
+[ 14.690150 0:2 crab_usb::backend::kmo74]   U2SSINP3OK  = falserab_usb::backend::kmod::dwc:575]   REQP0P1P2P3 rab_usb::backend::kmod::dwc:579]   DEP1P2P3    = true
+[ 14.692138 0:2 crab_usb::backend::kmod::dwc:584] GUSB2PHYCFG  = 0x00101408
+[ 14.692836 0:2 crab_usb::backend::kmod::dwc:585]   SUSPHY      = false
+[ 14.693503 0:2 crab_usb::backend::kmod::dwc:586]   ENBLSLPM    = false
+[ 14.694170 0:2 crab_usb::backend::kmod::dwc:588]   PHYIF       = 1 (16-bit)
+[ 14.694875 0:2 crab_usb::backend::kmod::dwc:594]   USBTRDTIM   = 5
+[ 14.695513 0:2 crab_usb::backend::kmod::dwc:598] GHWPARAMS0   = 0x2020400a
+[ 14.696211 0:2 crab_usb::backend::kmod::dwc:607]   MODE        = DRD (2)
+[ 14.696893 0:2 crab_usb::backend::kmod::dwc:611] GHWPARAMS1   = 0x0160c93b
+[ 14.697590 0:2 crab_usb::backend::kmod::dwc:612]   NUM_EVENT_BUFFERS = 1
+[ 14.698273 0:2 crab_usb::backend::kmod::c:614] ======================
+[ 14.698984 0:2 starry_kernel::pseudofs::usbfs::manager:1218] usbfs: host onus 1 initialized
+[ 14.699823 0:2 starry_kernel::pseu2] usbfs: 1 host(s) ready
+[ 14.700585 0:2 starry_kernel::pseudofs::usbfs:60] usbfs: spawning refresh task starry_kernel::pseudofs::usbfs:36] usbfs: creating filesysm instance
+[ 14.702161 0:2 starry_kernel::pseudofs:76] Mounted usbfs at /dev/bus/usb
+[ 14.702872 0:2 starry_kernel::pseudofs:76] Mounted tmpfs at /dev/shm
+[ 14.704317 0:2 starry_kernel::pseudofs:76] Mounted tmpfs at /tmp
+[ 14.705002 0:2 starry_kernel::dyn_debug:61] debug_init: initializing dynamic debug sites
+[ 14.706563 0:2 starry_kernel::dyn_debug:64] debug_init: found 181 dynamic debug sites
+[ 14.707347 0:2 starry_kernel::pseudofs::proc:70] Read kallsyms, size: 660KB
+[ 14.719935 0:2 starry_kernel::pseudofs:76] Mounted proc at /proc
+[ 14.721267 0:2 starry_kernel::pseudofs:76] Mounted sysfs at /sys
+[ 14.721970 0:2 starry_kernel::pseudofs:76] Mounted sysfs at /sys/bus/usb
+[ 14.722855 0:2 starry_kernel::pseudofs:76] Mounted debug at /sys/kernel/debug
+[ 14.723645 0:2 starry_kernel::task::timer:329] Initialize alarm...
+[ 14.731480 0:8 starry_kernel::task::user:25] Enter user space: ip=0x6016953c, sp=0x7ffefffff750
+Welcome to Starry OS!
+[ 14.814132 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.821202 0:9 starry_kernel::task::user:25] Enter user space: ip=0x6014826c, sp=0x7ffeffffeee0
+USER=root
+HOSTNAME=starry
+SHLVL=1
+HOME=/root
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/
+box") exit with code: 0
+[ 14.835219 0:9 starry_kernel SIGCHLD to process 8
+[ 14.836744 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.837712 0:8 starry_kernel::d <= pid: -1, options: WaitPidOptions(WNOHANG)
+
+Use apk to install packages.
+
+[ 14.843390 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.844496 0:10 starry_kernel::task::user:25] Enter user space: ip=0x6014826c, sp=0x7ffeffffeee0
+[ 14.851665 0:10 starry_kernel::task::ops:497] Task(10, "busybox") exit with code: 256
+[ 14.852534 0:10 starry_kernel::task::signal:519] Send signal SIGCHLD to process 8
+[ 14.854065 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.855028 0:8 starry_kernel::syscall::task::wai156] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHAN[m[ 14.856959 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.858045 0:11 starry_kernel::task::user:25] Enter user space: ip=0x6014826c, sp=0x7ffeffffeee0
+[ 14.863222 0:11 starry_kernel::task::ops:497] Task(11, "busybox") exit with code: 256
+[ 14.864095 0:11 starry_kernel::task::signal:519] Send signal SIGCHLD to proce 8
+[ 14.865582 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.866542 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHAN[ 14.868458 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, optionOptions(0x0)
+[ 14.869554 0:12 starry_kernel::task::uEnter user space: ip=0x6014826c, sp=0x7ffeffffeee0
+[ 14.875036 0:12 starry_kernel::task::ops:497] Task(12, "busybox") exit with code: 256
+[ 14.875912 0:12 starry_kernel::task::signal:519] Send signal SIGCHLD to process 8
+[ 14.877417 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.878377 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: [ 14.881574 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.882591 0:13 starry_kernel::task::user:25] Enter user space: ip=0x6014826c, sp=0x7ffeffffed40
+[ 14.901532 0:13 starry_kernel::task::ops:497] Task(13, "busybox") exit with code: 0
+[ 14.902383 0:13 starss 8
+[ 14.903835 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.904794 0:8 skernel::syscall::task::wait:156][32msys_waitpid <= pid: -1, optitPidOptions(WNOHANG)
+[ 14.906713 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.907801 0:14 starry_kernel::task::user:25] Enter user sp0x6014826c, sp=0x7ffeffffed40
+[ 14.927243 0:14 starry_kernel::task::ops:497] Task(14, "busybox") exit with code: 0
+[ 14.934968 0:14 starry_kernel::task::signal:519] Send signal SIGCHLD to process 8
+[ 14.936408 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, optPidOptions(0x0)
+[ 1 0:8 starry_kernel::syscall::tas[32msys_waitpid <= pid: -1, optitPidOptions(WNOHANG)
+[ 14.939430 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.940477 0:15 starry_kernel::task::user:25] Enter user space: ip=0x6014826c, sp=0x7ffeffffeb50
+[ 14.957810 0:15 starry_kernel::task::ops:497] Task(15, "busybox") exit with code: 0
+[ 14.958625 0:15 starignal SIGCHLD to process 8
+[ 14.960051 0:8 starry_kesyscall::task::wait:156] sy<= pid: -1, options: WaitPidOpti sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)[ 14.962935 0:8 starry_kernel::syscall::task::wait:156] aitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.963974 0:16 starry_kernel::task::user:25] Enter user space: ip=0x6014826c, sp=0x7ffeffffe[ 14.985538 0:16 starry_kernel::task::ops:497] Task(16, "busybox") exit with code: 0
+[ 14.986383 0:16 star:signal:519] Send signal SIcess 8
+[ 14.987830 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.988788 0:8::syscall::task::wait:156] sys_waitpid <= pid: -1, options:OHANG)
+[ 14.990704 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.991825 0:17 starry_kernel::task::user:25] Enter user space: ip=0x6014826c, sp=0x7ffeffffeb50
+[ 15.009125 0:17 starry_kernel::task::ops:497] Task(17, "busybox") exit with code: 0
+[ 15.009965 0:17 starl:519] Send signal SIGCHLD
+[ 15.011413 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.012372 0:8 starry_kernel::syscall::task::wait:15tions: WaitPidOptions(WNOHANG)
+[ 15.015348 0:18 starry_kernel::task::user:25] Enter user space: ip=0x6014826c, sp=0x7ffeffffeb50ptions(0x0)
+[ 15.034247 0:18 starry_kernel::task::ops:497] Task(18, "busybox") exit with code: 0
+[ 15.035086 0:18 starHLD to process 8
+[ 15.036537 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.037496 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPid
+                                                                                                [ 15.039412 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.040475 0:19 starry_kernel::task::user:25] Enter user space: ip=0x6014826c, sp=0x7ffeffffeb50
+[ 15.057796 0:19 starry_kernel::task::ops:497] Task(19, "busybox") exit with code: 0
+[ 15.107740 0:19 starry_kernel::task::signal:519] Send signal SIGCHLD to process 8
+[ 15.109170 0:8 starry_ask::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptiitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.112041 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: Wai[ 15.157793 0:20 starry_kernel::task::user:25] Enter user space: ip=0x6014826c, sp=0x7ffeffffeb50
+[ 15.178748 0:20 starry_kernel::task::ops:497] Task(20, "busybox") exit with code: 0
+[ 15.179530 0:5 crab_[ 15.181870 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, optionk::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptionG)
+[ 15.184737 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)m
+[ 15.185812 0:21 starser:25] Enter user space: ip=0x6014826c, sp=0x7ffeffffeb50[ 15.203281 0:21 starry_kernel::task::ops:497] Task(21, "busybox") exit with code: 0
+[ 15.204130 0:21 starD to process 8
+[ 15.205579 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.206538 0:8 starry_kernel::syscall::task::wait:156] sys_waitpiaitPidOptions(WNOHANG)
+[ 15.208448 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options:tPidOptions(0x0)
+[ 15.209525 0:22 starry_kernel::task::user:25] Enter user spac14826c, sp=0x7ffeffffeb50
+[ 15.228496 0:22 starry_kernel::task::ops:497] Task(22, "busybox") exit with code: 0
+[ 15.229367 0:22 starSend signal SIGCHLD to process 8
+[ 15.230797 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.231755 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.238749 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.239792 0:23 starry_kernel::task::user:25] Enter usep=0x6014826c, sp=0x7ffeffffeee0
+[ 15.246929 0:23 starry_kernel::task::ops:497] Task(23, "busybox") exit with code: 0
+[ 15.247742 0:23 starry_kernel::task::signal:519] Send signal SIGCHLD to process[ 15.249189 0:8 starry_kernel::syscall::task::wait:156] sys_waitpid <= pid: -1, optionaitPidOptions(0x0)
+[ 15.250148 0:8 starry_kernel::sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+root@starry:/root #

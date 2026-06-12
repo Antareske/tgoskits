@@ -1,0 +1,109 @@
+Script started on 2026-06-09 16:36:08+00:00 [COMMAND="picocom -b 1500000 /dev/ttyUSB0" TERM="xterm" TTY="/dev/pts/5" COLUMNS="188" LINES="46"]
+picocom v3.1
+
+port is        : /dev/ttyUSB0
+flowcontrol    : none
+baudrate is    : 1500000
+parity is      : none
+databits are   : 8
+stopbits are   : 1
+escape is      : C-a
+local echo is  : no
+noinit is      : no
+noreset is     : no
+hangup is      : no
+nolock is      : no
+send_cmd is    : sz -vv
+receive_cmd is : rz -vv -E
+imap is        : 
+omap is        : 
+emap is        : crcrlf,delbs,
+logfile is     : none
+initstring     : none
+exit_after is  : not set
+exit is        : no
+
+Type [C-a] [C-h] to see available commands
+Terminal ready
+DDR 9fffbe1e78 cym 24/02/04-10:09:20,fwver: v1.16
+LPDDR5, 2400MHz
+channel[0] BW=16 Col=10 Bk=16 CS0 Row=15 CS1 Row=15 CS=2 Die BW=16 Size=2048MB
+channel[1] BW=16 Col=10 Bk=16 CS0 Row=15 CS1 Row=15 CS=2 Die BW=16 Size=2048MB
+channel[2] BW=16 Col=10 Bk=16 CS0 Row=15 CS1 Row=15 CS=2 Die BW=16 Size=2048MB
+channel[3] BW=16 Col=10 Bk=16 CS0 Row=15 CS1 Row=15 CS=2 Die BW=16 Size=2048MB
+Manufacturer ID:CH0 RX Vref:29.3%, TX Vref:20.0%,19.0%
+CH1 RX Vref:26.7%, TX Vref:22.0%,22.0%
+CH2 RX Vref:28.5%, TX Vref:21.0%,19.0%
+CH3 RX Vref:30.2%, TX Vref:20.0%,20.0%
+change to F1: 534MHz
+change to F2: 1320MHz
+change to F3: 1968MHz
+change to F0: 2400MHz
+out
+U-Boot SPL board init
+U-Boot SPL 2017.09-orangepi (Aug 30 2024 - 22:09:16)
+Trying to boot from MMC1
+Trying fit image at 0x4000 sector
+## Verified-boot: 0
+## Checking atf-1 0x00040000 ... sha256(76c60de4ac...) + OK
+## Checking u-boot 0x00800000 ... sha256(dacb3f1dfb...) + OK
+## Checking fdt-1 0x008d3978 ... sha256(7ac0f174fa...) + OK
+## Checking atf-2 0x0005f000 ... sha256(dc0b3c15d8...) + OK
+## Checking atf-3 0xff100000 ... sha256(23a09356c5...) + OK
+JumTotal: 829.17 ms
+
+NOTICE:  BL31: v2.13.0(release):armbian
+NOTICE:  BL31: Built : 05:22:31, May 24 2026
+INFO:    GICv3 without legacy support dets = 0x800000
+INFO:    SPSR = 0x3c9
+
+
+U-Boot 2026.01_armbian-2026.01-S127a-Pbf64-He141-Vc0e0-Bd0d2-R448a (May 24 2026 - 05:25:06 +0000)
+
+Model: Xunlong Orange Pi 5 Plus
+SoC:   RK3588
+DRAM:  8 GiB
+Core:  361 devices, 31 uclasses, devicetree: separate
+MMC:   mmc@fe2c0000: 1, mmc@fe2e0000: 0
+Loading Environment from nowhere... OK
+In:    serial@feb50000
+Out:   serial@feb50000
+Err:   serial@feb50000
+Model: Xunlong Orange Pi 5 Plus
+SoC:   RK3588
+Net:   No ethernet found.
+Hit any key to stop autoboot:  1 Hit any key to stop autoboot: 0[K
+Scanning for bootflows in all bootdevs
+Seq  Method       State   Uclass    Part  Name     -----------------------  ----------------
+Scanning global bootm8Card did not respond to voltage select! : -110
+Cannot persist EFI variables without system partition
+  0  efi_mgr      ready  Loading Boot0000 'mmc 1' failed
+EFI boot manager: Cannot load any image
+Boot failed (err=-14)
+Scanning bootdev 'mmc@fe2c0000.  1  script       ready   mmc          1  mmc@fe2c0000.bootdev.part /boot.scr
+** Booting bootflow 'mmc@fe2c0000.bootdev.part_1'13523440 bytes read in 1162 ms (11.1 MiB/s)
+280066 bytes read in 27 ms (9.9 MiB/s)
+## Loading kernel (any) from FIT Image at 10000000 ...
+   Using 'config-1' configuratioOK
+   Trying 'kernel-1' kernel subimage
+     Description:  Sta Type:         Kernel Image
+   ssed
+     Data Start:   0x100004
+     OS:           Linux
+     Load Address: 0x40000000
+    sh algo:    sha256
+     Hash value:   23945472aa47768f66293d4faae5c471
+   Verifying Hash Integrity ... sha256+ OK
+## Flattened Device Tree blob at 0a100000
+   Booting using the fdt blob at 0xa100000
+Working F   Loading Device Tree to 00000000ecb64000, end 00000000ecbab601 ... OK
+Working FDT set to ecb64000
+
+Starting kernel ...
+
+
+Terminating...
+Skipping tty reset...
+Thanks for using picocom
+
+Script done on 2026-06-09 16:36:43+00:00 [COMMAND_EXIT_CODE="0"]

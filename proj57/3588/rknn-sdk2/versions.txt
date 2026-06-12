@@ -1,0 +1,21 @@
+The versions of each component of rknn-toolkit2-2.4.2a7 is as follows:
+    packages/rknn_toolkit2-2.4.2a7-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl2.4.2a7
+    runtime/Android/rknn_server/arm64/rknn_server                              2.4.0 (41466cf build@2026-03-16T14:57:26)
+    runtime/Android/librknn_api/arm64-v8a/librknnrt.so                         2.4.2a2 (e747c6e4b8@2026-06-11T15:04:01)
+    runtime//Linux/rknn_server/aarch64/usr/bin/rknn_server                     2.4.0 (41466cf build@2026-03-16T14:57:53)
+    runtime/Linux/librknn_api/aarch64/librknnrt.so                             2.4.2a2 (e747c6e4b8@2026-06-11T15:05:16)
+    runtime/Linux/rknn_server/armhf-uclibc/usr/bin/rknn_server                 2.4.0 (41466cf build@2026-03-16T14:58:23)
+    runtime/Linux/librknn_api/armhf-uclibc/librknnmrt.so                       2.4.2a2 (e747c6e4b8@2026-06-11T15:07:39)
+
+Because the versions of toolkit2/rknn_server/librknnrt.so must matched, So please use the following command to query these versions,
+And make sure they are consistent with the above versions:
+    RKNN-Toolkit2:           pip3 list |grep 'rknn'
+    Android rknn_server:     strings /vendor/bin/rknn_server |grep 'build@'
+    Android librknnrt.so:    strings /vendor/lib64/librknnrt.so |grep 'librknnrt version:'
+    Linux rknn_server:       strings /usr/bin/rknn_server |grep 'build@'
+    Linux librknnrt.so:      strings /usr/lib/librknnrt.so |grep 'librknnrt version:'
+    Linux armhf-uclibc rknn_server:       strings /usr/bin/rknn_server |grep 'build@'
+    Linux armhf-uclibc librknnmrt.so:     strings /oem/usr/lib/librknnmrt.so |grep 'librknnmrt version:'
+If the queried version is inconsistent with the above version, please update these components.
+For the update/usage method of rknn_server and librknnrt.so, please refer to runtime/rknn_server_proxy.md.
+

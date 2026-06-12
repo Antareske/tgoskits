@@ -1,0 +1,117 @@
+kchip_mmc:160] rockchip-sdo responsive card at [PA:4264427520, SZ:0x10000); skipping contr[214.468083 ax_driver::usb::dwc:425] DWC xHCI power domain 31 enabled
+[214.468725 ax_driver::usb::dwc:430][214.519180 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixed regulator vcc5v0-host enabled via pinctrl
+[214.542373 crab_usb::backend::kmod::xhci::host:92] xHCI: Addressing Capability (AC64) = fal[214.544209 crab_usb::backend::kmod::dwc::udphy:118] Uh 2 DP lanes
+[214.545125 ax_driver::usb::dwc:172] DWC xHCI driver initialized successfully for usb@fc400000 witme(253)
+[214.822321 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe190000: assert PERST via GPIO4 pin 2[215.008545 ax_driver::pci::fdt::rk3588::body:245] RK3588 Naneng combphy phy@fee00000 initialized for PCIe, refclk=100[215.032344 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe host 0xfe190000: FDT resources node=pcie@fe19000=0, phys=1, supply=None, pipe-grSome(Phandle(119)), reset-gpio=G13 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 P[215.236114 ax_driver::pci::fdt::rk3588::body:119] Rockchip RK3588 PCIe host[216.038139 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe190000: link down, LTSSM=0x3, DEBUG1=0x8100000
+[[216.049048 ax_driver::block::rockchip_sd:78] rockchip-dwmmc probe: node=mmc@fe2c0000, addr=0xfe2c0000, size=0x4000[216.067498 sdmmc_protocol::sdio:1098] sdio: detected Sd ocr=0xc1ff8000
+[216.070818 sdmmc_protocol: 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00] block1_ok=t2mrockchip-dwmmc: selected RK3588 SDMMC sample phase 0deg
+[216.479445 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe150000: assert PERST via GPIO4 pin 14[216.526006 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixedregulator vcc3v3-pcie30 enabled via pinctrl
+[216.732816 ax_driver::pci::fdt::rk3588::body:151] RK3588 PCIe3 PHY phy@fee80000 initialized, mode=4
+[216.756483 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe host 0xfe150000: FDT resources node=pcie@fe15000=0xf0000000/0x100000, buses 0x0..=0xf, clocks=6, resets=2, powerin 14 active-high
+[216.766492 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe150000: assert PERST via GPIO4 pin 14m
+[216.967500 ax_driver::pci::fdt::rk3588::body:119] Rockchip RK3588 PCIe host 0xfe150000: rel[217.769531 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe150000: link down, LTSSM=0x0, DEBUG1=0x8200000
+[37m[217.771448 ax_driver::pci:258] PCIe legacy IRQ route: logical bus 0..=15 -> IRQs [292]
+[217.772231 ax_driveIe host 0xfe150000: registering config window 0xf0000000/1048576[218.288035 ax_driver::pci::fdt::rk3588::body:111] Rockchip RK3588 PCIe host 0xfe170000: assert PERST via GPIO4 pin 5[218.379408 ax_driver::soc::rockchip::pinctrl:103] Rockchip fixed regulator vcc3v3-pcie2x1l0 enabled via pinctrl
+[218.586622 ax_driver::pci::fdt::rk3588::body:245] RK3588 Naneng combphy phy@fee10000 initialized for PCIe, refclk=100[218.610445 ax_driver::pci::fdt::rk3588::body:2] Rockchip RK3588 PCIe host 0xfe170000: FDT resources node=pcie@fe1700020..=0x2f, clocks=6, resets=2, ppply=Some(Phandle(454)), pipe-grO4 pin 5 active-high
+[218.613327 ax_driver::pci::fdt4 pin 5
+[218.814328 ax_driver::pci::fdt::rk3588::body:119] Rockchip RK3588 PCIe host 0xfe170000: rel[219.616354 rk3588_pci:229] Rockchip RK3588 PCIe host 0xfe170000: link down, LTSSM=0x3, DEBUG1=0x8100000
+[ buses 0x20..=0x2f, logical buses 0..=15
+[220.167897 ax_runtime::block::root:138]     partition 1 name=None fs=Some(Ext4) lba 32768..123469824
+[220ip-sd) has Gpt partition table with 1 partitions
+[220.169771 ax_runtime::block::rootsupported filesystem partition i[220.170750 ax_fs_ng:35]Initialize filesystem subs0.171322 ax_fs_ng:36]   selected root device: disk0 partiti>, fs=ext4, lba 32768..123469824)
+[220.172878 rsext4::crc32c::arm64:32] ID_AA64ISAR0_EL1[19:16]: 0x1
+[220.173495 rsext4::crc32c::ardware CRC32C support detected.[220.195908 rsext4::ext4::mount:278] /lost+found exists (superblock hint inode=11)
+[220.198095 rsext4::ext4::mount:407] Ext4 filesystem mounted
+[220.198668 rsext4::ext4::mount:408]
+[220.199275 rsext4::ext4::mount:409]   - total blks: 15429632
+[220.199882 rsext4::ext4::mount:410]
+[220.200482 rsext4::ext4::mount:411]   - total i20.201676 rsext4::ext4::sync:13] Syncing filesystem...
+[220.249975 rsext4::ext4::mount:482] Ext4 filesystem mounted
+[220.250558 ax_fs_ng:44]   filesystem tyffffff803e8b68, tracepoint_data_end: 0xffffffff803e8b88
+[220.358924 0:2 starry_kernel::pseudofs::dev::dma_heap:17] dma_heap: Creating new DmaHeapSystem instance
+[220.361618 0:2 starry_kernel::pseudofs:76] Mounted devfs at /dev
+[220.362229 0:2 starry_kernel::pseudofs::usbfsmanager
+[220.362954 0:2 starry_kernel::pseudofs::usbusbfs: creating event handler for bus 1
+[220.364710 365549 0:2 starry_kernel::pseudofs::usbfs::irq:90] usbfs: r:kmod::dwc:629] DWC3: Start initialization
+[220.369220 0:2 crab_usb::backend::kmod::dwc::usb2phy:151] USB2PHY: Starting initialization
+[220.370024 0:2 crab_uskmod::dwc::usb2phy:260] USB
+[220.371029 0:2 crab_usb::backend::kmod::dwc::usb2phy:transmitter pre-emphasis set to [220.371939 0:2 crab_usb::b:usb2phy:205] === USB2 PHY  Dump ===
+[220.37274d::kmod::dwc::usb2phy:206] PHY Base: 0xffff0000fd5d4000
+[220.373529 0:2 crab_us:backend::kmod::dwc::usb2phy:210TROL (0x0008) = 0x00000d10
+[220.374353 0:2 crab_usb:kend::kmod::dwc::usb2phy:211]   IDDQ (bit 29)    = 0 (正常工作模式✅)
+[220.375283 0:2 crab_usb::backend::kmod::dwc::usb2phy:220]   HS_TX_PREEMP (bits 20:19) = 0 (0x)
+[220.376132 0:2 [32mHS_DC_LEVEL (0x0004) = 0x00007933
+[220.376956 0:2 crab_usb::backend::kmod::dwc::usb2phy:235]   HS_DC_LEVEL (bits 27:24) = 0x0(其他值)
+[220.377864 0:2 crab_usb::backend::kmod::dwc::usb2phy:246] SUSPEND_CONTROL (0x000c) = 0x00000200
+[220.378718 0:2 crab_usb::backend::kmod::dwc::usb2phy:247]   PHY_SUSPEND (bit 11) = 0
+[220.379491 0:2 crab_usb::backend::kmod::dwc::usb2phy:248] =========================
+[220.380256 0:2 crab_usb::backend::kmod::dwc::usb2phy:163] USB2PHY: init with port kind Otg
+[220.381074 0:2 crab_usb::backend::kmod::dwc::usb2phy:175] USB2PHY: Waiting for UTMI clock to stabilize
+[220.383997 0:2 crab_usb::backend::kmod::dwc::udphy:156] Starting initialization
+[220.386208 0:2 crab_usb::backend::kmod::dwc::udphy:212] Udphy initialized
+[220.386888 0:2 crab_usb::backend::kmod::dwc::udphy:406] === USB3/DP PHY Register Dump ===
+[220.387695 0:2 crab_usb::backend::kmod::dwc::udphy:407] PHY ID: 1
+[220.388325 0:2 crab_usb::backend::kmod::dwc::udphy:408] PHY Mode: UdphyMode(USB | DP)
+[220.389105 0:2 crab_usb::backend::kmod::dwc::udphy:409] PHY Base: 0xffff0000fed90000
+[220.389879 0:2 crab_usb::backend::kmod::dwc::udphy:413] CMN_LANE_MUX_AND_EN = 0x000000cc
+[220.390680 0:2 crab_usb::backend::kmod::dwc::udphy:414]   LANE0_MUX = 0 (USB)
+[220.391401 0:2 crab_usb::backend::kmod::dwc::udphy:419]   LANE1_MUX = 0 (USB)
+[220.392120 0:2 crab_usb::backend::kmod::dwc::udphy:424]   LANE2_MUX = 1 (DP)
+[220.392833 0:2 crab_usb::backend::kmod::dwc::udphy:429]   LANE3_MUX = 1 (DP)
+[220.393545 0:2 crab_usb::backend::kmod::dwc::udphy:434]   LANE0_EN = Disabled
+[220.394265 0:2 crab_usb::backend::kmod::dwc::udphy:442]   LANE1_EN = Disabled
+[220.394985 0:2 crab_usb::backend::kmod::dwc::udphy:450]   LANE2_EN = Enabled ✅
+[220.395728 0:2 crab_usb::backend::kmod::dwc::udphy:458]   LANE3_EN = Enabled ✅
+[220.396471 0:2 crab_usb::backend::kmod::dwc::udphy:469] CMN_ANA_LCPLL_DONE = 0x000000de
+[220.397265 0:2 crab_usb::backend::kmod::dwc::udphy:470]   AFC_DONE = Locked ✅
+[220.398000 0:2 crab_usb::backend::kmod::dwc::udphy:478]   LOCK_DONE = Locked [220.398744 0:2 crab_usbphy:502] TRSV_LN0_MON_RX_CDR = 0x0000000f
+[220.399545 0:2 crab_usb::backend::kmod::dwc::udphy:503]   LOCK_DONE (Lane 0) = Locked ✅
+[220.400356 0:2 crab_usb::backend::kmod::dwc::udphy:516] CMN_DP_RSTN = 0x0000000a
+[220.401098 0:2 crab_usb::backend::kmod::dwc::udphy:517]   DP_CMN_RSTN = Asserted
+[220.401841 0:2 crab_usb::backend::kmod::dwc::udphy:526]   DP_INIT_RSTN = Released ✅
+[220.402620 0:2 crab_usb::backend::kmod::dwc::udphy:536]   U3 Port Disable = false
+[220.403370 0:2 crab_usb::backend::kmod::dwc::udphy:540] ================================
+[220.404210 0:2 crab_usb::backend::kmod::dwc:251] DWC3: Starting core soft reset (includes PHY soft reset)
+[220.605132 0:2 crab_usb::backend::kmod::dwc:257] DWC3: After core_soft_reset - GUSB3PIPECTL=0x010c0002, GUSB2PHYCFG=0[220.708661 0:2 crab_usb::backend::kmod::dwc:451] DWC3: Initial GUSB2PHYCFG = 0x40101408 before config
+[220.809549 0:2 crab_usb::backend::kmod::dwc:535] DWC3: Initializing in HOST mode
+[220.810279 0:2 crab_usb[221.011739 0:2 crab_usb::backend::kmod::dwc:553] === DWC3 寄存器状态 ===
+[221.012447 0:2 crab_usb::bGCTL         = 0x30c1100d
+[221.013144 0:2 crab_usb::PDIR   = Host (1)
+[221.013834 0:2 crab_usb::backend:014532 0:2 crab_usb::backend::km32m  U2SSINP3OK  = false
+[221.015867 0:2 crab_usb::bod::dwc:575]   REQP0P1P2P3 = true
+[221.016527 0[32m  DEP1P2P3    = true
+kend::kmod::dwc:584] GUSB2PHYCFG  = 0x00101408
+[221.017884 0:2 crab_usb::backend::kmod::dwc:585]   SUSPHY alse
+[221.018552 0:2.019220 0:2 crab_usb::backend::kmod::dwc:588]   PHYIF      AMS0   = 0x2020400a
+[221.021260 0:2 crab_usb::backenm  MODE        = DRD (2)
+:2 crab_usb::backend::kmod::dwc:
+[221.022639 0:2 crab_u::backend::kmod::dwc:612]   = 1
+[221.023322 0:2 usbfs: host on bus 1 initialized
+[221.024864 02musbfs: 1 host(s) ready
+[221.025625 0:2 starry_kernfs::usbfs:60] usbfs: spawniask
+[221.026376 0:2 system instance
+[2215 0:2 starry_kernel::pseudofs:76 usbfs at /dev/bus/usb
+[221.027900 0:2 starry_kernel::pseudofs:76] Mounted tmpfs at /dev/shm
+[221.029465 0:2 starry_kernel::pseudofs:76] Mounted tmpfs at /tmp
+[221.030142 0:2 stakernel::dyn_debug:61] debug_init: initializing dynamic debug sites
+[221.031536 0:2 starry_kernel::dyn_debug:64] debug_init: found 150 dynamic debug sites
+[221.032312 0:2 starry_kernel::pseudmRead kallsyms, size: 599KB
+m[221.044134 0:2 starry_kernel::pseudofs:76] Mounted proc at /proc
+[221.045480 0:2 starry_kernel::pseudofs:76] Mounted sysfs at /sys
+[221.046138 0:2 starry_kernel::pseudofs:76] Moun1.046972 0:2 starry_kernel::pseudofs:76] Mounted debug at /sys/kernel/debug
+[221.047756 0:2 starry_kernel::task::timer:329] Initialize alarm...
+[221.061729 0:8 starry_kernel::task::user:25] Enter user space: ip=0x6011c640, sp=0x7ffefffffab0
+Welcome to Starry OS!
+[221.274375 0:9 starry_kernel::task::user:25] Enter user space: ip=0x122820, sp=0x7ffefffff4e0
+[221.470111 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[221.942543 0:9 starry_kernel::task::user:89] Process { pid: 9, parent: 8, group: ProcessGroup(8, session=8) }: segmen[222.107510 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+Se[222.133847 0:10 starry_kernel::task::user:25] Enter u[222.323890 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[222.796799 0:5 crab_usb::backend::kmod::kcore:118] Added new hub with id Id { idx: 1 }
+[222.844213 0:10 starry_kernel::task::user:89] Process { pid: 10, parent: 8, group: ProcessGroup(8, session=8) }: segm[223.011089 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+id: -1, options: WaitPidOptions(WNOHANG)
+[223.01_kernel::task::user:25] Ent ip=0x122820, sp=0x7ffefffff4e0[223.202694 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[223.672680 0:11 starry_kernel::task::user:89] Process { pid: 11, parent: 8, group: ProcessGroup(8, session=8) }: segm[223.837447 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[223.838460 0:8 starry_kernel:wait:142] sys_waitpid <= pernel::task::user:25] Enter user space: ip=0x122820, sp=0x7[224.030105 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[224.500306 0:12 starry_kernel::task::user:89] Process { pid: 12, parent: 8, group: ProcessGroup(8, session=8) }: segm[224.666854 0:8 starry_kernel::syscall::task::wait:142] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[224.673864 0:8 starry_kernel::task::ops:470] Task(8, "dash") exit with code: 512
+[224.715027 0:2 starry_kernel::entry:93] Init process exited with code: 0

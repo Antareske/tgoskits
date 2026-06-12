@@ -27,17 +27,19 @@ apt install -y gdisk fdisk mtools dosfstools u-boot-tools \
 
 ## 2. 资产准备
 
-构建需要四类资产：启动链、设备树、StarryOS 内核、StarryOS 根文件系统。其中启动链与设备树取自一份现成的 Armbian 镜像，内核与根文件系统由 tgoskits 工作区提供。
+构建需要四类资产：启动链、设备树、StarryOS 内核、StarryOS 根文件系统。其中**启动链**取自一份现成的 Armbian 镜像，**设备树、内核、根文件系统**均由 tgoskits 工作区提供。
 
-### 2.1 现成的 Armbian 镜像（启动链与设备树来源）
+> 设备树必须使用 tgoskits 提供的官方 DTB `os/StarryOS/configs/board/orangepi-5-plus.dtb`，**不要**用 Armbian 镜像里的 DTB。原因：StarryOS 的 RKNPU 驱动只匹配 `compatible = "rockchip,rk3588-rknpu"`，而较新的 Armbian 内核（如 6.18）改用了三核拆分布局 `rockchip,rk3588-rknn-core`，与 StarryOS 驱动不匹配，会导致 NPU 设备无法 probe 注册（NPU 用例运行时所有 rknpu ioctl 返回 NotFound 并段错误）。官方 DTB 的 NPU 节点为单节点 `rockchip,rk3588-rknpu`，已验证可在板上正常驱动 NPU。
 
-本文使用官方 Armbian 的 Orange Pi 5 Plus 镜像作为启动链与设备树的来源：https://armbian.com/boards/orangepi5-plus
+### 2.1 现成的 Armbian 镜像（启动链来源）
+
+本文使用官方 Armbian 的 Orange Pi 5 Plus 镜像作为启动链（idbloader + u-boot.itb）的来源：https://armbian.com/boards/orangepi5-plus
 
 ```text
 Armbian_26.5.1_Orangepi5-plus_resolute_current_6.18.33_minimal.img
 ```
 
-它已适配 RK3588，自带可用的 idbloader、U-Boot（2026.01，对 StarryOS FIT 镜像支持完整）与设备树。任何同样适配 Orange Pi 5 Plus 的镜像应该均可替代。
+它已适配 RK3588，自带可用的 idbloader、U-Boot（2026.01，对 StarryOS FIT 镜像支持完整）。任何同样适配 Orange Pi 5 Plus 的镜像应该均可替代。本文只从中提取启动链，设备树另取自 tgoskits（见 2.3）。
 
 ```bash
 xz -dk Armbian_26.5.1_Orangepi5-plus_resolute_current_6.18.33_minimal.img.xz
@@ -63,19 +65,19 @@ dd if=$ARMBIAN of=u-boot.itb    bs=512 skip=16384 count=8192
 
 ### 2.3 设备树（DTB）
 
-从 Armbian 镜像根分区的 `/boot/dtb/rockchip/rk3588-orangepi-5-plus.dtb`（即 `/boot/dtb-<内核版本>-current-rockchip64/rockchip/rk3588-orangepi-5-plus.dtb`）取出，作为 StarryOS 设备树的基底。后续会修改其 `/chosen/bootargs`（见 4.1）。
+使用 tgoskits 工作区提供的官方 DTB 作为 StarryOS 设备树的基底：
 
-挂载 Armbian 根分区（p1，起始 sector 32768）后拷出：
+```text
+os/StarryOS/configs/board/orangepi-5-plus.dtb
+```
+
+它的 NPU 节点为 `compatible = "rockchip,rk3588-rknpu"`，与 StarryOS 的 RKNPU 驱动匹配，是 NPU 能在板上工作的前提。直接拷出作为基底，后续修改其 `/chosen/bootargs`（见 4.1）：
 
 ```bash
-ARMBIAN=Armbian_26.5.1_Orangepi5-plus_resolute_current_6.18.33_minimal.img
-
-OFF=$((32768*512))
-mkdir -p mnt
-mount -o loop,offset=$OFF,ro "$ARMBIAN" mnt
-cp mnt/boot/dtb/rockchip/rk3588-orangepi-5-plus.dtb .
-umount mnt
+cp os/StarryOS/configs/board/orangepi-5-plus.dtb rk3588-orangepi-5-plus.dtb
 ```
+
+> 切勿改用 Armbian 镜像内的 DTB（`/boot/dtb/rockchip/rk3588-orangepi-5-plus.dtb`）。较新 Armbian 内核的 NPU 节点是 `rockchip,rk3588-rknn-core` 三核布局，StarryOS 驱动不识别，NPU 无法初始化。
 
 ### 2.4 StarryOS 内核
 
@@ -154,15 +156,18 @@ StarryOS 在运行时从设备树 `/chosen/bootargs` 读取内核命令行，因
 dtc -I dtb -O dts rk3588-orangepi-5-plus.dtb -o starry.dts
 ```
 
-基底 DTB 的 `/chosen` 节点形如：
+官方 DTB 的 `/chosen` 节点形如（含 Linux 用的 bootargs 与 initrd 地址）：
 
 ```text
 chosen {
     stdout-path = "serial2:1500000n8";
+    linux,initrd-start = <...>;
+    linux,initrd-end = <...>;
+    bootargs = "root=UUID=... console=ttyS2,1500000 ... cma=128M ...";
 };
 ```
 
-向其中添加 `bootargs`：
+改写为 StarryOS 用的形态：保留 `stdout-path`，把 `bootargs` 整体替换为指向 Starry 根分区的命令行，并删除 `linux,initrd-start/end`（StarryOS 不使用 initrd，残留地址可能误导内核）：
 
 ```text
 chosen {

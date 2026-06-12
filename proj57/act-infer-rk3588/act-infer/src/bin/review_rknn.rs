@@ -1,0 +1,88 @@
+use std::{env, process};
+
+use act_infer_rk3588::{
+    cli::{parse_common_args, print_common_usage, write_json_if_requested},
+    infer_rknn::run_model_timed,
+    meminfo::peak_rss_kb,
+    preprocess::{
+        denormalize_action, normalize_state, preprocess_image_file, read_state_file, read_stats,
+    },
+    schema::{ReviewOutput, STATE_LEN},
+};
+use anyhow::Result;
+
+fn main() {
+    if let Err(err) = run() {
+        eprintln!("ACT_INFER_FAILED: {err:#}");
+        process::exit(1);
+    }
+}
+
+fn run() -> Result<()> {
+    let args = env::args().skip(1).collect::<Vec<_>>();
+    if args.is_empty() || args.len() % 2 != 0 {
+        print_common_usage("act-infer-review-rknn");
+        process::exit(2);
+    }
+    let parsed = parse_common_args(&args)?;
+
+    let stats = read_stats(&parsed.normalize_path)?;
+    let state_raw = if let Some(path) = parsed.state_path.as_ref() {
+        read_state_file(path)?
+    } else {
+        [0.0_f32; STATE_LEN]
+    };
+    let state = normalize_state(state_raw, &stats)?;
+    let image = preprocess_image_file(&parsed.image_path)?;
+
+    // review mode only emits the action result for human inspection of the
+    // left/right wheel speed trend (the contest decision-direction check).
+    let (raw_action, timing_ms) = run_model_timed(
+        &parsed.model_path,
+        &image,
+        &state,
+        parsed.repeat,
+        parsed.core_mask,
+    )?;
+    let action_denorm = denormalize_action(&raw_action, &stats)?;
+
+    let action_dim = stats.action.q01.len();
+    let chunk_steps = action_denorm.len().checked_div(action_dim).unwrap_or(0);
+    let left_wheel = action_denorm.first().copied().unwrap_or_default();
+    let right_wheel = action_denorm.get(1).copied().unwrap_or_default();
+    let speed_diff = right_wheel - left_wheel;
+    // Differential-drive convention: right faster than left => turning left.
+    let direction = if speed_diff > 0.0 {
+        "left"
+    } else if speed_diff < 0.0 {
+        "right"
+    } else {
+        "straight"
+    };
+
+    let result = ReviewOutput {
+        mode: "review-rknn",
+        backend: "rknn-npu",
+        model_path: parsed.model_path.display().to_string(),
+        image_path: parsed.image_path.display().to_string(),
+        normalize_path: parsed.normalize_path.display().to_string(),
+        state_path: parsed.state_path.as_ref().map(|p| p.display().to_string()),
+        action_dim,
+        chunk_steps,
+        left_wheel,
+        right_wheel,
+        speed_diff,
+        direction,
+        output_action_norm: raw_action,
+        output_action_denorm: action_denorm,
+        timing_ms,
+        peak_rss_kb: peak_rss_kb(),
+    };
+
+    let json = serde_json::to_string_pretty(&result)?;
+    println!("ACT_REVIEW_RESULT");
+    println!("{json}");
+    println!("ACT_REVIEW_DIRECTION={direction}");
+    write_json_if_requested(parsed.output_path.as_deref(), &json)?;
+    Ok(())
+}

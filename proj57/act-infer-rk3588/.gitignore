@@ -1,0 +1,19 @@
+# Python venv
+.venv/
+
+# Rust build artifacts
+act-infer/target/
+
+# Cross-compile staging output
+install/
+
+# Large downloaded / generated model artifacts (regenerated via scripts/prepare-model.sh)
+assets/downloads/
+assets/prepare/model.onnx
+assets/prepare/model.onnx.data
+assets/prepare/model.rknn
+
+# RKNN toolkit conversion logs / temp
+*.log
+*.rknn.cache
+check*.onnx

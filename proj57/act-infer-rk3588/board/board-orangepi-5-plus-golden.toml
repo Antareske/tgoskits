@@ -1,0 +1,16 @@
+board_type = "OrangePi-5-Plus"
+shell_prefix = "root@starry:/root #"
+shell_init_cmd = '''
+/act_infer_rk3588/run-golden.sh
+'''
+success_regex = [
+  "(?m)^ACT_INFER_OK$",
+]
+fail_regex = [
+  "(?i)\\bpanic(?:ked)?\\b",
+  "(?m)^ACT_INFER_FAILED.*$",
+  "(?m)^rknn_init fail.*$",
+  "(?i)error while loading shared libraries",
+  "(?i)(act-infer-review-rknn|act-infer-golden-rknn|sh): .*not found",
+]
+timeout = 180

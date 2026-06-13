@@ -44,7 +44,7 @@ flowchart TB
     subgraph sg_plat["平台层"]
         direction LR
         p1["axplat-dyn"]
-        p2["ax-plat-x86-qemu-q35"]
+        p2["ax-plat-loongarch64-qemu-virt"]
     end
     subgraph sg_comp["组件层 (92 crates)"]
         direction LR
@@ -150,8 +150,7 @@ flowchart TB
 | `ax-memory-addr` | 组件层 | `memory/memory_addr` | 0 | 24 | [查看](crates/ax-memory-addr) |
 | `ax-memory-set` | 组件层 | `memory/memory_set` | 2 | 3 | [查看](crates/ax-memory-set) |
 | `ax-mm` | ArceOS 层 | `os/arceos/modules/axmm` | 8 | 4 | [查看](crates/ax-mm) |
-| `ax-net` | ArceOS 层 | `os/arceos/modules/axnet` | 8 | 4 | [查看](crates/ax-net) |
-| `ax-net-ng` | ArceOS 层 | `os/arceos/modules/axnet-ng` | 11 | 2 | [查看](crates/ax-net-ng) |
+| `ax-net` | 组件层 | `net/ax-net` | 11 | 6 | [查看](crates/ax-net) |
 | `ax-page-table-entry` | 组件层 | `memory/page_table_entry` | 1 | 12 | [查看](crates/ax-page-table-entry) |
 | `ax-page-table-multiarch` | 组件层 | `memory/page_table_multiarch` | 3 | 7 | [查看](crates/ax-page-table-multiarch) |
 | `ax-percpu` | 组件层 | `components/percpu/percpu` | 2 | 17 | [查看](crates/ax-percpu) |
@@ -159,7 +158,6 @@ flowchart TB
 | `ax-plat` | 组件层 | `platforms/ax-plat` | 6 | 15 | [查看](crates/ax-plat) |
 | `ax-plat-loongarch64-qemu-virt` | 组件层 | `platforms/ax-plat-loongarch64-qemu-virt` | 6 | 5 | [查看](crates/ax-plat-loongarch64-qemu-virt) |
 | `ax-plat-macros` | 组件层 | `platforms/ax-plat-macros` | 1 | 1 | [查看](crates/ax-plat-macros) |
-| `ax-plat-x86-pc` | 组件层 | `platforms/ax-plat-x86-pc` | 7 | 5 | [查看](crates/ax-plat-x86-pc) |
 | `ax-posix-api` | ArceOS 层 | `os/arceos/api/arceos_posix_api` | 13 | 1 | [查看](crates/ax-posix-api) |
 | `ax-runtime` | ArceOS 层 | `os/arceos/modules/axruntime` | 20 | 4 | [查看](crates/ax-runtime) |
 | `ax-sched` | 组件层 | `components/axsched` | 1 | 1 | [查看](crates/ax-sched) |
@@ -176,7 +174,6 @@ flowchart TB
 | `axhvc` | 组件层 | `virtualization/axhvc` | 1 | 1 | [查看](crates/axhvc) |
 | `axklib` | 组件层 | `components/axklib` | 2 | 3 | [查看](crates/axklib) |
 | `axplat-dyn` | 平台层 | `platforms/axplat-dyn` | 11 | 2 | [查看](crates/axplat-dyn) |
-| `ax-plat-x86-qemu-q35` | 平台层 | `platforms/ax-plat-x86-qemu-q35` | 7 | 1 | [查看](crates/axplat-x86-qemu-q35) |
 | `axpoll` | 组件层 | `components/axpoll` | 0 | 5 | [查看](crates/axpoll) |
 | `axvcpu` | 组件层 | `virtualization/axvcpu` | 5 | 5 | [查看](crates/axvcpu) |
 | `axvisor` | Axvisor 层 | `os/axvisor` | 27 | 0 | [查看](crates/axvisor) |

@@ -10,8 +10,8 @@ pub use crate::build::LogLevel;
 use crate::context::{ResolvedStarryRequest, STARRY_PACKAGE, starry_arch_for_target_checked};
 
 pub(crate) fn default_starry_build_info_for_target(target: &str) -> StarryBuildInfo {
-    let mut build_info = StarryBuildInfo::default_for_target(target);
-    if build_info.plat_dyn {
+    let mut build_info = StarryBuildInfo::default();
+    if build_info.effective_plat_dyn(target, None) {
         build_info.features = Vec::new();
     } else {
         build_info.features = vec!["qemu".to_string()];
@@ -63,17 +63,12 @@ pub(crate) fn load_build_info(request: &ResolvedStarryRequest) -> anyhow::Result
         })?;
         let content = std::fs::read_to_string(&request.build_info_path)?;
         crate::build::reject_arceos_app_c_field(&request.build_info_path, &content)?;
-        let mut build_info: StarryBuildInfo = toml::from_str(&content).with_context(|| {
+        let build_info: StarryBuildInfo = toml::from_str(&content).with_context(|| {
             format!(
                 "failed to parse build info {}",
                 request.build_info_path.display()
             )
         })?;
-        crate::build::apply_target_defaults_if_plat_dyn_unspecified(
-            &mut build_info,
-            &request.target,
-            &content,
-        );
         build_info
     };
 
@@ -98,17 +93,12 @@ pub(crate) fn load_cargo_config(request: &ResolvedStarryRequest) -> anyhow::Resu
         })?;
         let content = std::fs::read_to_string(&request.build_info_path)?;
         crate::build::reject_arceos_app_c_field(&request.build_info_path, &content)?;
-        let mut build_info: StarryBuildInfo = toml::from_str(&content).with_context(|| {
+        let build_info: StarryBuildInfo = toml::from_str(&content).with_context(|| {
             format!(
                 "failed to parse build info {}",
                 request.build_info_path.display()
             )
         })?;
-        crate::build::apply_target_defaults_if_plat_dyn_unspecified(
-            &mut build_info,
-            &request.target,
-            &content,
-        );
         build_info
     };
     crate::build::apply_makefile_features_with_metadata(
@@ -309,7 +299,7 @@ fn uses_default_qemu_platform(features: &[String]) -> bool {
 
 fn default_starry_qemu_platform_feature(feature: &str) -> Option<&str> {
     match feature.strip_prefix("ax-hal/")? {
-        "x86-pc" | "loongarch64-qemu-virt" => Some(feature),
+        "loongarch64-qemu-virt" => Some(feature),
         _ => None,
     }
 }
@@ -532,8 +522,6 @@ std = false
 features = []
 log = "Info"
 
-[env]
-AX_IP = "10.0.2.15"
 "#,
         )
         .unwrap();
@@ -557,8 +545,6 @@ app-c = "c"
 features = []
 log = "Info"
 
-[env]
-AX_IP = "10.0.2.15"
 "#,
         )
         .unwrap();
@@ -848,6 +834,30 @@ AX_IP = "10.0.2.15"
         assert_eq!(
             cargo.env.get("AX_PLATFORM").map(String::as_str),
             Some("riscv64-sg2002")
+        );
+    }
+
+    #[test]
+    fn load_cargo_config_keeps_pie_target_for_non_kmod_plat_dyn_request() {
+        let mut request = request(
+            PathBuf::from("/tmp/.build.toml"),
+            "aarch64",
+            "aarch64-unknown-none-softfloat",
+        );
+        request.build_info_override = Some(StarryBuildInfo {
+            plat_dyn: true,
+            features: vec!["ax-driver/virtio-blk".to_string()],
+            ..default_starry_build_info_for_target("aarch64-unknown-none-softfloat")
+        });
+
+        let cargo = load_cargo_config(&request).unwrap();
+
+        assert!(
+            cargo
+                .target
+                .ends_with("scripts/targets/std/pie/aarch64-unknown-linux-musl.json"),
+            "expected pie target, got {}",
+            cargo.target
         );
     }
 

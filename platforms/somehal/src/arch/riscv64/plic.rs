@@ -1,22 +1,18 @@
 use alloc::{format, vec::Vec};
-use core::{
-    num::NonZeroU32,
-    ptr::NonNull,
-    sync::atomic::{AtomicPtr, Ordering},
-};
+use core::{num::NonZeroU32, ptr::NonNull};
 
 use ax_riscv_plic::{PLICRegs, Plic, PlicIrqHandler};
 use kernutil::StaticCell;
 use rdif_intc::Interface;
 use rdrive::{
-    Device, DriverGeneric, Phandle, PlatformDevice, module_driver,
+    Device, DriverGeneric, Phandle, module_driver,
     probe::{OnProbeError, fdt::NodeType},
-    register::FdtInfo,
+    register::{FdtInfo, ProbeFdt},
 };
 use riscv::register::{sie, sip};
 use sbi_rt::HartMask;
 
-use crate::{common::ioremap, irq::_handle_irq};
+use crate::common::ioremap;
 
 const INTC_IRQ_BASE: usize = 1usize << (usize::BITS as usize - 1);
 const S_SOFT: usize = INTC_IRQ_BASE | 1;
@@ -27,7 +23,6 @@ const DEFAULT_PRIORITY: u32 = 1;
 const DEFAULT_PLIC_SIZE: usize = 0x400_0000;
 
 static IRQ_HANDLER: StaticCell<RiscvPlicIrqHandler> = StaticCell::uninit();
-static CURRENT_CPU_ID: AtomicPtr<()> = AtomicPtr::new(core::ptr::null_mut());
 
 module_driver!(
     name: "RISC-V PLIC",
@@ -45,10 +40,6 @@ module_driver!(
 
 pub fn systick_irq() -> rdrive::IrqId {
     S_TIMER.into()
-}
-
-pub fn register_current_cpu_id(_cpu_idx: usize, reader: fn() -> usize) {
-    CURRENT_CPU_ID.store(reader as *mut (), Ordering::Release);
 }
 
 pub fn irq_set_enable(irq: rdrive::IrqId, enable: bool) {
@@ -80,24 +71,50 @@ pub fn irq_set_enable(irq: rdrive::IrqId, enable: bool) {
     }
 }
 
-pub fn irq_handler_with_raw(raw: usize) -> Option<someboot::irq::IrqId> {
-    match raw {
-        S_TIMER => {
-            _handle_irq(S_TIMER.into());
-            Some(S_TIMER.into())
+enum Completion {
+    None,
+    Plic(NonZeroU32),
+}
+
+pub struct ActiveIrq {
+    irq: rdrive::IrqId,
+    completion: Completion,
+}
+
+impl ActiveIrq {
+    pub fn id(&self) -> rdrive::IrqId {
+        self.irq
+    }
+}
+
+impl Drop for ActiveIrq {
+    fn drop(&mut self) {
+        if let Completion::Plic(source) = self.completion {
+            complete_external_irq_source(source);
         }
+    }
+}
+
+pub fn begin_irq(raw: usize) -> Option<ActiveIrq> {
+    match raw {
+        S_TIMER => Some(ActiveIrq {
+            irq: S_TIMER.into(),
+            completion: Completion::None,
+        }),
         S_SOFT => {
             unsafe {
                 sip::clear_ssoft();
             }
-            _handle_irq(S_SOFT.into());
-            Some(S_SOFT.into())
+            Some(ActiveIrq {
+                irq: S_SOFT.into(),
+                completion: Completion::None,
+            })
         }
-        S_EXT => handle_external_irq(),
-        external if external & INTC_IRQ_BASE == 0 => {
-            _handle_irq(external.into());
-            Some(external.into())
-        }
+        S_EXT => begin_external_irq(),
+        external if external & INTC_IRQ_BASE == 0 => Some(ActiveIrq {
+            irq: external.into(),
+            completion: Completion::None,
+        }),
         other => {
             warn!("unsupported RISC-V interrupt cause {other:#x}");
             None
@@ -105,15 +122,15 @@ pub fn irq_handler_with_raw(raw: usize) -> Option<someboot::irq::IrqId> {
     }
 }
 
-pub fn claim_external_irq() -> Option<someboot::irq::IrqId> {
+fn begin_external_irq() -> Option<ActiveIrq> {
     let source = claim_external_irq_source()?;
-    Some(someboot::irq::IrqId::new(source.get() as usize))
+    Some(ActiveIrq {
+        irq: (source.get() as usize).into(),
+        completion: Completion::Plic(source),
+    })
 }
 
-pub fn complete_external_irq(irq: someboot::irq::IrqId) {
-    let Some(source) = NonZeroU32::new(irq.raw() as u32) else {
-        return;
-    };
+fn complete_external_irq_source(source: NonZeroU32) {
     if let Some(handler) = get_irq_handler() {
         handler.complete_current(source);
     } else {
@@ -139,7 +156,8 @@ pub fn send_ipi_to_cpu(cpu_id: usize) {
     }
 }
 
-fn probe_plic(info: FdtInfo<'_>, dev: PlatformDevice) -> Result<(), OnProbeError> {
+fn probe_plic(probe: ProbeFdt<'_>) -> Result<(), OnProbeError> {
+    let (info, dev) = probe.into_parts();
     let reg = info
         .node
         .regs()
@@ -237,14 +255,6 @@ fn set_external_irq_enable(irq: usize, enable: bool) {
             plic.disable_source(source);
         }
     });
-}
-
-fn handle_external_irq() -> Option<someboot::irq::IrqId> {
-    let source = claim_external_irq_source()?;
-    let irq = someboot::irq::IrqId::new(source.get() as usize);
-    _handle_irq(irq.raw().into());
-    complete_external_irq(irq);
-    Some(irq)
 }
 
 fn claim_external_irq_source() -> Option<NonZeroU32> {
@@ -368,22 +378,12 @@ impl RiscvPlic {
 }
 
 fn current_context(context_by_cpu: &[Option<usize>]) -> Option<usize> {
-    let cpu_idx = current_cpu_idx()?;
+    let cpu_idx = crate::cpu::current_cpu_idx()?;
     context_by_cpu.get(cpu_idx).and_then(|ctx| *ctx)
 }
 
-fn current_cpu_idx() -> Option<usize> {
-    let reader = CURRENT_CPU_ID.load(Ordering::Acquire);
-    if !reader.is_null() {
-        let reader = unsafe { core::mem::transmute::<*mut (), fn() -> usize>(reader) };
-        return Some(reader());
-    }
-
-    someboot::smp::try_early_cpu_idx()
-}
-
 fn warn_missing_current_context() {
-    if let Some(cpu_idx) = current_cpu_idx() {
+    if let Some(cpu_idx) = crate::cpu::current_cpu_idx() {
         warn!("PLIC supervisor context for logical CPU {cpu_idx} is not found");
     } else {
         warn!("PLIC supervisor context for current logical CPU is not found");

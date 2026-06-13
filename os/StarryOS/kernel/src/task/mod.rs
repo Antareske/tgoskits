@@ -25,7 +25,7 @@ use extern_trait::extern_trait;
 use kernel_elf_parser::AuxEntry;
 use scope_local::{ActiveScope, Scope};
 use spin::RwLock;
-use starry_process::Process;
+use starry_process::{Pid, Process};
 use starry_signal::{
     SignalInfo, SignalSet, Signo,
     api::{ProcessSignalManager, SignalActions, ThreadSignalManager},
@@ -373,6 +373,11 @@ impl Thread {
     pub fn set_cred(&self, new_cred: Cred) {
         let new_arc = Arc::new(new_cred);
 
+        // Always update the caller first.  The process thread list is a
+        // best-effort snapshot, and credential-changing syscalls must not
+        // return before the calling thread observes its own new credentials.
+        self.set_cred_single(new_arc.clone());
+
         // Collect TIDs and sort to establish a consistent lock order.
         let mut tids = self.proc_data.proc.threads();
         tids.sort_unstable();
@@ -578,14 +583,9 @@ pub struct ProcessData {
     /// The virtual memory address space.
     // TODO: scopify
     aspace: SpinNoIrq<Arc<Mutex<AddrSpace>>>,
-    /// Per-process uprobe manager. Uprobes plant an `int3` in *this* process'
-    /// user text, so (unlike the global kprobe manager) the registry is
-    /// per-address-space. A *sleeping* mutex, because arming/disarming
-    /// manipulates the user address space (page-table query, faulting reads,
-    /// mapping the out-of-line single-step page) which requires sleeping locks;
-    /// the exception-context breakpoint/debug handlers acquire it with
-    /// `try_lock()` (a single CAS, safe in atomic context) instead.
-    pub uprobe_manager: Mutex<crate::kprobe::KprobeManager>,
+    /// The per-process uprobe manager. Each process has its own because user
+    /// code can be modified independently.
+    pub uprobe_manager: crate::kprobe::KprobeManager,
     /// Per-process uprobe point list, paired with [`Self::uprobe_manager`].
     pub uprobe_point_list: Mutex<crate::kprobe::KprobePointList>,
     /// The resource scope
@@ -611,6 +611,12 @@ pub struct ProcessData {
     pub exec_lock: Mutex<()>,
     /// The exit signal of the thread
     pub exit_signal: Option<Signo>,
+    /// The thread in the parent thread group that created this process.
+    ///
+    /// Linux's `__WNOTHREAD` wait option restricts child selection to children
+    /// created by the calling thread, while the default wait may reap children
+    /// created by any thread in the same thread group.
+    pub wait_parent_tid: Pid,
 
     /// The process signal manager
     pub signal: Arc<ProcessSignalManager>,
@@ -736,6 +742,7 @@ impl ProcessData {
         aspace: Arc<Mutex<AddrSpace>>,
         signal_actions: Arc<SpinNoIrq<SignalActions>>,
         exit_signal: Option<Signo>,
+        wait_parent_tid: Pid,
         vm_aspace_shared: bool,
     ) -> Arc<Self> {
         let this = Arc::new(Self {
@@ -744,7 +751,7 @@ impl ProcessData {
             cmdline: RwLock::new(image.cmdline),
             auxv: RwLock::new(image.auxv),
             aspace: SpinNoIrq::new(aspace),
-            uprobe_manager: Mutex::new(crate::kprobe::KprobeManager::default()),
+            uprobe_manager: crate::kprobe::KprobeManager::new(),
             uprobe_point_list: Mutex::new(crate::kprobe::KprobePointList::new()),
             scope: RwLock::new(Scope::new()),
             heap_top: AtomicUsize::new(crate::config::USER_HEAP_BASE),
@@ -756,6 +763,7 @@ impl ProcessData {
             thread_exit_event: Arc::default(),
             exec_lock: Mutex::new(()),
             exit_signal,
+            wait_parent_tid,
 
             signal: Arc::new(ProcessSignalManager::new(
                 signal_actions,
@@ -837,6 +845,23 @@ impl ProcessData {
         }
         let aspace = self.aspace.lock().clone();
         crate::mm::release_process_slot(&aspace);
+    }
+
+    /// Mutate the process scope from the current task.
+    ///
+    /// `TaskExt::on_enter` leaves the current task's active scope installed by
+    /// holding one read count on [`Self::scope`]. A syscall running in that task
+    /// must temporarily release that read count before taking the write side.
+    pub fn with_current_scope_mut<R>(&self, f: impl FnOnce(&mut Scope) -> R) -> R {
+        ActiveScope::set_global();
+        unsafe { self.scope.force_read_decrement() };
+        let mut scope = self.scope.write();
+        let ret = f(&mut scope);
+        drop(scope);
+        let scope = self.scope.read();
+        unsafe { ActiveScope::set(&scope) };
+        core::mem::forget(scope);
+        ret
     }
 
     /// Get the top address of the user heap.

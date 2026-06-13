@@ -7,12 +7,19 @@ use std::{
         mpsc,
     },
     thread,
-    time::Duration,
+    time::{Duration, Instant},
 };
 
 use anyhow::{Context, bail};
 
 use crate::test::case::HostHttpServerConfig;
+
+const BIND_RETRY_TIMEOUT: Duration = Duration::from_secs(180);
+const BIND_RETRY_INTERVAL: Duration = Duration::from_millis(50);
+const READ_TIMEOUT: Duration = Duration::from_secs(1);
+const MIN_WRITE_TIMEOUT: Duration = Duration::from_secs(5);
+const MAX_WRITE_TIMEOUT: Duration = Duration::from_secs(300);
+const MIN_WRITE_BYTES_PER_SEC: usize = 128 * 1024;
 
 pub(crate) struct HostHttpServerGuard {
     stop: Arc<AtomicBool>,
@@ -22,9 +29,7 @@ pub(crate) struct HostHttpServerGuard {
 impl HostHttpServerGuard {
     pub(crate) fn start(config: &HostHttpServerConfig, case_name: &str) -> anyhow::Result<Self> {
         let addr = format!("{}:{}", config.bind, config.port);
-        let listener = TcpListener::bind(&addr).with_context(|| {
-            format!("failed to bind host HTTP server `{addr}` for `{case_name}`")
-        })?;
+        let listener = bind_listener(&addr, case_name)?;
         listener
             .set_nonblocking(true)
             .with_context(|| format!("failed to configure host HTTP server `{addr}`"))?;
@@ -38,8 +43,8 @@ impl HostHttpServerGuard {
             while !thread_stop.load(Ordering::Acquire) {
                 match listener.accept() {
                     Ok((mut stream, _peer)) => {
-                        let _ = stream.set_read_timeout(Some(Duration::from_secs(1)));
-                        let _ = stream.set_write_timeout(Some(Duration::from_secs(1)));
+                        let _ = stream.set_read_timeout(Some(READ_TIMEOUT));
+                        let _ = stream.set_write_timeout(Some(body.write_timeout()));
                         let mut request = [0; 1024];
                         let _ = stream.read(&mut request);
                         let response = format!(
@@ -68,6 +73,38 @@ impl HostHttpServerGuard {
             stop,
             thread: Some(thread),
         })
+    }
+}
+
+fn bind_listener(addr: &str, case_name: &str) -> anyhow::Result<TcpListener> {
+    let started = Instant::now();
+    let mut reported_wait = false;
+
+    loop {
+        match TcpListener::bind(addr) {
+            Ok(listener) => return Ok(listener),
+            Err(err)
+                if err.kind() == std::io::ErrorKind::AddrInUse
+                    && started.elapsed() < BIND_RETRY_TIMEOUT =>
+            {
+                if !reported_wait {
+                    println!(
+                        "  host http server: waiting for {addr} to become available for \
+                         {case_name}"
+                    );
+                    reported_wait = true;
+                }
+                thread::sleep(BIND_RETRY_INTERVAL);
+            }
+            Err(err) => {
+                return Err(err).with_context(|| {
+                    format!(
+                        "failed to bind host HTTP server `{addr}` for `{case_name}` after waiting \
+                         up to {BIND_RETRY_TIMEOUT:?}"
+                    )
+                });
+            }
+        }
     }
 }
 
@@ -110,6 +147,13 @@ impl HostHttpBody {
             }
         }
     }
+
+    fn write_timeout(&self) -> Duration {
+        let transfer_secs = self.len().div_ceil(MIN_WRITE_BYTES_PER_SEC) as u64;
+        Duration::from_secs(
+            transfer_secs.clamp(MIN_WRITE_TIMEOUT.as_secs(), MAX_WRITE_TIMEOUT.as_secs()),
+        )
+    }
 }
 
 impl Drop for HostHttpServerGuard {
@@ -123,7 +167,12 @@ impl Drop for HostHttpServerGuard {
 
 #[cfg(test)]
 mod tests {
-    use std::net::{TcpListener, TcpStream};
+    use std::{
+        net::{TcpListener, TcpStream},
+        sync::mpsc,
+        thread,
+        time::Duration,
+    };
 
     use super::*;
 
@@ -154,6 +203,61 @@ mod tests {
         let headers = String::from_utf8_lossy(&response[..body_offset]);
         assert!(headers.contains("Content-Length: 7"));
         assert_eq!(&response[body_offset..], b"XXXXXXX");
+    }
+
+    #[test]
+    fn write_timeout_scales_with_generated_body_size() {
+        let small = HostHttpBody::Generated {
+            size: 7,
+            byte: b'X',
+        };
+        let starry_apk_curl_fixture = HostHttpBody::Generated {
+            size: 20 * 1024 * 1024,
+            byte: b'a',
+        };
+
+        assert_eq!(small.write_timeout(), MIN_WRITE_TIMEOUT);
+        assert_eq!(
+            starry_apk_curl_fixture.write_timeout(),
+            Duration::from_secs(160)
+        );
+    }
+
+    #[test]
+    #[cfg(unix)]
+    fn same_host_http_port_waits_for_active_guard() {
+        let port = free_local_port();
+        let config = HostHttpServerConfig {
+            bind: "127.0.0.1".to_string(),
+            port,
+            body: "first".to_string(),
+            body_size: None,
+            body_byte: b'A',
+        };
+
+        let first_guard = HostHttpServerGuard::start(&config, "first").unwrap();
+        let second_config = config.clone();
+        let (tx, rx) = mpsc::channel();
+        let second_thread = thread::spawn(move || {
+            let result = HostHttpServerGuard::start(&second_config, "second").map(|_guard| ());
+            tx.send(result.map_err(|err| err.to_string())).unwrap();
+        });
+
+        match rx.recv_timeout(Duration::from_millis(100)) {
+            Err(mpsc::RecvTimeoutError::Timeout) => {}
+            Err(err) => panic!("second host HTTP guard channel failed: {err}"),
+            Ok(result) => {
+                panic!("second host HTTP guard did not wait for the first guard: {result:?}")
+            }
+        }
+
+        drop(first_guard);
+
+        let result = rx
+            .recv_timeout(Duration::from_secs(2))
+            .expect("second host HTTP guard did not start after the first guard dropped");
+        assert!(result.is_ok(), "{result:?}");
+        second_thread.join().unwrap();
     }
 
     fn free_local_port() -> u16 {

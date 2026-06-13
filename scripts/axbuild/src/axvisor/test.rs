@@ -619,7 +619,7 @@ impl Axvisor {
                         case.case.display_name
                     )
                 })?;
-            test_qemu::apply_dynamic_x86_64_qemu_boot(&mut qemu, &cargo);
+            test_qemu::apply_dynamic_platform_qemu_boot(&mut qemu, &cargo);
             test_qemu::validate_grouped_qemu_commands(&qemu, &case.case, "Axvisor")?;
             prepared.push(PreparedAxvisorQemuCase { case, qemu });
         }
@@ -698,7 +698,7 @@ impl Axvisor {
         rootfs::patch_qemu_rootfs_path(&mut qemu, &prepared_assets.rootfs_path);
         qemu.args.extend(prepared_assets.extra_qemu_args.clone());
         let cargo = build::load_cargo_config(request)?;
-        test_qemu::apply_dynamic_x86_64_qemu_boot(&mut qemu, &cargo);
+        test_qemu::apply_dynamic_platform_qemu_boot(&mut qemu, &cargo);
         Ok((qemu, prepared_assets))
     }
 
@@ -720,7 +720,10 @@ impl Axvisor {
             None,
             &case.case.case.qemu_config_path,
             prepared_assets,
-            prepare_started.elapsed(),
+            test_case::RunPreparedQemuCaseOptions {
+                prepare_elapsed: prepare_started.elapsed(),
+                qemu_timing_fields: None,
+            },
         )
         .await
     }
@@ -1640,6 +1643,22 @@ mod tests {
         assert_eq!(merged.timeout, Some(300));
         assert_eq!(merged.local.serial.as_deref(), Some("/dev/ttyUSB1"));
         assert_eq!(merged.local.baud_rate.as_deref(), Some("1500000"));
+    }
+
+    #[test]
+    fn x86_linux_direct_boot_configs_keep_timer_calibration_bypass() {
+        let workspace_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        for path in [
+            "os/axvisor/configs/vms/qemu/x86_64/linux-vmx-smp1.toml",
+            "os/axvisor/configs/vms/qemu/x86_64/linux-svm-smp1.toml",
+        ] {
+            let content = fs::read_to_string(workspace_root.join(path)).unwrap();
+            assert!(
+                content.contains("no_timer_check"),
+                "{path} should keep no_timer_check to avoid x86 Linux guest timer calibration \
+                 stalls"
+            );
+        }
     }
 
     #[test]

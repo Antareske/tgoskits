@@ -10,13 +10,16 @@ extern crate alloc;
 extern crate log;
 
 pub(crate) mod common;
+pub mod cpu;
 mod driver;
 pub mod irq;
 pub mod setup;
 
 pub use page_table_generic::{PagingError, PagingResult};
 pub use setup::KernelOp;
-pub use someboot::*;
+pub use someboot::{
+    console, entry, fdt_addr, fdt_addr_phys, mem, power, rsdp_addr_phys, smp, timer,
+};
 pub use somehal_macros::somehal_secondary_entry as secondary_entry;
 
 use crate::common::PlatOp;
@@ -45,6 +48,15 @@ pub fn post_paging() {
     someboot::post_allocator();
     // note: irq controller should be initialized when probe.
     driver::rdrive_setup();
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn current_cpu_idx_api_is_arch_independent() {
+        let current = crate::cpu::current_cpu_idx();
+        let _current: Option<usize> = current;
+    }
 }
 
 #[unsafe(no_mangle)]

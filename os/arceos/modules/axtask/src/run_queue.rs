@@ -512,7 +512,7 @@ impl<G: BaseGuard> CurrentRunQueueRef<'_, G> {
             curr.set_in_wait_queue(true);
             wq_guard.push_back(curr.clone());
         }
-        // Drop the lock of wait queue explictly.
+        // Drop the lock of wait queue explicitly.
         drop(wq_guard);
 
         // Current task's state has been changed to `Blocked` and added to the wait queue.
@@ -555,8 +555,7 @@ impl<G: BaseGuard> CurrentRunQueueRef<'_, G> {
         assert!(curr.is_running());
         assert!(!curr.is_idle());
 
-        let now = ax_hal::time::wall_time();
-        if now < deadline {
+        while ax_hal::time::monotonic_time() < deadline {
             crate::timers::set_alarm_wakeup(deadline, curr.clone());
             curr.set_state(TaskState::Blocked);
             self.inner.resched();

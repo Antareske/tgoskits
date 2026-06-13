@@ -1,6 +1,5 @@
 use rdif_intc::Intc;
 use rdrive::Device;
-use someboot::irq::IrqId;
 
 mod v2;
 mod v3;
@@ -29,12 +28,18 @@ fn backend() -> GicBackend {
 }
 
 pub fn init_current_cpu() {
+    let cpu_idx = crate::cpu::current_cpu_idx()
+        .unwrap_or_else(|| panic!("current logical CPU index is not available for GIC init"));
+    init_cpu(cpu_idx);
+}
+
+pub fn init_cpu(cpu_idx: usize) {
     match backend() {
         GicBackend::V2 => v2::init_cpu(),
-        GicBackend::V3 => v3::init_cpu(),
+        GicBackend::V3 => v3::init_cpu(cpu_idx),
         GicBackend::None => {
             if v3::is_support_icc() {
-                v3::init_cpu();
+                v3::init_cpu(cpu_idx);
             } else {
                 v2::init_cpu();
             }
@@ -73,34 +78,34 @@ pub fn send_ipi(irq: rdrive::IrqId, target: crate::irq::IpiTarget) {
     }
 }
 
-fn hardware_cpu_id(cpu_id: usize) -> usize {
-    someboot::smp::cpu_idx_to_id(cpu_id).unwrap_or(cpu_id)
+fn hardware_cpu_id(cpu_idx: usize) -> usize {
+    someboot::smp::cpu_idx_to_id(cpu_idx).unwrap_or(cpu_idx)
 }
 
-#[unsafe(no_mangle)]
-fn __aarch64_irq_handler() {
-    irq_handler();
+pub enum ActiveIrq {
+    V2(v2::ActiveIrq),
+    V3(v3::ActiveIrq),
 }
 
-pub(crate) fn irq_handler() -> someboot::irq::IrqId {
-    match backend() {
-        GicBackend::V2 => v2::handle_irq(),
-        GicBackend::V3 => v3::handle_irq(),
-        GicBackend::None => {
-            if v3::is_support_icc() {
-                v3::handle_irq()
-            } else {
-                v2::handle_irq()
-            }
+impl ActiveIrq {
+    pub fn id(&self) -> rdrive::IrqId {
+        match self {
+            Self::V2(active) => active.id(),
+            Self::V3(active) => active.id(),
         }
     }
 }
 
-fn _handle_irq(hwirq: IrqId) {
-    unsafe extern "Rust" {
-        fn _someboot_handle_irq(hwirq: IrqId);
-    }
-    unsafe {
-        _someboot_handle_irq(hwirq);
+pub fn begin_irq() -> Option<ActiveIrq> {
+    match backend() {
+        GicBackend::V2 => v2::begin_irq().map(ActiveIrq::V2),
+        GicBackend::V3 => v3::begin_irq().map(ActiveIrq::V3),
+        GicBackend::None => {
+            if v3::is_support_icc() {
+                v3::begin_irq().map(ActiveIrq::V3)
+            } else {
+                v2::begin_irq().map(ActiveIrq::V2)
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@ use alloc::format;
 
 use arm_gic_driver::v2::*;
 use kernutil::StaticCell;
-use rdrive::{PlatformDevice, module_driver, probe::OnProbeError, register::FdtInfo};
+use rdrive::{module_driver, probe::OnProbeError, register::ProbeFdt};
 
 use crate::common::ioremap;
 
@@ -28,7 +28,8 @@ module_driver!(
     ],
 );
 
-fn probe_gic(info: FdtInfo<'_>, dev: PlatformDevice) -> Result<(), OnProbeError> {
+fn probe_gic(probe: ProbeFdt<'_>) -> Result<(), OnProbeError> {
+    let (info, dev) = probe.into_parts();
     let mut reg = info.node.regs().into_iter();
     let gicd_reg = reg.next().ok_or(OnProbeError::other(format!(
         "[{}] has no reg",
@@ -84,8 +85,31 @@ fn probe_gic(info: FdtInfo<'_>, dev: PlatformDevice) -> Result<(), OnProbeError>
     Ok(())
 }
 
-pub fn handle_irq() -> someboot::irq::IrqId {
+pub struct ActiveIrq {
+    irq: rdrive::IrqId,
+    ack: Ack,
+}
+
+impl ActiveIrq {
+    pub fn id(&self) -> rdrive::IrqId {
+        self.irq
+    }
+}
+
+impl Drop for ActiveIrq {
+    fn drop(&mut self) {
+        TRAP.eoi(self.ack);
+        if TRAP.eoi_mode_ns() {
+            TRAP.dir(self.ack);
+        }
+    }
+}
+
+pub fn begin_irq() -> Option<ActiveIrq> {
     let ack = TRAP.ack();
+    if ack.is_special() {
+        return None;
+    }
 
     let irq_num = match ack {
         Ack::Other(intid) => intid,
@@ -93,15 +117,10 @@ pub fn handle_irq() -> someboot::irq::IrqId {
     };
 
     let irq_num: u32 = irq_num.into();
-    super::_handle_irq(someboot::irq::IrqId::new(irq_num as _));
-
-    if !ack.is_special() {
-        TRAP.eoi(ack);
-        if TRAP.eoi_mode_ns() {
-            TRAP.dir(ack);
-        }
-    }
-    irq_num.into()
+    Some(ActiveIrq {
+        irq: (irq_num as usize).into(),
+        ack,
+    })
 }
 
 pub fn init_cpu() {

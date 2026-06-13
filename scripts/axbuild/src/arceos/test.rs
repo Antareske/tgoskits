@@ -53,6 +53,7 @@ const ARCEOS_RUST_QEMU_FEATURES: &[&str] = &[
     "task-parallel",
     "task-priority",
     "task-sleep",
+    "task-smp-online",
     ARCEOS_RUST_STACK_GUARD_PAGE_FEATURE,
     "task-tls",
     "task-wait-queue",
@@ -654,6 +655,7 @@ fn load_rust_qemu_case(case: qemu_test::DiscoveredQemuCase) -> anyhow::Result<Ar
             host_symbolize_success_regex: Vec::new(),
             host_http_server,
             subcases: Vec::new(),
+            grouped_subcase_filter: None,
         },
         build_group: case.build_group,
         build_config_path: case.build_config_path,
@@ -681,6 +683,7 @@ fn load_arceos_test_suit_qemu_case(
             host_symbolize_success_regex: Vec::new(),
             host_http_server,
             subcases: Vec::new(),
+            grouped_subcase_filter: None,
         },
         build_group: ARCEOS_RUST_TEST_BUILD_GROUP.to_string(),
         build_config_path,
@@ -1434,7 +1437,7 @@ async fn build_and_run_c_test(
     );
     let output = cbuild::build_c_app(&workspace_root, &request, &input)?;
     let mut qemu = qemu_config;
-    qemu_test::apply_dynamic_x86_64_qemu_boot(&mut qemu, &cargo);
+    qemu_test::apply_dynamic_platform_qemu_boot(&mut qemu, &cargo);
     ensure_qemu_runtime_assets(arceos.app.workspace_root(), &qemu)?;
     let _host_http_server = qemu_test::load_qemu_case_host_http_server(&test.qemu_config_path)?
         .as_ref()
@@ -2054,6 +2057,19 @@ BT 0 ip=0x1 fp=0x2
     }
 
     #[test]
+    fn arceos_rust_aarch64_qemu_config_enables_smp_for_ipi_paths() {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../test-suit/arceos/rust");
+        let qemu_path = root.join("qemu-aarch64.toml");
+        let config = load_c_test_qemu_config(&qemu_path).unwrap();
+        let smp = qemu_test::smp_from_qemu_arg(&config).unwrap();
+        assert!(
+            smp >= 2,
+            "aarch64 task-ipi, task-smp-online, and task-stack-guard-page require SMP >= 2, got \
+             {smp}"
+        );
+    }
+
+    #[test]
     fn arceos_rust_panic_path_qemu_uses_panic_backtrace_result_regex() {
         let mut cargo = rust_test_cargo_for_target("x86_64-unknown-none");
         let mut qemu = QemuConfig {
@@ -2196,6 +2212,7 @@ BT 0 ip=0x1 fp=0x2
                     host_symbolize_success_regex: Vec::new(),
                     host_http_server: None,
                     subcases: Vec::new(),
+                    grouped_subcase_filter: None,
                 },
                 build_group: "std".to_string(),
                 build_config_path: build_config_path.to_path_buf(),

@@ -178,7 +178,7 @@ flowchart TD
     E --> F["注入 AX_CONFIG_PATH<br/>和 AX_PLATFORM 环境变量"]
 ```
 
-ArceOS 的平台配置（如内存布局、中断控制器地址、串口基地址等）由 `axbuild` 复用配置引擎库从平台包配置文件中合并生成 `.axconfig.toml`。在动态平台模式下（`plat_dyn = true`），这些配置由运行时动态加载；在静态模式下，必须在编译前预生成并注入 `AX_CONFIG_PATH` 环境变量，使得 OS 源码中的配置宏能在编译期读取配置。
+ArceOS 的平台配置（如内存布局、中断控制器地址、串口基地址等）由 `axbuild` 复用配置引擎库从平台包配置文件中合并生成 `.axconfig.toml`。动态平台模式是支持动态平台 target 的默认构建方式，配置可省略 `plat_dyn`；在静态模式下（`plat_dyn = false`），必须在编译前预生成并注入 `AX_CONFIG_PATH` 环境变量，使得 OS 源码中的配置宏能在编译期读取配置。
 
 ### 6a. 平台包解析
 
@@ -198,8 +198,8 @@ flowchart TD
     C --> D["返回匹配的依赖包名"]
     B -->|否| E{feature 包含 myplat?}
     E -->|是| F{是 Axvisor?}
-    F -->|x86_64| G["→ ax-plat-x86-qemu-q35"]
-    F -->|其他架构| I["在依赖中查找<br/>架构前缀匹配的平台包"]
+    F -->|是| G["要求动态平台<br/>或显式平台包"]
+    F -->|否| I["在依赖中查找<br/>架构前缀匹配的平台包"]
     E -->|否| J["回退到默认平台"]
     J --> K[default_platform_package]
 ```
@@ -208,9 +208,9 @@ flowchart TD
 
 | 架构 | 默认平台包 |
 |------|-----------|
-| `aarch64` | 无静态默认平台；默认使用 `plat_dyn = true` |
-| `x86_64` | `ax-plat-x86-pc` |
-| `riscv64` | 无静态默认平台；默认使用 `plat_dyn = true` |
+| `aarch64` | 无静态默认平台；默认使用动态平台 |
+| `x86_64` | 无静态默认平台；默认使用动态平台 |
+| `riscv64` | 无静态默认平台；默认使用动态平台 |
 | `loongarch64` | `ax-plat-loongarch64-qemu-virt` |
 
 **平台包命名规则**：

@@ -13,6 +13,7 @@ use act_infer_rk3588::{
 use anyhow::Result;
 
 fn main() {
+    // 入口只负责统一错误处理。
     if let Err(err) = run() {
         eprintln!("ACT_INFER_FAILED: {err:#}");
         process::exit(1);
@@ -20,6 +21,7 @@ fn main() {
 }
 
 fn run() -> Result<()> {
+    // 参数必须成对出现，否则直接打印用法并退出。
     let args = env::args().skip(1).collect::<Vec<_>>();
     if args.is_empty() || args.len() % 2 != 0 {
         print_golden_usage("act-infer-golden-rknn");
@@ -47,6 +49,7 @@ fn run() -> Result<()> {
     let action_denorm = denormalize_action(&raw_action, &stats)?;
 
     let golden = read_golden(&parsed.golden_path)?;
+    // 只比较两者共有的长度，避免基准和当前输出长度不一致时越界。
     let compare_len = action_denorm.len().min(golden.len());
     let mut max_abs_diff = 0.0_f32;
     for i in 0..compare_len {

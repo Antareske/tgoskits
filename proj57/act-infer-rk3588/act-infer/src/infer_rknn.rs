@@ -8,7 +8,7 @@ use crate::{
     schema::{IMAGE_LEN, STATE_LEN, TimingMetrics},
 };
 
-/// RAII wrapper around an `rknn_context`.
+/// `rknn_context` 的 RAII 包装，负责在离开作用域时释放上下文。
 struct RknnContext(rknn_context);
 
 impl Drop for RknnContext {
@@ -22,18 +22,16 @@ impl Drop for RknnContext {
 }
 
 fn attr_name(attr: &rknn_tensor_attr) -> String {
-    // name is a NUL-terminated C string inside a fixed array.
+    // `name` 是固定长度数组中的 NUL 结尾 C 字符串。
     let bytes = unsafe { CStr::from_ptr(attr.name.as_ptr()) };
     bytes.to_string_lossy().into_owned()
 }
 
-/// Run the ACT RKNN model once-or-N-times and return the (last) raw normalized
-/// action vector along with timing metrics.
+/// 运行 ACT 的 RKNN 模型 1 次或多次，返回最后一次的原始归一化动作和耗时。
 ///
-/// The model is expected to have two float inputs (image NCHW `[1,3,224,224]`
-/// and state `[1,2]`) and a single float output (`[1,chunk,action_dim]`).
-/// Inputs are mapped to the model's input tensors by element count so the
-/// binding is robust to input ordering changes in the exported graph.
+/// 模型期望有两个 float 输入（图像 NCHW `[1,3,224,224]`、状态 `[1,2]`）
+/// 和一个 float 输出（`[1,chunk,action_dim]`）。
+/// 输入会按元素数量映射到模型输入张量，因此导出图中的输入顺序变化也能兼容。
 pub fn run_model_timed(
     model_path: &Path,
     image: &[f32],
@@ -68,7 +66,7 @@ pub fn run_model_timed(
     let ctx = RknnContext(raw_ctx);
     let model_load_ms = load_start.elapsed().as_secs_f64() * 1000.0;
 
-    // Report SDK / driver version for diagnostics.
+    // 打印 SDK / 驱动版本，便于定位板端环境差异。
     let mut sdk = rknn_sdk_version::default();
     let ret = unsafe {
         rknn_query(
@@ -84,18 +82,18 @@ pub fn run_model_timed(
         eprintln!("RKNN_SDK api={api} driver={drv}");
     }
 
-    // Select NPU core(s).
+    // 选择使用的 NPU 核心。
     let mask = match core_mask {
         CoreMask::Auto => RKNN_NPU_CORE_AUTO,
         CoreMask::All012 => RKNN_NPU_CORE_0_1_2,
     };
     let ret = unsafe { rknn_set_core_mask(ctx.0, mask) };
     if ret != RKNN_SUCC {
-        // Non-fatal: AUTO still works on single/multi core silicon.
+        // 非致命错误：AUTO 在单核/多核芯片上通常仍可继续工作。
         eprintln!("rknn_set_core_mask warning: ret={ret} (continuing with default)");
     }
 
-    // Query input/output counts.
+    // 查询输入/输出数量。
     let mut io_num = rknn_input_output_num {
         n_input: 0,
         n_output: 0,
@@ -118,8 +116,7 @@ pub fn run_model_timed(
         bail!("model has no outputs");
     }
 
-    // Query input attributes and map our buffers to input indices by element
-    // count (image has IMAGE_LEN elems, state has STATE_LEN elems).
+    // 查询输入属性，并按元素数量把 image/state 绑定到正确的输入张量。
     let mut input_attrs = vec![rknn_tensor_attr::default(); io_num.n_input as usize];
     for (i, attr) in input_attrs.iter_mut().enumerate() {
         attr.index = i as u32;
@@ -165,9 +162,9 @@ pub fn run_model_timed(
         );
     }
 
-    // Build the input buffers in the order the model expects.
+    // 按模型期望的输入顺序构造输入缓冲区。
     let mut inputs: Vec<rknn_input> = Vec::with_capacity(io_num.n_input as usize);
-    // Keep owned copies alive for the duration of rknn_inputs_set.
+    // 在 rknn_inputs_set 调用期间保持所有权，避免裸指针悬空。
     let image_vec = image.to_vec();
     let state_vec = state.to_vec();
     for attr in &input_attrs {
@@ -197,7 +194,7 @@ pub fn run_model_timed(
         });
     }
 
-    // Timed inference loop.
+    // 进入计时推理循环。
     let mut last_action: Vec<f32> = Vec::new();
     let mut total_ms = 0.0_f64;
     for _ in 0..repeat {
@@ -232,7 +229,7 @@ pub fn run_model_timed(
         let elapsed_ms = run_start.elapsed().as_secs_f64() * 1000.0;
         total_ms += elapsed_ms;
 
-        // Copy the first output (action tensor) out before releasing.
+        // 在释放输出前，把第一个输出（动作张量）拷贝出来。
         let out0 = &outputs[0];
         let n = (out0.size as usize) / 4;
         let mut action = vec![0.0_f32; n];
@@ -259,6 +256,6 @@ pub fn run_model_timed(
         model_load_ms,
     };
 
-    // ctx dropped here -> rknn_destroy.
+    // `ctx` 在这里析构 -> 调用 `rknn_destroy`。
     Ok((last_action, timing))
 }

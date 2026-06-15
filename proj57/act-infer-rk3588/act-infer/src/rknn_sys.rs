@@ -1,35 +1,36 @@
-//! Minimal FFI bindings for the RKNPU2 runtime (`librknnrt.so`).
+//! RKNPU2 运行时（`librknnrt.so`）的最小 FFI 绑定。
 //!
-//! Only the subset of `rknn_api.h` required for a single-input or
-//! multi-input float model with float outputs is bound here. The struct
-//! layouts mirror `rknn_api.h` from RKNPU2 SDK 2.4.2 exactly; keep them in
-//! sync with `assets/sdk/include/rknn_api.h`.
+//! 这里只绑定当前程序需要的那一小部分 `rknn_api.h`：
+//! 支持单输入或多输入的 float 模型，以及 float 输出。
+//! 结构体布局必须与 RKNPU2 SDK 2.4.2 的 `rknn_api.h` 保持一致，
+//! 如 SDK 升级请同步检查 `assets/sdk/include/rknn_api.h`。
 #![allow(non_camel_case_types, dead_code)]
 
 use std::os::raw::{c_char, c_int, c_void};
 
 pub type rknn_context = u64;
 
+/// RKNN 接口的成功返回码。
 pub const RKNN_SUCC: c_int = 0;
 
-// rknn_query_cmd
+/// `rknn_query` 的查询类型。
 pub const RKNN_QUERY_IN_OUT_NUM: c_int = 0;
 pub const RKNN_QUERY_INPUT_ATTR: c_int = 1;
 pub const RKNN_QUERY_OUTPUT_ATTR: c_int = 2;
 pub const RKNN_QUERY_SDK_VERSION: c_int = 5;
 
-// rknn_tensor_type
+/// 张量数据类型。
 pub const RKNN_TENSOR_FLOAT32: c_int = 0;
 pub const RKNN_TENSOR_FLOAT16: c_int = 1;
 pub const RKNN_TENSOR_INT8: c_int = 2;
 pub const RKNN_TENSOR_UINT8: c_int = 3;
 
-// rknn_tensor_format
+/// 张量布局格式。
 pub const RKNN_TENSOR_NCHW: c_int = 0;
 pub const RKNN_TENSOR_NHWC: c_int = 1;
 pub const RKNN_TENSOR_UNDEFINED: c_int = 3;
 
-// rknn_core_mask
+/// NPU 核心掩码。
 pub const RKNN_NPU_CORE_AUTO: c_int = 0;
 pub const RKNN_NPU_CORE_0_1_2: c_int = 7;
 
@@ -46,28 +47,44 @@ pub struct rknn_input_output_num {
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct rknn_tensor_attr {
+    /// 张量索引。
     pub index: u32,
+    /// 张量维度数。
     pub n_dims: u32,
+    /// 各维度大小。
     pub dims: [u32; RKNN_MAX_DIMS],
+    /// 张量名称（C 字符串）。
     pub name: [c_char; RKNN_MAX_NAME_LEN],
+    /// 元素总数。
     pub n_elems: u32,
+    /// 张量字节大小。
     pub size: u32,
+    /// 张量布局格式。
     pub fmt: c_int,
+    /// 张量类型。
     pub type_: c_int,
+    /// 量化类型。
     pub qnt_type: c_int,
+    /// 量化参数位宽。
     pub fl: i8,
+    /// 零点。
     pub zp: i32,
+    /// 量化缩放因子。
     pub scale: f32,
+    /// 宽度 stride。
     pub w_stride: u32,
+    /// 带 stride 的总大小。
     pub size_with_stride: u32,
+    /// 是否透传。
     pub pass_through: u8,
+    /// 高度 stride。
     pub h_stride: u32,
 }
 
 impl Default for rknn_tensor_attr {
     fn default() -> Self {
-        // SAFETY: the struct is a plain-old-data type made only of integers,
-        // floats and fixed-size arrays, so an all-zero bit pattern is valid.
+        // SAFETY: 该结构体只包含整数、浮点数和固定长度数组，
+        // 因此全 0 位模式是合法值。
         unsafe { std::mem::zeroed() }
     }
 }
@@ -75,7 +92,9 @@ impl Default for rknn_tensor_attr {
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct rknn_sdk_version {
+    /// API 版本字符串。
     pub api_version: [c_char; 256],
+    /// 驱动版本字符串。
     pub drv_version: [c_char; 256],
 }
 
@@ -88,21 +107,32 @@ impl Default for rknn_sdk_version {
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct rknn_input {
+    /// 输入张量索引。
     pub index: u32,
+    /// 输入缓冲区指针。
     pub buf: *mut c_void,
+    /// 输入数据大小（字节）。
     pub size: u32,
+    /// 是否透传。
     pub pass_through: u8,
+    /// 输入张量类型。
     pub type_: c_int,
+    /// 输入张量布局。
     pub fmt: c_int,
 }
 
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct rknn_output {
+    /// 是否要求返回 float 数据。
     pub want_float: u8,
+    /// 是否由调用方预分配缓冲区。
     pub is_prealloc: u8,
+    /// 输出张量索引。
     pub index: u32,
+    /// 输出缓冲区指针。
     pub buf: *mut c_void,
+    /// 输出数据大小（字节）。
     pub size: u32,
 }
 

@@ -5,30 +5,44 @@ use std::{
 
 use anyhow::{Result, bail};
 
+/// 两种运行模式（review/golden）通用的命令行参数。
 pub struct CommonArgs {
+    /// 模型文件路径（.rknn）。
     pub model_path: PathBuf,
+    /// 输入图像路径（.jpg/.jpeg）。
     pub image_path: PathBuf,
+    /// 归一化统计文件路径（stats.json）。
     pub normalize_path: PathBuf,
+    /// 状态文件路径（可选，二进制 f32）。
     pub state_path: Option<PathBuf>,
+    /// 结果 JSON 输出路径（可选）。
     pub output_path: Option<PathBuf>,
-    /// Number of timed inference repeats (default 1). Useful for stable timing.
+    /// 计时推理的重复次数（默认 1），用于获得更稳定的耗时统计。
     pub repeat: usize,
-    /// NPU core mask selection: "auto" or "012" (all three cores).
+    /// NPU 核心选择掩码："auto" 或 "012"（同时使用三个核心）。
     pub core_mask: CoreMask,
 }
 
+/// NPU 核心掩码选择。
 #[derive(Clone, Copy)]
 pub enum CoreMask {
+    /// 自动调度（由运行时决定使用哪个核心）。
     Auto,
+    /// 同时使用 0/1/2 三个核心。
     All012,
 }
 
+/// golden 模式专用参数（在通用参数基础上扩展）。
 pub struct GoldenArgs {
+    /// 通用参数。
     pub common: CommonArgs,
+    /// 基准文件路径。
     pub golden_path: PathBuf,
+    /// 精度比对的绝对容差。
     pub atol: f32,
 }
 
+/// 解析通用命令行参数。参数按 `--key value` 成对出现。
 pub fn parse_common_args(args: &[String]) -> Result<CommonArgs> {
     let mut model_path = None;
     let mut image_path = None;
@@ -81,9 +95,13 @@ pub fn parse_common_args(args: &[String]) -> Result<CommonArgs> {
     Ok(parsed)
 }
 
+/// 解析 golden 模式参数：先抽取 `--golden`/`--atol`，其余参数透传给
+/// `parse_common_args` 复用通用解析逻辑。
 pub fn parse_golden_args(args: &[String]) -> Result<GoldenArgs> {
+    // 保留下来、需要交给通用解析器处理的参数。
     let mut kept = Vec::with_capacity(args.len());
     let mut golden_path = None;
+    // 精度比对的默认绝对容差。
     let mut atol = 5e-2_f32;
 
     let mut idx = 0;
@@ -115,6 +133,7 @@ pub fn parse_golden_args(args: &[String]) -> Result<GoldenArgs> {
     .validated()
 }
 
+/// 打印通用用法说明。
 pub fn print_common_usage(bin_name: &str) {
     eprintln!(
         "usage:\n  {bin_name} --model ABS_RKNN --image ABS_JPG --normalize ABS_STATS_JSON \
@@ -122,6 +141,7 @@ pub fn print_common_usage(bin_name: &str) {
     );
 }
 
+/// 打印 golden 模式用法说明。
 pub fn print_golden_usage(bin_name: &str) {
     eprintln!(
         "usage:\n  {bin_name} --model ABS_RKNN --image ABS_JPG --normalize ABS_STATS_JSON \
@@ -130,6 +150,7 @@ pub fn print_golden_usage(bin_name: &str) {
     );
 }
 
+/// 当指定了输出路径时，把结果 JSON 写入该文件；否则不做任何事。
 pub fn write_json_if_requested(path: Option<&Path>, content: &str) -> Result<()> {
     if let Some(path) = path {
         fs::write(path, content)?;
@@ -137,6 +158,7 @@ pub fn write_json_if_requested(path: Option<&Path>, content: &str) -> Result<()>
     Ok(())
 }
 
+/// 要求参数值为绝对路径，否则报错（本工具统一使用绝对路径以避免歧义）。
 fn require_absolute(name: &str, value: &str) -> Result<PathBuf> {
     let path = PathBuf::from(value);
     if !path.is_absolute() {
@@ -145,6 +167,7 @@ fn require_absolute(name: &str, value: &str) -> Result<PathBuf> {
     Ok(path)
 }
 
+/// 校验通用参数：必需文件存在、模型为 .rknn、图像为 .jpg/.jpeg。
 fn validate_common_args(args: &CommonArgs) -> Result<()> {
     require_file("--model", &args.model_path)?;
     require_file("--image", &args.image_path)?;
@@ -174,6 +197,7 @@ fn validate_common_args(args: &CommonArgs) -> Result<()> {
     Ok(())
 }
 
+/// 确认路径指向一个存在的文件，否则报错。
 fn require_file(name: &str, path: &Path) -> Result<()> {
     if !path.is_file() {
         bail!("{name} path is not a file: {}", path.display());
@@ -182,6 +206,7 @@ fn require_file(name: &str, path: &Path) -> Result<()> {
 }
 
 impl GoldenArgs {
+    /// 校验 golden 模式特有的参数（基准文件存在性）。
     fn validated(self) -> Result<Self> {
         require_file("--golden", &self.golden_path)?;
         Ok(self)

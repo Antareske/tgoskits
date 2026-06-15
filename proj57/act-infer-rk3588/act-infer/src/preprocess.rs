@@ -5,15 +5,17 @@ use image::imageops::FilterType;
 
 use crate::schema::{IMAGE_H, IMAGE_LEN, IMAGE_W, STATE_LEN, StatsFile};
 
-/// Resize to 224x224, convert to RGB, scale to [0,1], apply ImageNet
-/// normalization and lay out as NCHW float32 (matching the ONNX export /
-/// QEMU `tract` pipeline so RKNN output stays comparable to the golden).
+/// 把输入图片处理成模型需要的 224x224 RGB NCHW float32。
+///
+/// 处理步骤与导出 ONNX / QEMU `tract` 流水线保持一致：
+/// 先缩放，再转 RGB，再映射到 `[0,1]`，最后按 ImageNet 均值方差归一化。
 pub fn preprocess_image_file(path: &Path) -> Result<Vec<f32>> {
     let img = image::open(path)
         .with_context(|| format!("failed to open image {}", path.display()))?
         .to_rgb8();
     let img = image::imageops::resize(&img, IMAGE_W as u32, IMAGE_H as u32, FilterType::Triangle);
     let mut out = vec![0.0_f32; IMAGE_LEN];
+    // ImageNet 预训练常用的均值和标准差。
     let mean = [0.485_f32, 0.456_f32, 0.406_f32];
     let std = [0.229_f32, 0.224_f32, 0.225_f32];
     for y in 0..IMAGE_H {
@@ -30,10 +32,12 @@ pub fn preprocess_image_file(path: &Path) -> Result<Vec<f32>> {
 }
 
 pub fn read_state_file(path: &Path) -> Result<[f32; 2]> {
+    // 状态文件是两个 little-endian f32。
     let values = read_f32_file(path, STATE_LEN)?;
     Ok([values[0], values[1]])
 }
 
+/// 用统计文件中的分位数对状态做归一化；若没有状态统计则直接透传。
 pub fn normalize_state(raw: [f32; 2], stats: &StatsFile) -> Result<Vec<f32>> {
     let Some(ob_state) = stats.observation_state.as_ref() else {
         return Ok(raw.to_vec());
@@ -45,6 +49,7 @@ pub fn normalize_state(raw: [f32; 2], stats: &StatsFile) -> Result<Vec<f32>> {
     for (idx, value) in raw.iter().enumerate() {
         let q01 = ob_state.q01[idx];
         let q99 = ob_state.q99[idx];
+        // 避免分母为 0；极端情况下给一个很小的值兜底。
         let denom = if (q99 - q01).abs() < f32::EPSILON {
             1e-8
         } else {
@@ -63,6 +68,7 @@ pub fn denormalize_action(action: &[f32], stats: &StatsFile) -> Result<Vec<f32>>
         bail!("stats action quantiles length mismatch");
     }
     let dim = stats.action.q01.len();
+    // 动作向量可能按 chunk 展开，这里按维度循环使用分位数。
     Ok(action
         .iter()
         .enumerate()

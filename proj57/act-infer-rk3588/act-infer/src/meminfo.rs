@@ -1,18 +1,16 @@
 use std::fs;
 
-/// Best-effort process memory footprint in kilobytes.
+/// 尽力获取进程内存占用（KB）。
 ///
-/// Primary metric: `VmHWM` (peak resident set size) from
-/// `/proc/self/status`. If the running kernel's procfs does not expose
-/// `VmHWM` (a real possibility on StarryOS), fall back to `VmRSS` (current
-/// resident set), then to `VmPeak`/`VmSize` (virtual). Returns `None` only if
-/// `/proc/self/status` is entirely unavailable or none of the fields parse.
+/// 优先读取 /proc/self/status 中的 VmHWM（峰值常驻集），
+/// 如果当前内核没有暴露该字段（StarryOS 上是可能的），就回退到
+/// VmRSS（当前常驻集），再回退到 VmPeak/VmSize（虚拟内存）。
+/// 只有在 /proc/self/status 不可用或所有字段都解析失败时才返回 None。
 ///
-/// This requires no external tooling and is emitted in the result JSON so the
-/// on-board run captures memory usage even when standard monitors are missing.
+/// 这样无需依赖外部工具，也能把内存指标写入结果 JSON，方便板端回收。
 pub fn peak_rss_kb() -> Option<u64> {
     let status = fs::read_to_string("/proc/self/status").ok()?;
-    // Preference order: peak RSS, current RSS, peak virtual, current virtual.
+    // 峰值常驻 -> 当前常驻 -> 峰值虚拟 -> 当前虚拟
     for key in ["VmHWM:", "VmRSS:", "VmPeak:", "VmSize:"] {
         if let Some(kb) = field_kb(&status, key) {
             return Some(kb);

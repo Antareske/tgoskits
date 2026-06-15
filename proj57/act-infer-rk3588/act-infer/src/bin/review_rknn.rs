@@ -12,6 +12,7 @@ use act_infer_rk3588::{
 use anyhow::Result;
 
 fn main() {
+    // 入口只负责打印统一错误并返回退出码。
     if let Err(err) = run() {
         eprintln!("ACT_INFER_FAILED: {err:#}");
         process::exit(1);
@@ -19,6 +20,7 @@ fn main() {
 }
 
 fn run() -> Result<()> {
+    // 参数必须成对出现，否则直接打印用法并退出。
     let args = env::args().skip(1).collect::<Vec<_>>();
     if args.is_empty() || args.len() % 2 != 0 {
         print_common_usage("act-infer-review-rknn");
@@ -35,8 +37,7 @@ fn run() -> Result<()> {
     let state = normalize_state(state_raw, &stats)?;
     let image = preprocess_image_file(&parsed.image_path)?;
 
-    // review mode only emits the action result for human inspection of the
-    // left/right wheel speed trend (the contest decision-direction check).
+    // review 模式只输出动作结果，供人工检查左右轮速度趋势和转向方向。
     let (raw_action, timing_ms) = run_model_timed(
         &parsed.model_path,
         &image,
@@ -51,7 +52,7 @@ fn run() -> Result<()> {
     let left_wheel = action_denorm.first().copied().unwrap_or_default();
     let right_wheel = action_denorm.get(1).copied().unwrap_or_default();
     let speed_diff = right_wheel - left_wheel;
-    // Differential-drive convention: right faster than left => turning left.
+    // 差速驱动约定：右轮比左轮更快，车辆会向左转。
     let direction = if speed_diff > 0.0 {
         "left"
     } else if speed_diff < 0.0 {

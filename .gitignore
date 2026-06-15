@@ -15,11 +15,14 @@
 /.env
 /.venv
 /.venv-serial-console/
-/apps/starry/act-infer-qemu/.venv/
-/apps/starry/act-infer-qemu/output/
-/apps/starry/act-infer-qemu/assets/prepare/runtime-tmp/
-/apps/starry/act-infer-qemu/assets/downloads/output/train/model.pt
-/apps/starry/act-infer-qemu/assets/prepare/model.onnx
+/proj57/qemu/.venv/
+/proj57/qemu/output/
+/proj57/qemu/third_party/
+/proj57/qemu/assets/prepare/runtime-tmp/
+/proj57/qemu/assets/downloads/output/train/model.pt
+/proj57/qemu/assets/prepare/model.onnx
+# Ephemeral symlink created by proj57/qemu run scripts for xtask app discovery
+/apps/starry/act-infer-qemu
 /env/
 /venv/
 /ENV/

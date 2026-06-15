@@ -33,7 +33,7 @@ if ! "${py}" -c "import rknn, torch, onnx, onnxruntime" >/dev/null 2>&1; then
     "${pip}" install --extra-index-url https://download.pytorch.org/whl/cpu \
         "torch==2.4.0+cpu" "torchvision==0.19.0+cpu" \
         "onnx==1.17.0" onnxruntime "numpy<=1.26.4" Pillow "setuptools<81" \
-        "${app_dir}/../../www/3588/rknn-sdk2/packages/rknn_toolkit2-2.4.2a7-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+        "${app_dir}/rknn-sdk2/packages/rknn_toolkit2-2.4.2a7-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
 fi
 
 # 1. download checkpoint (optional) ------------------------------------------

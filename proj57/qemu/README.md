@@ -1,4 +1,4 @@
-# act-infer-qemu
+# proj57/qemu — ACT 模型 QEMU/StarryOS CPU 推理（任务三）
 
 ## 第一部分：推理程序与资产准备
 
@@ -50,18 +50,24 @@
 1) golden 入口：
 
 ```bash
-bash apps/starry/act-infer-qemu/run-golden.sh
+bash proj57/qemu/run-golden.sh
 ```
 
 2) review 入口：
 
 ```bash
-bash apps/starry/act-infer-qemu/review-run.sh <case_name> <expected_direction>
+bash proj57/qemu/review-run.sh <case_name> <expected_direction>
 # 示例
-bash apps/starry/act-infer-qemu/review-run.sh left left
+bash proj57/qemu/review-run.sh left left
 ```
 
 ### `cargo xtask starry app run` 执行链路
+
+> 注意：`cargo xtask starry app run` 仅在 `apps/starry/<case>` 下发现 app。本目录已统一到
+> `proj57/qemu`，不再常驻 `apps/starry/`。`run-golden.sh` / `review-run.sh` 会在运行时
+> 临时创建软链接 `apps/starry/act-infer-qemu -> proj57/qemu`（已被 `.gitignore` 忽略，
+> 脚本退出时自动清理），供 xtask 发现该 app。手动执行 `cargo xtask starry app run -t
+> act-infer-qemu` 前需自行建立同名软链接。
 
 1. `xtask` 发现该 app，并在存在时执行 `prebuild.sh`。
 2. `prebuild.sh` 校验资产，编译 `act-infer-golden-tract`/`act-infer-review-tract`（`riscv64gc-unknown-linux-musl`），并将文件放入 overlay。
@@ -82,10 +88,10 @@ bash apps/starry/act-infer-qemu/review-run.sh left left
 ### 宿主机推理二进制构建
 
 ```bash
-bash apps/starry/act-infer-qemu/build-scripts/build-linux.sh
+bash proj57/qemu/build-scripts/build-linux.sh
 ```
 
-该脚本会在 `apps/starry/act-infer-qemu/output/linux` 下生成四个二进制：
+该脚本会在 `proj57/qemu/output/linux` 下生成四个二进制：
 
 - `act-infer-golden-tract`
 - `act-infer-review-tract`
@@ -94,9 +100,9 @@ bash apps/starry/act-infer-qemu/build-scripts/build-linux.sh
 
 ### 资产目录覆盖
 
-默认读取 `apps/starry/act-infer-qemu/assets/prepare`。如需替换为其他数据集：
+默认读取 `proj57/qemu/assets/prepare`。如需替换为其他数据集：
 
 ```bash
-ACT_ASSETS_DIR=/abs/path/to/assets/prepare bash apps/starry/act-infer-qemu/run-golden.sh
-ACT_ASSETS_DIR=/abs/path/to/assets/prepare bash apps/starry/act-infer-qemu/review-run.sh right right
+ACT_ASSETS_DIR=/abs/path/to/assets/prepare bash proj57/qemu/run-golden.sh
+ACT_ASSETS_DIR=/abs/path/to/assets/prepare bash proj57/qemu/review-run.sh right right
 ```

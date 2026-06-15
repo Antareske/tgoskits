@@ -2,7 +2,7 @@
 set -euo pipefail
 
 app_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-workspace="$(cd "$app_dir/../../.." && pwd)"
+workspace="$(cd "$app_dir/../.." && pwd)"
 assets_dir="${ACT_ASSETS_DIR:-$app_dir/assets/prepare}"
 
 required=(
@@ -18,6 +18,13 @@ for file in "${required[@]}"; do
         exit 1
     fi
 done
+
+# xtask discovers apps under apps/starry/<case>. Provide a symlink if absent.
+app_link="$workspace/apps/starry/act-infer-qemu"
+if [[ ! -e "$app_link" ]]; then
+    ln -s "$app_dir" "$app_link"
+    trap 'rm -f "$app_link"' EXIT
+fi
 
 mkdir -p "$workspace/tmp/act-infer-golden"
 stamp="$(date +%Y%m%d-%H%M%S)"

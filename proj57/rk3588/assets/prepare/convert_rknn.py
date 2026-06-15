@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Convert the deterministic ACT ONNX model to an RK3588 .rknn model.
 
-Design choices (see proj57/act-infer-rk3588/README.md for rationale):
+Design choices (see proj57/rk3588/README.md for rationale):
 
 * No quantization (FP16). The RK3588 board has ample memory (4/8GB), so we
   keep the model in float to preserve the decision direction (left/right turn)

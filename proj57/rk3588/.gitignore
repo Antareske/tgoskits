@@ -1,0 +1,35 @@
+# Python venv
+.venv/
+
+# Rust build artifacts
+act-infer/target/
+
+# Cross-compile staging output
+install/
+
+# Large downloaded / generated model artifacts (regenerated via scripts/prepare-model.sh)
+assets/downloads/
+assets/prepare/model.onnx
+assets/prepare/model.onnx.data
+assets/prepare/model.rknn
+
+# RKNN toolkit conversion logs / temp
+*.log
+*.rknn.cache
+check*.onnx
+
+# RKNN SDK wheels / runtime tarballs (large; fetched from Rockchip SDK)
+rknn-sdk2/packages/
+rknn-sdk2/*.tar.gz
+
+# Image-build large binary assets (boot chain, kernel, rootfs, FIT, DTB)
+# Track only the scripts and text under image-build/, not the binaries.
+image-build/output/
+image-build/idbloader.img
+image-build/u-boot.itb
+image-build/starry.dtb
+image-build/starryos.bin
+image-build/starry-image.fit
+image-build/*.ext4
+image-build/*.img
+image-build/*.img.xz

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 app_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-workspace="$(cd "$app_dir/../../.." && pwd)"
+workspace="$(cd "$app_dir/../.." && pwd)"
 
 if [[ $# -lt 2 ]]; then
     echo "usage: $0 <case_name> <expected_direction>" >&2
@@ -45,6 +45,13 @@ cat > "$deploy_dir/review_meta.env" <<EOF
 ACT_REVIEW_CASE=$case_name
 ACT_REVIEW_EXPECTED=$expected_direction
 EOF
+
+# xtask discovers apps under apps/starry/<case>. Provide a symlink if absent.
+app_link="$workspace/apps/starry/act-infer-qemu"
+if [[ ! -e "$app_link" ]]; then
+    ln -s "$app_dir" "$app_link"
+    trap 'rm -f "$app_link"' EXIT
+fi
 
 mkdir -p "$workspace/tmp/act-infer-review"
 stamp="$(date +%Y%m%d-%H%M%S)"

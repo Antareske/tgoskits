@@ -1,4 +1,4 @@
-# act-infer-rk3588 — ACT 模型 RK3588 NPU 用户态推理
+# proj57/rk3588 — ACT 模型 RK3588 NPU 用户态推理（任务二）
 
 任务二（香橙派 RK3588 / NPU）的用户态推理交付。在 PC 上把赛题统一 ACT 模型
 （PyTorch checkpoint）转换为 RKNN 格式，在 RK3588 上用 NPU（RKNPU2）执行
@@ -36,7 +36,7 @@
 ## 2. 目录结构
 
 ```
-act-infer-rk3588/
+rk3588/
 ├── act-infer/                     # Rust 推理程序
 │   ├── build.rs                   # 链接 librknnrt.so，设置 $ORIGIN/lib rpath
 │   ├── src/
@@ -71,6 +71,19 @@ act-infer-rk3588/
 │   ├── on-board-run-golden.sh     # 板上 golden 启动器
 │   ├── on-board-run-review.sh     # 板上 review 启动器（左/右）
 │   └── on-board-mem-sample.sh     # 外部内存峰值采样（多级回退）
+├── image-build/                   # StarryOS 整盘镜像合成（脚本入仓，大二进制 git 忽略）
+│   ├── README.md                  # 镜像合成与换新工具说明
+│   ├── *.sh                       # build-image / make-dtb / repack-fit / swap-*
+│   ├── boot.cmd / boot.scr / starry.its
+│   └── output/                    # 生成的镜像与日志（git 忽略）
+├── rknn-sdk2/                     # RKNPU2 SDK 包与版本说明（wheel/tar git 忽略）
+├── docs/                          # RK3588 阶段文档与报告
+│   ├── rk3588-env-prepare.md
+│   ├── rk3588-starryos-build-manual.md
+│   ├── rk3588-debug-workflow.md
+│   ├── act-infer-report.md
+│   ├── share-rk3588-act-starry.md
+│   └── serial-scripts.md
 └── README.md                      # 本文
 ```
 
@@ -149,7 +162,7 @@ act-infer-rk3588/
 > 全程在项目内 venv 中执行，不改动全局 Python 环境。
 
 ```bash
-cd proj57/act-infer-rk3588
+cd proj57/rk3588
 
 # 一键：venv + 依赖 + 下载 model.pt + 导出 ONNX + 转 RKNN + 校验 + 生成 golden.json
 bash scripts/prepare-model.sh
@@ -160,7 +173,7 @@ bash scripts/prepare-model.sh
 - `torch==2.4.0+cpu`、`torchvision==0.19.0+cpu`
 - `onnx==1.17.0`（注意：rknn-toolkit2 2.4.2 依赖 `onnx.mapping`，必须 ≤1.17，
   不能用 1.18+）、`onnxruntime`、`numpy<=1.26.4`、`Pillow`、`setuptools<81`
-- `rknn_toolkit2-2.4.2a7`（cp312 wheel，来自 `www/3588/rknn-sdk2/packages/`）
+- `rknn_toolkit2-2.4.2a7`（cp312 wheel，来自 `proj57/rk3588/rknn-sdk2/packages/`）
 
 单步等价命令见 `scripts/prepare-model.sh` 内注释。
 
@@ -296,7 +309,7 @@ golden 额外支持 `--golden <json> --atol <float>`。
   指导与决策下生成与调试；模型转换、ONNX/RKNN 一致性校验、交叉编译、qemu-user
   冒烟均由助手在本环境实际执行并验证。
 - **借鉴**：
-  - 模型导出与预处理逻辑沿用本仓库任务三 `apps/starry/act-infer-qemu`
+  - 模型导出与预处理逻辑沿用本仓库任务三 `proj57/qemu`
     （`export_onnx.py` / 预处理 / golden 流程）。
   - RK3588 上 RKNN 的交叉编译与部署形态参考本仓库
     `apps/starry/orangepi-5-plus-uvc-rknn`（aarch64-gnu + `librknnrt.so` +

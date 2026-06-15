@@ -6,6 +6,10 @@
 #   act-infer-golden-rknn        golden self-check binary
 #   act-infer-review-rknn        review (left/right decision) binary
 #   lib/librknnrt.so             RKNPU2 runtime (resolved via $ORIGIN/lib rpath)
+#   lib/libc.so.6 ...            glibc runtime bundled from the cross toolchain so
+#                                the gnu binaries run on the musl StarryOS rootfs
+#   lib/ld-linux-aarch64.so.1    glibc dynamic loader (the binaries' hard-coded
+#                                ELF interpreter is /lib/ld-linux-aarch64.so.1)
 #   model/model.rknn             converted FP16 RKNN model
 #   model/stats.json             QUANTILE normalization stats
 #   model/golden.json            golden denormalized action (RKNN simulator)
@@ -62,6 +66,45 @@ mkdir -p "${install_dir}/lib" "${install_dir}/model"
 install -m0755 "${bin_dir}/act-infer-golden-rknn" "${install_dir}/act-infer-golden-rknn"
 install -m0755 "${bin_dir}/act-infer-review-rknn" "${install_dir}/act-infer-review-rknn"
 install -m0644 "${sdk_lib}" "${install_dir}/lib/librknnrt.so"
+
+# Bundle the glibc runtime + dynamic loader from the cross toolchain.
+#
+# The binaries target aarch64-unknown-linux-gnu (glibc) because librknnrt.so
+# depends on glibc symbols, but the StarryOS image ships an Alpine/musl rootfs
+# that has no glibc. Without these, the program fails at exec time (missing
+# interpreter / symbols), not at inference. We resolve each library through the
+# cross compiler so this works on any host with gcc-aarch64-linux-gnu, then the
+# overlay-build step places the loader at the rootfs path /lib/ld-linux-aarch64.so.1.
+cross_gcc="${CROSS_GCC:-aarch64-linux-gnu-gcc}"
+glibc_libs=(
+    ld-linux-aarch64.so.1
+    libc.so.6
+    libm.so.6
+    libdl.so.2
+    libpthread.so.0
+    libgcc_s.so.1
+    libstdc++.so.6
+)
+echo "info: bundling glibc runtime from ${cross_gcc} (-print-file-name)"
+for soname in "${glibc_libs[@]}"; do
+    src="$("${cross_gcc}" -print-file-name="${soname}" 2>/dev/null || true)"
+    if [[ -z "${src}" || "${src}" == "${soname}" || ! -e "${src}" ]]; then
+        echo "error: cannot locate ${soname} via ${cross_gcc} -print-file-name" >&2
+        echo "       install the aarch64 glibc cross runtime (e.g. libc6-arm64-cross," >&2
+        echo "       libstdc++6-arm64-cross) or set CROSS_GCC to your toolchain gcc." >&2
+        exit 1
+    fi
+    # Resolve to the real file, then install it under its soname. For versioned
+    # SONAMEs (e.g. libstdc++.so.6 -> libstdc++.so.6.0.NN) also keep the real
+    # versioned name plus the soname symlink so the dynamic linker is satisfied.
+    real="$(readlink -f "${src}")"
+    realname="$(basename "${real}")"
+    install -m0755 "${real}" "${install_dir}/lib/${realname}"
+    if [[ "${realname}" != "${soname}" ]]; then
+        ln -sf "${realname}" "${install_dir}/lib/${soname}"
+    fi
+    echo "  ${soname} <- ${real}"
+done
 
 install -m0644 "${assets_dir}/model.rknn" "${install_dir}/model/model.rknn"
 install -m0644 "${assets_dir}/stats.json" "${install_dir}/model/stats.json"

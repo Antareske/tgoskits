@@ -17,6 +17,8 @@ pub const RKNN_SUCC: c_int = 0;
 pub const RKNN_QUERY_IN_OUT_NUM: c_int = 0;
 pub const RKNN_QUERY_INPUT_ATTR: c_int = 1;
 pub const RKNN_QUERY_OUTPUT_ATTR: c_int = 2;
+/// 查询上一次 `rknn_run` 在 NPU 上的真实执行时间（微秒）。
+pub const RKNN_QUERY_PERF_RUN: c_int = 4;
 pub const RKNN_QUERY_SDK_VERSION: c_int = 5;
 
 /// 张量数据类型。
@@ -102,6 +104,14 @@ impl Default for rknn_sdk_version {
     fn default() -> Self {
         unsafe { std::mem::zeroed() }
     }
+}
+
+/// `RKNN_QUERY_PERF_RUN` 的返回结构：上一次推理在 NPU 上的真实执行时间。
+#[repr(C)]
+#[derive(Debug, Clone, Copy, Default)]
+pub struct rknn_perf_run {
+    /// NPU 真实推理耗时（微秒）。
+    pub run_duration: i64,
 }
 
 #[repr(C)]

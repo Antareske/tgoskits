@@ -1,4 +1,4 @@
-use std::{env, process};
+use std::{env, process, time::Instant};
 
 use act_infer_rk3588::{
     cli::{parse_golden_args, print_golden_usage, write_json_if_requested},
@@ -36,17 +36,30 @@ fn run() -> Result<()> {
     } else {
         [0.0_f32; STATE_LEN]
     };
+    let normalize_state_start = Instant::now();
     let state = normalize_state(state_raw, &stats)?;
-    let image = preprocess_image_file(&common.image_path)?;
+    let normalize_state_ms = normalize_state_start.elapsed().as_secs_f64() * 1000.0;
 
-    let (raw_action, timing_ms) = run_model_timed(
+    let preprocess_start = Instant::now();
+    let image = preprocess_image_file(&common.image_path)?;
+    let preprocess_ms = preprocess_start.elapsed().as_secs_f64() * 1000.0;
+
+    let (raw_action, mut timing_ms) = run_model_timed(
         &common.model_path,
         &image,
         &state,
         common.repeat,
         common.core_mask,
     )?;
+
+    let denormalize_start = Instant::now();
     let action_denorm = denormalize_action(&raw_action, &stats)?;
+    let denormalize_ms = denormalize_start.elapsed().as_secs_f64() * 1000.0;
+
+    // 回填 bin 层测量的一次性 CPU 阶段耗时。
+    timing_ms.preprocess_ms = preprocess_ms;
+    timing_ms.normalize_state_ms = normalize_state_ms;
+    timing_ms.denormalize_ms = denormalize_ms;
 
     let golden = read_golden(&parsed.golden_path)?;
     // 只比较两者共有的长度，避免基准和当前输出长度不一致时越界。

@@ -1,4 +1,4 @@
-use std::{env, process};
+use std::{env, process, time::Instant};
 
 use act_infer_rk3588::{
     cli::{parse_common_args, print_common_usage, write_json_if_requested},
@@ -34,18 +34,31 @@ fn run() -> Result<()> {
     } else {
         [0.0_f32; STATE_LEN]
     };
+    let normalize_state_start = Instant::now();
     let state = normalize_state(state_raw, &stats)?;
+    let normalize_state_ms = normalize_state_start.elapsed().as_secs_f64() * 1000.0;
+
+    let preprocess_start = Instant::now();
     let image = preprocess_image_file(&parsed.image_path)?;
+    let preprocess_ms = preprocess_start.elapsed().as_secs_f64() * 1000.0;
 
     // review 模式只输出动作结果，供人工检查左右轮速度趋势和转向方向。
-    let (raw_action, timing_ms) = run_model_timed(
+    let (raw_action, mut timing_ms) = run_model_timed(
         &parsed.model_path,
         &image,
         &state,
         parsed.repeat,
         parsed.core_mask,
     )?;
+
+    let denormalize_start = Instant::now();
     let action_denorm = denormalize_action(&raw_action, &stats)?;
+    let denormalize_ms = denormalize_start.elapsed().as_secs_f64() * 1000.0;
+
+    // 回填 bin 层测量的一次性 CPU 阶段耗时。
+    timing_ms.preprocess_ms = preprocess_ms;
+    timing_ms.normalize_state_ms = normalize_state_ms;
+    timing_ms.denormalize_ms = denormalize_ms;
 
     let action_dim = stats.action.q01.len();
     let chunk_steps = action_denorm.len().checked_div(action_dim).unwrap_or(0);

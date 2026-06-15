@@ -11,6 +11,8 @@ if [ -f "${here}/model/input_state.bin" ]; then
     state_args="--state ${here}/model/input_state.bin"
 fi
 
+output_json="${ACT_OUTPUT_JSON:-/tmp/act_golden_result.json}"
+
 echo ACT_INFER_BEGIN
 # shellcheck disable=SC2086
 if "${here}/act-infer-golden-rknn" \
@@ -22,7 +24,7 @@ if "${here}/act-infer-golden-rknn" \
     --atol "${ACT_ATOL:-0.05}" \
     --repeat "${ACT_REPEAT:-1}" \
     --core-mask "${ACT_CORE_MASK:-auto}" \
-    --output /tmp/act_golden_result.json; then
+    --output "${output_json}"; then
     echo ACT_INFER_OK
 else
     echo ACT_INFER_FAILED

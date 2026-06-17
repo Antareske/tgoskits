@@ -9,3 +9,4 @@ apps/starry/stress
 apps/starry/k230-qemu
 apps/starry/visual
 apps/starry/claw-code-regression
+apps/starry/net-bench

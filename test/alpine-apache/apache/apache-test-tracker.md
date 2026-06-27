@@ -57,17 +57,17 @@
   - 测例：`apps/starry/apache/smoke/apache-smoke-tests.sh`, `test_logs()`
 - [x] SIGTERM 后 httpd 退出且无残留
   - 测例：`apps/starry/apache/smoke/apache-smoke-tests.sh`, `stop_httpd()`
-  - 备注：2026-06-03 riscv64 StarryOS smoke 通过；命令 `cargo xtask starry app run -t apache --arch riscv64`
+  - 备注：2026-06-03 riscv64 StarryOS smoke 通过；命令 `cargo xtask starry app qemu -t apache --arch riscv64`
 
 ### 阶段 2：MPM 和进程/线程模型
 
 - [x] prefork MPM parent/child 启动
-  - 测例：`apps/starry/apache/phase/apache-2-0-mpm-prefork-tests.sh`, `test_prefork_process_tree()`
+  - 测例：`apps/starry/apache/phase/apache-2-0-mpm-prefork-tests.sh`, `test_worker_pool_ready()`
 - [x] prefork child 处理请求
-  - 测例：`apps/starry/apache/phase/apache-2-0-mpm-prefork-tests.sh`, `test_prefork_request_handling()`
-- [x] child 退出后 parent `wait4` 回收
-  - 测例：`apps/starry/apache/phase/apache-2-0-mpm-prefork-tests.sh`, `test_prefork_reap()`
-  - 备注：2026-06-04 riscv64 StarryOS phase20 通过；命令 `cargo xtask starry app run -t apache --arch riscv64 --qemu-config qemu-riscv64-phase20.toml`
+  - 测例：`apps/starry/apache/phase/apache-2-0-mpm-prefork-tests.sh`, `test_request_handling()`
+- [x] phase20 clean stop / httpd 退出
+  - 测例：`apps/starry/apache/phase/apache-2-0-mpm-prefork-tests.sh`, `test_stop_cleanup()`
+  - 备注：2026-06-18 x86_64 rerun 暴露 phase20 readiness overspecification；参见 `apps/starry/apache/debug/ISSUE-001-phase20-prefork-readiness.md` 与 `apps/starry/apache/qemu/debug/qemu-x86_64-phase20-restart.toml`。2026-06-04 riscv64 phase20 通过记录仍保留。
 - [ ] worker/event MPM 可启动（若 Alpine 构建支持）
   - 测例：待新增
 
@@ -87,7 +87,7 @@
   - 备注：Linux/StarryOS 对 `BAD /` 均返回 501
 - [x] `Connection: close` 行为正确
   - 测例：`apps/starry/apache/phase/apache-3-0-http-static-tests.sh`, `test_connection_close()`
-  - 备注：2026-06-03 riscv64 StarryOS phase30 通过；命令 `cargo xtask starry app run -t apache --arch riscv64 --qemu-config qemu-riscv64-phase30.toml`
+  - 备注：2026-06-03 riscv64 StarryOS phase30 通过；命令 `cargo xtask starry app qemu -t apache --arch riscv64 --qemu-config apps/starry/apache/qemu/phase/qemu-riscv64-phase30.toml`
 
 ### 阶段 4：Apache 目录、权限和路径规则
 
@@ -109,7 +109,7 @@
   - 备注：当前以 `AllowOverride Indexes` + `.htaccess` 中 `DirectoryIndex` 覆盖逐级读取行为；后续可补 `AllowOverride All` 的更多 directive 矩阵
 - [x] `Options FollowSymLinks` 差异
   - 测例：`apps/starry/apache/phase/apache-4-0-directory-access-tests.sh`, `test_symlink_follow_on()` / `test_symlink_follow_off()`
-  - 备注：Linux/StarryOS 均表现为开启时 200，关闭时 403；2026-06-03 riscv64 StarryOS phase40 通过，命令 `cargo xtask starry app run -t apache --arch riscv64 --qemu-config qemu-riscv64-phase40.toml`
+  - 备注：Linux/StarryOS 均表现为开启时 200，关闭时 403；2026-06-03 riscv64 StarryOS phase40 通过，命令 `cargo xtask starry app qemu -t apache --arch riscv64 --qemu-config apps/starry/apache/qemu/phase/qemu-riscv64-phase40.toml`
 
 ### 阶段 5：文件发送、Range 和缓存相关语义
 
@@ -127,7 +127,7 @@
   - 测例：`apps/starry/apache/phase/apache-5-5-sendfile-range-tests.sh`, `test_range_requests()`
 - [x] `If-Modified-Since` / `ETag` / `Last-Modified`
   - 测例：`apps/starry/apache/phase/apache-5-5-sendfile-range-tests.sh`, `test_conditional_get()`
-  - 备注：2026-06-05 riscv64 StarryOS phase55 通过；命令 `cargo xtask starry app run -t apache --arch riscv64 --qemu-config qemu-riscv64-phase55.toml`
+  - 备注：2026-06-05 riscv64 StarryOS phase55 通过；命令 `cargo xtask starry app qemu -t apache --arch riscv64 --qemu-config apps/starry/apache/qemu/phase/qemu-riscv64-phase55.toml`
 
 ### 阶段 6：日志、runtime 文件和 graceful 生命周期
 
@@ -143,7 +143,7 @@
   - 测例：`apps/starry/apache/phase/apache-5-0-log-lifecycle-tests.sh`, `test_stop_works()`
 - [x] log rotate 后 graceful/reopen
   - 测例：`apps/starry/apache/phase/apache-5-0-log-lifecycle-tests.sh`, `test_graceful_reopen()`
-  - 备注：2026-06-05 riscv64 StarryOS phase50 通过；命令 `cargo xtask starry app run -t apache --arch riscv64 --qemu-config qemu-riscv64-phase50.toml`
+  - 备注：2026-06-05 riscv64 StarryOS phase50 通过；命令 `cargo xtask starry app qemu -t apache --arch riscv64 --qemu-config apps/starry/apache/qemu/phase/qemu-riscv64-phase50.toml`
 
 ### 阶段 7：请求体、CGI 和动态执行路径
 
@@ -161,7 +161,7 @@
   - 备注：Linux/StarryOS 均返回 500
 - [x] CGI 环境变量正确
   - 测例：`apps/starry/apache/phase/apache-7-0-cgi-tests.sh`, `test_cgi_env_and_body()` / `test_cgi_get_env()`
-  - 备注：2026-06-05 riscv64 StarryOS phase70 通过；命令 `cargo xtask starry app run -t apache --arch riscv64 --qemu-config qemu-riscv64-phase70.toml`
+  - 备注：2026-06-05 riscv64 StarryOS phase70 通过；命令 `cargo xtask starry app qemu -t apache --arch riscv64 --qemu-config apps/starry/apache/qemu/phase/qemu-riscv64-phase70.toml`
 
 ### 阶段 8：模块特性扩展
 
@@ -179,7 +179,7 @@
   - 备注：已在 phase4 目录/路径规则中通过 `Alias` 语义覆盖，无需重复测试
 - [x] `mod_autoindex`
   - 备注：已在 phase4 目录/路径规则中通过 `Options Indexes` + `mod_autoindex` 覆盖，无需重复测试
-  - 备注：2026-06-05 riscv64 StarryOS phase80 通过；命令 `cargo xtask starry app run -t apache --arch riscv64 --qemu-config qemu-riscv64-phase80.toml`
+  - 备注：2026-06-05 riscv64 StarryOS phase80 通过；命令 `cargo xtask starry app qemu -t apache --arch riscv64 --qemu-config apps/starry/apache/qemu/phase/qemu-riscv64-phase80.toml`
 
 ### Stress
 

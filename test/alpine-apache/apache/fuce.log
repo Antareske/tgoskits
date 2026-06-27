@@ -1,0 +1,426 @@
+asta@Astalia:~/tgoskits/wt-test-alpine-apache$ timeout 1800s cargo xtask starry app qemu -t apache --arch x86_64
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.41s
+     Running `target/debug/tg-xtask starry app qemu -t apache --arch x86_64`
+[2026-06-25T02:55:09Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-test-alpine-apache
+RUN     1/1     apache  arch=x86_64
+file already exists and passed checksum verification
+image archive verified at /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/rootfs/rootfs-x86_64-alpine.img.tar.xz
+image already extracted and up to date at /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/rootfs/rootfs-x86_64-alpine.img
+cd /home/asta/tgoskits/wt-test-alpine-apache/apps/starry/apache && bash /home/asta/tgoskits/wt-test-alpine-apache/apps/starry/apache/prebuild.sh
+debugfs -w /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/rootfs/rootfs-x86_64-alpine.img/rootfs-x86_64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+debugfs:  mkdir /usr
+debugfs:  mkdir /usr/bin
+debugfs:  rm /usr/bin/apache-accept-mutex.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-app/apache/overlay/usr/bin/apache-accept-mutex.sh /usr/bin/apache-accept-mutex.sh
+Allocated inode: 4195
+debugfs:  sif /usr/bin/apache-accept-mutex.sh mode 0100755
+debugfs:  rm /usr/bin/apache-alpine-mirror.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-aph
+Allocated inode: 4196he-alpine-mirror.sh
+debugfs:  sif /usr/bin/apache-alpine-mirror.sh mode 0100755
+debugfs:  rm /usr/bin/apache-cgi-pipe-exec.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-aph
+Allocated inode: 4197he-cgi-pipe-exec.sh
+debugfs:  sif /usr/bin/apache-cgi-pipe-exec.sh mode 0100755
+debugfs:  rm /usr/bin/apache-graceful-signal.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-app/apache/overlay/usr/bin/apache-graceful-signal.sh /usr/bin/apache-graceful-signal.sh
+Allocated inode: 4198
+debugfs:  sif /usr/bin/apache-graceful-signal.sh mode 0100755
+debugfs:  rm /usr/bin/apache-htaccess-pathwalk.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-app/apache/overlay/usr/bin/apache-htaccess-pathwalk.sh /usr/bin/apache-htaccess-pathwalk.sh
+Allocated inode: 4199
+debugfs:  sif /usr/bin/apache-htaccess-pathwalk.sh mode 0100755
+debugfs:  rm /usr/bin/apache-log-append-reopen.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-app/apache/overlay/usr/bin/apache-log-append-reopen.sh /usr/bin/apache-log-append-reopen.sh
+Allocated inode: 4200
+debugfs:  sif /usr/bin/apache-log-append-reopen.sh mode 0100755
+debugfs:  rm /usr/bin/apache-mpm-prefork-wait.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-app/apache/overlay/usr/bin/apache-mpm-prefork-wait.sh /usr/bin/apache-mpm-prefork-wait.sh
+Allocated inode: 4201
+debugfs:  sif /usr/bin/apache-mpm-prefork-wait.sh mode 0100755
+debugfs:  rm /usr/bin/apache-mpm-thread-futex.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-app/apache/overlay/usr/bin/apache-mpm-thread-futex.sh /usr/bin/apache-mpm-thread-futex.sh
+Allocated inode: 4202
+debugfs:  sif /usr/bin/apache-mpm-thread-futex.sh mode 0100755
+debugfs:  rm /usr/bin/apache-phase20-restart.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-app/apache/overlay/usr/bin/apache-phase20-restart.sh /usr/bin/apache-phase20-restart.sh
+Allocated inode: 4203
+debugfs:  sif /usr/bin/apache-phase20-restart.sh mode 0100755
+debugfs:  rm /usr/bin/apache-phase20-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-aph
+Allocated inode: 4204he-phase20-tests.sh
+debugfs:  sif /usr/bin/apache-phase20-tests.sh mode 0100755
+debugfs:  rm /usr/bin/apache-phase30-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-aph
+Allocated inode: 4205he-phase30-tests.sh
+debugfs:  sif /usr/bin/apache-phase30-tests.sh mode 0100755
+debugfs:  rm /usr/bin/apache-phase40-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-aph
+Allocated inode: 4206he-phase40-tests.sh
+debugfs:  sif /usr/bin/apache-phase40-tests.sh mode 0100755
+debugfs:  rm /usr/bin/apache-phase50-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-aph
+Allocated inode: 4207he-phase50-tests.sh
+debugfs:  sif /usr/bin/apache-phase50-tests.sh mode 0100755
+debugfs:  rm /usr/bin/apache-phase55-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-aph
+Allocated inode: 4208he-phase55-tests.sh
+debugfs:  sif /usr/bin/apache-phase55-tests.sh mode 0100755
+debugfs:  rm /usr/bin/apache-phase70-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-aph
+Allocated inode: 4209he-phase70-tests.sh
+debugfs:  sif /usr/bin/apache-phase70-tests.sh mode 0100755
+debugfs:  rm /usr/bin/apache-phase80-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-aph
+Allocated inode: 4210he-phase80-tests.sh
+debugfs:  sif /usr/bin/apache-phase80-tests.sh mode 0100755
+debugfs:  rm /usr/bin/apache-runner-lib.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-app/apache/overlay/usr/bin/apache-runner-lib.sh /usr/bin/apache-runner-lib.sh
+Allocated inode: 4211
+debugfs:  sif /usr/bin/apache-runner-lib.sh mode 0100755
+debugfs:  rm /usr/bin/apache-runner.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-app/apache/overlay/usr/bin/apache-runner.sh /usr/bin/apache-runner.sh
+Allocated inode: 4212
+debugfs:  sif /usr/bin/apache-runner.sh mode 0100755
+debugfs:  rm /usr/bin/apache-sendfile-mmap-range.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-app/apache/overlay/usr/bin/apache-sendfile-mmap-range.sh /usr/bin/apache-sendfile-mmap-range.sh
+Allocated inode: 4213
+debugfs:  sif /usr/bin/apache-sendfile-mmap-range.sh mode 0100755
+debugfs:  rm /usr/bin/apache-smoke-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/starry-app/apache/overlay/usr/bin/apache-smoke-tests.sh /usr/bin/apache-smoke-tests.sh
+Allocated inode: 4214
+debugfs:  sif /usr/bin/apache-smoke-tests.sh mode 0100755
+debugfs:  quit
+file already exists and passed checksum verification
+image archive verified at /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/rootfs/rootfs-x86_64-alpine.img.tar.xz
+image already extracted and up to date at /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/rootfs/rootfs-x86_64-alpine.img
+Using build config: /home/asta/tgoskits/wt-test-alpine-apache/apps/starry/apache/build-x86_64-unknown-none.toml
+[2026-06-25T02:55:14Z INFO  axbuild::build] Found build config at /home/asta/tgoskits/wt-test-alpine-apache/apps/starry/apache/build-x86_64-unknown-none.toml
+[2026-06-25T02:55:14Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-test-alpine-apache/apps/starry/apache/qemu-x86_64.toml
+  prepare assets: 0ns (pipeline=plain, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-test-alpine-apache/apps/starry/apache/qemu-x86_64.toml (timeout=3600s)
+  rootfs: /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/rootfs/rootfs-x86_64-alpine.img/rootfs-x86_64-alpine.img
+sh -c /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/std/prebuild/prebuild-x86_64-unknown-linux-musl-cc33eb9344465af7.sh
+sh -c rm -f '/home/asta/tgoskits/wt-test-alpine-apache/target/x86_64-unknown-none/release/starryos' '/home/asta/tgoskits/wt-test-alpine-apache/target/x86_64-unknown-none/release/starryos.bin'
+AR_x86_64_unknown_linux_musl=x86_64-linux-musl-ar
+AX_ARCH=x86_64
+AX_GW=10.0.2.2
+AX_IP=10.0.2.15
+AX_LOG=warn
+AX_TARGET=x86_64-unknown-none
+BINDGEN_EXTRA_CLANG_ARGS_x86_64_unknown_linux_musl=--target=x86_64-linux-musl --sysroot=/home/asta/musl/x86_64-linux-musl-cross/bin/../x86_64-linux-musl -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -mno-avx -mno-avx2 -msoft-float
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+CC_x86_64_unknown_linux_musl=x86_64-linux-musl-cc
+CFLAGS_x86_64_unknown_linux_musl=-mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -mno-avx -mno-avx2 -msoft-float
+CXXFLAGS_x86_64_unknown_linux_musl=-mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2 -mno-avx -mno-avx2 -msoft-float
+cargo build --config /home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/std/config-x86_64-unknown-linux-musl-dynamic.toml -p starryos --target scripts/targets/std/pie/x86_64-unknown-linux-musl.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-test-alpine-apache/target --features ax-std/smp,ax-std/std-compat,ax-std/virtio-blk,ax-std/virtio-gpu,ax-std/virtio-input,ax-std/virtio-net,ax-std/virtio-socket,plat-dyn,smp,plat-dyn -Z json-target-spec --bin starryos --release --message-format json-render-diagnostics
+    Finished `release` profile [optimized] target(s) in 0.58s
+sh -c sh '/home/asta/tgoskits/wt-test-alpine-apache/scripts/axbuild/scripts/starry-kallsyms.sh'
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-test-alpine-apache/target/x86_64-unknown-linux-musl/release/starryos
+  bin: /home/asta/tgoskits/wt-test-alpine-apache/target/x86_64-unknown-linux-musl/release/starryos.bin
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-test-alpine-apache/target/x86_64-unknown-linux-musl/release/starryos /home/asta/tgoskits/wt-test-alpine-apache/target/x86_64-unknown-linux-musl/release/starryos.bin
+Preparing OVMF firmware for architecture: X86_64
+[2026-06-25T02:55:15Z INFO  ostool::run::ovmf_prebuilt::fetch] probing OVMF mirror https://gitee.com/zr233/ovmf-prebuilt/releases/download/edk2-stable202508-r1/edk2-stable202508-r1-bin.tar.xz
+[2026-06-25T02:55:16Z INFO  ostool::run::ovmf_prebuilt::fetch] OVMF mirror gitee probe: 262144 bytes in 1.03906188s
+[2026-06-25T02:55:16Z INFO  ostool::run::ovmf_prebuilt::fetch] probing OVMF mirror https://github.com/rust-osdev/ovmf-prebuilt/releases/download/edk2-stable202508-r1/edk2-stable202508-r1-bin.tar.xz
+[2026-06-25T02:55:18Z INFO  ostool::run::ovmf_prebuilt::fetch] OVMF mirror github probe: 262144 bytes in 1.417608344s
+[2026-06-25T02:55:18Z INFO  ostool::run::ovmf_prebuilt::fetch] OVMF download source: gitee (https://gitee.com/zr233/ovmf-prebuilt/releases/download/edk2-stable202508-r1/edk2-stable202508-r1-bin.tar.xz)
+[2026-06-25T02:55:18Z INFO  ostool::run::ovmf_prebuilt::fetch] downloading https://gitee.com/zr233/ovmf-prebuilt/releases/download/edk2-stable202508-r1/edk2-stable202508-r1-bin.tar.xz
+Downloaded 8508740 bytes
+  [00:00:03] [######################################################################] 8.11 MiB/8.11 MiB (2.25 MiB/s, 0s)[2026-06-25T02:55:22Z INFO  ostool::run::ovmf_prebuilt::fetch] received 8508740 bytes
+[2026-06-25T02:55:22Z INFO  ostool::run::ovmf_prebuilt::fetch] decompressing tarball
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/loongarch64/shell.efi
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/loongarch64/vars.fd
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/loongarch64/code.fd
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/x64/shell.efi
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/x64/vars.fd
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/x64/code.fd
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/ia32/shell.efi
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/ia32/vars.fd
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/ia32/code.fd
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/riscv64/vars.fd
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/riscv64/code.fd
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/riscv64/shell.efi
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/aarch64/vars.fd
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/aarch64/code.fd
+[2026-06-25T02:55:25Z INFO  ostool::run::ovmf_prebuilt::fetch] unpacking to /tmp/ostool/ovmf/aarch64/shell.efi
+qemu-system-x86_64 -nographic -m 1G -device virtio-blk-pci,drive=disk0 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-test-alpine-apache/tmp/axbuild/rootfs/rootfs-x86_64-alpine.img/rootfs-x86_64-alpine.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -vga none -machine q35 -drive if=pflash,format=raw,unit=0,readonly=on,file=/tmp/ostool/ovmf/x64/code.fd -drive if=pflash,format=raw,unit=1,file=/home/asta/tgoskits/wt-test-alpine-apache/target/x86_64-unknown-linux-musl/release/starryos.vars.fd -drive format=raw,file=fat:rw:/home/asta/tgoskits/wt-test-alpine-apache/target/x86_64-unknown-linux-musl/release/starryos.esp
+0
+BdsDxe: failed to load Boot0002 "UEFI Misc Device" from PciRoot(0x0)/Pci(0x1,0x0): Not Found
+BdsDxe: loading Boot0003 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+BdsDxe: starting Boot0003 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+UEFI application started.
+UEFI console ok.
+No FDT found in UEFI config tables.
+Found ACPI 1.0 RSDP at address: 0x3f77e000
+Found ACPI 2.0 RSDP at address: 0x3f77e014
+Using ACPI 2 RSDP at address: 0x3f77e014
+UEFI setup.
+Exiting UEFI boot services...
+Exited boot services, memory map obtained.
+VM Load @0x3c397000
+VM Load Offset: 0xbc397000
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  Free   0x00000000900000 - 0x0000003c397000 (954.59 MiB)
+  KImg   0x0000003c397000 - 0x0000003d200000 (14.41 MiB)
+  Free   0x0000003d200000 - 0x0000003e93f000 (23.25 MiB)
+  Rsv    0x0000003e93f000 - 0x0000003ea00000 (772 KiB)
+  Free   0x0000003ea00000 - 0x0000003f4ed000 (10.93 MiB)
+  Rsv    0x0000003f4ed000 - 0x0000003f7ff000 (3.07 MiB)
+  Free   0x0000003f7ff000 - 0x0000003fec1000 (6.76 MiB)
+  Rsv    0x0000003fec1000 - 0x0000003fec7000 (24 KiB)
+  Free   0x0000003fec7000 - 0x0000003fef4000 (180 KiB)
+  Rsv    0x0000003fef4000 - 0x00000040000000 (1.05 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+  Rsv    0x0000fd00000000 - 0x00010000000000 (12 GiB)
+Initialize RAM allocator: 0x900000..0x3c397000
+Initializing per-CPU data
+Per-CPU data one cpu size: 0x41000 bytes
+Total per-CPU data size for secondary CPUs: 0x41000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x900000..0x941000, current: 0x941000
+Per-CPU data allocated at 0x900000 - 0x941000
+Initializing per-CPU RAM for CPU0 - hard id 0x0 @ 0x900000
+CPU0 - hard id 0x0, stack top @0x941000, stack top virt @0xffffff0000941000, entry virt @0xffffffff803a3d90
+Free                : [0x0000000000000000, 0x0000000000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Free                : [0xffff800000000000, 0xffff800000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Reserved            : [0x0000000000008000, 0x0000000000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Reserved            : [0xffff800000008000, 0xffff800000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Free                : [0x0000000000009000, 0x00000000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0xffff800000009000, 0xffff8000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0x0000000000100000, 0x0000000000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Free                : [0xffff800000100000, 0xffff800000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Reserved            : [0x0000000000800000, 0x0000000000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Reserved            : [0xffff800000800000, 0xffff800000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Free                : [0x0000000000808000, 0x000000000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Free                : [0xffff800000808000, 0xffff80000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Reserved            : [0x000000000080b000, 0x000000000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Reserved            : [0xffff80000080b000, 0xffff80000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Free                : [0x000000000080c000, 0x0000000000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Free                : [0xffff80000080c000, 0xffff800000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Reserved            : [0x0000000000811000, 0x0000000000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Reserved            : [0xffff800000811000, 0xffff800000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Free                : [0x0000000000941000, 0x000000003c397000) -> [0x0000000000941000, 0x000000003c397000) (954.34 MiB)
+Free                : [0xffff800000941000, 0xffff80003c397000) -> [0x0000000000941000, 0x000000003c397000) (954.34 MiB)
+KImage              : [0x000000003c397000, 0x000000003d200000) -> [0x000000003c397000, 0x000000003d200000) (14.41 MiB)
+KImage              : [0xffff80003c397000, 0xffff80003d200000) -> [0x000000003c397000, 0x000000003d200000) (14.41 MiB)
+Free                : [0x000000003d200000, 0x000000003e93f000) -> [0x000000003d200000, 0x000000003e93f000) (23.25 MiB)
+Free                : [0xffff80003d200000, 0xffff80003e93f000) -> [0x000000003d200000, 0x000000003e93f000) (23.25 MiB)
+Reserved            : [0x000000003e93f000, 0x000000003ea00000) -> [0x000000003e93f000, 0x000000003ea00000) (772 KiB)
+Reserved            : [0xffff80003e93f000, 0xffff80003ea00000) -> [0x000000003e93f000, 0x000000003ea00000) (772 KiB)
+Free                : [0x000000003ea00000, 0x000000003f4ed000) -> [0x000000003ea00000, 0x000000003f4ed000) (10.93 MiB)
+Free                : [0xffff80003ea00000, 0xffff80003f4ed000) -> [0x000000003ea00000, 0x000000003f4ed000) (10.93 MiB)
+Reserved            : [0x000000003f4ed000, 0x000000003f7ff000) -> [0x000000003f4ed000, 0x000000003f7ff000) (3.07 MiB)
+Reserved            : [0xffff80003f4ed000, 0xffff80003f7ff000) -> [0x000000003f4ed000, 0x000000003f7ff000) (3.07 MiB)
+Free                : [0x000000003f7ff000, 0x000000003fec1000) -> [0x000000003f7ff000, 0x000000003fec1000) (6.76 MiB)
+Free                : [0xffff80003f7ff000, 0xffff80003fec1000) -> [0x000000003f7ff000, 0x000000003fec1000) (6.76 MiB)
+Reserved            : [0x000000003fec1000, 0x000000003fec7000) -> [0x000000003fec1000, 0x000000003fec7000) (24 KiB)
+Reserved            : [0xffff80003fec1000, 0xffff80003fec7000) -> [0x000000003fec1000, 0x000000003fec7000) (24 KiB)
+Free                : [0x000000003fec7000, 0x000000003fef4000) -> [0x000000003fec7000, 0x000000003fef4000) (180 KiB)
+Free                : [0xffff80003fec7000, 0xffff80003fef4000) -> [0x000000003fec7000, 0x000000003fef4000) (180 KiB)
+Reserved            : [0x000000003fef4000, 0x0000000040000000) -> [0x000000003fef4000, 0x0000000040000000) (1.05 MiB)
+Reserved            : [0xffff80003fef4000, 0xffff800040000000) -> [0x000000003fef4000, 0x0000000040000000) (1.05 MiB)
+Reserved            : [0x00000000e0000000, 0x00000000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Reserved            : [0xffff8000e0000000, 0xffff8000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Mmio                : [0x00000000ffc00000, 0x0000000100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Mmio                : [0xffff8000ffc00000, 0xffff800100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Reserved            : [0x000000fd00000000, 0x0000010000000000) -> [0x000000fd00000000, 0x0000010000000000) (12 GiB)
+Reserved            : [0xffff80fd00000000, 0xffff810000000000) -> [0x000000fd00000000, 0x0000010000000000) (12 GiB)
+PerCpu              : [0x0000000000900000, 0x0000000000941000) -> [0x0000000000900000, 0x0000000000941000) (260 KiB)
+PerCpu              : [0xffff800000900000, 0xffff800000941000) -> [0x0000000000900000, 0x0000000000941000) (260 KiB)
+LAPIC               : [0x00000000fee00000, 0x00000000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+LAPIC               : [0xffff8000fee00000, 0xffff8000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+KImage              : [0xffffffff80000000, 0xffffffff81000000) -> [0x000000003c397000, 0x000000003d397000) (16 MiB)
+PerCpu              : [0xffffff0000900000, 0xffffff0000941000) -> [0x0000000000900000, 0x0000000000941000) (260 KiB)
+x86_64 switching CR3 and resetting relocations before high-half jump
+Trap vector at 0xffffffff80d9efe0
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  PerCPU 0x00000000900000 - 0x00000000941000 (260 KiB)
+  Rsv    0x00000000941000 - 0x0000000097f000 (248 KiB)
+  Free   0x0000000097f000 - 0x0000003c397000 (954.09 MiB)
+  KImg   0x0000003c397000 - 0x0000003d200000 (14.41 MiB)
+  Free   0x0000003d200000 - 0x0000003e93f000 (23.25 MiB)
+  Rsv    0x0000003e93f000 - 0x0000003ea00000 (772 KiB)
+  Free   0x0000003ea00000 - 0x0000003f4ed000 (10.93 MiB)
+  Rsv    0x0000003f4ed000 - 0x0000003f7ff000 (3.07 MiB)
+  Free   0x0000003f7ff000 - 0x0000003fec1000 (6.76 MiB)
+  Rsv    0x0000003fec1000 - 0x0000003fec7000 (24 KiB)
+  Free   0x0000003fec7000 - 0x0000003fef4000 (180 KiB)
+  Rsv    0x0000003fef4000 - 0x00000040000000 (1.05 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+  Rsv    0x0000fd00000000 - 0x00010000000000 (12 GiB)
+Jumping to main entry point at 0xffffffff8039cd60 with SP 0xffffff0000941000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = x86_64
+platform = x86_64-plat-dyn
+target = x86_64-unknown-none
+build_mode =
+log_level = warn
+backtrace = false
+smp = 1
+
+Boot at 2026-06-25 02:55:26.015674163 UTC
+
+[  2.399892 ax_fs_ng::block::runtime::device:1400] rdif filesystem block device virtio-blk falls back to polling without IRQ: AxErrorKind::Unsupported
+[  2.446154 ax_net::service:814] eth0: DHCP acquired address 10.0.2.15/24
+[  2.446340 ax_net::service:816] eth0: DHCP router 10.0.2.2
+Initialized 6 tracepoints
+kmod subsystem initialized
+Welcome to Starry OS!
+USER=root
+HOSTNAME=starry
+SHLVL=1
+HOME=/root
+TERM=xterm-256color
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/
+
+Use apk to install packages.
+
+root@starry:/root # /usr/bin/apache-runner.sh smoke
+APACHE_RUNNER_PHASE_BEGIN phase=smoke
+APACHE_RUNNER_LOG: BEGIN smoke
+APACHE_APP_LOG: BEGIN prepare packages
+APACHE_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+APACHE_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+APACHE_APP_STEP_PASS: prepare packages
+APACHE_APP_LOG: BEGIN prepare apache files
+APACHE_APP_STEP_PASS: prepare apache files
+APACHE_APP_LOG: BEGIN environment probe
+Server version: Apache/2.4.67 (Unix)
+Server built:   May  4 2026 20:39:29
+Server version: Apache/2.4.67 (Unix)
+Server built:   May  4 2026 20:39:29
+Server's Module Magic Number: 20120211:142
+Server loaded:  APR 1.7.6, APR-UTIL 1.6.3, PCRE 10.47 2025-10-21
+Compiled using: APR 1.7.6, APR-UTIL 1.6.3, PCRE 10.47 2025-10-21
+Architecture:   64-bit
+Server MPM:     prefork
+  threaded:     no
+    forked:     yes (variable process count)
+Server compiled with....
+ -D APR_HAS_SENDFILE
+ -D APR_HAS_MMAP
+ -D APR_HAVE_IPV6 (IPv4-mapped addresses enabled)
+ -D APR_USE_PROC_PTHREAD_SERIALIZE
+ -D APR_USE_PTHREAD_SERIALIZE
+ -D SINGLE_LISTEN_UNSERIALIZED_ACCEPT
+ -D APR_HAS_OTHER_CHILD
+ -D AP_HAVE_RELIABLE_PIPED_LOGS
+ -D DYNAMIC_MODULE_LIMIT=256
+ -D HTTPD_ROOT="/usr"
+ -D SUEXEC_BIN="/usr/sbin/suexec"
+ -D DEFAULT_PIDLOG="/run/apache2/httpd.pid"
+ -D DEFAULT_SCOREBOARD="logs/apache_runtime_status"
+ -D DEFAULT_ERRORLOG="logs/error_log"
+ -D AP_TYPES_CONFIG_FILE="/etc/apache2/mime.types"
+ -D SERVER_CONFIG_FILE="/etc/apache2/httpd.conf"
+Loaded Modules:
+ core_module (static)
+ so_module (static)
+ http_module (static)
+ mpm_prefork_module (shared)
+ authn_file_module (shared)
+ authn_core_module (shared)
+ authz_host_module (shared)
+ authz_groupfile_module (shared)
+ authz_user_module (shared)
+ authz_core_module (shared)
+ access_compat_module (shared)
+ auth_basic_module (shared)
+ reqtimeout_module (shared)
+ filter_module (shared)
+ mime_module (shared)
+ log_config_module (shared)
+ env_module (shared)
+ headers_module (shared)
+ setenvif_module (shared)
+ version_module (shared)
+ unixd_module (shared)
+ status_module (shared)
+ autoindex_module (shared)
+ dir_module (shared)
+ alias_module (shared)
+ negotiation_module (shared)
+total 0
+drwxr-xr-x 1 root root 0 Jan  1  1970 .
+drwxr-xr-x 1 root root 0 Jan  1  1970 ..
+lrw-rw-rw- 1 root root 0 Jan  1  1970 0 -> /dev/console
+lrw-rw-rw- 1 root root 0 Jan  1  1970 1 -> /dev/console
+lrw-rw-rw- 1 root root 0 Jan  1  1970 2 -> /dev/console
+lrw-rw-rw- 1 root root 0 Jan  1  1970 3 -> /proc/self/fd
+APACHE_APP_STEP_PASS: environment probe
+APACHE_APP_LOG: BEGIN apache config test
+Syntax OK
+APACHE_APP_STEP_PASS: apache config test
+APACHE_APP_LOG: BEGIN start apache single process
+APACHE_APP_STEP_PASS: start apache single process
+APACHE_APP_LOG: BEGIN GET /
+APACHE_APP_STEP_PASS: GET /
+APACHE_APP_LOG: BEGIN GET missing returns 404
+APACHE_APP_STEP_PASS: GET missing returns 404
+APACHE_APP_LOG: BEGIN HEAD /small.txt
+APACHE_APP_STEP_PASS: HEAD /small.txt
+APACHE_APP_LOG: BEGIN keepalive two requests
+APACHE_APP_STEP_PASS: keepalive two requests
+APACHE_APP_LOG: BEGIN logs written
+APACHE_APP_STEP_PASS: logs written
+APACHE_APP_LOG: BEGIN stop apache
+APACHE_APP_STEP_PASS: stop apache
+APACHE_APP_SMOKE_PASSED
+APACHE_RUNNER_PHASE_PASS phase=smoke
+APACHE_RUNNER_PASSED mode=smoke
+
+=== SUCCESS PATTERN MATCHED: (?m)^APACHE_RUNNER_PASSED\b ===
+                                                            root@starry:/root #
+✓ 已退出串口终端模式

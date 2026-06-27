@@ -1,0 +1,432 @@
+asta@Astalia:~/tgoskits/wt-test-alpine-nginx$ cargo xtask starry app qemu -t nginx --arch riscv64 --qemu-config apps/starry/nginx/qemu-riscv64-all.toml
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.40s
+     Running `target/debug/tg-xtask starry app qemu -t nginx --arch riscv64 --qemu-config apps/starry/nginx/qemu-riscv64-all.toml`
+[2026-06-17T13:20:11Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-test-alpine-nginx
+RUN     1/1     nginx   arch=riscv64
+file already exists and passed checksum verification
+image archive verified at /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/rootfs/rootfs-riscv64-alpine.img.tar.xz
+image already extracted and up to date at /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/rootfs/rootfs-riscv64-alpine.img
+cd /home/asta/tgoskits/wt-test-alpine-nginx/apps/starry/nginx && bash /home/asta/tgoskits/wt-test-alpine-nginx/apps/starry/nginx/prebuild.sh
+debugfs -w /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/rootfs/rootfs-riscv64-alpine.img/rootfs-riscv64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+debugfs:  mkdir /usr
+debugfs:  mkdir /usr/bin
+debugfs:  rm /usr/bin/nginx-all-tests.sh
+debugfs:  rm: File not found by ext2_lookup while trying to resolve filename
+write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-all-tests.sh /usr/bin/nginx-all-tests.sh
+Allocated inode: 4269
+debugfs:  sif /usr/bin/nginx-all-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-alpine-mirror.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-alpine-mirror.sh /usr/bin/nginx-alpine-mirror.sh
+Allocated inode: 4250
+debugfs:  sif /usr/bin/nginx-alpine-mirror.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-bad-method-debug.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-bad-method-debug.sh /usr/bin/nginx-bad-method-debug.sh
+Allocated inode: 4251
+debugfs:  sif /usr/bin/nginx-bad-method-debug.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-bad-method-matrix.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-bad-method-matrix.sh /usr/bin/nginx-bad-method-matrix.sh
+Allocated inode: 4252
+debugfs:  sif /usr/bin/nginx-bad-method-matrix.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase00-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase00-tests.sh /usr/bin/nginx-phase00-tests.sh
+Allocated inode: 4253
+debugfs:  sif /usr/bin/nginx-phase00-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase1-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase1-tests.sh /usr/bin/nginx-phase1-tests.sh
+Allocated inode: 4254
+debugfs:  sif /usr/bin/nginx-phase1-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase12-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase12-tests.sh /usr/bin/nginx-phase12-tests.sh
+Allocated inode: 4255
+debugfs:  sif /usr/bin/nginx-phase12-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase2-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase2-tests.sh /usr/bin/nginx-phase2-tests.sh
+Allocated inode: 4256
+debugfs:  sif /usr/bin/nginx-phase2-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase31-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase31-tests.sh /usr/bin/nginx-phase31-tests.sh
+Allocated inode: 4257
+debugfs:  sif /usr/bin/nginx-phase31-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase32-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase32-tests.sh /usr/bin/nginx-phase32-tests.sh
+Allocated inode: 4258
+debugfs:  sif /usr/bin/nginx-phase32-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase33-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase33-tests.sh /usr/bin/nginx-phase33-tests.sh
+Allocated inode: 4259
+debugfs:  sif /usr/bin/nginx-phase33-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase41-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase41-tests.sh /usr/bin/nginx-phase41-tests.sh
+Allocated inode: 4260
+debugfs:  sif /usr/bin/nginx-phase41-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase42-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase42-tests.sh /usr/bin/nginx-phase42-tests.sh
+Allocated inode: 4261
+debugfs:  sif /usr/bin/nginx-phase42-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase43-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase43-tests.sh /usr/bin/nginx-phase43-tests.sh
+Allocated inode: 4262
+debugfs:  sif /usr/bin/nginx-phase43-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase50-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase50-tests.sh /usr/bin/nginx-phase50-tests.sh
+Allocated inode: 4263
+debugfs:  sif /usr/bin/nginx-phase50-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase60-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase60-tests.sh /usr/bin/nginx-phase60-tests.sh
+Allocated inode: 4264
+debugfs:  sif /usr/bin/nginx-phase60-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase70-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase70-tests.sh /usr/bin/nginx-phase70-tests.sh
+Allocated inode: 4265
+debugfs:  sif /usr/bin/nginx-phase70-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-phase90-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-phase90-tests.sh /usr/bin/nginx-phase90-tests.sh
+Allocated inode: 4266
+debugfs:  sif /usr/bin/nginx-phase90-tests.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-sendfile-on-debug.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-sendfile-on-debug.sh /usr/bin/nginx-sendfile-on-debug.sh
+Allocated inode: 4267
+debugfs:  sif /usr/bin/nginx-sendfile-on-debug.sh mode 0100755
+debugfs:  rm /usr/bin/nginx-smoke-tests.sh
+
+debugfs:  write /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/starry-app/nginx/overlay/usr/bin/nginx-smoke-tests.sh /usr/bin/nginx-smoke-tests.sh
+Allocated inode: 4268
+debugfs:  sif /usr/bin/nginx-smoke-tests.sh mode 0100755
+debugfs:  quit
+file already exists and passed checksum verification
+image archive verified at /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/rootfs/rootfs-riscv64-alpine.img.tar.xz
+image already extracted and up to date at /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/rootfs/rootfs-riscv64-alpine.img
+Using build config: /home/asta/tgoskits/wt-test-alpine-nginx/apps/starry/nginx/build-riscv64gc-unknown-none-elf.toml
+[2026-06-17T13:20:13Z INFO  axbuild::build] Found build config at /home/asta/tgoskits/wt-test-alpine-nginx/apps/starry/nginx/build-riscv64gc-unknown-none-elf.toml
+[2026-06-17T13:20:13Z INFO  ostool::run::qemu] Using QEMU config file: apps/starry/nginx/qemu-riscv64-all.toml
+  prepare assets: 0ns (pipeline=plain, cache=miss)
+  qemu config: apps/starry/nginx/qemu-riscv64-all.toml (timeout=3600s)
+  rootfs: /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/rootfs/rootfs-riscv64-alpine.img/rootfs-riscv64-alpine.img
+sh -c /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/std/prebuild/prebuild-riscv64gc-unknown-linux-musl-f7d2edad7e2cbd4e.sh
+sh -c rm -f '/home/asta/tgoskits/wt-test-alpine-nginx/target/riscv64gc-unknown-none-elf/release/starryos' '/home/asta/tgoskits/wt-test-alpine-nginx/target/riscv64gc-unknown-none-elf/release/starryos.bin'
+AR_riscv64gc_unknown_linux_musl=riscv64-linux-musl-ar
+AX_ARCH=riscv64
+AX_LOG=warn
+AX_TARGET=riscv64gc-unknown-none-elf
+BINDGEN_EXTRA_CLANG_ARGS_riscv64gc_unknown_linux_musl=--target=riscv64-linux-musl --sysroot=/home/asta/musl/riscv64-linux-musl-cross/bin/../riscv64-linux-musl -march=rv64gc -mabi=lp64d -mcmodel=medany
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+CC_riscv64gc_unknown_linux_musl=riscv64-linux-musl-cc
+CFLAGS_riscv64gc_unknown_linux_musl=-march=rv64gc -mabi=lp64d -mcmodel=medany
+CXXFLAGS_riscv64gc_unknown_linux_musl=-march=rv64gc -mabi=lp64d -mcmodel=medany
+cargo build --config /home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/std/config-riscv64gc-unknown-linux-musl-dynamic.toml -p starryos --target scripts/targets/std/pie/riscv64gc-unknown-linux-musl.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-test-alpine-nginx/target --features ax-driver/serial,ax-std/rtc,ax-std/smp,ax-std/std-compat,ax-std/virtio-blk,ax-std/virtio-gpu,ax-std/virtio-input,ax-std/virtio-net,ax-std/virtio-socket,plat-dyn,smp,starry-kernel/input,plat-dyn -Z json-target-spec --bin starryos --release --message-format json-render-diagnostics
+    Finished `release` profile [optimized] target(s) in 0.31s
+sh -c sh '/home/asta/tgoskits/wt-test-alpine-nginx/scripts/axbuild/scripts/starry-kallsyms.sh'
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-test-alpine-nginx/target/riscv64gc-unknown-linux-musl/release/starryos
+  bin: /home/asta/tgoskits/wt-test-alpine-nginx/target/riscv64gc-unknown-linux-musl/release/starryos.bin
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-test-alpine-nginx/target/riscv64gc-unknown-linux-musl/release/starryos /home/asta/tgoskits/wt-test-alpine-nginx/target/riscv64gc-unknown-linux-musl/release/starryos.bin
+qemu-system-riscv64 -nographic -m 512M -cpu rv64 -device virtio-blk-pci,drive=disk0 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-test-alpine-nginx/tmp/axbuild/rootfs/rootfs-riscv64-alpine.img/rootfs-riscv64-alpine.img -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -snapshot -machine virt -kernel /home/asta/tgoskits/wt-test-alpine-nginx/target/riscv64gc-unknown-linux-musl/release/starryos.bin
+
+OpenSBI v1.7
+   ____                    _____ ____ _____
+  / __ \                  / ____|  _ \_   _|
+ | |  | |_ __   ___ _ __ | (___ | |_) || |
+ | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
+ | |__| | |_) |  __/ | | |____) | |_) || |_
+  \____/| .__/ \___|_| |_|_____/|____/_____|
+        | |
+        |_|
+
+Platform Name               : riscv-virtio,qemu
+Platform Features           : medeleg
+Platform HART Count         : 1
+Platform IPI Device         : aclint-mswi
+Platform Timer Device       : aclint-mtimer @ 10000000Hz
+Platform Console Device     : uart8250
+Platform HSM Device         : ---
+Platform PMU Device         : ---
+Platform Reboot Device      : syscon-reboot
+Platform Shutdown Device    : syscon-poweroff
+Platform Suspend Device     : ---
+Platform CPPC Device        : ---
+Firmware Base               : 0x80000000
+Firmware Size               : 317 KB
+Firmware RW Offset          : 0x40000
+Firmware RW Size            : 61 KB
+Firmware Heap Offset        : 0x46000
+Firmware Heap Size          : 37 KB (total), 2 KB (reserved), 11 KB (used), 23 KB (free)
+Firmware Scratch Size       : 4096 B (total), 1400 B (used), 2696 B (free)
+Runtime SBI Version         : 3.0
+Standard SBI Extensions     : time,rfnc,ipi,base,hsm,srst,pmu,dbcn,fwft,legacy,dbtr,sse
+Experimental SBI Extensions : none
+
+Domain0 Name                : root
+Domain0 Boot HART           : 0
+Domain0 HARTs               : 0*
+Domain0 Region00            : 0x0000000000100000-0x0000000000100fff M: (I,R,W) S/U: (R,W)
+Domain0 Region01            : 0x0000000010000000-0x0000000010000fff M: (I,R,W) S/U: (R,W)
+Domain0 Region02            : 0x0000000002000000-0x000000000200ffff M: (I,R,W) S/U: ()
+Domain0 Region03            : 0x0000000080040000-0x000000008004ffff M: (R,W) S/U: ()
+Domain0 Region04            : 0x0000000080000000-0x000000008003ffff M: (R,X) S/U: ()
+Domain0 Region05            : 0x000000000c400000-0x000000000c5fffff M: (I,R,W) S/U: (R,W)
+Domain0 Region06            : 0x000000000c000000-0x000000000c3fffff M: (I,R,W) S/U: (R,W)
+Domain0 Region07            : 0x0000000000000000-0xffffffffffffffff M: () S/U: (R,W,X)
+Domain0 Next Address        : 0x0000000080200000
+Domain0 Next Arg1           : 0x000000009fe00000
+Domain0 Next Mode           : S-mode
+Domain0 SysReset            : yes
+Domain0 SysSuspend          : yes
+
+Boot HART ID                : 0
+Boot HART Domain            : root
+Boot HART Priv Version      : v1.12
+Boot HART Base ISA          : rv64imafdch
+Boot HART ISA Extensions    : sstc,zicntr,zihpm,zicboz,zicbom,sdtrig,svadu
+Boot HART PMP Count         : 16
+Boot HART PMP Granularity   : 2 bits
+Boot HART PMP Address Bits  : 54
+Boot HART MHPM Info         : 16 (0x0007fff8)
+Boot HART Debug Triggers    : 2 triggers
+Boot HART MIDELEG           : 0x0000000000001666
+Boot HART MEDELEG           : 0x0000000000f4b509
+RISC-V64 SBI kernel entry.
+VM Load @0x80200000
+VM Load Offset: 0x100200000
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080050000 (320 KiB)
+  Free   0x00000080050000 - 0x00000080200000 (1.69 MiB)
+  KImg   0x00000080200000 - 0x00000081000000 (14 MiB)
+  Free   0x00000081000000 - 0x000000a0000000 (496 MiB)
+Initialize RAM allocator: 0x81000000..0xa0000000
+Initializing per-CPU data
+Per-CPU data one cpu size: 0x41000 bytes
+Total per-CPU data size for secondary CPUs: 0x41000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x81000000..0x81002000, current: 0x81002000
+Flushed RAM used range to memory map: 0x81002000..0x81043000, current: 0x81043000
+Per-CPU data allocated at 0x81002000 - 0x81043000
+Initializing per-CPU RAM for CPU0 - hard id 0x0 @ 0x81002000
+CPU0 - hard id 0x0, stack top @0x81043000, stack top virt @0xffffffe081043000, entry virt @0xffffffff802a3276
+Mapping early memory regions...
+Ram                 : [0x0000000080000000, 0x00000000a0000000) -> [0x0000000080000000, 0x00000000a0000000) (512 MiB)
+Ram                 : [0xffffffc080000000, 0xffffffc0a0000000) -> [0x0000000080000000, 0x00000000a0000000) (512 MiB)
+KImage              : [0xffffffff80000000, 0xffffffff80e00000) -> [0x0000000080200000, 0x0000000081000000) (14 MiB)
+PerCpu              : [0xffffffe081002000, 0xffffffe081043000) -> [0x0000000081002000, 0x0000000081043000) (260 KiB)
+Boot page table at physical address: 0x81043000
+MMU Entry point at physical address: 0x804a499e
+Enabling MMU...
+MMU enabled, jumping to 0xffffffff802a499e, sp=0xffffffe081043000
+Trap vector at 0xffffffff8029ea74
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080050000 (320 KiB)
+  Free   0x00000080050000 - 0x00000080200000 (1.69 MiB)
+  KImg   0x00000080200000 - 0x00000081000000 (14 MiB)
+  Rsv    0x00000081000000 - 0x00000081002000 (8 KiB)
+  PerCPU 0x00000081002000 - 0x00000081043000 (260 KiB)
+  Rsv    0x00000081043000 - 0x00000081250000 (2.05 MiB)
+  Free   0x00000081250000 - 0x000000a0000000 (493.69 MiB)
+Jumping to main entry point at 0xffffffff802996ec with SP 0xffffffe081043000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = riscv64
+platform = riscv64-plat-dyn
+target = riscv64gc-unknown-none-elf
+build_mode =
+log_level = warn
+backtrace = false
+smp = 1
+
+Boot at 2026-06-17 13:20:15.039391800 UTC
+
+Initialized 6 tracepoints
+kmod subsystem initialized
+[  0.326660 0:4 ax_net::service:401] eth0: DHCP acquired address 10.0.2.15/24
+[  0.327763 0:4 ax_net::service:403] eth0: DHCP router 10.0.2.2
+Welcome to Starry OS!
+USER=root
+HOSTNAME=starry
+SHLVL=1
+HOME=/root
+TERM=xterm-256color
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/
+
+Use apk to install packages.
+
+^[[<0;45;1M^[[<0;45;1mroot@starry:/root # /usr/bin/nginx-all-tests.sh
+NGINX_APP_LOG: BEGIN prepare packages
+NGINX_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+NGINX_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+NGINX_APP_STEP_PASS: prepare packages
+NGINX_APP_LOG: BEGIN prepare nginx files
+1024+0 records in
+1024+0 records out
+1048576 bytes (1.0MB) copied, 0.120313 seconds, 8.3MB/s
+NGINX_APP_STEP_PASS: prepare nginx files
+NGINX_APP_LOG: BEGIN environment probe
+nginx version: nginx/1.28.3
+nginx version: nginx/1.28.3
+built with OpenSSL 3.5.6 7 Apr 2026
+TLS SNI support enabled
+configure arguments: --prefix=/var/lib/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules --conf-path=/etc/nginx/nginx.conf --pid-path=/run/nginx/nginx.pid --lock-path=/run/nginx/nginx.lock --http-client-body-temp-path=/var/lib/nginx/tmp/client_body --http-proxy-temp-path=/var/lib/nginx/tmp/proxy --http-fastcgi-temp-path=/var/lib/nginx/tmp/fastcgi --http-uwsgi-temp-path=/var/lib/nginx/tmp/uwsgi --http-scgi-temp-path=/var/lib/nginx/tmp/scgi --with-perl_modules_path=/usr/lib/perl5/vendor_perl --user=nginx --group=nginx --with-threads --with-file-aio --with-compat --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_geoip_module=dynamic --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_slice_module --with-http_stub_status_module --with-http_perl_module=dynamic --with-mail=dynamic --with-mail_ssl_module --with-stream=dynamic --with-stream_ssl_module --with-stream_realip_module --with-stream_geoip_module=dynamic --with-stream_ssl_preread_module --add-dynamic-module=/home/buildozer/aports/main/nginx/src/njs-0.9.6/nginx --add-dynamic-module=/home/buildozer/aports/main/nginx/src/ngx_devel_kit-0.3.3/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/ngx_dynamic_healthcheck-1.3.8/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/ngx_dynamic_upstream-2.3.4/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/traffic-accounting-nginx-module-2.0/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/array-var-nginx-module-0.06/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx-auth-jwt-0.9.0/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/ngx_brotli-1.0.0rc/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/ngx_cache_purge-2.5.4/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx_cookie_flag_module-1.1.0/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx-dav-ext-module-3.0.0/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/echo-nginx-module-0.63/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/encrypted-session-nginx-module-0.09/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/ngx-fancyindex-0.5.2/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/ngx_http_geoip2_module-3.4/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/headers-more-nginx-module-0.39/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx-keyval-0.3.0/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx-log-zmq-1.0.0/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/naxsi-1.7/naxsi_src --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nchan-1.3.7/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/redis2-nginx-module-0.15/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/set-misc-nginx-module-0.33/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx-http-shibboleth-2.0.2/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/ngx_slowfs_cache-1.11/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/ngx_http_untar_module-1.1/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx-upload-module-2.3.0/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx-upload-progress-module-0.9.4/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx-upstream-fair-0.1.3/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx-vod-module-1.33/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx-module-vts-0.2.4/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/mod_zip-1.3.0/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/zstd-nginx-module-0.1.1/ --add-dynamic-module=/home/buildozer/aports/main/nginx/src/nginx-rtmp-module-1.2.2/
+total 0
+drwxr-xr-x    1 root     root             0 Jan  1  1970 .
+drwxr-xr-x    1 root     root             0 Jan  1  1970 ..
+lrw-rw-rw-    1 root     root             0 Jan  1  1970 0 -> /dev/console
+lrw-rw-rw-    1 root     root             0 Jan  1  1970 1 -> /dev/console
+lrw-rw-rw-    1 root     root             0 Jan  1  1970 2 -> /dev/console
+ls: /proc/self/fd/3: cannot read link: No such file or directory
+lrw-rw-rw-    1 root     root             0 Jan  1  1970 3
+NGINX_APP_STEP_PASS: environment probe
+NGINX_APP_LOG: BEGIN nginx config test
+nginx: the configuration file /tmp/nginx-tests/conf/single-worker.conf syntax is ok
+nginx: configuration file /tmp/nginx-tests/conf/single-worker.conf test is successful
+NGINX_APP_STEP_PASS: nginx config test
+NGINX_APP_LOG: BEGIN start nginx single process
+NGINX_APP_STEP_PASS: start nginx single process
+NGINX_APP_LOG: BEGIN GET /
+NGINX_APP_STEP_PASS: GET /
+NGINX_APP_LOG: BEGIN GET missing returns 404
+NGINX_APP_STEP_PASS: GET missing returns 404
+NGINX_APP_LOG: BEGIN HEAD /small.txt
+NGINX_APP_STEP_PASS: HEAD /small.txt
+NGINX_APP_LOG: BEGIN keepalive two requests
+NGINX_APP_STEP_PASS: keepalive two requests
+NGINX_APP_LOG: BEGIN logs written
+NGINX_APP_STEP_PASS: logs written
+NGINX_APP_LOG: BEGIN stop nginx
+[ 21.499288 0:61 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 21.499715 0:61 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 21.500165 0:61 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_APP_STEP_PASS: stop nginx
+NGINX_APP_LOG: BEGIN nginx master config test
+nginx: the configuration file /tmp/nginx-tests/conf/master-one-worker.conf syntax is ok
+nginx: configuration file /tmp/nginx-tests/conf/master-one-worker.conf test is successful
+NGINX_APP_STEP_PASS: nginx master config test
+NGINX_APP_LOG: BEGIN start nginx master one worker
+NGINX_APP_STEP_PASS: start nginx master one worker
+NGINX_APP_LOG: BEGIN master GET /
+NGINX_APP_STEP_PASS: master GET /
+NGINX_APP_LOG: BEGIN master reload
+[ 26.608552 0:82 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 26.608893 0:82 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 26.609182 0:82 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_APP_STEP_PASS: master reload
+NGINX_APP_LOG: BEGIN master quit
+[ 30.136149 0:86 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 30.136490 0:86 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 30.136802 0:86 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_APP_STEP_PASS: master quit
+NGINX_APP_LOG: BEGIN nginx sendfile config test
+nginx: the configuration file /tmp/nginx-tests/conf/sendfile.conf syntax is ok
+nginx: configuration file /tmp/nginx-tests/conf/sendfile.conf test is successful
+NGINX_APP_STEP_PASS: nginx sendfile config test
+NGINX_APP_LOG: BEGIN start nginx sendfile
+NGINX_APP_STEP_PASS: start nginx sendfile
+NGINX_APP_LOG: BEGIN range request
+NGINX_APP_STEP_PASS: range request
+NGINX_APP_LOG: BEGIN small POST
+NGINX_APP_STEP_PASS: small POST
+NGINX_APP_LOG: BEGIN too large POST known issue probe
+8+0 records in
+8+0 records out
+8192 bytes (8.0KB) copied, 0.001715 seconds, 4.6MB/s
+NGINX_APP_STEP_PASS: too large POST known issue probe
+NGINX_APP_LOG: BEGIN 20 short connections
+NGINX_APP_STEP_PASS: 20 short connections
+NGINX_APP_LOG: BEGIN stop nginx sendfile
+[ 50.765896 0:93 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 50.766231 0:93 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 50.766523 0:93 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_APP_STEP_PASS: stop nginx sendfile
+NGINX_APP_SMOKE_PASSED
+NGINX_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+NGINX_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+nginx: the configuration file /tmp/nginx-phase00/conf/rlimit.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase00/conf/rlimit.conf test is successful
+NGINX_PHASE00_LOG: rlimit_nofile_before=1024 after=1024
+NGINX_PHASE00_TEST_PASSED
+NGINX_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+NGINX_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+nginx: the configuration file /tmp/nginx-phase12/conf/master1.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase12/conf/master1.conf test is successful
+NGINX_PHASE12_LOG: phase1.2 nginx_proc_count_before_reload=2
+[ 72.441623 0:172 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 72.441975 0:172 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 72.442260 0:172 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_PHASE12_LOG: phase1.2 nginx_proc_count_after_reload=2
+[ 74.171976 0:178 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 74.172349 0:178 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 74.172654 0:178 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_PHASE12_TEST_PASSED
+NGINX_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+NGINX_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+nginx: the configuration file /tmp/nginx-phase1/conf/single.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase1/conf/single.conf test is successful
+[ 86.666061 0:218 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 86.666378 0:218 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 86.666662 0:218 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+nginx: the configuration file /tmp/nginx-phase1/conf/master1.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase1/conf/master1.conf test is successful
+[ 90.915880 0:230 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 90.916221 0:230 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 90.916505 0:230 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+nginx: the configuration file /tmp/nginx-phase1/conf/master2.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase1/conf/master2.conf test is successful
+NGINX_PHASE1_LOG: phase1.3 nginx_proc_count=3
+[ 96.611280 0:240 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 96.611645 0:240 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 96.611930 0:240 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+[ 96.618131 0:239 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 96.618489 0:239 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 96.618780 0:239 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_PHASE1_TEST_PASSED
+NGINX_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+NGINX_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+nginx: the configuration file /tmp/nginx-phase2/conf/http-basic.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase2/conf/http-basic.conf test is successful
+punt!
+Terminated
+NGINX_PHASE00_LOG: watchdog timeout
+sh: can't kill pid 125: No such process
+NGINX_PHASE2_LOG: KNOWN_ISSUE: BAD method raw request path unstable or blocked, status=<empty>
+[112.742823 0:276 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[112.743199 0:276 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[112.743496 0:276 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_PHASE2_TEST_PASSED
+NGINX_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+NGINX_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+nginx: the configuration file /tmp/nginx-phase31/conf/short-connection.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase31/conf/short-connection.conf test is successful
+NGINX_PHASE12_LOG: watchdog timeout
+sh: can't kill pid 146: No such process
+NGINX_PHASE1_LOG: watchdog timeout
+sh: can't kill pid 197: No such process
+NGINX_PHASE2_LOG: watchdog timeout
+sh: can't kill pid 257: No such process
+NGINX_PHASE31_LOG: watchdog timeout
+Terminated
+root@starry:/root # exit
+
+✓ 已退出串口终端模式

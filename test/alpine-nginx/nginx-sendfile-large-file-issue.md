@@ -145,7 +145,7 @@ NGINX_PHASE42_DEBUG_DONE
 - 默认 smoke：`apps/starry/nginx/smoke/nginx-smoke-tests.sh`
 - sendfile 专项脚本：`apps/starry/nginx/phase/nginx-4-2-sendfile-on-tests.sh`
 - debug 定位脚本：`apps/starry/nginx/debug/nginx-4-2-sendfile-on-debug.sh`
-- debug QEMU：`apps/starry/nginx/qemu-x86_64-sendfile-on-debug.toml`
+- debug QEMU：`apps/starry/nginx/qemu/debug/qemu-x86_64-sendfile-on-debug.toml`
 
 ## 影响范围
 

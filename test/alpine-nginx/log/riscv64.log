@@ -1,0 +1,134 @@
+ls: /proc/self/fd/3: cannot read link: No such file or directory
+lrw-rw-rw-    1 root     root             0 Jan  1  1970 3
+NGINX_APP_STEP_PASS: environment probe
+NGINX_APP_LOG: BEGIN nginx config test
+nginx: the configuration file /tmp/nginx-tests/conf/single-worker.conf syntax is ok
+nginx: configuration file /tmp/nginx-tests/conf/single-worker.conf test is successful
+NGINX_APP_STEP_PASS: nginx config test
+NGINX_APP_LOG: BEGIN start nginx single process
+NGINX_APP_STEP_PASS: start nginx single process
+NGINX_APP_LOG: BEGIN GET /
+NGINX_APP_STEP_PASS: GET /
+NGINX_APP_LOG: BEGIN GET missing returns 404
+NGINX_APP_STEP_PASS: GET missing returns 404
+NGINX_APP_LOG: BEGIN HEAD /small.txt
+NGINX_APP_STEP_PASS: HEAD /small.txt
+NGINX_APP_LOG: BEGIN keepalive two requests
+NGINX_APP_STEP_PASS: keepalive two requests
+NGINX_APP_LOG: BEGIN logs written
+NGINX_APP_STEP_PASS: logs written
+NGINX_APP_LOG: BEGIN stop nginx
+[ 29.157134 0:63 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 29.157598 0:63 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 29.158116 0:63 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_APP_STEP_PASS: stop nginx
+NGINX_APP_LOG: BEGIN nginx master config test
+nginx: the configuration file /tmp/nginx-tests/conf/master-one-worker.conf syntax is ok
+nginx: configuration file /tmp/nginx-tests/conf/master-one-worker.conf test is successful
+NGINX_APP_STEP_PASS: nginx master config test
+NGINX_APP_LOG: BEGIN start nginx master one worker
+NGINX_APP_STEP_PASS: start nginx master one worker
+NGINX_APP_LOG: BEGIN master GET /
+NGINX_APP_STEP_PASS: master GET /
+NGINX_APP_LOG: BEGIN master reload
+[ 34.396612 0:84 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 34.397133 0:84 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 34.397438 0:84 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_APP_STEP_PASS: master reload
+NGINX_APP_LOG: BEGIN master quit
+[ 38.066823 0:88 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 38.067297 0:88 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 38.067632 0:88 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_APP_STEP_PASS: master quit
+NGINX_APP_LOG: BEGIN nginx sendfile config test
+nginx: the configuration file /tmp/nginx-tests/conf/sendfile.conf syntax is ok
+nginx: configuration file /tmp/nginx-tests/conf/sendfile.conf test is successful
+NGINX_APP_STEP_PASS: nginx sendfile config test
+NGINX_APP_LOG: BEGIN start nginx sendfile
+NGINX_APP_STEP_PASS: start nginx sendfile
+NGINX_APP_LOG: BEGIN range request
+NGINX_APP_STEP_PASS: range request
+NGINX_APP_LOG: BEGIN small POST
+NGINX_APP_STEP_PASS: small POST
+NGINX_APP_LOG: BEGIN too large POST known issue probe
+8+0 records in
+8+0 records out
+8192 bytes (8.0KB) copied, 0.001870 seconds, 4.2MB/s
+NGINX_APP_STEP_PASS: too large POST known issue probe
+NGINX_APP_LOG: BEGIN 20 short connections
+NGINX_APP_STEP_PASS: 20 short connections
+NGINX_APP_LOG: BEGIN stop nginx sendfile
+[ 59.947084 0:95 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 59.947678 0:95 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 59.948415 0:95 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_APP_STEP_PASS: stop nginx sendfile
+NGINX_APP_SMOKE_PASSED
+NGINX_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+NGINX_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+nginx: the configuration file /tmp/nginx-phase00/conf/rlimit.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase00/conf/rlimit.conf test is successful
+NGINX_PHASE00_LOG: rlimit_nofile_before=1024 after=1024
+NGINX_PHASE00_TEST_PASSED
+NGINX_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+NGINX_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+nginx: the configuration file /tmp/nginx-phase12/conf/master1.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase12/conf/master1.conf test is successful
+NGINX_PHASE12_LOG: phase1.2 nginx_proc_count_before_reload=2
+[ 88.386825 0:174 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 88.387178 0:174 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 88.387482 0:174 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_PHASE12_LOG: phase1.2 nginx_proc_count_after_reload=2
+[ 90.498777 0:185 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[ 90.499164 0:185 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[ 90.499501 0:185 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_PHASE12_TEST_PASSED
+NGINX_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+NGINX_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+nginx: the configuration file /tmp/nginx-phase1/conf/single.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase1/conf/single.conf test is successful
+[104.416511 0:224 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[104.417040 0:224 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[104.417375 0:224 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+nginx: the configuration file /tmp/nginx-phase1/conf/master1.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase1/conf/master1.conf test is successful
+[110.971172 0:236 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[110.971543 0:236 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[110.971855 0:236 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+nginx: the configuration file /tmp/nginx-phase1/conf/master2.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase1/conf/master2.conf test is successful
+NGINX_PHASE1_LOG: phase1.3 nginx_proc_count=3
+[119.448138 0:250 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[119.448509 0:250 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[119.448847 0:250 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+[119.455712 0:249 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[119.456109 0:249 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[119.456439 0:249 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_PHASE1_TEST_PASSED
+NGINX_PHASE00_LOG: watchdog timeout
+sh: can't kill pid 127: No such process
+NGINX_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+NGINX_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+nginx: the configuration file /tmp/nginx-phase2/conf/http-basic.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase2/conf/http-basic.conf test is successful
+punt!
+Terminated
+NGINX_PHASE2_LOG: KNOWN_ISSUE: BAD method raw request path unstable or blocked, status=<empty>
+[138.431693 0:290 starry_kernel::syscall::fs::aio:1271] sys_io_destroy: cleared queue, inflight=0, pending=0
+[138.432068 0:290 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain
+[138.432387 0:290 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained
+NGINX_PHASE2_TEST_PASSED
+NGINX_APK_MIRROR_TRY: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23 attempt=1
+NGINX_APK_MIRROR_OK: https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.23
+nginx: the configuration file /tmp/nginx-phase31/conf/short-connection.conf syntax is ok
+nginx: configuration file /tmp/nginx-phase31/conf/short-connection.conf test is successful
+NGINX_PHASE12_LOG: watchdog timeout
+sh: can't kill pid 148: No such process
+NGINX_PHASE1_LOG: watchdog timeout
+sh: can't kill pid 203: No such process
+NGINX_PHASE31_TEST_FAILED
+                         === FAIL PATTERN MATCHED: (?m)^NGINX_.*_FAILED
+
+NGINX_PHASE31_LOG: 100 short connections
+root@starry:/root #
+✓ 已退出串口终端模式
+Error: Fail pattern matched '(?m)^NGINX_.*_FAILED': 7m[119.448509 0:250 starry_kernel::syscall::fs::aio:1281] sys_io_destroy: waiting for inflight to drain [119.448847 0:250 starry_kernel::syscall::fs::aio:1283] sys_io_destroy: all inflight drained [119.455712 0:249 starry_kernel::syscall::f...

@@ -1,0 +1,26 @@
+这轮基于当前 head `955a168ed64ca9a7748540b7451d5e2a95a7bd9e` 复审。之前缺少默认 `qemu-aarch64.toml` / `qemu-loongarch64.toml` 的阻塞问题已经修复，我已把对应旧 review threads 标记为 resolved；README 中 nginx 命令也已改成当前真实的 `starry app qemu` 接口。
+
+还需要修改后再合入。新的阻塞点是 nginx smoke 的 keepalive 成功判定仍然会吞掉真实失败：我在当前 head 运行 `cargo xtask starry app qemu -t nginx --arch x86_64`，QEMU 能启动并最终匹配 `NGINX_APP_SMOKE_PASSED`，但 keepalive 步骤输出了 `punt!` 后仍继续打印 `NGINX_APP_STEP_PASS: keepalive two requests`。这说明当前 smoke 可能在没有拿到有效 HTTP 响应时仍上报通过，不能作为 CI/app smoke 的可靠断言。
+
+当前 CI 也不是“全 skipped/cancelled”：`gh run view 27010279473 --json jobs` 显示 current head 上 `Test starry x86_64 qemu / run_container` 的 `Run command` 为 failure，其余多项是被取消；Actions 日志下载目前返回空或 blob 连接失败，所以不能用日志把这次失败证明为无关。即使不把这项 CI 单独作为结论，keepalive false-positive 已足够阻塞本 PR。
+
+已做检查：
+- `git diff --check origin/dev...HEAD`：通过。
+- `find apps/starry/nginx -name '*.sh' -print0 | xargs -0 -n1 sh -n`：通过。
+- `cargo xtask starry app qemu -t nginx --arch x86_64`：退出 0 并匹配 `NGINX_APP_SMOKE_PASSED`，但暴露 keepalive 步骤误判通过。
+- 旧 aarch64/loongarch64 默认配置线程已 resolve；`ZCShou`、`luodeb` reviewer 请求已存在，保留。
+
+重复/重叠分析：`origin/dev` 已有 #1014 的 nginx app 基础，本 PR是在其上扩展 phase/debug/smoke 场景，不是重复实现；当前 open PR 中 #1017/#1125/#1076 等也涉及 Starry app/rootfs 或自编译流程，但不在 `apps/starry/nginx` 上实现同一套测试，属于相邻风险面，不构成替代或重复。
+
+
+
+
+
+
+
+apps/starry/nginx/smoke/nginx-smoke-tests.sh:214-215
+
+
+【阻塞】这里已经选到了可用的 `nc`/`timeout` 并实际发起 keepalive 请求，后续如果 `keepalive.raw` 为空仍然 `return 0`，会把真实的连接/HTTP 响应失败当成通过。我在当前 head 本地跑 `cargo xtask starry app qemu -t nginx --arch x86_64` 时，keepalive 步骤输出了 `punt!`，但脚本仍打印 `NGINX_APP_STEP_PASS: keepalive two requests`，最后还匹配 `NGINX_APP_SMOKE_PASSED`。
+
+缺少工具时显式 skip 可以接受；但一旦已经运行请求，空输出、非 HTTP 响应或未拿到两个 `HTTP/1.1 200 OK` 都应该失败并打印原始输出/诊断。建议把这里改成 `[ -s "$OUT/keepalive.raw" ] || return 1`（或等价的显式 fail），并确保 smoke 只在真实收到两次 200 时通过。

@@ -1,0 +1,49 @@
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-all.toml
+cargo xtask starry app qemu -t nginx --arch riscv64 --qemu-config apps/starry/nginx/qemu-riscv64-all.toml
+cargo xtask starry app qemu -t nginx --arch aarch64 --qemu-config apps/starry/nginx/qemu-aarch64-all.toml
+cargo xtask starry app qemu -t nginx --arch loongarch64 --qemu-config apps/starry/nginx/qemu-loongarch64-all.toml
+
+
+
+# x86_64
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase0.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase1.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase1-2.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase1-3.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase2.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase31.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase32.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase33.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase41.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase42.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase43.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase5.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase6.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase7.toml
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-phase9.toml
+
+# riscv64
+cargo xtask starry app qemu -t nginx --arch riscv64 --qemu-config apps/starry/nginx/qemu-riscv64-phase1.toml
+cargo xtask starry app qemu -t nginx --arch riscv64 --qemu-config apps/starry/nginx/qemu-riscv64-phase1-2.toml
+cargo xtask starry app qemu -t nginx --arch riscv64 --qemu-config apps/starry/nginx/qemu-riscv64-phase1-3.toml
+cargo xtask starry app qemu -t nginx --arch riscv64 --qemu-config apps/starry/nginx/qemu-riscv64-phase2.toml
+cargo xtask starry app qemu -t nginx --arch riscv64 --qemu-config apps/starry/nginx/qemu-riscv64-phase31.toml
+cargo xtask starry app qemu -t nginx --arch riscv64 --qemu-config apps/starry/nginx/qemu-riscv64-phase32.toml
+
+# aarch64
+cargo xtask starry app qemu -t nginx --arch aarch64 --qemu-config apps/starry/nginx/qemu-aarch64-phase1-2.toml
+cargo xtask starry app qemu -t nginx --arch aarch64 --qemu-config apps/starry/nginx/qemu-aarch64-phase1-3.toml
+
+# loongarch64
+cargo xtask starry app qemu -t nginx --arch loongarch64 --qemu-config apps/starry/nginx/qemu-loongarch64-phase1-2.toml
+cargo xtask starry app qemu -t nginx --arch loongarch64 --qemu-config apps/starry/nginx/qemu-loongarch64-phase1-3.toml
+
+
+# all
+cargo xtask starry app qemu -t nginx --arch x86_64 --qemu-config apps/starry/nginx/qemu-x86_64-all.toml
+cargo xtask starry app qemu -t nginx --arch riscv64 --qemu-config apps/starry/nginx/qemu-riscv64-all.toml
+cargo xtask starry app qemu -t nginx --arch aarch64 --qemu-config apps/starry/nginx/qemu-aarch64-all.toml
+cargo xtask starry app qemu -t nginx --arch loongarch64 --qemu-config apps/starry/nginx/qemu-loongarch64-all.toml
+
+
+

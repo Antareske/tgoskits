@@ -6,8 +6,8 @@
 
 ## 与 nginx 经验的对齐
 
-- 采用 `apps/starry/apache` 作为 app 目录，建议拆为 `smoke/`、`phase/`、`debug/`、`stress/`。
-- `smoke/` 只保留全局入口验收，`phase/` 用于功能阶段迭代，`debug/` 保存单问题探针，`stress/` 单独管理压力测试。
+- 采用 `apps/starry/apache` 作为 app 目录，当前按 `runner/`、`smoke/`、`phase/`、`qemu/phase/`、`debug/`、`stress/` 分层组织。
+- `smoke/` 只保留全局入口验收，`phase/` 用于功能阶段迭代，`qemu/phase/` 保存手工复测入口，`debug/` 保存单问题探针，`stress/` 单独管理压力测试。
 - 每个 StarryOS 测试项执行前，必须先在 Linux Alpine 环境运行同一脚本或同等命令，确认测试本身正确；Linux 结果只作为对照，不代表 StarryOS 通过。
 - 每个脚本必须有短超时、watchdog、失败诊断和强制清理，避免 QEMU guest 被 httpd 残留进程污染。
 - 阻塞点记录为“Apache 场景 + 失败日志 + 疑似 syscall/语义 + Linux 对照 + 最小源码级复现”。
@@ -28,16 +28,25 @@ apps/starry/apache/
   prebuild.sh
   apache-alpine-mirror.sh
   apache-cli-tests.sh
+  runner/
   qemu-riscv64.toml
-  qemu-x86_64-phase*.toml
+  qemu/
+    all/
+    debug/
+    phase/
+      qemu-riscv64-phase20.toml
+      qemu-riscv64-phase30.toml
+      qemu-riscv64-phase40.toml
+      qemu-riscv64-phase50.toml
+      qemu-riscv64-phase55.toml
+      qemu-riscv64-phase70.toml
+      qemu-riscv64-phase80.toml
   smoke/apache-smoke-tests.sh
-  phase/apache-0-0-env-config-tests.sh
-  phase/apache-1-0-foreground-static-tests.sh
   phase/apache-2-0-mpm-prefork-tests.sh
   phase/apache-3-0-http-static-tests.sh
   phase/apache-4-0-directory-access-tests.sh
-  phase/apache-5-0-log-runtime-tests.sh
-  phase/apache-6-0-lifecycle-graceful-tests.sh
+  phase/apache-5-0-log-lifecycle-tests.sh
+  phase/apache-5-5-sendfile-range-tests.sh
   phase/apache-7-0-cgi-tests.sh
   phase/apache-8-0-module-feature-tests.sh
   debug/
@@ -150,7 +159,7 @@ Apache 的 StarryOS 修复重点应围绕 MPM，而不是照搬 nginx 的 worker
 - `wait4`、SIGCHLD、僵尸进程。
 - accept mutex 相关的 `fcntl/flock/pthread mutex` 或文件锁语义。
 
-当前落地脚本：`apps/starry/apache/phase/apache-2-0-mpm-prefork-tests.sh`，对应 StarryOS 入口 `qemu-riscv64-phase20.toml`。该脚本已完成 prefork 进程树、请求处理和 parent 回收验证。
+当前落地脚本：`apps/starry/apache/phase/apache-2-0-mpm-prefork-tests.sh`，对应 StarryOS 入口 `qemu/phase/qemu-riscv64-phase20.toml`。该脚本当前聚焦 prefork 启动、`/server-status?auto` 可读、请求处理和 clean stop；restart/lifecycle 语义移到阶段 6。
 
 ### 2.2 worker/event MPM（若 Alpine 构建支持）
 
@@ -209,7 +218,7 @@ Apache 的 StarryOS 修复重点应围绕 MPM，而不是照搬 nginx 的 worker
 - `AllowOverride All` 时 `.htaccess` 被读取并影响访问。
 - `Options FollowSymLinks` / 禁用 FollowSymLinks 的差异按 Linux 对照验证。
 
-当前落地脚本：`apps/starry/apache/phase/apache-4-0-directory-access-tests.sh`，对应 StarryOS 入口 `qemu-riscv64-phase40.toml`。该脚本已覆盖 autoindex、禁用 indexes、Alias、ErrorDocument、Require denied、`.htaccess` DirectoryIndex、FollowSymLinks on/off。
+当前落地脚本：`apps/starry/apache/phase/apache-4-0-directory-access-tests.sh`，对应 StarryOS 入口 `qemu/phase/qemu-riscv64-phase40.toml`。该脚本已覆盖 autoindex、禁用 indexes、Alias、ErrorDocument、Require denied、`.htaccess` DirectoryIndex、FollowSymLinks on/off。
 
 重点暴露：
 
@@ -235,7 +244,7 @@ Apache 配置项不同于 nginx，应显式测试：
 - `lseek/pread/stat`。
 - 时间戳精度和 HTTP date 格式。
 
-当前落地脚本：`apps/starry/apache/phase/apache-5-5-sendfile-range-tests.sh`，对应 StarryOS 入口 `qemu-riscv64-phase55.toml`。该脚本已覆盖 sendfile off/on、1MiB 大文件一致性、Range 三种形式、以及 `If-Modified-Since` / `ETag` / `Last-Modified`。
+当前落地脚本：`apps/starry/apache/phase/apache-5-5-sendfile-range-tests.sh`，对应 StarryOS 入口 `qemu/phase/qemu-riscv64-phase55.toml`。该脚本已覆盖 sendfile off/on、1MiB 大文件一致性、Range 三种形式、以及 `If-Modified-Since` / `ETag` / `Last-Modified`。
 
 ## 阶段 6：日志、runtime 文件和 graceful 生命周期
 
@@ -256,7 +265,7 @@ Apache 配置项不同于 nginx，应显式测试：
 - signal mask、pending signal、SIGUSR1/SIGHUP/SIGTERM/SIGCHLD。
 - parent/child fd 生命周期。
 
-当前落地脚本：`apps/starry/apache/phase/apache-5-0-log-lifecycle-tests.sh`，对应 StarryOS 入口 `qemu-riscv64-phase50.toml`。该脚本已覆盖 access log 增长、PidFile、USR1 graceful reopen、HUP restart、SIGTERM stop 和 log rotate 重开。
+当前落地脚本：`apps/starry/apache/phase/apache-5-0-log-lifecycle-tests.sh`，对应 StarryOS 入口 `qemu/phase/qemu-riscv64-phase50.toml`。该脚本覆盖 access log 增长、PidFile、USR1 graceful reopen、HUP restart、SIGTERM stop 和 log rotate 重开；其中 restart 语义不再放在阶段 2。
 
 ## 阶段 7：请求体、CGI 和动态执行路径
 
@@ -278,7 +287,7 @@ Apache 可以用 CGI 覆盖 nginx 静态测试没有覆盖到的 exec 和管道�
 - request body 读取、临时文件。
 - 环境变量和 argv 构造。
 
-当前落地脚本：`apps/starry/apache/phase/apache-7-0-cgi-tests.sh`，对应 StarryOS 入口 `qemu-riscv64-phase70.toml`。该脚本已覆盖 CGI 请求体回显、GET/POST 环境变量、4096B 大 POST、8192B 限制下的 413，以及 CGI 异常退出的 500 行为。
+当前落地脚本：`apps/starry/apache/phase/apache-7-0-cgi-tests.sh`，对应 StarryOS 入口 `qemu/phase/qemu-riscv64-phase70.toml`。该脚本已覆盖 CGI 请求体回显、GET/POST 环境变量、4096B 大 POST、8192B 限制下的 413，以及 CGI 异常退出的 500 行为。
 
 ## 阶段 8：模块特性扩展
 
@@ -294,7 +303,7 @@ Apache 可以用 CGI 覆盖 nginx 静态测试没有覆盖到的 exec 和管道�
 - `mod_rewrite`：简单 rewrite 和 redirect。
 - name-based virtual host：`Host` header 选择不同 DocumentRoot。
 
-当前落地脚本：`apps/starry/apache/phase/apache-8-0-module-feature-tests.sh`，对应 StarryOS 入口 `qemu-riscv64-phase80.toml`。该脚本已覆盖 `mod_mime`、`mod_status`、`mod_deflate`、`mod_rewrite` 和 name-based vhost；`mod_alias` / `mod_autoindex` 已在 phase4 中通过 Apache 目录规则覆盖。
+当前落地脚本：`apps/starry/apache/phase/apache-8-0-module-feature-tests.sh`，对应 StarryOS 入口 `qemu/phase/qemu-riscv64-phase80.toml`。该脚本已覆盖 `mod_mime`、`mod_status`、`mod_deflate`、`mod_rewrite` 和 name-based vhost；`mod_alias` / `mod_autoindex` 已在 phase4 中通过 Apache 目录规则覆盖。
 
 延后项：
 
@@ -330,13 +339,13 @@ Apache 可以用 CGI 覆盖 nginx 静态测试没有覆盖到的 exec 和管道�
 成功标记建议：
 
 ```text
-APACHE_APP_SMOKE_PASSED
+APACHE_RUNNER_PASSED mode=smoke
 ```
 
 失败标记建议：
 
 ```text
-APACHE_APP_SMOKE_FAILED
+APACHE_RUNNER_FAILED
 ```
 
 ## 推荐执行顺序
@@ -358,6 +367,7 @@ APACHE_APP_SMOKE_FAILED
 优先沉淀的 StarryOS 语义类别：
 
 - `bug-apache-mpm-prefork-wait`：prefork 子进程、SIGCHLD、wait4。
+- `bug-apache-phase20-prefork-readiness`：phase20 readiness overspecification、server-status 可读性、clean stop。
 - `bug-apache-mpm-thread-futex`：worker/event 线程、futex、线程退出。
 - `bug-apache-accept-mutex`：accept mutex、文件锁或 pthread mutex。
 - `bug-apache-htaccess-pathwalk`：逐级目录查找、权限和 symlink。

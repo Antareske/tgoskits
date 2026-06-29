@@ -3,10 +3,10 @@
 > 目标：系统梳理 StarryOS（`net/ax-net` + `drivers/net` + smoltcp）的网络实现，定位制约
 > 单核 / 多核吞吐与稳定性的瓶颈，给出追赶 Linux 的可执行工作项。
 >
-> 本分析基于最新 dev 分支（commit 6a857920，`ax-net 0.7.3`，smoltcp 0.13.1）。
+> 本分析基于当前 dev 分支状态（`ax-net`，smoltcp 0.13.1）。
 > 所有结论均标注了对应源码位置，便于复核。
 >
-> **更新说明**：标注"✅ 已完成"的项目已在最近的 dev 分支中完成；其余为待推进项。
+> **更新说明**：标注"✅ 已完成"的项目已在 dev 分支中完成；其余为待推进项。
 
 ---
 
@@ -19,7 +19,7 @@
 ax-net socket 层   tcp.rs / udp.rs / raw.rs / unix / vsock
    │  通过 request_poll() 请求协议推进
    ▼
-专属 net-poll worker ← ✅ 已完成 (#1340)
+专属 net-poll worker ← ✅ 已完成
    │  驱动 Interface.poll
    ▼
 全局服务 SERVICE: Once<Mutex<Service>>
@@ -30,7 +30,7 @@ smoltcp Interface.poll(timestamp, &mut Router, &mut SocketSet)
    │
    ▼
 Router (phy::Device)   单一 rx_buffer / tx_buffer（各 64 包）
-   │  多接口支持、per-interface 路由 ← ✅ 已完成 (#1244)
+   │  多接口支持、per-interface 路由 ← ✅ 已完成
    ▼
 EthernetDevice   ARP/neighbor、pending_packets，SpinNoIrq<Box<dyn EthernetDriver>>
    │
@@ -45,9 +45,9 @@ virtio-net / e1000 / ixgbe / realtek / fxmac
 
 - `SERVICE: Once<Mutex<Service>>`：整个协议栈一把锁。
 - `SOCKET_SET: Mutex<SocketSet>`：所有 socket 一把锁。
-- `LISTEN_TABLE: LazyLock<ListenTable>`：HashMap 索引监听端口 ← ✅ 已优化 (#1340)。
+- `LISTEN_TABLE: LazyLock<ListenTable>`：HashMap 索引监听端口 ← ✅ 已优化。
 - 专属 net-poll worker：通过 `NET_POLL_REQUESTED` / `NET_POLL_WAKE` 解耦数据面 ← ✅ 已完成。
-- `DEFERRED_POLL_WAKES`：延迟 PollSet 通知，避免在持锁时触发 waker ← ✅ 已完成 (#1340)。
+- `DEFERRED_POLL_WAKES`：延迟 PollSet 通知，避免在持锁时触发 waker ← ✅ 已完成。
 
 **核心判断：当前实现已从"同步内联 poll"演进为"异步 poll worker + deferred waker"模型。** 
 poll 模型重构解决了 syscall 路径与协议推进的解耦问题，但数据面仍存在全局大锁、4+ 次拷贝、
@@ -98,11 +98,11 @@ virtio 还会再加一层 staging 拷贝（`drivers/ax-driver/src/virtio/net.rs:
 
 ### 2.3 poll 模型（✅ 已大幅改善，但仍有优化空间）
 
-**✅ 已完成（#1340, #1278）：**
+**✅ 已完成：**
 - 引入专属 net-poll worker，socket 方法通过 `request_poll()` + waker 异步推进协议栈。
 - `DEFERRED_POLL_WAKES` 机制避免在持锁时触发 waker，防止 PollSet 唤醒死锁。
 - 数据面与 syscall 路径解耦，不再每个 `send`/`recv` 都内联驱动整栈。
-- IRQ-safe 延迟通知支持 (#1278)，保证中断上下文安全。
+- IRQ-safe 延迟通知支持，保证中断上下文安全。
 
 **仍需优化：**
 - 缺少 NAPI/softirq 风格的 budget 轮询与中断合并，中断频率仍较高。
@@ -142,7 +142,7 @@ virtio staging 每包分配；ARP pending 重排时 `buf.to_vec()`（`ethernet.r
 
 **✅ 已改善：**
 - poll 模型重构后，数据面不再由每个 syscall 内联驱动，减少了锁持有时间。
-- `LISTEN_TABLE` 改为 HashMap 索引 (#1340)，端口查找不再线性扫描 65536 个槽位。
+- `LISTEN_TABLE` 改为 HashMap 索引，端口查找不再线性扫描 65536 个槽位。
 
 **仍待解决：**
 - `SERVICE: Mutex<Service>`：任何收发、ARP、路由、DHCP 都要拿这把锁。
@@ -167,7 +167,7 @@ per-CPU 内存池，使吞吐近似随核数线性扩展。
 ### 3.2 端口分配的全局争用（部分已改善）
 
 **✅ 已改善：**
-- `LISTEN_TABLE` 改为 HashMap (#1340)，按端口哈希索引，不再遍历 65536 个数组槽位。
+- `LISTEN_TABLE` 改为 HashMap，按端口哈希索引，不再遍历 65536 个数组槽位。
 
 **仍需优化：**
 - `get_ephemeral_port` 单把 `Mutex<u16>` + 线性扫描（`tcp.rs` 类似位置）。
@@ -178,7 +178,7 @@ per-CPU 内存池，使吞吐近似随核数线性扩展。
 
 ### 3.3 waker 机制（✅ 已优化）
 
-**✅ 已完成 (#1340)：**
+**✅ 已完成：**
 - `DEFERRED_POLL_WAKES` 机制避免在持 SOCKET_SET 锁时直接触发 PollSet waker。
 - waker 延迟到 net-poll worker 外层循环统一处理，避免重入和死锁。
 - 统一 deferred waker 设计，替代了旧的 `Service::register_waker` 频繁分配。
@@ -247,10 +247,10 @@ per-CPU 内存池，使吞吐近似随核数线性扩展。
 ### 阶段一：稳定性与低风险加速（改动局部、收益确定）—— 约 40% 完成
 
 **✅ 已完成：**
-- poll 模型重构：专属 net-poll worker、数据面与 syscall 解耦、deferred waker (#1340, #1278)
-- listen_table 优化：HashMap 索引替代线性扫描 (#1340)
-- 多接口支持：per-interface 路由、环回快速路径 (#1244)
-- 并发文档：878 行锁顺序与竞态说明 (#1340)
+- poll 模型重构：专属 net-poll worker、数据面与 syscall 解耦、deferred waker
+- listen_table 优化：HashMap 索引替代线性扫描
+- 多接口支持：per-interface 路由、环回快速路径
+- 并发文档：878 行锁顺序与竞态说明
 
 **待推进：**
 1. 清除数据面所有 `panic/expect/unwrap`，改为丢包 + 计数。（第 4 节表格）

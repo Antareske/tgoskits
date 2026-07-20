@@ -34,6 +34,13 @@ import re
 import sys
 from dataclasses import dataclass, field
 
+from constants import (  # noqa: E402 — shared with compare-baseline.py
+    TEST_LABELS,
+    TEST_ORDER,
+    _REVERSE_TEST_IDS,
+    format_bytes,
+)
+
 BEGIN_RE = re.compile(
     r"^NET_BENCH_BEGIN\s+test=(\S+)\s+iter=(\d+)\s+warmup=([01])\s*$"
 )
@@ -49,20 +56,6 @@ NETSTATS_END_RE = re.compile(r"^NET_STATS_END\s*$")
 # Relative stddev (stddev/mean) above this fraction is flagged as noisy.
 NOISE_THRESHOLD = 0.10
 
-# Human-friendly descriptions, also fixes report ordering.
-TEST_ORDER = ["tcp1", "tcp4", "tcp1r", "udp1g", "udp64"]
-TEST_LABELS = {
-    "tcp1": "TCP 1-stream (uplink)",
-    "tcp4": "TCP 4-stream (uplink)",
-    "tcp1r": "TCP 1-stream (reverse/downlink)",
-    "udp1g": "UDP 1G target (large packets)",
-    "udp64": "UDP 64B small-packet PPS",
-}
-
-# Test IDs whose traffic direction is reverse (downlink: host -> guest).
-# Used for protocol-overhead direction attribution.
-_REVERSE_TEST_IDS: frozenset[str] = frozenset({"tcp1r"})
-
 
 @dataclass
 class Sample:
@@ -71,6 +64,7 @@ class Sample:
     mbps: float
     pps: float | None = None
     lost_percent: float | None = None
+    jitter_ms: float | None = None  # UDP jitter from iperf3 end.sum.jitter_ms
     retransmits: int | None = None
     app_bytes: int = 0  # application-layer bytes from iperf3 sum_received/sum
 
@@ -104,6 +98,10 @@ def _extract_metric(doc: dict) -> Sample:
         pps = float(packets) / seconds
     if "lost_percent" in summary:
         lost_percent = float(summary["lost_percent"])
+    # UDP jitter (ms) — present in iperf3 -u JSON end.sum.jitter_ms.
+    jitter_ms = None
+    if "jitter_ms" in summary:
+        jitter_ms = float(summary["jitter_ms"])
     if "retransmits" in summary:
         retransmits = int(summary["retransmits"])
     # TCP retransmits also appear under sum_sent.
@@ -111,7 +109,8 @@ def _extract_metric(doc: dict) -> Sample:
         retransmits = int(end["sum_sent"]["retransmits"])
 
     return Sample(
-        mbps=mbps, pps=pps, lost_percent=lost_percent, retransmits=retransmits,
+        mbps=mbps, pps=pps, lost_percent=lost_percent, jitter_ms=jitter_ms,
+        retransmits=retransmits,
         app_bytes=app_bytes,
     )
 
@@ -127,6 +126,7 @@ class NetDevSnapshot:
 
     interfaces: dict[str, dict[str, int]] = field(default_factory=dict)
     warmup: bool = False  # True if this snapshot belongs to a warmup iteration
+    test_id: str = "unknown"  # test identifier from nearest NET_BENCH_BEGIN
 
 
 # /proc/net/dev row parser: extracts interface name + 16 column values.
@@ -161,19 +161,34 @@ def _parse_proc_net_dev_line(line: str) -> tuple[str, dict[str, int]]:
 
 
 def parse_netstats(text: str) -> list[NetDevSnapshot]:
-    """Extract NET_STATS_BEGIN/END blocks containing /proc/net/dev output."""
+    """Extract NET_STATS_BEGIN/END blocks containing /proc/net/dev output.
+
+    Each snapshot is tagged with the active test_id from the nearest preceding
+    NET_BENCH_BEGIN marker so that per-test L2 deltas can be computed.
+    """
     snapshots: list[NetDevSnapshot] = []
     lines = text.splitlines()
     i = 0
     skipped_lines = 0
+    empty_blocks = 0
+    current_test_id = "unknown"
     while i < len(lines):
-        m = NETSTATS_BEGIN_RE.match(lines[i])
+        line = lines[i]
+
+        # Track test context from NET_BENCH_BEGIN markers.
+        begin_m = BEGIN_RE.match(line)
+        if begin_m:
+            current_test_id = begin_m.group(1)
+            i += 1
+            continue
+
+        m = NETSTATS_BEGIN_RE.match(line)
         if not m:
             i += 1
             continue
         warmup = m.group(1) == "1"
         i += 1
-        snap = NetDevSnapshot(warmup=warmup)
+        snap = NetDevSnapshot(warmup=warmup, test_id=current_test_id)
         while i < len(lines) and not NETSTATS_END_RE.match(lines[i]):
             if _NETDEV_HEADER_RE.match(lines[i]):
                 i += 1
@@ -188,6 +203,15 @@ def parse_netstats(text: str) -> list[NetDevSnapshot]:
             i += 1  # consume END
         if snap.interfaces:
             snapshots.append(snap)
+        else:
+            empty_blocks += 1
+    if empty_blocks:
+        print(
+            f"warning: {empty_blocks} NET_STATS block(s) contained no "
+            f"parseable /proc/net/dev rows — snapshot pairing may be affected "
+            f"if gaps exist",
+            file=sys.stderr,
+        )
     if skipped_lines:
         print(
             f"warning: skipped {skipped_lines} unparseable line(s) "
@@ -195,17 +219,6 @@ def parse_netstats(text: str) -> list[NetDevSnapshot]:
             file=sys.stderr,
         )
     return snapshots
-
-
-def _fmt_bytes(n: int) -> str:
-    """Format a byte count in human-readable form."""
-    if n >= 1 << 30:
-        return f"{n / (1 << 30):.2f} GB"
-    if n >= 1 << 20:
-        return f"{n / (1 << 20):.2f} MB"
-    if n >= 1 << 10:
-        return f"{n / (1 << 10):.2f} KB"
-    return f"{n} B"
 
 
 def _netdev_delta(
@@ -245,15 +258,34 @@ def _pair_deltas(
 ) -> tuple[list[dict[str, dict[str, int]]], int, int]:
     """Pair consecutive snapshots and return (deltas, tx_total, rx_total).
 
-    When *skip_warmup* is True, snapshot pairs whose `before` snapshot
+    When *skip_warmup* is True, snapshot pairs whose ``before`` snapshot
     is tagged warmup are excluded so protocol-overhead analysis only
     compares measured-iteration L2 traffic against application-layer bytes.
+
+    Pairing invariant: consecutive snapshots at (j, j+1) must share the
+    same ``warmup`` flag and ``test_id``.  A mismatch indicates a dropped
+    or reordered snapshot and produces a loud assertion failure so the
+    user can investigate rather than getting silently wrong deltas.
     """
+    if len(snapshots) % 2 != 0:
+        print(
+            f"warning: odd number of NET_STATS snapshots ({len(snapshots)}), "
+            f"last snapshot will be ignored",
+            file=sys.stderr,
+        )
     deltas: list[dict[str, dict[str, int]]] = []
     tx_total = 0
     rx_total = 0
     for j in range(0, len(snapshots) - 1, 2):
         before, after = snapshots[j], snapshots[j + 1]
+        assert before.warmup == after.warmup, (
+            f"warmup mismatch in snapshot pair ({j}, {j+1}): "
+            f"{before.warmup} != {after.warmup}"
+        )
+        assert before.test_id == after.test_id, (
+            f"test_id mismatch in snapshot pair ({j}, {j+1}): "
+            f"{before.test_id!r} != {after.test_id!r}"
+        )
         if skip_warmup and before.warmup:
             continue
         d = _netdev_delta(before, after)
@@ -265,36 +297,160 @@ def _pair_deltas(
     return deltas, tx_total, rx_total
 
 
-def render_netstats(snapshots: list[NetDevSnapshot]) -> str:
-    """Render /proc/net/dev L2 counter deltas across all measured iterations.
+def _compute_per_test_breakdown(
+    snapshots: list[NetDevSnapshot],
+) -> dict[str, dict[str, dict[str, int]]]:
+    """Group consecutive paired-snapshot deltas by test_id.
 
-    Consecutive snapshots are paired (before, after) and accumulated.
-    Warmup-tagged snapshots are excluded.
+    Returns ``{test_id: {iface: {field: delta}}}`` where deltas from measured
+    (non-warmup) iterations are summed per test and per interface.  Warmup
+    pairs whose *before* snapshot is tagged ``warmup=True`` are excluded.
+    """
+    breakdown: dict[str, dict[str, dict[str, int]]] = {}
+    for j in range(0, len(snapshots) - 1, 2):
+        before, after = snapshots[j], snapshots[j + 1]
+        # Paired snapshots must agree on warmup status and test identity.
+        # A mismatch means a snapshot was dropped or reordered.
+        assert before.warmup == after.warmup, (
+            f"warmup mismatch in per-test pair ({j}, {j+1}): "
+            f"{before.warmup} != {after.warmup}"
+        )
+        assert before.test_id == after.test_id, (
+            f"test_id mismatch in per-test pair ({j}, {j+1}): "
+            f"{before.test_id!r} != {after.test_id!r}"
+        )
+        if before.warmup:
+            continue
+        d = _netdev_delta(before, after)
+        if not d:
+            continue
+        tid = before.test_id
+        if tid not in breakdown:
+            breakdown[tid] = {}
+        for iface, fields in d.items():
+            if iface not in breakdown[tid]:
+                breakdown[tid][iface] = {k: 0 for k in _IFACE_FIELDS}
+            for k, v in fields.items():
+                breakdown[tid][iface][k] += v
+    return breakdown
+
+
+def _fmt_rate(part: int, total: int) -> str:
+    """Format a part/total fraction as a percentage or ratio."""
+    if total == 0:
+        return "—" if part == 0 else f"{part}/0"
+    pct = part / total * 100
+    if pct < 0.01:
+        return "<0.01%"
+    if pct < 1:
+        return f"{pct:.2f}%"
+    return f"{pct:.1f}%"
+
+
+def render_netstats(snapshots: list[NetDevSnapshot]) -> str:
+    """Render /proc/net/dev L2 counter deltas with per-test breakdown.
+
+    Consecutive snapshots are paired (before, after).  Warmup-tagged pairs
+    are excluded.  Output includes a per-test table showing what each test
+    contributed to each interface, plus aggregate totals with error/drop
+    rates.
     """
     if len(snapshots) < 2:
         return ""
+
+    # ---- aggregate totals ------------------------------------------------
     deltas, _, _ = _pair_deltas(snapshots, skip_warmup=True)
     if not deltas:
         return ""
-    total = _sum_deltas(deltas)
-    out = ["## /proc/net/dev (kernel interface counters)"]
-    for iface in sorted(total.keys()):
-        f = total[iface]
-        tx_b = f.get("tx_bytes", 0)
-        rx_b = f.get("rx_bytes", 0)
-        tx_p = f.get("tx_packets", 0)
-        rx_p = f.get("rx_packets", 0)
-        tx_e = f.get("tx_errors", 0)
-        rx_e = f.get("rx_errors", 0)
-        tx_d = f.get("tx_dropped", 0)
-        rx_d = f.get("rx_dropped", 0)
-        parts = [f"  [{iface}]"]
-        parts.append(f"tx={_fmt_bytes(tx_b)}/{tx_p}pkts")
-        parts.append(f"rx={_fmt_bytes(rx_b)}/{rx_p}pkts")
-        if tx_e or rx_e or tx_d or rx_d:
-            parts.append(f"tx_err={tx_e} tx_drop={tx_d} rx_err={rx_e} rx_drop={rx_d}")
-        out.append("  ".join(parts))
-    out.append("")
+    totals = _sum_deltas(deltas)
+
+    # ---- per-test breakdown -----------------------------------------------
+    per_test = _compute_per_test_breakdown(snapshots)
+
+    out = ["## /proc/net/dev (kernel interface counters)", ""]
+
+    # Per-interface per-test table.
+    all_ifaces = sorted(
+        set(totals.keys()) | {iface for td in per_test.values() for iface in td}
+    )
+    for iface in all_ifaces:
+        tf = totals.get(iface, {k: 0 for k in _IFACE_FIELDS})
+        out.append(f"### {iface}")
+        out.append("| test   | tx_bytes | tx_pkts | rx_bytes | rx_pkts | tx_err | tx_drop | rx_err | rx_drop |")
+        out.append("|--------|----------|---------|----------|---------|--------|---------|--------|---------|")
+
+        # Ordered by test label so output is deterministic.
+        test_order = [t for t in TEST_ORDER if t in per_test]
+        test_order += [t for t in per_test if t not in test_order]
+        for tid in test_order:
+            label = TEST_LABELS.get(tid, tid)
+            td = per_test[tid].get(iface, {k: 0 for k in _IFACE_FIELDS})
+            ttx_b = format_bytes(td.get("tx_bytes", 0))
+            ttx_p = td.get("tx_packets", 0)
+            trx_b = format_bytes(td.get("rx_bytes", 0))
+            trx_p = td.get("rx_packets", 0)
+            ttx_e = td.get("tx_errors", 0)
+            ttx_d = td.get("tx_dropped", 0)
+            trx_e = td.get("rx_errors", 0)
+            trx_d = td.get("rx_dropped", 0)
+            out.append(
+                f"| {label:<6} | {ttx_b:>8} | {ttx_p:>7} | "
+                f"{trx_b:>8} | {trx_p:>7} | "
+                f"{ttx_e:>6} | {ttx_d:>7} | {trx_e:>6} | {trx_d:>7} |"
+            )
+
+        # Total row.
+        ttx_b = format_bytes(tf.get("tx_bytes", 0))
+        ttx_p = tf.get("tx_packets", 0)
+        trx_b = format_bytes(tf.get("rx_bytes", 0))
+        trx_p = tf.get("rx_packets", 0)
+        ttx_e = tf.get("tx_errors", 0)
+        ttx_d = tf.get("tx_dropped", 0)
+        trx_e = tf.get("rx_errors", 0)
+        trx_d = tf.get("rx_dropped", 0)
+        out.append(
+            f"| **total** | {ttx_b:>8} | {ttx_p:>7} | "
+            f"{trx_b:>8} | {trx_p:>7} | "
+            f"{ttx_e:>6} | {ttx_d:>7} | {trx_e:>6} | {trx_d:>7} |"
+        )
+
+        # Error/drop rate summary for this interface.
+        tx_total_pkts = tf.get("tx_packets", 0)
+        rx_total_pkts = tf.get("rx_packets", 0)
+        tx_err_rate = _fmt_rate(ttx_e, tx_total_pkts + ttx_e)
+        tx_drop_rate = _fmt_rate(ttx_d, tx_total_pkts + ttx_d)
+        rx_err_rate = _fmt_rate(trx_e, rx_total_pkts + trx_e)
+        rx_drop_rate = _fmt_rate(trx_d, rx_total_pkts + trx_d)
+        out.append(
+            f"  *rates:* tx_err={tx_err_rate}  tx_drop={tx_drop_rate}  "
+            f"rx_err={rx_err_rate}  rx_drop={rx_drop_rate}"
+        )
+        out.append("")
+
+    # Diagnostic for non-zero errors/drops.
+    flags = []
+    for iface in all_ifaces:
+        tf = totals.get(iface, {})
+        for field, label in [
+            ("tx_errors", "TX errors"), ("tx_dropped", "TX drops"),
+            ("rx_errors", "RX errors"), ("rx_dropped", "RX drops"),
+        ]:
+            if tf.get(field, 0) > 0:
+                flags.append(f"    [{iface}] {label}: {tf[field]}")
+    if flags:
+        out.append("### ⚠️  Non-zero error/drop counters")
+        out.append("")
+        out.extend(flags)
+        out.append("")
+        out.append(
+            "These counters indicate packets lost inside the kernel network "
+            "stack.  Drops may be caused by queue overflow (RX buffer full, "
+            "TX queue full), no-route (IP layer), or loopback injection "
+            "failure.  Errors originate from device-level deferred counters "
+            "(e.g. send failures)."
+        )
+        out.append("")
+
     return "\n".join(out)
 
 
@@ -422,7 +578,8 @@ def render_text(stats: dict[str, TestStats], snapshots: list[NetDevSnapshot]) ->
     # Compute aggregate L2 and application-layer byte totals for overhead
     # comparison.  Warmup-tagged snapshots are excluded so the L2 and
     # application-layer totals are comparable.
-    _, l2_tx_total, l2_rx_total = _pair_deltas(snapshots, skip_warmup=True)
+    deltas, l2_tx_total, l2_rx_total = _pair_deltas(snapshots, skip_warmup=True)
+    totals = _sum_deltas(deltas) if deltas else {}
 
     app_tx_total = 0
     app_rx_total = 0
@@ -434,6 +591,12 @@ def render_text(stats: dict[str, TestStats], snapshots: list[NetDevSnapshot]) ->
             else:
                 app_tx_total += s.app_bytes
 
+    # Compute aggregate error/drop totals from all interfaces for context.
+    l2_tx_errs = sum(f.get("tx_errors", 0) for f in totals.values())
+    l2_tx_drops = sum(f.get("tx_dropped", 0) for f in totals.values())
+    l2_rx_errs = sum(f.get("rx_errors", 0) for f in totals.values())
+    l2_rx_drops = sum(f.get("rx_dropped", 0) for f in totals.values())
+
     # Show aggregate L2-vs-app overview.
     if l2_tx_total or l2_rx_total:
         out.append("## Protocol Overhead (L2 vs Application)")
@@ -444,8 +607,8 @@ def render_text(stats: dict[str, TestStats], snapshots: list[NetDevSnapshot]) ->
             else:
                 overhead = "N/A"
             out.append(
-                f"  TX  L2={_fmt_bytes(l2_tx_total)}  "
-                f"app={_fmt_bytes(app_tx_total)}  "
+                f"  TX  L2={format_bytes(l2_tx_total)}  "
+                f"app={format_bytes(app_tx_total)}  "
                 f"overhead={overhead}"
             )
         if l2_rx_total > 0:
@@ -455,10 +618,28 @@ def render_text(stats: dict[str, TestStats], snapshots: list[NetDevSnapshot]) ->
             else:
                 overhead = "N/A"
             out.append(
-                f"  RX  L2={_fmt_bytes(l2_rx_total)}  "
-                f"app={_fmt_bytes(app_rx_total)}  "
+                f"  RX  L2={format_bytes(l2_rx_total)}  "
+                f"app={format_bytes(app_rx_total)}  "
                 f"overhead={overhead}"
             )
+        # Error/drop context: non-zero values mean some L2 bytes were dropped
+        # before reaching the application, inflating the apparent overhead.
+        l2_has_loss = l2_tx_errs or l2_tx_drops or l2_rx_errs or l2_rx_drops
+        if l2_has_loss:
+            out.append("")
+            out.append("  ⚠️  L2 error/drop counters are non-zero — protocol overhead")
+            out.append("  may be skewed because dropped packets contribute to L2 byte")
+            out.append("  counters but never reach iperf3's application-layer totals.")
+            parts = []
+            if l2_tx_errs:
+                parts.append(f"tx_err={l2_tx_errs}")
+            if l2_tx_drops:
+                parts.append(f"tx_drop={l2_tx_drops}")
+            if l2_rx_errs:
+                parts.append(f"rx_err={l2_rx_errs}")
+            if l2_rx_drops:
+                parts.append(f"rx_drop={l2_rx_drops}")
+            out.append(f"  totals: {', '.join(parts)}")
         out.append("")
     for test_id in ordered:
         ts = stats[test_id]
@@ -486,6 +667,12 @@ def render_text(stats: dict[str, TestStats], snapshots: list[NetDevSnapshot]) ->
         if loss_vals:
             loss_mean, loss_std = _mean_std(loss_vals)
             out.append(f"  udp loss   : {loss_mean:.2f} +/- {loss_std:.2f} %")
+        jitter_vals = [
+            s.jitter_ms for s in ts.measured if s.jitter_ms is not None
+        ]
+        if jitter_vals:
+            jitter_mean, jitter_std = _mean_std(jitter_vals)
+            out.append(f"  udp jitter : {jitter_mean:.3f} +/- {jitter_std:.3f} ms")
         retr_vals = [
             s.retransmits for s in ts.measured if s.retransmits is not None
         ]
@@ -525,6 +712,12 @@ def render_json(stats: dict[str, TestStats]) -> str:
         if loss_vals:
             lm, ls = _mean_std(loss_vals)
             entry["loss_percent_mean"], entry["loss_percent_std"] = lm, ls
+        jitter_vals = [
+            s.jitter_ms for s in ts.measured if s.jitter_ms is not None
+        ]
+        if jitter_vals:
+            jm, js = _mean_std(jitter_vals)
+            entry["jitter_ms_mean"], entry["jitter_ms_std"] = jm, js
         if retr_vals:
             rm, rs = _mean_std(retr_vals)
             entry["retransmits_mean"], entry["retransmits_std"] = rm, rs

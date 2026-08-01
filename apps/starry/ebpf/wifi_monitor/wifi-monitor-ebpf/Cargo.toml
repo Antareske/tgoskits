@@ -1,0 +1,16 @@
+[package]
+name = "wifi-monitor-ebpf"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+wifi-monitor-common = { path = "../wifi-monitor-common" }
+
+aya-ebpf = { workspace = true }
+
+[build-dependencies]
+which = { workspace = true }
+
+[[bin]]
+name = "wifi-monitor"
+path = "src/main.rs"

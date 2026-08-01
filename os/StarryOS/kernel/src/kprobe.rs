@@ -19,6 +19,7 @@
 
 use alloc::{sync::Arc, vec::Vec};
 
+use ax_errno::{AxError, AxResult};
 use ax_kspin::{RawSpinNoIrq, SpinNoIrq};
 use ax_memory_addr::{MemoryAddr, PAGE_SIZE_4K, VirtAddr, VirtAddrRange};
 use ax_runtime::hal::{
@@ -254,9 +255,12 @@ where
 
 /// Register a kprobe into the global manager, returning the live handle.
 #[inline(never)]
-pub fn register_kprobe(builder: ProbeBuilder<KernelKprobeOps>) -> Arc<KernelKprobe> {
+pub fn register_kprobe(builder: ProbeBuilder<KernelKprobeOps>) -> AxResult<Arc<KernelKprobe>> {
     with_manager_and_list(|mgr, list| {
-        kprobe_crate_register_kprobe(mgr, list, builder).expect("Failed to register kprobe")
+        kprobe_crate_register_kprobe(mgr, list, builder).map_err(|e| {
+            error!("Failed to register kprobe: {e:?}");
+            AxError::Unsupported
+        })
     })
 }
 
@@ -268,9 +272,12 @@ pub fn unregister_kprobe(kprobe: Arc<KernelKprobe>) {
 
 /// Register a kretprobe and return its live handle.
 #[inline(never)]
-pub fn register_kretprobe(builder: KretprobeBuilder<KernelRawMutex>) -> Arc<KernelKretprobe> {
+pub fn register_kretprobe(builder: KretprobeBuilder<KernelRawMutex>) -> AxResult<Arc<KernelKretprobe>> {
     with_manager_and_list(|mgr, list| {
-        kprobe_crate_register_kretprobe(mgr, list, builder).expect("Failed to register kretprobe")
+        kprobe_crate_register_kretprobe(mgr, list, builder).map_err(|e| {
+            error!("Failed to register kretprobe: {e:?}");
+            AxError::Unsupported
+        })
     })
 }
 

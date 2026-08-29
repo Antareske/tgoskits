@@ -20,7 +20,6 @@ pub(super) struct OwnerOutputs {
     pending_rx_frame: Option<Vec<u8>>,
     pending_rx_completion: Option<RxCompletion>,
     pending_wifi_progress: Option<Result<WifiControlProgress, AicError>>,
-    terminal_error: Option<AicError>,
     next_tx_token: u64,
     wifi_active: bool,
 }
@@ -35,7 +34,6 @@ impl OwnerOutputs {
             pending_rx_frame: None,
             pending_rx_completion: None,
             pending_wifi_progress: None,
-            terminal_error: None,
             next_tx_token: 1,
             wifi_active: false,
         }
@@ -69,14 +67,8 @@ impl OwnerOutputs {
             AicEvent::Receive(frame) => !self.publish_rx(frame)?,
             AicEvent::TransmitComplete(token) => !self.publish_tx_completion(token)?,
             AicEvent::Failed(error) => {
-                let blocked = self.wifi_active && !self.publish_wifi_progress(Err(error.clone()));
                 self.wifi_active = false;
-                if blocked {
-                    self.terminal_error = Some(error);
-                    true
-                } else {
-                    return Err(error.into());
-                }
+                return Err(error.into());
             }
         };
         Ok(blocked)
@@ -107,9 +99,6 @@ impl OwnerOutputs {
         }
         if self.has_pending() {
             return Ok(false);
-        }
-        if let Some(error) = self.terminal_error.take() {
-            return Err(error.into());
         }
         Ok(true)
     }

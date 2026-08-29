@@ -112,6 +112,43 @@ fn io_only_init_enumerates_cccr_fbr_and_cis_without_host_protocol_duplication() 
 }
 
 #[test]
+fn init_advance_keeps_driving_register_only_steps_within_one_call() {
+    // Register-only bus operations never produce an interrupt, so a single
+    // advance must drive them synchronously (with Submitted) until the first
+    // command step, which legitimately waits for its completion interrupt.
+    // A regression to "submit the next step and return Pending" stalls the
+    // caller until the startup deadline, so the first command must already
+    // be in flight after one advance.
+    let mut card = SdioCard::new(MockHost::new(std::vec![r4(SDIO_READY)]));
+    let mut request = card.submit_init().unwrap();
+    let progress = card
+        .advance_init_request(&mut request, sdmmc_host::ProgressCause::RegisterRetry)
+        .unwrap();
+    assert!(matches!(progress, OperationProgress::Pending));
+    assert!(
+        card.host()
+            .commands
+            .iter()
+            .any(|command| command.index == 5),
+        "register-only steps must be driven synchronously up to the first command"
+    );
+    // The caller's cause advances only the first step; every freshly
+    // submitted register-only step is driven with Submitted afterwards.
+    let causes = &card.host().bus_advance_causes;
+    assert_eq!(
+        causes.first(),
+        Some(&sdmmc_host::ProgressCause::RegisterRetry)
+    );
+    assert!(
+        causes
+            .iter()
+            .skip(1)
+            .all(|cause| *cause == sdmmc_host::ProgressCause::Submitted),
+        "freshly submitted steps must advance with Submitted, got {causes:?}"
+    );
+}
+
+#[test]
 fn stale_direct_request_cannot_advance_a_later_command() {
     let mut card = SdioCard::new(MockHost::new(std::vec![r5(0x11), r5(0x22)]));
     let address = IoAddress::new(0x10).unwrap();

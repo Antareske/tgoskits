@@ -71,6 +71,9 @@ struct MockHost {
     pending_polls: usize,
     complete_after_irq_register_retry: bool,
     completion_irq_enabled: bool,
+    /// Records every cause passed to `advance_bus_op` so tests can pin the
+    /// "register-only steps advance with Submitted" contract.
+    bus_advance_causes: Vec<sdmmc_host::ProgressCause>,
     /// Optional monotonic clock value returned from
     /// [`sdmmc_host::SdMmcHost::now_ms`]. Tests advance this directly to verify the
     /// wall-clock timeout path; `None` keeps the legacy poll-counter
@@ -113,6 +116,7 @@ impl MockHost {
             pending_polls: 0,
             complete_after_irq_register_retry: false,
             completion_irq_enabled: false,
+            bus_advance_causes: Vec::new(),
             now_ms: None,
         }
     }
@@ -140,6 +144,7 @@ impl MockHost {
             pending_polls: 0,
             complete_after_irq_register_retry: false,
             completion_irq_enabled: false,
+            bus_advance_causes: Vec::new(),
             now_ms: None,
         }
     }
@@ -349,8 +354,9 @@ impl sdmmc_host::SdMmcHost for MockHost {
     fn advance_bus_op(
         &mut self,
         request: &mut Self::BusRequest,
-        _cause: sdmmc_host::ProgressCause,
+        cause: sdmmc_host::ProgressCause,
     ) -> Result<sdmmc_host::RequestProgress<()>, sdmmc_host::AdvanceRequestError> {
+        self.bus_advance_causes.push(cause);
         if request.done {
             return Err(sdmmc_host::AdvanceRequestError::AlreadyCompleted);
         }

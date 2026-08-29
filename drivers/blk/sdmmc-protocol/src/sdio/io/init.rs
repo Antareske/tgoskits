@@ -110,37 +110,47 @@ impl<H: SdMmcIrqHost + 'static> SdioCard<H> {
     }
 
     /// Advance one completed controller or register step of initialization.
+    ///
+    /// Each newly submitted step is advanced once immediately with
+    /// [`ProgressCause::Submitted`]: register-only bus operations never
+    /// produce an interrupt, so waiting for one after submission would stall
+    /// until the caller's overall deadline. Only the first advance of a call
+    /// uses the caller-provided cause.
     pub fn advance_init_request(
         &mut self,
         request: &mut SdioInitRequest<H>,
-        cause: ProgressCause,
+        mut cause: ProgressCause,
     ) -> Result<OperationProgress<SdioCardInfo>, Error> {
-        match &mut request.active {
-            InitActive::None => return Err(Error::InvalidArgument),
-            InitActive::Command => match self.host.advance_command_response(cause)? {
-                CommandResponseProgress::Pending => return Ok(OperationProgress::Pending),
-                CommandResponseProgress::Complete(response) => {
-                    request.active = InitActive::None;
-                    self.consume_init_response(request, response)?;
+        loop {
+            match &mut request.active {
+                InitActive::None => return Err(Error::InvalidArgument),
+                InitActive::Command => match self.host.advance_command_response(cause)? {
+                    CommandResponseProgress::Pending => return Ok(OperationProgress::Pending),
+                    CommandResponseProgress::Complete(response) => {
+                        request.active = InitActive::None;
+                        self.consume_init_response(request, response)?;
+                    }
+                },
+                InitActive::Bus(bus_request) => {
+                    match self.host.advance_bus_op(bus_request, cause)? {
+                        OperationProgress::Pending => return Ok(OperationProgress::Pending),
+                        OperationProgress::Complete(()) => {
+                            request.active = InitActive::None;
+                            request.advance_after_bus()?;
+                        }
+                    }
                 }
-            },
-            InitActive::Bus(bus_request) => match self.host.advance_bus_op(bus_request, cause)? {
-                OperationProgress::Pending => return Ok(OperationProgress::Pending),
-                OperationProgress::Complete(()) => {
-                    request.active = InitActive::None;
-                    request.advance_after_bus()?;
-                }
-            },
-        }
+            }
 
-        if request.state == InitState::Complete {
-            let info = request.card_info()?;
-            self.info = Some(info);
-            self.functions = request.functions;
-            return Ok(OperationProgress::Complete(info));
+            if request.state == InitState::Complete {
+                let info = request.card_info()?;
+                self.info = Some(info);
+                self.functions = request.functions;
+                return Ok(OperationProgress::Complete(info));
+            }
+            self.submit_init_state(request)?;
+            cause = ProgressCause::Submitted;
         }
-        self.submit_init_state(request)?;
-        Ok(OperationProgress::Pending)
     }
 
     /// Abort an in-flight initialization request and return host ownership to

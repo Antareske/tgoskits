@@ -425,6 +425,7 @@ pub(super) struct ExecutorControl {
     pub(super) command: AtomicU8,
     pub(super) affinity_status: AtomicU8,
     pub(super) startup_status: AtomicU8,
+    pub(super) startup_error: SpinLock<Option<NetError>>,
     pub(super) notify: Arc<ax_task::IrqNotify>,
 }
 
@@ -485,7 +486,17 @@ pub(super) fn queue_executor_main(
         return;
     }
 
-    let initialized = groups.iter_mut().all(|group| group.initialize().is_ok());
+    let mut initialized = true;
+    for group in &mut groups {
+        if let Err(error) = group.initialize() {
+            // Recorded for the runtime builder: the panic that follows a
+            // failed startup (axruntime devices.rs:97) reports this error
+            // instead of a generic initialization failure.
+            *control.startup_error.lock_irqsave() = Some(error);
+            initialized = false;
+            break;
+        }
+    }
     control.startup_status.store(
         if initialized {
             STATUS_READY

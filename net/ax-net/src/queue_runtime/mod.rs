@@ -163,8 +163,8 @@ pub enum NetworkRuntimeError {
     InvalidTopology,
     #[error("network queue executor could not be pinned to CPU {0}")]
     WorkerAffinity(usize),
-    #[error("network queue initialization failed")]
-    QueueInit,
+    #[error("network queue initialization failed: {0}")]
+    QueueInit(NetError),
     #[error("network IRQ registration failed: {0}")]
     IrqRegistration(#[from] PinnedNetIrqError),
     #[error("network DMA setup failed: {0}")]
@@ -471,6 +471,7 @@ impl<'a> NetworkRuntimeBuilder<'a> {
                 command: AtomicU8::new(COMMAND_WAIT),
                 affinity_status: AtomicU8::new(STATUS_PENDING),
                 startup_status: AtomicU8::new(STATUS_PENDING),
+                startup_error: SpinLock::new(None),
                 notify: Arc::clone(&cpu_notifies[owner_cpu]),
             });
             let task_control = Arc::clone(&control);
@@ -602,7 +603,15 @@ impl<'a> NetworkRuntimeBuilder<'a> {
                     ),
                     irq_synchronized,
                 );
-                return Err(NetworkRuntimeError::QueueInit);
+                // STATUS_FAILED is only written by `initialize` after
+                // recording the error, so the cause is always present here.
+                let error = executor
+                    .control
+                    .startup_error
+                    .lock_irqsave()
+                    .take()
+                    .expect("failed startup always records its cause");
+                return Err(NetworkRuntimeError::QueueInit(error));
             }
         }
         let protocol_owner_cpu = select_protocol_owner(&group_owners, self.online_cpus);

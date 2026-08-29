@@ -158,7 +158,7 @@ impl AicDevice {
             IoPurpose::TransmitFlow => self.consume_transmit_flow(response, now),
             IoPurpose::TransmitData => self.consume_transmit_data(response),
             IoPurpose::Shutdown => {
-                expect_unit(response)?;
+                expect_write_ack(response)?;
                 self.lifecycle.state = AicState::Stopped;
                 self.data.events.push_back(AicEvent::Stopped);
                 Ok(())
@@ -237,7 +237,10 @@ mod tests {
     use alloc::vec;
 
     use super::*;
-    use crate::common::{ChipVariant, SDIOWIFI_FUNC_BLOCKSIZE};
+    use crate::{
+        common::{ChipVariant, SDIOWIFI_FUNC_BLOCKSIZE},
+        device::startup::StartupStage,
+    };
 
     fn time(ms: u64) -> MonotonicTime {
         MonotonicTime::from_nanos(ms * NANOS_PER_MILLISECOND)
@@ -274,6 +277,141 @@ mod tests {
             SdioRequestKind::SetBlockSize { block_size, .. }
                 if block_size.get() == SDIOWIFI_FUNC_BLOCKSIZE
         ));
+    }
+
+    /// Drives a D80 through the unit-completed stages up to the first
+    /// vendor write so stage-injected tests share the same setup.
+    fn first_vendor_write(device: &mut AicDevice) -> SdioRequest {
+        device.start(time(0)).unwrap();
+        let AicAction::SubmitSdio(enable) = device.advance(AicInput::tick(time(0))) else {
+            panic!("expected function enable")
+        };
+        let AicAction::SubmitSdio(block_size) =
+            device.advance(complete(&enable, SdioResponse::Unit, time(0)))
+        else {
+            panic!("expected block-size configuration")
+        };
+        let AicAction::SubmitSdio(interrupt) =
+            device.advance(complete(&block_size, SdioResponse::Unit, time(0)))
+        else {
+            panic!("expected interrupt enable")
+        };
+        let AicAction::SubmitSdio(vendor) =
+            device.advance(complete(&interrupt, SdioResponse::Unit, time(0)))
+        else {
+            panic!("expected vendor setup")
+        };
+        vendor
+    }
+
+    // The adapter completes every Direct operation (read or write) with the
+    // R5 data byte, so the core's write consumers must accept a Byte
+    // completion instead of rejecting it as malformed.
+
+    #[test]
+    fn vendor_setup_accepts_the_write_read_back_byte() {
+        let mut device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+        let vendor = first_vendor_write(&mut device);
+        assert!(matches!(vendor.kind, SdioRequestKind::WriteByte { .. }));
+        let action = device.advance(complete(&vendor, SdioResponse::Byte(0x7f), time(0)));
+        let AicAction::SubmitSdio(next) = action else {
+            panic!("vendor write must consume the read-back byte, got {action:?}")
+        };
+        assert!(matches!(next.kind, SdioRequestKind::WriteByte { .. }));
+        assert_ne!(device.state(), AicState::Failed);
+
+        // The rejection side of the same contract: a Unit completion is not
+        // the adapter shape for a Direct write.
+        let mut rejected = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+        let vendor = first_vendor_write(&mut rejected);
+        let action = rejected.advance(complete(&vendor, SdioResponse::Unit, time(0)));
+        assert!(matches!(action, AicAction::Event(AicEvent::Failed(_))));
+    }
+
+    #[test]
+    fn reinitialize_accepts_the_write_read_back_byte() {
+        let mut device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+        device.start(time(0)).unwrap();
+        device.lifecycle.startup.as_mut().unwrap().stage = StartupStage::Reinitialize(0);
+        let AicAction::SubmitSdio(request) = device.advance(AicInput::tick(time(0))) else {
+            panic!("expected reinitialize write")
+        };
+        assert!(matches!(request.kind, SdioRequestKind::WriteByte { .. }));
+        let action = device.advance(complete(&request, SdioResponse::Byte(0), time(0)));
+        let AicAction::SubmitSdio(next) = action else {
+            panic!("reinitialize must consume the read-back byte, got {action:?}")
+        };
+        assert!(matches!(next.kind, SdioRequestKind::WriteByte { .. }));
+        assert_ne!(device.state(), AicState::Failed);
+
+        let mut rejected = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+        rejected.start(time(0)).unwrap();
+        rejected.lifecycle.startup.as_mut().unwrap().stage = StartupStage::Reinitialize(0);
+        let AicAction::SubmitSdio(request) = rejected.advance(AicInput::tick(time(0))) else {
+            panic!("expected reinitialize write")
+        };
+        let action = rejected.advance(complete(&request, SdioResponse::Unit, time(0)));
+        assert!(matches!(action, AicAction::Event(AicEvent::Failed(_))));
+    }
+
+    #[test]
+    fn arm_chip_interrupt_accepts_the_write_read_back_byte() {
+        let mut device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+        device.start(time(0)).unwrap();
+        device.lifecycle.startup.as_mut().unwrap().stage = StartupStage::ArmChipInterrupt;
+        let AicAction::SubmitSdio(request) = device.advance(AicInput::tick(time(0))) else {
+            panic!("expected interrupt-enable write")
+        };
+        assert!(matches!(request.kind, SdioRequestKind::WriteByte { .. }));
+        let action = device.advance(complete(&request, SdioResponse::Byte(0), time(0)));
+        assert!(
+            matches!(action, AicAction::Event(AicEvent::Started { .. })),
+            "interrupt-enable write must finish startup, got {action:?}"
+        );
+        assert_eq!(device.state(), AicState::Ready);
+
+        let mut rejected = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+        rejected.start(time(0)).unwrap();
+        rejected.lifecycle.startup.as_mut().unwrap().stage = StartupStage::ArmChipInterrupt;
+        let AicAction::SubmitSdio(request) = rejected.advance(AicInput::tick(time(0))) else {
+            panic!("expected interrupt-enable write")
+        };
+        let action = rejected.advance(complete(&request, SdioResponse::Unit, time(0)));
+        assert!(matches!(action, AicAction::Event(AicEvent::Failed(_))));
+    }
+
+    #[test]
+    fn shutdown_accepts_the_write_read_back_byte() {
+        let mut device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+        device.start(time(0)).unwrap();
+        // Drive the stop through the control path instead of forcing the
+        // state, so the ControlRequest::Shutdown branch is exercised too.
+        let action = device.advance(AicInput {
+            now: time(0),
+            event: Some(AicInputEvent::Control(ControlRequest::Shutdown)),
+        });
+        let AicAction::SubmitSdio(request) = action else {
+            panic!("expected shutdown write")
+        };
+        assert!(matches!(request.kind, SdioRequestKind::WriteByte { .. }));
+        let action = device.advance(complete(&request, SdioResponse::Byte(0), time(0)));
+        assert!(
+            matches!(action, AicAction::Event(AicEvent::Stopped)),
+            "shutdown write must complete the stop, got {action:?}"
+        );
+        assert_eq!(device.state(), AicState::Stopped);
+
+        let mut rejected = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+        rejected.start(time(0)).unwrap();
+        let action = rejected.advance(AicInput {
+            now: time(0),
+            event: Some(AicInputEvent::Control(ControlRequest::Shutdown)),
+        });
+        let AicAction::SubmitSdio(request) = action else {
+            panic!("expected shutdown write")
+        };
+        let action = rejected.advance(complete(&request, SdioResponse::Unit, time(0)));
+        assert!(matches!(action, AicAction::Event(AicEvent::Failed(_))));
     }
 
     #[test]

@@ -2,7 +2,9 @@ use alloc::vec::Vec;
 
 use super::{START_STABILIZE, StartupStage};
 use crate::{
-    common::{CHIP_REV_MASK, ChipVariant},
+    common::{
+        CHIP_REV_HIGH_SHIFT, CHIP_REV_MASK, CHIP_REV_U01, CHIP_REV_U02, CHIP_REV_U03, ChipVariant,
+    },
     device::*,
     firmware::{
         CONFIG_BASE_OFFSET, MAIN_ADDRESS, MASKED_SYSTEM_CONFIG, PATCH_ADDRESS,
@@ -116,8 +118,10 @@ impl AicDevice {
                     return Err(AicError::MalformedResponse);
                 }
                 let raw = u32::from_le_bytes([result[4], result[5], result[6], result[7]]);
-                let revision = (raw & CHIP_REV_MASK) as u8;
-                if !matches!(revision, 1 | 3 | 7) {
+                // The chip stores the revision in the high half of the word;
+                // the low half carries unrelated value noise.
+                let revision = ((raw >> CHIP_REV_HIGH_SHIFT) & CHIP_REV_MASK) as u8;
+                if !matches!(revision, CHIP_REV_U01 | CHIP_REV_U02 | CHIP_REV_U03) {
                     return Err(AicError::UnsupportedRevision(revision));
                 }
                 startup.revision = Some(revision);
@@ -157,7 +161,15 @@ impl AicDevice {
                     StartupStage::Stabilize
                 }
             }
-            StartupStage::StackStart => StartupStage::ArmChipInterrupt,
+            StartupStage::StackStart => StartupStage::GetMacAddress,
+            StartupStage::GetMacAddress => {
+                // The confirmation payload starts with the six-byte MAC.
+                if result.len() < 6 {
+                    return Err(AicError::MalformedResponse);
+                }
+                self.data.mac_address.copy_from_slice(&result[..6]);
+                StartupStage::ArmChipInterrupt
+            }
             _ => return Err(AicError::CompletionMismatch),
         };
         Ok(())

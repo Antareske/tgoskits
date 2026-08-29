@@ -11,6 +11,7 @@ pub(crate) const DBG_MEM_BLOCK_WRITE_REQ: u16 = 0x040b;
 pub(crate) const DBG_START_APP_REQ: u16 = 0x040d;
 pub(crate) const DBG_MEM_MASK_WRITE_REQ: u16 = 0x0411;
 pub(crate) const MM_SET_STACK_START_REQ: u16 = 0x007b;
+pub(crate) const MM_GET_MAC_ADDR_REQ: u16 = 0x0073;
 pub(crate) const TASK_MM: u16 = 0;
 
 const SDIO_HEADER_SIZE: usize = 4;

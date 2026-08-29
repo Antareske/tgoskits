@@ -6,6 +6,19 @@ use sdmmc_protocol::sdio::io::{AddressMode, FunctionNumber, IoAddress, TransferM
 use super::{AicError, SdioRequestKind, SdioResponse};
 use crate::protocol::BLOCK_SIZE;
 
+// Completion-shape contract: the adapter guarantees one shape per request
+// kind, and the core consumes exactly that shape via the `expect_*` helpers.
+//
+// | Request kind            | Completion shape | Note                      |
+// |-------------------------|------------------|---------------------------|
+// | EnableFunction          | Unit             |                           |
+// | SetBlockSize            | Unit             |                           |
+// | EnableFunctionInterrupt | Unit             |                           |
+// | ReadByte                | Byte             | register read-back        |
+// | WriteByte               | Byte             | R5 read-back byte (RAW=1) |
+// | Read (DMA)              | Data             |                           |
+// | Write (DMA)             | Unit             |                           |
+// | SetClockHz              | Unit             | bus op completion         |
 pub(super) fn expect_unit(response: SdioResponse) -> Result<(), AicError> {
     match response {
         SdioResponse::Unit => Ok(()),
@@ -27,6 +40,12 @@ pub(super) fn expect_data(response: SdioResponse) -> Result<Vec<u8>, AicError> {
     }
 }
 
+/// A `WriteByte` completion carries the R5 read-back byte; write-only
+/// consumers discard the value here.
+pub(super) fn expect_write_ack(response: SdioResponse) -> Result<(), AicError> {
+    expect_byte(response).map(|_| ())
+}
+
 pub(super) fn read_byte(function_number: u8, register: u32) -> SdioRequestKind {
     SdioRequestKind::ReadByte {
         function: function(function_number),
@@ -34,6 +53,8 @@ pub(super) fn read_byte(function_number: u8, register: u32) -> SdioRequestKind {
     }
 }
 
+// `read_after_write` sets the CMD52 RAW bit so the R5 data byte carries the
+// post-write read-back (see `expect_write_ack`).
 pub(super) fn write_byte(function_number: u8, register: u32, value: u8) -> SdioRequestKind {
     SdioRequestKind::WriteByte {
         function: function(function_number),

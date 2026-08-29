@@ -226,7 +226,7 @@ pub enum AicError {
     CompletionMismatch,
     #[error("AIC mailbox timed out")]
     MailboxTimeout,
-    #[error("AIC mailbox response was malformed")]
+    #[error("AIC SDIO completion did not match the expected response shape")]
     MalformedResponse,
     #[error("unsupported chip revision {0}")]
     UnsupportedRevision(u8),

@@ -194,3 +194,145 @@ impl AicDevice {
         });
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use alloc::vec;
+
+    use super::*;
+    use crate::{
+        AicInputEvent, ChipVariant, SdioCompletion, SdioRequestKind, SdioResponse,
+        device::startup::StartupStage, protocol::TASK_MM,
+    };
+
+    const NANOS_PER_MILLISECOND: u64 = 1_000_000;
+
+    fn time(ms: u64) -> MonotonicTime {
+        MonotonicTime::from_nanos(ms * NANOS_PER_MILLISECOND)
+    }
+
+    fn completion(request_id: u64, response: SdioResponse, now: MonotonicTime) -> AicInput {
+        AicInput {
+            now,
+            event: Some(AicInputEvent::Sdio(SdioCompletion {
+                request_id,
+                result: Ok(response),
+            })),
+        }
+    }
+
+    /// Drives one mailbox through flow control, the frame write, the settle
+    /// retry and the count poll, and returns the pending read request.
+    fn pending_read(device: &mut AicDevice, first: SdioRequest) -> SdioRequest {
+        let action = device.advance(completion(first.id, SdioResponse::Byte(0x7f), time(2)));
+        let AicAction::SubmitSdio(write) = action else {
+            panic!("expected mailbox frame write")
+        };
+        let action = device.advance(completion(write.id, SdioResponse::Unit, time(3)));
+        assert!(matches!(action, AicAction::RetryAt(_)));
+        let action = device.advance(AicInput::tick(time(5)));
+        let AicAction::SubmitSdio(count) = action else {
+            panic!("expected mailbox count poll")
+        };
+        let action = device.advance(completion(count.id, SdioResponse::Byte(1), time(6)));
+        let AicAction::SubmitSdio(read) = action else {
+            panic!("expected mailbox response read")
+        };
+        read
+    }
+
+    fn confirmation_frame(message_id: u16, payload: &[u8]) -> alloc::vec::Vec<u8> {
+        let mut frame = vec![0u8; BLOCK_SIZE];
+        frame[4..6].copy_from_slice(&message_id.to_le_bytes());
+        frame[10..12].copy_from_slice(&(payload.len() as u16).to_le_bytes());
+        frame[16..16 + payload.len()].copy_from_slice(payload);
+        frame
+    }
+
+    #[test]
+    fn read_revision_takes_the_version_from_the_high_half_of_the_read_back() {
+        let mut device = AicDevice::new(ChipVariant::Aic8800D80).expect("D80 is supported");
+        device.start(time(0)).expect("stopped device starts");
+        device.lifecycle.startup.as_mut().unwrap().stage = StartupStage::ReadRevision;
+        device.begin_debug_mailbox(0x0400, &[0; 4], time(0));
+        let AicAction::SubmitSdio(first) = device.advance(AicInput::tick(time(0))) else {
+            panic!("mailbox must produce a first SDIO request");
+        };
+        let read = pending_read(&mut device, first);
+
+        // The chip reports its revision in the high half of the read-back
+        // word (the low half is unrelated value noise, as seen on the board).
+        let mut payload = [0u8; 8];
+        payload[4..8].copy_from_slice(&0x0001_0020u32.to_le_bytes()); // rev U01, noise 0x20
+        let action = device.advance(completion(
+            read.id,
+            SdioResponse::Data(confirmation_frame(0x0401, &payload)),
+            time(7),
+        ));
+        let AicAction::SubmitSdio(upload) = action else {
+            panic!("revision U01 must be accepted, got {action:?}")
+        };
+        assert_eq!(
+            device.lifecycle.startup.as_ref().unwrap().stage,
+            StartupStage::UploadMain(0)
+        );
+        assert!(matches!(
+            upload.kind,
+            SdioRequestKind::ReadByte { address, .. } if address.get() == 3 // flow control
+        ));
+        assert_ne!(device.state(), AicState::Failed);
+    }
+
+    #[test]
+    fn get_mac_address_confirmation_installs_the_mac_and_arms_the_chip_interrupt() {
+        let mut device = AicDevice::new(ChipVariant::Aic8800D80).expect("D80 is supported");
+        device.start(time(0)).expect("stopped device starts");
+        device.lifecycle.startup.as_mut().unwrap().stage = StartupStage::GetMacAddress;
+        device.begin_lmac_mailbox(0x0073, TASK_MM, &1u32.to_le_bytes(), 0x0074, time(0));
+        let AicAction::SubmitSdio(first) = device.advance(AicInput::tick(time(0))) else {
+            panic!("mailbox must produce a first SDIO request");
+        };
+        let read = pending_read(&mut device, first);
+
+        let mac = [0x02, 0x03, 0x04, 0x05, 0x06, 0x07];
+        let action = device.advance(completion(
+            read.id,
+            SdioResponse::Data(confirmation_frame(0x0074, &mac)),
+            time(7),
+        ));
+        assert_eq!(device.mac_address(), mac);
+        assert_eq!(
+            device.lifecycle.startup.as_ref().unwrap().stage,
+            StartupStage::ArmChipInterrupt
+        );
+        let AicAction::SubmitSdio(arm) = action else {
+            panic!("startup must continue with the interrupt-enable write, got {action:?}")
+        };
+        assert!(matches!(arm.kind, SdioRequestKind::WriteByte { .. }));
+        assert_ne!(device.state(), AicState::Failed);
+    }
+
+    #[test]
+    fn get_mac_address_confirmation_shorter_than_the_address_fails_the_device() {
+        let mut device = AicDevice::new(ChipVariant::Aic8800D80).expect("D80 is supported");
+        device.start(time(0)).expect("stopped device starts");
+        device.lifecycle.startup.as_mut().unwrap().stage = StartupStage::GetMacAddress;
+        device.begin_lmac_mailbox(0x0073, TASK_MM, &1u32.to_le_bytes(), 0x0074, time(0));
+        let AicAction::SubmitSdio(first) = device.advance(AicInput::tick(time(0))) else {
+            panic!("mailbox must produce a first SDIO request");
+        };
+        let read = pending_read(&mut device, first);
+
+        assert!(
+            matches!(
+                device.advance(completion(
+                    read.id,
+                    SdioResponse::Data(confirmation_frame(0x0074, &[0x02, 0x03, 0x04, 0x05, 0x06])),
+                    time(7),
+                )),
+                AicAction::Event(AicEvent::Failed(AicError::MalformedResponse))
+            ),
+            "a truncated get-mac confirmation must fail the device"
+        );
+    }
+}

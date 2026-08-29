@@ -5,8 +5,8 @@ use crate::{
     common::{CHIP_REV_ADDR, SDIOWIFI_FUNC_BLOCKSIZE},
     firmware::MAIN_ADDRESS,
     protocol::{
-        DBG_MEM_READ_REQ, DBG_START_APP_REQ, MM_SET_STACK_START_REQ, TASK_MM, memory_read_payload,
-        start_app_payload,
+        DBG_MEM_READ_REQ, DBG_START_APP_REQ, MM_GET_MAC_ADDR_REQ, MM_SET_STACK_START_REQ, TASK_MM,
+        memory_read_payload, start_app_payload,
     },
     registers::{INTERRUPTS_ENABLED, interface_ready},
 };
@@ -39,6 +39,7 @@ pub(super) enum StartupStage {
     Stabilize,
     Reinitialize(u8),
     StackStart,
+    GetMacAddress,
     ArmChipInterrupt,
     Complete,
 }
@@ -169,6 +170,18 @@ impl AicDevice {
                 );
                 self.drive_mailbox(now)
             }
+            StartupStage::GetMacAddress => {
+                // The firmware owns the module MAC; read it once here so the
+                // Started event and later LMAC commands carry the real address.
+                self.begin_lmac_mailbox(
+                    MM_GET_MAC_ADDR_REQ,
+                    TASK_MM,
+                    &1u32.to_le_bytes(),
+                    MM_GET_MAC_ADDR_REQ + 1,
+                    now,
+                );
+                self.drive_mailbox(now)
+            }
             StartupStage::ArmChipInterrupt => self.emit(
                 IoPurpose::Startup,
                 write_byte(1, self.registers.interrupt_enable, INTERRUPTS_ENABLED),
@@ -209,7 +222,7 @@ impl AicDevice {
                 self.set_startup_stage(StartupStage::VendorSetup(0));
             }
             StartupStage::VendorSetup(index) => {
-                expect_unit(response)?;
+                expect_write_ack(response)?;
                 self.set_startup_stage(StartupStage::VendorSetup(index + 1));
             }
             StartupStage::VendorReady => {
@@ -229,11 +242,11 @@ impl AicDevice {
                 self.lifecycle.retry_at = Some(now.after(START_STABILIZE));
             }
             StartupStage::Reinitialize(index) => {
-                expect_unit(response)?;
+                expect_write_ack(response)?;
                 self.set_startup_stage(StartupStage::Reinitialize(index + 1));
             }
             StartupStage::ArmChipInterrupt => {
-                expect_unit(response)?;
+                expect_write_ack(response)?;
                 self.set_startup_stage(StartupStage::Complete);
             }
             _ => return Err(AicError::CompletionMismatch),

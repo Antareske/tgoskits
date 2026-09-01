@@ -180,18 +180,29 @@ class BoardSession:
     # ---- file transfer ----------------------------------------------------
 
     def deploy(self, local_path: Path, remote_path: str = "/tmp/") -> str:
-        """Upload a file to the board via SFTP.  Returns the remote path."""
+        """Upload a file to the board via exec_command heredoc.
+
+        Uses exec_command(``cat > path && chmod +x path``) rather than
+        SFTP, because dropbear (the SSH server on StarryOS) does not
+        support the SFTP subsystem.
+        """
         assert self._client is not None, "not connected"
-        sftp = self._client.open_sftp()
         remote_full = remote_path.rstrip("/") + "/" + local_path.name
-        try:
-            sftp.put(str(local_path), remote_full)
-        finally:
-            sftp.close()
-        # Set executable if it looks like a script or binary.
-        if local_path.suffix in (".sh", "") or "bin" in str(local_path):
-            self.run(f"chmod +x {remote_full}", timeout=5)
-        print(f"[board] deployed {local_path.name} -> {remote_full}", file=sys.stderr)
+        content = local_path.read_text()
+        _stdin, stdout, _stderr = self._client.exec_command(
+            f"cat > {remote_full} && chmod +x {remote_full} && echo DEPLOY_OK",
+            timeout=10,
+        )
+        _stdin.write(content)
+        _stdin.channel.shutdown_write()
+        out = stdout.read().decode(errors="replace")
+        if "DEPLOY_OK" not in out:
+            raise RuntimeError(
+                f"deploy of {local_path.name} to {remote_full} failed: {out}"
+            )
+        print(
+            f"[board] deployed {local_path.name} -> {remote_full}", file=sys.stderr,
+        )
         return remote_full
 
     def file_exists(self, remote_path: str) -> bool:
@@ -242,7 +253,7 @@ class TestRunner:
             channel.settimeout(self.duration + TIMEOUT_PAD)
             # ---- Phase 1: start board-server.sh on the board --------------
             channel.exec_command(
-                f"sh {self.server_script} {self.port} {warmup_flag}"
+                f"sh {self.server_script} {self.port} {warmup_flag} {self.duration}"
             )
 
             # ---- Phase 2: wait for SERVER_READY ---------------------------
@@ -366,6 +377,7 @@ def _build_iperf3_args(
         "-c", host,
         "-p", str(port),
         "-t", str(duration),
+        "--connect-timeout", "5000",
         "-J",
     ]
     if window:

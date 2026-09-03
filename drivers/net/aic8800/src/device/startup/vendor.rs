@@ -56,6 +56,47 @@ impl AicDevice {
         else {
             return Err(AicError::CompletionMismatch);
         };
+        // The V3 wakeup write (index 2) commands the chip out of light sleep, so its CMD52
+        // RAW read-back byte reflects the register state the write is changing (0x01 while
+        // the chip is still asleep) rather than the written value 0x11. The vendor driver
+        // never compares this byte either; the write's effect is verified later by the
+        // VendorReady sleep-status READY poll, so only the Byte shape is checked here.
+        if self.transport_generation() == crate::profile::TransportGeneration::V3
+            && index == 2
+            && !reinitialize
+        {
+            expect_byte(response)?;
+            return Ok(());
+        }
         expect_write_readback(response, value)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::common::ChipVariant;
+
+    #[test]
+    fn v3_wakeup_write_accepts_a_non_echoing_read_back_byte() {
+        let device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+
+        assert_eq!(
+            device.validate_vendor_setup_readback(2, false, SdioResponse::Byte(0x01)),
+            Ok(())
+        );
+    }
+
+    #[test]
+    fn v3_vendor_writes_still_enforce_the_read_back_value() {
+        let device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+
+        assert!(matches!(
+            device.validate_vendor_setup_readback(0, false, SdioResponse::Byte(0x00)),
+            Err(AicError::SdioWriteReadbackMismatch {
+                expected: 0x7f,
+                actual: 0x00
+            })
+        ));
     }
 }

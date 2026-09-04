@@ -22,6 +22,11 @@ impl AicDevice {
                     SDIOWIFI_V3_WAKEUP_VALUE,
                 )),
                 3 if reinitialize => Some(write_byte(0, 0x04, INTERRUPTS_ENABLED)),
+                3 => Some(write_byte(
+                    1,
+                    self.registers().interrupt_enable,
+                    INTERRUPTS_ENABLED,
+                )),
                 _ => None,
             }
         } else {
@@ -58,11 +63,14 @@ impl AicDevice {
         };
         // The V3 wakeup write (index 2) commands the chip out of light sleep, so its CMD52
         // RAW read-back byte reflects the register state the write is changing (0x01 while
-        // the chip is still asleep) rather than the written value 0x11. The vendor driver
-        // never compares this byte either; the write's effect is verified later by the
-        // VendorReady sleep-status READY poll, so only the Byte shape is checked here.
+        // the chip is still asleep) rather than the written value 0x11. The interrupt-arm
+        // write (index 3) is similar: its read-back byte is the register's previous value
+        // (0x00 on the first write), not 0x07. The vendor driver never compares either byte;
+        // wakeup effect is verified by the VendorReady sleep-status READY poll, and the
+        // interrupt arm takes effect when the ROM asserts CARD_INT for mailbox responses,
+        // so only the Byte shape is checked here.
         if self.transport_generation() == crate::profile::TransportGeneration::V3
-            && index == 2
+            && matches!(index, 2 | 3)
             && !reinitialize
         {
             expect_byte(response)?;
@@ -98,5 +106,31 @@ mod tests {
                 actual: 0x00
             })
         ));
+    }
+
+    #[test]
+    fn v3_vendor_setup_arms_the_device_interrupt_before_the_rom_mailbox_phase() {
+        let device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+
+        assert!(matches!(
+            device.vendor_setup_operation(3, false),
+            Some(SdioRequestKind::WriteByte {
+                function,
+                address,
+                value: INTERRUPTS_ENABLED,
+                ..
+            }) if function.get() == 1
+                && address.get() == device.registers().interrupt_enable
+        ));
+    }
+
+    #[test]
+    fn v3_rom_interrupt_arm_accepts_the_raw_read_back_byte() {
+        let device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+
+        assert_eq!(
+            device.validate_vendor_setup_readback(3, false, SdioResponse::Byte(0x00)),
+            Ok(())
+        );
     }
 }

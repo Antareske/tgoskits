@@ -8,7 +8,6 @@ use crate::{
         DBG_MEM_BLOCK_WRITE_REQ, DBG_MEM_MASK_WRITE_REQ, DBG_MEM_READ_REQ, DBG_MEM_WRITE_REQ,
         DBG_START_APP_REQ, command_frame, debug_command_frame,
     },
-    registers::flow_credits,
 };
 
 const MAILBOX_TIMEOUT: Duration = Duration::from_secs(5);
@@ -135,6 +134,16 @@ impl AicDevice {
         response: SdioResponse,
         now: MonotonicTime,
     ) -> Result<(), AicError> {
+        // The flow register decode is profile-dependent and borrows the
+        // device; resolve it before taking the mailbox reference.
+        let flow = if purpose == IoPurpose::MailboxFlow {
+            Some(
+                self.registers()
+                    .flow_credits(expect_byte(response.clone())?),
+            )
+        } else {
+            None
+        };
         let mailbox = self
             .lifecycle
             .mailbox
@@ -142,7 +151,7 @@ impl AicDevice {
             .ok_or(AicError::CompletionMismatch)?;
         match purpose {
             IoPurpose::MailboxFlow => {
-                let flow = flow_credits(expect_byte(response)?);
+                let flow = flow.expect("mailbox flow decoded before the borrow");
                 if flow == 0 {
                     mailbox.flow_retries = mailbox.flow_retries.saturating_add(1);
                     if mailbox.flow_retries >= MAX_MAILBOX_FLOW_RETRIES {

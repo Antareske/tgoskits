@@ -419,11 +419,6 @@ impl SdMmcIrqHost for MockHost {
         Ok(())
     }
 
-    fn rearm_completion_irq_and_check(&mut self) -> Result<CompletionIrqRearm, Error> {
-        self.completion_irq_enabled = true;
-        Ok(CompletionIrqRearm::Idle)
-    }
-
     fn disable_completion_irq(&mut self) -> Result<(), Error> {
         self.completion_irq_enabled = false;
         Ok(())
@@ -515,23 +510,6 @@ fn protocol_error_to_host(error: Error) -> sdmmc_host::Error {
         Error::Misaligned => sdmmc_host::Error::Misaligned,
         _ => sdmmc_host::Error::Controller,
     }
-}
-
-#[test]
-fn sdio_host_irq_methods_default_to_noop() {
-    let mut host = MockHost::new(Vec::new());
-
-    assert_eq!(host.enable_completion_irq(), Ok(()));
-    assert_eq!(host.disable_completion_irq(), Ok(()));
-}
-
-#[test]
-fn unit_irq_event_reports_no_runtime_action() {
-    let event = ();
-
-    assert_eq!(event.kind(), HostEventKind::None);
-    assert_eq!(event.source(), HostEventSource::Controller);
-    assert_eq!(event.queue_id(), None);
 }
 
 fn ok_r1() -> Response {

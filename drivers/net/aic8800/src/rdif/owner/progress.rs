@@ -6,8 +6,8 @@ use sdmmc_host::ProgressCause;
 use sdmmc_protocol::{
     OperationProgress,
     sdio::{
-        CardIrqControl, CisInfo, CompletionIrqRearm, FunctionNumber, HostProgressWait,
-        SdMmcIrqHost, SdioCard, SdioCardInfo, io::SdioInitRequest,
+        CardIrqControl, CisInfo, CompletionIrqRearm, CompletionIrqRearmHost, FunctionNumber,
+        HostProgressWait, SdioCard, SdioCardInfo, io::SdioInitRequest,
     },
 };
 
@@ -43,8 +43,30 @@ enum CardIrqWait {
     Armed,
 }
 
+impl CardIrqWait {
+    fn complete_event(
+        &mut self,
+        transmit_completed: bool,
+        output_blocked: bool,
+    ) -> Option<OwnerProgress> {
+        if transmit_completed {
+            // A busy TX queue must not keep CARD_INT masked across successive
+            // SDIO writes. Return to the owner rearm boundary after publishing
+            // each completion so pending RX is sampled before the next TX.
+            *self = Self::Armed;
+        }
+        if output_blocked {
+            Some(OwnerProgress::Wait(OwnerWait::Interrupt))
+        } else if transmit_completed {
+            Some(OwnerProgress::Ready)
+        } else {
+            None
+        }
+    }
+}
+
 /// Sole task-context owner of the SDIO card, controller transactions and AIC core.
-pub(crate) struct AicOwner<H: SdMmcIrqHost + 'static> {
+pub(crate) struct AicOwner<H: CompletionIrqRearmHost + 'static> {
     card: SdioCard<H>,
     card_irq: Option<H::CardIrq>,
     init: Option<SdioInitRequest<H>>,
@@ -58,7 +80,7 @@ pub(crate) struct AicOwner<H: SdMmcIrqHost + 'static> {
     card_irq_wait: CardIrqWait,
 }
 
-impl<H: SdMmcIrqHost + Send + 'static> AicOwner<H> {
+impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
     pub(crate) fn new(
         host: H,
         card_irq: Option<H::CardIrq>,
@@ -363,10 +385,11 @@ impl<H: SdMmcIrqHost + Send + 'static> AicOwner<H> {
                     return Ok(Some(OwnerProgress::Ready));
                 }
                 AicAction::Event(event) => {
-                    if self.outputs.consume_event(event)? {
-                        return Ok(Some(OwnerProgress::Wait(OwnerWait::Interrupt)));
-                    }
-                    return Ok(None);
+                    let transmit_completed = matches!(event, AicEvent::TransmitComplete(_));
+                    let output_blocked = self.outputs.consume_event(event)?;
+                    return Ok(self
+                        .card_irq_wait
+                        .complete_event(transmit_completed, output_blocked));
                 }
                 AicAction::Idle => {
                     let ready = self.device()?.state() == AicState::Ready;
@@ -549,6 +572,31 @@ mod tests {
     use alloc::string::ToString;
 
     use super::*;
+
+    #[test]
+    fn transmit_completion_yields_to_card_irq_before_next_sdio_submission() {
+        for output_blocked in [false, true] {
+            let mut wait = CardIrqWait::Masked;
+            let progress = wait.complete_event(true, output_blocked);
+
+            assert!(
+                progress.is_some(),
+                "a completed TX must return to the rearm boundary before dequeuing more TX"
+            );
+            assert!(card_irq_rearm_allowed(true, false, wait));
+            assert!(!card_irq_rearm_allowed(true, true, wait));
+            assert!(!card_irq_rearm_allowed(false, false, wait));
+        }
+
+        let mut wait = CardIrqWait::Masked;
+        assert_eq!(wait.complete_event(false, false), None);
+        assert_eq!(wait, CardIrqWait::Masked);
+        assert_eq!(
+            wait.complete_event(false, true),
+            Some(OwnerProgress::Wait(OwnerWait::Interrupt))
+        );
+        assert_eq!(wait, CardIrqWait::Masked);
+    }
 
     #[test]
     fn card_interrupt_stays_masked_until_sdio_enumeration_completes() {

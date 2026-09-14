@@ -44,12 +44,16 @@ feature 声明只控制编译依赖与条件模块，实际对外能力还取决
 
 启用 `vsock` 后导出：
 
-- `init_vsock(vsock_devs)`。
+- `init_vsock(vsock_inputs, registrar, active_cpus)`。
 - `vsock` 模块。
 - `Socket::Vsock` 变体。
-- `VsockDevice` / `VsockDeviceList` 类型别名。
+- `VsockDevice` / `VsockDeviceInput` / `VsockDeviceList` 和 `VsockRuntimeError`。
 
-导出项列表说明 `vsock` feature 同时改变初始化 API 和 `Socket` 枚举，因此上层必须在相同条件下编译调用代码。smoltcp feature 属于 IP 协议核心的固定能力，和这个可选 transport 边界分开维护。
+`VsockDeviceInput` 必须包含已解析 `IrqId` 以及 driver 一次性转移的
+`VsockIrqEndpoints`。feature 只决定编译能力，不允许无 IRQ 或 periodic poll 模式。
+导出项列表说明 `vsock` feature 同时改变初始化 API 和 `Socket` 枚举，因此上层必须在
+相同条件下编译调用代码。smoltcp feature 属于 IP 协议核心的固定能力，和这个可选
+transport 边界分开维护。
 
 ### 1.2 smoltcp 能力
 
@@ -153,6 +157,16 @@ pub enum InterfaceMatcher {
 
 匹配规则只回答“配置属于哪个设备”，其优先级和唯一性在初始化校验中确定。设备匹配成功后，静态地址结构才决定本地 CIDR、gateway 和 DNS 等网络属性。
 
+`ByOrder` 使用候选 Ethernet device 的原始发现顺序，不因 owner startup 剔除
+不适用设备而重新编号。例如，原始 0 号设备缺失、1 号设备可用时，`ByOrder(1)`
+仍匹配原始 1 号设备，`ByOrder(0)` 不会转而匹配它。`init_network()` 通过
+`NetworkQueueRuntime::discovery_order()` 恢复该顺序；运行时句柄和普通接口缺省
+名称使用发布端口列表的紧凑索引。
+
+显式配置指向被剔除的设备时，仍会触发 `ensure_all_interface_configs_used()` 的
+未匹配配置检查。安全跳过候选设备不等于自动忽略其配置；需要允许该设备缺失的
+调用方不应同时提供必须匹配它的显式配置。
+
 ### 2.4 静态地址配置
 
 `StaticIpConfig` 把 CIDR、可选 gateway 和 DNS server 作为一个完整静态网络角色提交。`Router::ipv4_rules()` 根据这些字段生成 connected/default route，因而 prefix、gateway 和本地地址必须在初始化校验阶段保持同一子网语义。
@@ -199,10 +213,10 @@ pub struct StaticIpConfig {
 
 未显式匹配 `InterfaceConfig` 的 Ethernet 设备会落入确定的默认策略，而不是被忽略或猜测静态地址。该策略由初始化配置逻辑统一生成，保证新增普通 NIC 至少能以 DHCP 角色进入接口 registry，并具有可预测的名字和 metric。
 
-- 名称为 `eth{order}`。
+- 名称为 `eth{order}`；Wi-Fi 能力设备例外，改用驱动注册名（例如 `wlan0`）。
 - `InterfaceId = order + 2`。
 - metric 为 `100`。
-- 默认启用 DHCP。
+- 未显式配置时，普通 Ethernet 默认启用 DHCP；带 startup link policy 的 Wi-Fi 设备使用该策略的静态地址（SoftAP 场景不启用 DHCP client）。
 - 无静态接口级 DNS。
 
 loopback：
@@ -255,12 +269,41 @@ dns_servers()
 ## 6. 设备与运行期配置
 
 物理设备只能在网络启动阶段一次性发布。runtime 收集全部
-`NetworkDeviceInput { name, device, irq_sources }`，`NetworkRuntimeBuilder` 完成
-affinity domain、worker pin、DMA refill、IRQ registration/rearm 后，`init_network()`
-才分配接口 ID 并发布 `Service`。启动后新增/删除物理 NIC、无 IRQ 设备和周期 poll
-模式不在当前配置面中。
+`NetworkDeviceInput { name, device, irq_sources, tx_queue_discipline }`，
+`NetworkRuntimeBuilder` 完成 affinity domain、worker pin、DMA refill、IRQ
+registration/rearm 后，`init_network()` 才分配接口 ID 并发布 `Service`。启动后
+新增/删除物理 NIC、无 IRQ 设备和周期 poll 模式不在当前配置面中。
 
-### 6.1 Wi-Fi startup transaction
+vsock 遵循相同的 fail-closed 原则，但使用独立的单设备 runtime。平台必须提供一个
+typed IRQ binding；runtime 将其解析为 `IrqId`，把 fixed-affinity registrar、active CPU
+集合和完整 `VsockDeviceInput` 一次性交给 `init_vsock()`。当前只允许零个或恰好一个
+设备，worker 固定到网络 protocol owner CPU。poll interval、空闲退避和连接引用计数都
+不是可配置项，因为 event 只能由 hard IRQ 或明确的 task-side ring-space notification
+驱动。
+
+### 6.1 TX queue discipline
+
+`tx_queue_discipline` 是每个设备必须显式选择的 protocol TX 策略，没有 `Default`：
+
+```rust
+pub enum TxQueueDiscipline {
+    NoQueue,
+    Fifo { max_frames: NonZeroUsize },
+}
+```
+
+- `NoQueue` 对应 Linux `noqueue` 的边界：只尝试直接提交，设备 busy 时立即返回
+  `Again`，不保留 frame，也不分配 backlog。
+- `Fifo` 对应 packet-limited FIFO qdisc：设备 busy 后按提交顺序保留 frame，达到
+  `max_frames` 后拒绝新 frame；backing storage 从零容量开始，在第一次入队时按需分配。
+
+当前一个 `QueueFramePort` 对应一个设备，所以 discipline 也按设备所有；它不是全局
+queue，也不表示已经实现 per-hardware-queue qdisc。`axruntime` 当前为生产网卡显式
+选择 `Fifo { max_frames: 64 }`，保持短暂 TX token 耗尽时的重试语义。该值不属于
+`NetworkConfig` 的 IP/DNS 配置，也不能与驱动 `QueueConfig::ring_size`、AIC
+`aic,queue-size` 或 DMA token 数量互相替代。
+
+### 6.2 Wi-Fi startup transaction
 
 Wi-Fi 驱动可以在 owned `WifiControl` 中提供一个 `startup_transaction()`。它不是
 probe 期间的直接 SDIO 调用：builder 等待 queue worker affinity-ready、注册并 enable
@@ -268,14 +311,14 @@ probe 期间的直接 SDIO 调用：builder 等待 queue worker affinity-ready�
 刷新完成后才发布接口。SoftAP 的初始静态地址与 DHCP server policy 同步写入 protocol
 配置。
 
-### 6.2 运行期 Wi-Fi transaction
+### 6.3 运行期 Wi-Fi transaction
 
 `reconfigure_wifi(ifname, WifiTransaction)` 只改变已发布 Wi-Fi 设备的 link policy。
 owner executor quiesce 所属 group、执行 STA connect/disconnect 或 open AP、原子
 rearm；随后唯一 protocol executor 提交 DHCP/static-address/DHCP-server 变化。该 API
 不能新增设备，也不能让调用者直接借用 SDIO/MMIO control handle。
 
-### 6.3 运行期 IPv4 地址
+### 6.4 运行期 IPv4 地址
 
 已注册的 Ethernet 接口还可通过 `set_interface_ipv4()` / `remove_interface_ipv4()` 修改地址。当前控制面有意保持单地址模型：
 
@@ -295,15 +338,15 @@ StarryOS 的 `RTM_NEWADDR` / `RTM_DELADDR` 直接映射到这两个入口。
 `SOCKET_BUFFER_SIZE` 影响 Router 协议侧 packet buffer 以及多个 socket 后端的默认容量，是内存预算和吞吐之间的全局权衡。修改该常量时需要区分字节流缓冲区与 packet metadata 容量，不能仅根据 MTU 线性推断所有队列占用。
 
 ```rust
-pub const TCP_RX_BUF_LEN: usize = 64 * 1024;
-pub const TCP_TX_BUF_LEN: usize = 64 * 1024;
+pub const TCP_RX_BUF_LEN: usize = 256 * 1024;
+pub const TCP_TX_BUF_LEN: usize = 256 * 1024;
 pub const UDP_RX_BUF_LEN: usize = 64 * 1024;
 pub const UDP_TX_BUF_LEN: usize = 64 * 1024;
 pub const RAW_RX_BUF_LEN: usize = 64 * 1024;
 pub const RAW_TX_BUF_LEN: usize = 64 * 1024;
 ```
 
-这些是每个 socket 的默认协议缓冲区大小。
+这些是每个 socket 的默认协议缓冲区大小；TCP 每方向 256 KiB，其余协议为 64 KiB。
 
 ### 7.2 设备队列
 
@@ -328,8 +371,9 @@ pub const LISTEN_QUEUE_SIZE: usize = 512;
 | `LISTEN_QUEUE_SIZE` | TCP listen backlog clamp 上限 |
 
 protocol frame port 使用预分配 SPSC move `DmaBuffer`；ring full 时 token 保留在
-`pending_*`，不会产生额外无界 queue。Ethernet ARP pending queue 保存二层帧，单槽
-容量为 `STANDARD_MTU + 14`；因此估算 pending 内存时不能只按 1500 B 计算。
+`pending_*`，不会产生额外无界 queue。设备级 TX `Fifo` 是另一层明确有界且按需分配
+的 frame backlog；`NoQueue` 不建立该 backlog。Ethernet ARP pending queue 保存二层帧，
+单槽容量为 `STANDARD_MTU + 14`；因此估算 pending 内存时不能只按 1500 B 计算。
 更完整的拷贝边界、队列满行为和内存预算见[内存与队列](memory.md)。
 
 ### 7.3 Unix 流缓冲区

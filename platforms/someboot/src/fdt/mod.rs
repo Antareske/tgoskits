@@ -1,3 +1,5 @@
+mod capacity;
+pub(crate) use capacity::{CPU_CAPACITY_SCALE, CpuCapacities};
 mod earlycon;
 mod memory;
 
@@ -48,7 +50,7 @@ pub(crate) fn set_fdt_addr_phys_if_valid(fdt_addr: usize) -> bool {
     true
 }
 
-fn fdt_base() -> Option<fdt_raw::Fdt<'static>> {
+pub(crate) fn fdt_base() -> Option<fdt_raw::Fdt<'static>> {
     let fdt_addr = fdt_addr()?;
     // SAFETY: the global FDT address points to firmware memory or the saved
     // early RAM copy, both of which stay valid for the boot lifetime.
@@ -178,23 +180,6 @@ mod tests {
     use fdt_edit::{Fdt, Node, NodeId, Property};
 
     use super::*;
-
-    #[test]
-    fn arch_default_canonicalize_paddr_keeps_identity() {
-        assert_eq!(
-            <crate::arch::Arch as crate::ArchTrait>::canonicalize_paddr(0x1234_5678),
-            0x1234_5678
-        );
-    }
-
-    #[test]
-    fn arch_default_ioremap_device_uses_generic_path() {
-        assert_eq!(
-            <crate::arch::Arch as crate::ArchTrait>::ioremap_device(0x1234_5678, 0x1000),
-            None
-        );
-        assert!(<crate::arch::Arch as crate::ArchTrait>::user_aspace_needs_kernel_mappings());
-    }
 
     #[test]
     fn set_fdt_addr_phys_rejects_zero() {

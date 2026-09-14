@@ -2,9 +2,8 @@
 
 use axdevice::{DeviceFirmwareBinding, DeviceNodeId, DeviceNodeSpec};
 use axvm_types::{NestedPagingConfig, VmArchVcpuOps};
-use riscv_vcpu::RiscvVcpuCreateConfig;
 
-use super::*;
+use super::{policy::RiscvVcpuCreateConfig, *};
 use crate::{
     AxVmError, AxVmResult, ax_err,
     config::*,
@@ -82,6 +81,7 @@ fn plan_devices(config: &AxVMConfig) -> AxVmResult<RiscvVmPlan> {
         &mut nodes,
         &controller_id,
         axdevice_base::InterruptControllerId::new(0),
+        None,
     )?;
     Ok(SimpleVmPlan::new(VmDevicePlan::with_pools_for_vm(
         config,

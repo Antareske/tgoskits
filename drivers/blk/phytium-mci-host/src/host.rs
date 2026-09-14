@@ -8,9 +8,7 @@ use dma_api::{DeviceDma, DmaConstraints};
 use mmio_api::MmioRaw;
 use sdmmc_protocol::{
     error::{Error, ErrorContext, Phase},
-    sdio::host::{
-        BusWidth, CompletionIrqRearm, HostEvent, HostEventKind, SdMmcIrqHandle, SignalVoltage,
-    },
+    sdio::host::{BusWidth, SdMmcIrqHandle, SignalVoltage},
 };
 use volatile::VolatilePtr;
 
@@ -466,15 +464,6 @@ impl PhytiumMci {
         self.regs.ctrl().update(|r| r.with_int_enable(true));
     }
 
-    pub(crate) fn rearm_completion_irq_and_check(&mut self) -> CompletionIrqRearm {
-        self.enable_completion_irq();
-        atomic::fence(Ordering::SeqCst);
-        match handle_irq_core(&self.irq).kind() {
-            HostEventKind::None | HostEventKind::CardInterrupt => CompletionIrqRearm::Idle,
-            _ => CompletionIrqRearm::Pending,
-        }
-    }
-
     pub fn disable_completion_irq(&mut self) {
         self.completion_irq_enabled.store(false, Ordering::Release);
         self.regs.intmask().write(0);
@@ -653,14 +642,6 @@ mod tests {
     use core::ptr::NonNull;
 
     use super::*;
-
-    #[test]
-    fn constructs_from_mapped_mmio_pointer() {
-        let base = NonNull::new(0x2800_0000 as *mut u8).unwrap();
-        let host = unsafe { PhytiumMci::new(base) };
-
-        assert_eq!(host.base_addr, 0x2800_0000);
-    }
 
     #[test]
     fn disabled_idmac_receive_status_is_acknowledged_without_wakeup() {

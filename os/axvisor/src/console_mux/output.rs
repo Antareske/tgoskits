@@ -18,13 +18,16 @@ pub struct GuestOutputMux {
     total_pending: usize,
 }
 
-#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum OutputMode {
-    #[default]
     BootMultiplex,
-    Interactive {
-        foreground: Option<usize>,
-    },
+    Interactive { foreground: Option<usize> },
+}
+
+impl Default for OutputMode {
+    fn default() -> Self {
+        Self::Interactive { foreground: None }
+    }
 }
 
 #[derive(Debug)]
@@ -100,7 +103,7 @@ impl GuestOutputMux {
         self.owner = None;
         self.physical_line_open = false;
         output.extend_from_slice(record);
-        if !record.ends_with(b"\n") {
+        if !record_ends_with_line_break(record) {
             output.push(b'\n');
         }
         output
@@ -141,16 +144,10 @@ impl GuestOutputMux {
         }
     }
 
-    /// Discards output state for guests that are no longer running.
+    /// Clears arbitration requests that refer to guests that are no longer running.
+    ///
+    /// Buffered output remains available until an explicit replay or VM removal.
     pub fn reconcile_running(&mut self, running: &BTreeSet<usize>) {
-        let discarded = self
-            .guests
-            .iter()
-            .filter(|(vm_id, _)| !running.contains(vm_id))
-            .map(|(_, guest)| guest.pending.len())
-            .sum::<usize>();
-        self.guests.retain(|vm_id, _| running.contains(vm_id));
-        self.total_pending -= discarded;
         if self.owner.is_some_and(|vm_id| !running.contains(&vm_id)) {
             self.owner = None;
         }
@@ -160,6 +157,22 @@ impl GuestOutputMux {
         {
             self.preemption = None;
         }
+    }
+
+    /// Drains one guest's buffered output without selecting an interactive foreground.
+    pub fn replay_buffered(&mut self, vm_id: usize) -> Option<Vec<u8>> {
+        self.guests.contains_key(&vm_id).then_some(())?;
+        self.mode = OutputMode::Interactive { foreground: None };
+        let mut output = self.drain_guest_log(vm_id);
+        if self.physical_line_open {
+            output.push(b'\n');
+            if let Some(guest) = self.guests.get_mut(&vm_id) {
+                guest.at_line_start = true;
+            }
+            self.owner = None;
+            self.physical_line_open = false;
+        }
+        Some(output)
     }
 
     /// Discards pending output for a replaced or stopped backend.
@@ -448,6 +461,33 @@ impl GuestOutputMux {
     }
 }
 
+fn record_ends_with_line_break(mut record: &[u8]) -> bool {
+    loop {
+        if record.ends_with(b"\n") {
+            return true;
+        }
+        let Some(sgr_start) = trailing_sgr_start(record) else {
+            return false;
+        };
+        record = &record[..sgr_start];
+    }
+}
+
+fn trailing_sgr_start(record: &[u8]) -> Option<usize> {
+    if record.last() != Some(&b'm') {
+        return None;
+    }
+    let start = record.iter().rposition(|&byte| byte == b'\x1b')?;
+    if record.get(start + 1) != Some(&b'[')
+        || !record[start + 2..record.len() - 1]
+            .iter()
+            .all(|byte| (0x30..=0x3f).contains(byte))
+    {
+        return None;
+    }
+    Some(start)
+}
+
 fn emit_vm_prefix(vm_id: usize, emit: &mut dyn FnMut(&[u8])) {
     emit(b"[VM ");
 
@@ -485,10 +525,45 @@ fn emit_usize(value: usize, emit: &mut dyn FnMut(&[u8])) {
 mod tests {
     use super::*;
 
+    fn boot_mux() -> GuestOutputMux {
+        let mut mux = GuestOutputMux::default();
+        mux.start_boot_multiplex();
+        mux
+    }
+
+    #[cfg_attr(axtest, axtest::axtest)]
+    #[cfg_attr(not(axtest), test)]
+    fn guest_output_is_buffered_until_a_foreground_is_selected() {
+        let mut mux = GuestOutputMux::default();
+
+        assert!(mux.format(1, false, b"guest boot\n").is_empty());
+        assert_eq!(mux.select_foreground(1), b"guest boot\n");
+    }
+
+    #[cfg_attr(axtest, axtest::axtest)]
+    #[cfg_attr(not(axtest), test)]
+    fn reconciliation_keeps_stopped_guest_output_replayable() {
+        let mut mux = GuestOutputMux::default();
+
+        assert!(mux.format(1, false, b"guest result\n").is_empty());
+        mux.reconcile_running(&BTreeSet::new());
+
+        assert_eq!(mux.select_foreground(1), b"guest result\n");
+    }
+
+    #[cfg_attr(axtest, axtest::axtest)]
+    #[cfg_attr(not(axtest), test)]
+    fn registering_guest_preallocates_atomic_output_storage() {
+        let mut mux = GuestOutputMux::default();
+        mux.register_guest(7);
+
+        assert!(mux.guests[&7].pending.capacity() >= PER_GUEST_LOG_CAPACITY);
+    }
+
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
     fn host_record_terminates_an_open_guest_line() {
-        let mut mux = GuestOutputMux::default();
+        let mut mux = boot_mux();
         assert_eq!(mux.format(1, false, b"guest> "), b"guest> ");
 
         assert_eq!(mux.format_host_record(b"host record\n"), b"\nhost record\n");
@@ -503,8 +578,17 @@ mod tests {
 
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
-    fn complete_line_is_emitted_while_other_fragment_remains_buffered() {
+    fn host_record_with_trailing_sgr_does_not_add_a_blank_line() {
         let mut mux = GuestOutputMux::default();
+        let record = b"\x1b[37mhost record\x1b[m\r\n\x1b[m";
+
+        assert_eq!(mux.format_host_record(record), record);
+    }
+
+    #[cfg_attr(axtest, axtest::axtest)]
+    #[cfg_attr(not(axtest), test)]
+    fn complete_line_is_emitted_while_other_fragment_remains_buffered() {
+        let mut mux = boot_mux();
         let mut host = Vec::new();
 
         host.extend(mux.format(2, true, b"booting"));
@@ -517,7 +601,7 @@ mod tests {
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
     fn complete_line_preempts_an_abandoned_partial_fragment() {
-        let mut mux = GuestOutputMux::default();
+        let mut mux = boot_mux();
 
         assert!(mux.format(2, true, b"~ # ").is_empty());
         assert_eq!(mux.format(1, true, b"ready\n"), b"[VM 1] ready\n");
@@ -526,7 +610,7 @@ mod tests {
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
     fn competing_guest_does_not_split_an_incomplete_logical_line() {
-        let mut mux = GuestOutputMux::default();
+        let mut mux = boot_mux();
 
         assert!(mux.format(1, true, b"long ").is_empty());
         assert_eq!(mux.format(2, true, b"ready\n"), b"[VM 2] ready\n");
@@ -539,7 +623,7 @@ mod tests {
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
     fn fragmented_output_from_one_guest_keeps_one_prefix() {
-        let mut mux = GuestOutputMux::default();
+        let mut mux = boot_mux();
 
         assert!(mux.format(1, true, b"prom").is_empty());
         assert_eq!(
@@ -551,7 +635,7 @@ mod tests {
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
     fn pending_output_is_bounded_per_guest() {
-        let mut mux = GuestOutputMux::default();
+        let mut mux = boot_mux();
         assert!(mux.format(0, true, b"open").is_empty());
         assert!(
             mux.format(1, true, &vec![b'x'; PER_GUEST_LOG_CAPACITY + 1])
@@ -565,7 +649,7 @@ mod tests {
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
     fn full_boot_ring_retains_the_newline_that_completes_a_line() {
-        let mut mux = GuestOutputMux::default();
+        let mut mux = boot_mux();
         assert!(
             mux.format(1, true, &vec![b'x'; PER_GUEST_LOG_CAPACITY])
                 .is_empty()
@@ -589,7 +673,7 @@ mod tests {
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
     fn oversized_backend_write_does_not_drive_output_allocation() {
-        let mut mux = GuestOutputMux::default();
+        let mut mux = boot_mux();
         let output = mux.format(1, true, &vec![b'x'; PER_GUEST_LOG_CAPACITY * 4]);
 
         assert!(output.capacity() <= PER_GUEST_LOG_CAPACITY + 16);
@@ -598,7 +682,7 @@ mod tests {
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
     fn total_pending_output_is_bounded_and_cleanup_releases_capacity() {
-        let mut mux = GuestOutputMux::default();
+        let mut mux = boot_mux();
         assert!(mux.format(0, true, b"open").is_empty());
 
         for vm_id in 1..=5 {
@@ -613,13 +697,13 @@ mod tests {
         assert_eq!(mux.total_pending(), PER_GUEST_LOG_CAPACITY * 4 + 4);
 
         mux.reconcile_running(&BTreeSet::from([0, 5]));
-        assert_eq!(mux.total_pending(), PER_GUEST_LOG_CAPACITY + 4);
+        assert_eq!(mux.total_pending(), PER_GUEST_LOG_CAPACITY * 4 + 4);
     }
 
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
     fn complete_line_preempts_a_background_fragment_once() {
-        let mut mux = GuestOutputMux::default();
+        let mut mux = boot_mux();
         assert!(mux.format(2, true, b"~ # ").is_empty());
 
         mux.request_preemption(1);
@@ -674,7 +758,7 @@ mod tests {
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
     fn resetting_an_open_line_owner_preserves_a_physical_separator() {
-        let mut mux = GuestOutputMux::default();
+        let mut mux = boot_mux();
         assert!(mux.format(2, true, b"partial").is_empty());
 
         mux.reset_guest(2);
@@ -685,7 +769,7 @@ mod tests {
     #[cfg_attr(axtest, axtest::axtest)]
     #[cfg_attr(not(axtest), test)]
     fn reconciliation_clears_invalid_preemption_and_preserves_separator() {
-        let mut mux = GuestOutputMux::default();
+        let mut mux = boot_mux();
         assert!(mux.format(2, true, b"partial").is_empty());
         mux.request_preemption(2);
 

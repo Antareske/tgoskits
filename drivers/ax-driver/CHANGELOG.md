@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.0](https://github.com/rcore-os/tgoskits/compare/ax-driver-v0.15.0...ax-driver-v0.16.0) - 2026-09-13
+
+### Fixed
+
+- *(rknpu)* copy and validate user task arrays before NPU submit ([#2327](https://github.com/rcore-os/tgoskits/pull/2327))
+
+## [0.15.0](https://github.com/rcore-os/tgoskits/compare/ax-driver-v0.14.0...ax-driver-v0.15.0) - 2026-09-11
+
+### Fixed
+
+- *(axvisor)* restore COM1 console and preserve guest output order ([#2311](https://github.com/rcore-os/tgoskits/pull/2311))
+- *(rknpu)* add timeout error handling and update ioctl error mapping ([#2324](https://github.com/rcore-os/tgoskits/pull/2324))
+
+## [0.14.0](https://github.com/rcore-os/tgoskits/compare/ax-driver-v0.13.3...ax-driver-v0.14.0) - 2026-09-09
+
+### Added
+
+- *(trait-ffi)* [**breaking**] maintain and extend static interfaces with syn 3 ([#2300](https://github.com/rcore-os/tgoskits/pull/2300))
+- *(aic8800)* integrate AKA WPA2 Wi-Fi and iperf validation ([#2222](https://github.com/rcore-os/tgoskits/pull/2222))
+
+### Fixed
+
+- *(jpeg)* validate MPP DMA ranges against imported dma-bufs ([#2289](https://github.com/rcore-os/tgoskits/pull/2289))
+- *(starry)* enforce warning-free builds ([#2244](https://github.com/rcore-os/tgoskits/pull/2244))
+- *(ax-driver)* align RK3588 DWCMSHC clock setup ([#2242](https://github.com/rcore-os/tgoskits/pull/2242))
+
+### Other
+
+- *(repo)* remove duplicated tests and configuration snapshots ([#2326](https://github.com/rcore-os/tgoskits/pull/2326))
+- *(repo)* continue removing nonfunctional test scaffolding ([#2307](https://github.com/rcore-os/tgoskits/pull/2307))
+- *(ax-task)* rebuild scheduler and runtime ownership ([#1775](https://github.com/rcore-os/tgoskits/pull/1775))
+
 ## [0.13.3](https://github.com/rcore-os/tgoskits/compare/ax-driver-v0.13.2...ax-driver-v0.13.3) - 2026-08-27
 
 ### Other

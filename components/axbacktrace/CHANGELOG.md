@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.12](https://github.com/rcore-os/tgoskits/compare/axbacktrace-v0.4.11...axbacktrace-v0.4.12) - 2026-09-13
+
+### Added
+
+- *(starry)* add AArch64 Linux perf support ([#2274](https://github.com/rcore-os/tgoskits/pull/2274))
+
+## [0.4.11](https://github.com/rcore-os/tgoskits/compare/axbacktrace-v0.4.10...axbacktrace-v0.4.11) - 2026-09-09
+
+### Other
+
+- *(repo)* continue removing nonfunctional test scaffolding ([#2307](https://github.com/rcore-os/tgoskits/pull/2307))
+- *(ax-task)* rebuild scheduler and runtime ownership ([#1775](https://github.com/rcore-os/tgoskits/pull/1775))
+
 ## [0.4.10](https://github.com/rcore-os/tgoskits/compare/axbacktrace-v0.4.9...axbacktrace-v0.4.10) - 2026-08-25
 
 ### Other

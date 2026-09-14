@@ -9,17 +9,23 @@ use core::fmt::{self, Write};
 
 use ax_lazyinit::OnceLock;
 use ax_sync::Mutex;
-use axpoll::PollSet;
+use axpoll_set::PollSet;
 
 pub use crate::serial::RxItem;
-use crate::{RuntimeError, RuntimeResult, raw_console::RawConsoleInput, serial, sync::SpinLock};
+use crate::{
+    RuntimeError, RuntimeResult,
+    raw_console::RawConsoleInput,
+    serial,
+    structured_log::{RuntimeLogContext, write_record},
+    task::sync::RawSpinLock,
+};
 
 static ACTIVATION: OnceLock<ConsoleActivation> = OnceLock::new();
 static TTY_NUMBERS: OnceLock<Box<[Option<usize>]>> = OnceLock::new();
 // Task writers take these in order. Log publishers take only the hardware
 // lock, so early CPUs and interrupt context never touch task-owned state.
 static RAW_OUTPUT_LOCK: Mutex<()> = Mutex::new(());
-static RAW_HARDWARE_LOCK: SpinLock<()> = SpinLock::new(());
+static RAW_HARDWARE_LOCK: RawSpinLock<()> = RawSpinLock::new(());
 static RAW_OUTPUT_SOURCE: OnceLock<Arc<PollSet>> = OnceLock::new();
 
 /// Result of selecting the firmware console before secondary CPUs start.
@@ -236,6 +242,8 @@ pub fn subscribe_logs() -> RuntimeResult<ConsoleLogSubscription> {
 /// UART exists. Failed-closed ownership consumes the record without touching
 /// the former early console.
 pub(crate) fn try_publish_without_runtime(
+    meta: ax_log::RecordMeta,
+    context: RuntimeLogContext,
     args: fmt::Arguments<'_>,
 ) -> Option<ax_log::PublishStatus> {
     match activation()? {
@@ -243,7 +251,7 @@ pub(crate) fn try_publish_without_runtime(
             // Logging can run on a secondary CPU before its scheduler has
             // installed a current task, or from interrupt context. A
             // sleepable mutex is therefore never a valid record arbiter.
-            Some(publish_raw_record(args, &mut RawHalWriter))
+            Some(publish_raw_record(meta, context, args, &mut RawHalWriter))
         }
         ConsoleActivation::Active { .. } | ConsoleActivation::FailedClosed(_) => {
             Some(ax_log::PublishStatus::Dropped)
@@ -251,11 +259,16 @@ pub(crate) fn try_publish_without_runtime(
     }
 }
 
-fn publish_raw_record(args: fmt::Arguments<'_>, writer: &mut impl Write) -> ax_log::PublishStatus {
+fn publish_raw_record(
+    meta: ax_log::RecordMeta,
+    context: RuntimeLogContext,
+    args: fmt::Arguments<'_>,
+    writer: &mut impl Write,
+) -> ax_log::PublishStatus {
     let Some(_hardware) = RAW_HARDWARE_LOCK.try_lock_irqsave() else {
         return ax_log::PublishStatus::Dropped;
     };
-    if writer.write_fmt(args).is_ok() {
+    if write_record(writer, meta, context, args).is_ok() {
         ax_log::PublishStatus::Published
     } else {
         ax_log::PublishStatus::Dropped
@@ -469,6 +482,14 @@ pub struct ConsoleLogRecord {
 }
 
 impl ConsoleLogRecord {
+    /// Application routing tag for raw output; absent for kernel logs/prints.
+    pub fn output_tag(&self) -> Option<u128> {
+        match self.inner.kind() {
+            serial::LogRecordKind::Output(tag) => Some(tag),
+            _ => None,
+        }
+    }
+
     pub fn bytes(&self) -> &[u8] {
         self.inner.bytes()
     }
@@ -507,6 +528,16 @@ pub struct ConsoleLogSubscription {
 }
 
 impl ConsoleLogSubscription {
+    /// Enqueues raw bytes alongside kernel records in publication order.
+    ///
+    /// `tag` is opaque to the runtime and identifies the application stream and
+    /// its generation. Adjacent writes with the same tag may coalesce. This
+    /// operation allocates nothing and never sleeps; a full queue rejects the
+    /// entire write with `WouldBlock` and accounts it in `dropped()`.
+    pub fn write_output(&self, tag: u128, bytes: &[u8]) -> RuntimeResult {
+        self.inner.write_output(tag, bytes)
+    }
+
     pub fn try_read(&self) -> Option<ConsoleLogRecord> {
         self.inner
             .try_read()
@@ -564,7 +595,7 @@ mod tests {
         inactive_console_error, output, publish_raw_record, raw_hal_activation, select_candidate,
         take_input,
     };
-    use crate::RuntimeError;
+    use crate::{RuntimeError, structured_log::RuntimeLogContext};
 
     #[test]
     fn tty_numbering_preserves_aliases_and_fills_gaps() {
@@ -670,9 +701,17 @@ mod tests {
         let mut rendered = alloc::string::String::new();
 
         assert_eq!(
-            publish_raw_record(format_args!("early secondary record"), &mut rendered),
+            publish_raw_record(
+                ax_log::RecordMeta::log(),
+                RuntimeLogContext::new(core::time::Duration::new(12, 345_678_000), Some(2), None),
+                format_args!("\u{1b}[37max_runtime:462] early secondary record\n"),
+                &mut rendered,
+            ),
             ax_log::PublishStatus::Published
         );
-        assert_eq!(rendered, "early secondary record");
+        assert_eq!(
+            rendered,
+            "\u{1b}[37m[ 12.345678 2 \u{1b}[37max_runtime:462] early secondary record\n"
+        );
     }
 }

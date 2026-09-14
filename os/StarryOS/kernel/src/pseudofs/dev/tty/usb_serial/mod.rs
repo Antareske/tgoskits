@@ -4,7 +4,8 @@ use alloc::{collections::VecDeque, string::ToString, sync::Arc, vec::Vec};
 use core::sync::atomic::{AtomicBool, AtomicU32, AtomicUsize, Ordering};
 
 use ax_lazyinit::LazyLock;
-use axpoll::{IoEvents, PollSet};
+use axpoll::IoEvents;
+use axpoll_set::PollSet;
 
 use self::backend::{UsbSerialPortInfo, find_usb_serial_port};
 use super::{
@@ -385,8 +386,8 @@ impl UsbSerialBackendState {
         }
 
         let backend = self.clone();
-        ax_task::spawn_with_name(
-            move || {
+        crate::task::kernel_thread_builder("usb-serial-rx".to_string())
+            .spawn(move || {
                 let mut buf = [0u8; USB_SERIAL_RX_CHUNK];
                 loop {
                     if backend.session_closing.load(Ordering::Acquire) {
@@ -413,7 +414,7 @@ impl UsbSerialBackendState {
                         }
                     };
                     match backend.bulk_in_rx(&session, &mut buf) {
-                        Ok(0) => ax_task::yield_now(),
+                        Ok(0) => crate::task::yield_now(),
                         Ok(actual) => {
                             backend.push_rx(&buf[..actual.min(buf.len())]);
                             if backend.session_closing.load(Ordering::Acquire) {
@@ -431,9 +432,8 @@ impl UsbSerialBackendState {
                         }
                     }
                 }
-            },
-            "usb-serial-rx".to_string(),
-        );
+            })
+            .expect("failed to spawn kernel thread");
     }
 
     fn start_tx_worker(self: &Arc<Self>) {
@@ -446,35 +446,36 @@ impl UsbSerialBackendState {
         }
 
         let backend = self.clone();
-        ax_task::spawn_with_name(
-            move || loop {
-                let result = {
-                    let _guard = backend.output_lock.lock();
-                    backend.drain_tx_queue_locked()
-                };
-                if let Err(err) = result {
-                    warn!(
-                        "usb-serial: ttyUSB{} TX worker stopped: {err:?}",
-                        backend.index
-                    );
-                    backend.tx_worker_started.store(false, Ordering::Release);
-                    break;
-                }
+        crate::task::kernel_thread_builder("usb-serial-tx".to_string())
+            .spawn(move || {
+                loop {
+                    let result = {
+                        let _guard = backend.output_lock.lock();
+                        backend.drain_tx_queue_locked()
+                    };
+                    if let Err(err) = result {
+                        warn!(
+                            "usb-serial: ttyUSB{} TX worker stopped: {err:?}",
+                            backend.index
+                        );
+                        backend.tx_worker_started.store(false, Ordering::Release);
+                        break;
+                    }
 
-                backend.tx_worker_started.store(false, Ordering::Release);
-                // Avoid a lost wakeup: if a producer queued more bytes after
-                // the queue was drained, take the worker flag again and loop.
-                if backend.tx_queue.lock().is_empty()
-                    || backend
-                        .tx_worker_started
-                        .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
-                        .is_err()
-                {
-                    break;
+                    backend.tx_worker_started.store(false, Ordering::Release);
+                    // Avoid a lost wakeup: if a producer queued more bytes after
+                    // the queue was drained, take the worker flag again and loop.
+                    if backend.tx_queue.lock().is_empty()
+                        || backend
+                            .tx_worker_started
+                            .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
+                            .is_err()
+                    {
+                        break;
+                    }
                 }
-            },
-            "usb-serial-tx".to_string(),
-        );
+            })
+            .expect("failed to spawn kernel thread");
     }
 }
 

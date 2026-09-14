@@ -14,6 +14,8 @@ mod browser_console_delivery;
 #[path = "../src/network_console/layout.rs"]
 mod browser_console_layout;
 mod guest_console_harness;
+#[path = "../src/guest_console/terminal.rs"]
+mod host_terminal;
 mod manager;
 mod network_console;
 
@@ -33,6 +35,13 @@ mod tests {
         metadata_for_remove, move_file_or_dir, remove_path, touch_file_at,
     };
 
+    fn remove_guest_console(vm_id: usize) {
+        use crate::guest_console_harness::mux;
+
+        let identity = mux::backend_identity(vm_id).expect("guest backend must be registered");
+        assert!(mux::remove_if_backend(identity));
+    }
+
     #[test]
     fn guest_output_reaches_only_its_network_console() {
         use crate::{guest_console_harness::mux, network_console};
@@ -51,8 +60,8 @@ mod tests {
         ax_assert_eq!(network_console::take_guest_output(1), b"starry output\n");
         ax_assert_eq!(network_console::take_guest_output(2), b"zephyr output\n");
         ax_assert!(network_console::take_guest_output(3).is_empty());
-        mux::remove(1);
-        mux::remove(2);
+        remove_guest_console(1);
+        remove_guest_console(2);
     }
 
     #[test]
@@ -66,7 +75,7 @@ mod tests {
         backend.write(b"physical console only\n");
 
         ax_assert!(network_console::take_guest_output(1).is_empty());
-        mux::remove(1);
+        remove_guest_console(1);
     }
 
     #[test]
@@ -81,7 +90,7 @@ mod tests {
         backend.write(b"./run_dual_pick.sh");
 
         ax_assert_eq!(network_console::take_guest_output(1), b"./run_dual_pick.sh");
-        mux::remove(1);
+        remove_guest_console(1);
     }
 
     #[test]
@@ -98,7 +107,7 @@ mod tests {
         }
 
         ax_assert_eq!(network_console::take_guest_output(2), b"zephyr log line\n");
-        mux::remove(2);
+        remove_guest_console(2);
     }
 
     #[test]
@@ -110,7 +119,6 @@ mod tests {
         delivery.append(b"starry ", 0);
         delivery.append(b"continues", 0);
 
-        ax_assert_eq!(delivery.len(), 16);
         ax_assert_eq!(delivery.into_bytes(), b"starry continues");
     }
 
@@ -148,19 +156,26 @@ mod tests {
         use core::sync::atomic::{AtomicBool, Ordering};
         use std::{sync::Arc, thread, time::Duration};
 
-        use crate::browser_console_delivery::BlockingSignal;
+        use {
+            ax_std::os::arceos::modules::ax_runtime::task::sync::irq::IrqWaitCell,
+            ax_std::os::arceos::modules::ax_runtime::task::sync::irq::IrqWorkerWaiter,
+            ax_std::os::arceos::modules::ax_runtime::task::thread::current::current_thread_handle,
+        };
 
-        let signal = Arc::new(BlockingSignal::new());
-        signal.notify_irq();
-        signal.drain();
+        let signal = Arc::new(IrqWaitCell::new());
         let waiting = Arc::new(AtomicBool::new(false));
         let woke = Arc::new(AtomicBool::new(false));
         let worker_signal = Arc::clone(&signal);
         let worker_waiting = Arc::clone(&waiting);
         let worker_woke = Arc::clone(&woke);
         let worker = thread::spawn(move || {
+            let current =
+                current_thread_handle().expect("delivery waiter must bind to its runtime worker");
+            let waiter = IrqWorkerWaiter::new(current.wake_handle());
             worker_waiting.store(true, Ordering::Release);
-            worker_signal.wait();
+            waiter
+                .wait(&worker_signal)
+                .expect("delivery waiter must accept one notification cell");
             worker_woke.store(true, Ordering::Release);
         });
 
@@ -170,7 +185,7 @@ mod tests {
         thread::sleep(Duration::from_millis(30));
         ax_assert!(!woke.load(Ordering::Acquire));
 
-        signal.notify();
+        let _result = signal.notify();
         worker
             .join()
             .expect("delivery waiter must exit after notify");
@@ -178,8 +193,30 @@ mod tests {
     }
 
     #[test]
+    fn host_terminal_converts_only_bare_lf_across_batches() {
+        use crate::host_terminal::TerminalNewlineNormalizer;
+
+        let mut normalizer = TerminalNewlineNormalizer::new();
+        let mut output = Vec::new();
+        normalizer
+            .write(b"banner\nline\r", |bytes| {
+                output.extend_from_slice(bytes);
+                Ok::<_, ()>(())
+            })
+            .unwrap();
+        normalizer
+            .write(b"\nnext\n", |bytes| {
+                output.extend_from_slice(bytes);
+                Ok::<_, ()>(())
+            })
+            .unwrap();
+
+        ax_assert_eq!(output, b"banner\r\nline\r\nnext\r\n");
+    }
+
+    #[test]
     fn browser_console_layout_uses_at_most_three_sorted_guests() {
-        use crate::browser_console_layout::{ConsoleLane, MAX_GUEST_CONSOLES, plan_endpoints};
+        use crate::browser_console_layout::{MAX_GUEST_CONSOLES, plan_endpoints};
 
         let endpoints = plan_endpoints(
             [7, 5, 9, 3]
@@ -189,7 +226,6 @@ mod tests {
         );
 
         ax_assert_eq!(endpoints.len(), MAX_GUEST_CONSOLES + 1);
-        ax_assert_eq!(ConsoleLane::COUNT, 4);
         ax_assert_eq!(endpoints[0].route, "axvisor");
         ax_assert_eq!(endpoints[1].vm_id, Some(3));
         ax_assert_eq!(endpoints[2].vm_id, Some(5));

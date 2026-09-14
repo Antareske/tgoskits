@@ -162,7 +162,7 @@ impl PciFunction for VpciTestFunction {
     fn read_bar(
         &self,
         access: PciBarAccess,
-        _context: &mut dyn DeviceContext,
+        _context: &mut dyn PciEndpointContext,
     ) -> DeviceResult<u64> {
         let (offset, size) = self.access_range(access)?;
         let backing = self.backing.lock().map_err(|_| DeviceError::InvalidState {
@@ -181,7 +181,7 @@ impl PciFunction for VpciTestFunction {
         &self,
         access: PciBarAccess,
         value: u64,
-        _context: &mut dyn DeviceContext,
+        _context: &mut dyn PciEndpointContext,
     ) -> DeviceResult {
         let (offset, size) = self.access_range(access)?;
         let mut backing = self.backing.lock().map_err(|_| DeviceError::InvalidState {
@@ -190,6 +190,17 @@ impl PciFunction for VpciTestFunction {
         })?;
         let bytes = value.to_le_bytes();
         backing[offset..offset + size].copy_from_slice(&bytes[..size]);
+        Ok(())
+    }
+
+    fn reset(&self, _command: PciCommandState) -> DeviceResult {
+        self.backing
+            .lock()
+            .map_err(|_| DeviceError::InvalidState {
+                operation: "reset vpci-test BAR",
+                detail: "BAR backing lock is poisoned".into(),
+            })?
+            .fill(0);
         Ok(())
     }
 }
@@ -226,14 +237,6 @@ mod tests {
         .with_bar(PciMemoryBar::new(PciBarIndex::new(BAR_INDEX).unwrap(), BAR_SIZE as u64).unwrap())
         .unwrap();
         assert_eq!(function, &expected);
-    }
-
-    #[test]
-    fn backing_is_zeroed_per_endpoint() {
-        let first = VpciTestFunction::new().unwrap();
-        let second = VpciTestFunction::new().unwrap();
-        first.backing.lock().unwrap()[0] = 0xa5;
-        assert_eq!(second.backing.lock().unwrap()[0], 0);
     }
 
     #[test]

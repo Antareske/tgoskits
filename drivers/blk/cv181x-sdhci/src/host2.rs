@@ -3,7 +3,7 @@
 use dma_api::DeviceDma;
 use sdhci_host::Sdhci;
 use sdmmc_host::{ClockHz, ProgressCause, RequestProgress, SignalVoltage};
-use sdmmc_protocol::sdio::host::SdMmcIrqHost;
+use sdmmc_protocol::sdio::host::{CompletionIrqRearmHost, SdMmcIrqHost};
 
 use super::*;
 
@@ -19,12 +19,6 @@ impl SdMmcIrqHost for Cv181xSdhci {
     fn enable_completion_irq(&mut self) -> Result<(), ProtocolError> {
         self.inner.enable_completion_irq();
         Ok(())
-    }
-
-    fn rearm_completion_irq_and_check(
-        &mut self,
-    ) -> Result<sdmmc_protocol::sdio::CompletionIrqRearm, ProtocolError> {
-        <Sdhci as SdMmcIrqHost>::rearm_completion_irq_and_check(&mut self.inner)
     }
 
     fn disable_completion_irq(&mut self) -> Result<(), ProtocolError> {
@@ -58,6 +52,14 @@ impl SdMmcIrqHost for Cv181xSdhci {
 
     fn progress_wait_kind(&self) -> sdmmc_protocol::sdio::HostProgressWait {
         <Sdhci as SdMmcIrqHost>::progress_wait_kind(&self.inner)
+    }
+}
+
+impl CompletionIrqRearmHost for Cv181xSdhci {
+    fn rearm_completion_irq_and_check(
+        &mut self,
+    ) -> Result<sdmmc_protocol::sdio::CompletionIrqRearm, ProtocolError> {
+        <Sdhci as CompletionIrqRearmHost>::rearm_completion_irq_and_check(&mut self.inner)
     }
 }
 
@@ -137,12 +139,26 @@ impl sdmmc_host::SdMmcHost for Cv181xSdhci {
                 Ok(BusRequest::inner(request, AfterBusOp::ResetAll))
             }
             sdmmc_host::BusOp::SetClock(speed) => {
-                let request = unsafe { sdmmc_host::SdMmcHost::submit_bus_op(&mut self.inner, op)? };
-                Ok(BusRequest::inner(request, AfterBusOp::SetClock(speed)))
+                let plan = self.clock_plan(speed)?;
+                let request = unsafe {
+                    sdmmc_host::SdMmcHost::submit_bus_op(
+                        &mut self.inner,
+                        sdmmc_host::BusOp::SetClockHz(ClockHz(plan.target_hz)),
+                    )?
+                };
+                self.apply_clock_timing(plan);
+                Ok(BusRequest::inner(request, AfterBusOp::None))
             }
             sdmmc_host::BusOp::SetClockHz(ClockHz(hz)) => {
-                let request = unsafe { sdmmc_host::SdMmcHost::submit_bus_op(&mut self.inner, op)? };
-                Ok(BusRequest::inner(request, AfterBusOp::SetClockHz(hz)))
+                let plan = self.clock_hz_plan(hz);
+                let request = unsafe {
+                    sdmmc_host::SdMmcHost::submit_bus_op(
+                        &mut self.inner,
+                        sdmmc_host::BusOp::SetClockHz(ClockHz(plan.target_hz)),
+                    )?
+                };
+                self.apply_clock_timing(plan);
+                Ok(BusRequest::inner(request, AfterBusOp::None))
             }
             sdmmc_host::BusOp::SetBusWidth(width) if !self.config.supports_bus_width(width) => {
                 Err(sdmmc_host::Error::Unsupported)
@@ -231,6 +247,4 @@ pub(super) enum AfterBusOp {
     PowerOff,
     ResetAll,
     Restore3v3,
-    SetClock(sdmmc_host::ClockSpeed),
-    SetClockHz(u32),
 }

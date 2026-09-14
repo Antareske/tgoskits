@@ -18,12 +18,10 @@ pub(crate) mod usbfs;
 
 use alloc::{boxed::Box, sync::Arc};
 
-use ax_fs_ng::vfs::FsContext;
+use ax_fs_ng::vfs::{FsContext, current_fs_context};
 use ax_lazyinit::LazyInit;
 use axfs_ng_vfs::{DirNodeOps, FileNodeOps, Filesystem, NodePermission, WeakDirEntry};
 pub use tmp::MemoryFs;
-#[cfg(axtest)]
-pub(crate) use tmp::failed_symlink_capacity_reservation_does_not_publish_name_for_test;
 
 pub use self::{device::*, dir::*, file::*, fs::*};
 use crate::StarryResult;
@@ -87,7 +85,7 @@ fn mount_at(fs: &FsContext, path: &str, mount_fs: Filesystem) -> StarryResult<()
 pub fn mount_all() -> StarryResult<()> {
     info!("Initialize pseudofs...");
 
-    let fs_context = ax_fs_ng::vfs::current_fs_context();
+    let fs_context = current_fs_context();
     let fs = fs_context.lock();
     mount_at(&fs, "/dev", dev::new_devfs())?;
     let usbfs = usbfs::new_usbfs()?;

@@ -7,6 +7,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.5](https://github.com/rcore-os/tgoskits/compare/axvisor-v0.7.4...axvisor-v0.7.5) - 2026-09-13
+
+### Other
+
+- updated the following local packages: ax-driver, axbuild, ax-std
+
+## [0.7.4](https://github.com/rcore-os/tgoskits/compare/axvisor-v0.7.3...axvisor-v0.7.4) - 2026-09-12
+
+### Added
+
+- *(axvisor)* validate RISC-V virtio-blk guest ([#2379](https://github.com/rcore-os/tgoskits/pull/2379))
+
+## [0.7.3](https://github.com/rcore-os/tgoskits/compare/axvisor-v0.7.2...axvisor-v0.7.3) - 2026-09-11
+
+### Added
+
+- *(axvisor)* validate AArch64 virtio-blk with Linux smoke
+
+### Fixed
+
+- *(axvm)* prepare host GIC before CPU enable and centralize fatal traps ([#2356](https://github.com/rcore-os/tgoskits/pull/2356))
+- *(axvisor)* restore COM1 console and preserve guest output order ([#2311](https://github.com/rcore-os/tgoskits/pull/2311))
+
+### Other
+
+- *(axbuild)* migrate test execution to shell check steps ([#2361](https://github.com/rcore-os/tgoskits/pull/2361))
+
+## [0.7.2](https://github.com/rcore-os/tgoskits/compare/axvisor-v0.7.1...axvisor-v0.7.2) - 2026-09-09
+
+### Other
+
+- update Cargo.lock dependencies
+
+## [0.7.1](https://github.com/rcore-os/tgoskits/compare/axvisor-v0.7.0...axvisor-v0.7.1) - 2026-09-09
+
+### Fixed
+
+- *(release)* restore verified semver checks and package Axvisor linker ([#2335](https://github.com/rcore-os/tgoskits/pull/2335))
+
+## [0.7.0](https://github.com/rcore-os/tgoskits/compare/axvisor-v0.6.2...axvisor-v0.7.0) - 2026-09-09
+
+### Added
+
+- *(axvisor)* add browser console ([#2211](https://github.com/rcore-os/tgoskits/pull/2211))
+- *(axvisor)* add generic vPCI foundation with x86 PCI enumeration ([#2197](https://github.com/rcore-os/tgoskits/pull/2197))
+
+### Fixed
+
+- *(repo)* remove redundant Cargo manifest declarations ([#2297](https://github.com/rcore-os/tgoskits/pull/2297))
+- *(axvisor)* render browser consoles with xterm ([#2285](https://github.com/rcore-os/tgoskits/pull/2285))
+- *(axvm)* align implicit PCI ownership with guest FDT ([#2262](https://github.com/rcore-os/tgoskits/pull/2262))
+- *(axvisor)* preserve structured console output ([#2204](https://github.com/rcore-os/tgoskits/pull/2204))
+- *(axvisor)* stabilize physical console logs ([#2248](https://github.com/rcore-os/tgoskits/pull/2248))
+- *(axvisor)* stabilize browser console delivery ([#2241](https://github.com/rcore-os/tgoskits/pull/2241))
+- *(axvm)* exclude disabled devices from generated guest FDT ([#2207](https://github.com/rcore-os/tgoskits/pull/2207))
+
+### Other
+
+- *(ax-task)* [**breaking**] organize scheduler namespaces and unify runtime APIs ([#2313](https://github.com/rcore-os/tgoskits/pull/2313))
+- *(repo)* continue removing nonfunctional test scaffolding ([#2307](https://github.com/rcore-os/tgoskits/pull/2307))
+- *(ax-task)* rebuild scheduler and runtime ownership ([#1775](https://github.com/rcore-os/tgoskits/pull/1775))
+
 ## [0.6.2](https://github.com/rcore-os/tgoskits/compare/axvisor-v0.6.1...axvisor-v0.6.2) - 2026-08-27
 
 ### Fixed

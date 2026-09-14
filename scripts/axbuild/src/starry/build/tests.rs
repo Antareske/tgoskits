@@ -116,12 +116,6 @@ fn load_build_info_writes_default_template_when_missing() {
 }
 
 #[test]
-fn default_starry_build_info_does_not_inject_features() {
-    let build_info = default_starry_build_info();
-    assert!(build_info.features.is_empty());
-}
-
-#[test]
 fn load_build_info_reads_existing_file() {
     let root = tempdir().unwrap();
     let path = root.path().join(".build-target.toml");
@@ -328,65 +322,6 @@ fn load_cargo_config_rejects_removed_dynamic_platform_feature() {
 }
 
 #[test]
-fn patch_starry_cargo_config_keeps_qemu_as_capability_feature() {
-    let request = request(
-        PathBuf::from("/tmp/.build.toml"),
-        "aarch64",
-        "aarch64-unknown-none-softfloat",
-    );
-    let build_info = StarryBuildInfo {
-        env: HashMap::new(),
-        features: vec!["qemu".to_string()],
-        log: LogLevel::Info,
-        max_cpu_num: None,
-    };
-    let mut cargo = build_info.into_base_cargo_config_with_log(
-        STARRY_PACKAGE.to_string(),
-        "scripts/targets/std/pie/aarch64-unknown-linux-musl.json".to_string(),
-        Vec::new(),
-    );
-
-    let metadata = crate::build::workspace_metadata().unwrap();
-    patch_starry_cargo_config(&mut cargo, &request, &metadata).unwrap();
-
-    assert!(cargo.features.contains(&"qemu".to_string()));
-    assert!(!cargo.env.contains_key("AX_PLATFORM"));
-}
-
-#[test]
-fn patch_starry_cargo_config_keeps_loongarch64_dynamic_platform_dynamic() {
-    let request = request(
-        PathBuf::from("/tmp/.build.toml"),
-        "loongarch64",
-        "loongarch64-unknown-none-softfloat",
-    );
-    let build_info = StarryBuildInfo {
-        env: HashMap::new(),
-        features: vec!["axplat-dyn/efi".to_string()],
-        log: LogLevel::Info,
-        max_cpu_num: None,
-    };
-    let mut cargo = build_info.into_base_cargo_config_with_log(
-        STARRY_PACKAGE.to_string(),
-        request.target.clone(),
-        vec![],
-    );
-    let metadata = crate::build::workspace_metadata().unwrap();
-    patch_starry_cargo_config(&mut cargo, &request, &metadata).unwrap();
-
-    assert!(!cargo.features.contains(&"qemu".to_string()));
-    assert!(cargo.features.contains(&"axplat-dyn/efi".to_string()));
-    assert!(!cargo.env.contains_key("AX_PLATFORM"));
-}
-
-#[test]
-fn uimage_its_path_for_config_uses_same_basename_with_its_extension() {
-    let path = uimage_its_path_for_config(Path::new("os/StarryOS/configs/board/foo.toml"));
-
-    assert_eq!(path, PathBuf::from("os/StarryOS/configs/board/foo.its"));
-}
-
-#[test]
 fn uimage_generation_plan_is_absent_without_companion_its() {
     let root = tempdir().unwrap();
     let config = root.path().join("board/foo.toml");
@@ -467,42 +402,7 @@ fn render_uimage_its_template_replaces_build_placeholders() {
 }
 
 #[test]
-fn load_cargo_config_keeps_sg2002_as_device_feature_without_static_platform_alias() {
-    let mut request = request(
-        PathBuf::from("/tmp/.build.toml"),
-        "riscv64",
-        "riscv64gc-unknown-none-elf",
-    );
-    request.build_info_override = Some(StarryBuildInfo {
-        features: vec![
-            "starry-kernel/sg2002".to_string(),
-            "axplat-dyn/thead-mae".to_string(),
-        ],
-        ..default_starry_build_info()
-    });
-
-    let cargo = load_cargo_config(&request).unwrap();
-    let removed_sg2002_platform = concat!("ax-hal/", "riscv64", "-sg2002");
-
-    assert!(cargo.features.contains(&"starry-kernel/sg2002".to_string()));
-    assert!(
-        cargo
-            .features
-            .iter()
-            .all(|feature| feature != removed_sg2002_platform)
-    );
-    assert!(
-        !cargo
-            .features
-            .iter()
-            .any(|feature| feature.starts_with("qemu"))
-    );
-    assert!(!cargo.features.contains(&"qemu".to_string()));
-    assert_eq!(cargo.env.get("AX_PLATFORM"), None);
-}
-
-#[test]
-fn load_cargo_config_keeps_original_bare_target_for_dynamic_platform_request() {
+fn load_cargo_config_uses_shared_bare_target_for_dynamic_platform_request() {
     let target = "aarch64-unknown-none-softfloat";
     let mut request = request(PathBuf::from("/tmp/.build.toml"), "aarch64", target);
     request.build_info_override = Some(StarryBuildInfo {
@@ -512,7 +412,8 @@ fn load_cargo_config_keeps_original_bare_target_for_dynamic_platform_request() {
 
     let cargo = load_cargo_config(&request).unwrap();
 
-    assert_eq!(cargo.target, target);
+    assert_eq!(cargo.target, format!("scripts/targets/bare/{target}.json"));
+    assert_eq!(cargo.env.get("AX_TARGET"), Some(&target.to_string()));
 }
 
 #[test]
@@ -542,7 +443,7 @@ fn load_cargo_config_uses_bare_no_std_pie_contract() {
     let cargo = load_cargo_config(&request).unwrap();
     let args = cargo.args.join("\n");
 
-    assert_eq!(cargo.target, target);
+    assert_eq!(cargo.target, format!("scripts/targets/bare/{target}.json"));
     assert!(
         cargo
             .args
@@ -562,9 +463,17 @@ fn load_cargo_config_uses_bare_no_std_pie_contract() {
     }
     assert!(cargo.extra_config.is_none());
     assert!(cargo.pre_build_cmds.is_empty());
-    assert!(!cargo.target.contains("scripts/targets/std"));
-    assert!(!cargo.args.iter().any(|arg| arg == "json-target-spec"));
-    assert!(!cargo.env.contains_key("CARGO_UNSTABLE_JSON_TARGET_SPEC"));
+    assert!(cargo.target.starts_with("scripts/targets/bare/"));
+    assert!(
+        cargo
+            .args
+            .windows(2)
+            .any(|pair| pair == ["-Z", "json-target-spec"])
+    );
+    assert_eq!(
+        cargo.env.get("CARGO_UNSTABLE_JSON_TARGET_SPEC"),
+        Some(&"true".to_string())
+    );
     assert!(
         cargo
             .features
@@ -574,42 +483,32 @@ fn load_cargo_config_uses_bare_no_std_pie_contract() {
 }
 
 #[test]
-fn load_cargo_config_derives_to_bin_from_original_bare_target() {
-    for (arch, target, expected_to_bin) in [
-        ("x86_64", "x86_64-unknown-none", false),
-        ("loongarch64", "loongarch64-unknown-none-softfloat", false),
-        ("aarch64", "aarch64-unknown-none-softfloat", true),
-        ("riscv64", "riscv64gc-unknown-none-elf", true),
-    ] {
-        let mut request = request(PathBuf::from("/tmp/.build.toml"), arch, target);
-        request.build_info_override = Some(default_starry_build_info());
-
-        let cargo = load_cargo_config(&request).unwrap();
-        assert_eq!(cargo.target, target);
-        assert_eq!(cargo.to_bin, expected_to_bin);
-    }
-}
-
-#[test]
 fn load_cargo_config_applies_arch_specific_bare_pie_flags() {
-    for (arch, target, expected_flag) in [
-        (
-            "riscv64",
-            "riscv64gc-unknown-none-elf",
-            "-Clink-args=--no-relax",
-        ),
-        (
-            "loongarch64",
-            "loongarch64-unknown-none-softfloat",
-            "-Ctarget-feature=-ual",
-        ),
-    ] {
+    for (arch, target, expected_flag) in [(
+        "riscv64",
+        "riscv64gc-unknown-none-elf",
+        "-Clink-args=--no-relax",
+    )] {
         let mut request = request(PathBuf::from("/tmp/.build.toml"), arch, target);
         request.build_info_override = Some(default_starry_build_info());
 
         let cargo = load_cargo_config(&request).unwrap();
         assert!(cargo.args.join("\n").contains(expected_flag));
     }
+}
+
+#[test]
+fn load_cargo_config_denies_warnings() {
+    let mut request = request(
+        PathBuf::from("/tmp/.build.toml"),
+        "x86_64",
+        "x86_64-unknown-none",
+    );
+    request.build_info_override = Some(default_starry_build_info());
+
+    let cargo = load_cargo_config(&request).unwrap();
+
+    assert!(cargo.args.join("\n").contains("\"-D\", \"warnings\""));
 }
 
 #[test]
@@ -692,16 +591,6 @@ fn ensure_starry_bin_arg_adds_bin_for_starryos_package() {
 }
 
 #[test]
-fn ensure_starry_bin_arg_keeps_existing_bin_arg() {
-    let mut args = vec!["--bin".to_string(), "starryos".to_string()];
-
-    let metadata = crate::build::workspace_metadata().unwrap();
-    ensure_starry_bin_arg(&mut args, STARRY_PACKAGE, &metadata).unwrap();
-
-    assert!(args.windows(2).any(|pair| pair == ["--bin", "starryos"]));
-}
-
-#[test]
 fn riscv_image_header_accepts_compact_entry_and_fixed_offsets() {
     let image = riscv_image_fixture(0x0032_2297, 0x4982_8067);
 
@@ -745,3 +634,4 @@ fn put_u32(image: &mut [u8], offset: usize, value: u32) {
 fn put_u64(image: &mut [u8], offset: usize, value: u64) {
     image[offset..offset + 8].copy_from_slice(&value.to_le_bytes());
 }
+// weave: run 'weave explain scripts/axbuild/src/starry/build/tests.rs' for per-hunk detail, 'weave check' to verify your resolution

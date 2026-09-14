@@ -22,10 +22,12 @@ use crate::{
     registers::{INTERRUPTS_ENABLED, interface_ready},
 };
 
+mod d80;
 mod dc;
 mod firmware;
 mod vendor;
 
+use d80::D80PatchStage;
 use dc::{DcStage, DcStartupState};
 
 const START_STABILIZE: Duration = Duration::from_millis(200);
@@ -47,6 +49,7 @@ enum StartupStage {
     VendorReady,
     ReadRevision,
     UploadMain(usize),
+    D80Patch(D80PatchStage),
     Dc(DcStage),
     StartApplication,
     Stabilize,
@@ -200,6 +203,7 @@ impl AicDevice {
                 self.drive_mailbox(now)
             }
             StartupStage::UploadMain(offset) => self.drive_main_upload(offset, now),
+            StartupStage::D80Patch(stage) => self.drive_d80_patch(stage, now),
             StartupStage::Dc(stage) => self.drive_dc_startup(stage, now),
             StartupStage::StartApplication => {
                 let (address, boot_type) = match self.firmware_profile() {
@@ -365,10 +369,12 @@ impl AicDevice {
                 }
                 self.lifecycle.startup = None;
                 self.lifecycle.state = AicState::Ready;
-                self.data
-                    .events
-                    .push_back(AicEvent::Started { mac_address });
-                AicAction::Event(self.data.events.pop_front().unwrap())
+                let _ = self.data.push_event(AicEvent::Started { mac_address });
+                AicAction::Event(
+                    self.data
+                        .pop_event()
+                        .expect("startup always publishes a Started event"),
+                )
             }
         }
     }

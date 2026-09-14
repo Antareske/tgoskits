@@ -1,5 +1,6 @@
 use std::{
     collections::BTreeMap,
+    io::{self, Write},
     path::{Path, PathBuf},
     sync::{Arc, atomic::AtomicBool},
     time::Instant,
@@ -141,7 +142,7 @@ impl Axvisor {
         // embedded VM configuration, so a later build would otherwise replace
         // the executable belonging to an earlier group.
         for (index, build_group) in build_groups.iter_mut().enumerate() {
-            rootfs::ensure_qemu_rootfs_ready(&build_group.request, self.app.workspace_root(), None)
+            rootfs::ensure_qemu_assets_ready(&build_group.request, self.app.workspace_root(), None)
                 .await?;
             build_group.cargo = build::load_cargo_config(&build_group.request)?;
             prepare_configured_busybox_initramfs(
@@ -247,7 +248,6 @@ impl Axvisor {
                         case.case.display_name
                     )
                 })?;
-            test_qemu::validate_grouped_qemu_commands(&qemu, &case.case, "Axvisor")?;
             prepared.push(PreparedAxvisorQemuCase { case, qemu });
         }
 
@@ -295,11 +295,6 @@ impl Axvisor {
         asset_config: &test_case::CaseAssetConfig,
     ) -> anyhow::Result<(QemuConfig, test_case::PreparedCaseAssets)> {
         let mut qemu = case.qemu.clone();
-        test_case::apply_grouped_qemu_config(
-            &mut qemu,
-            &case.case.case,
-            &asset_config.grouped_runner,
-        );
         test_qemu::apply_timeout_scale(&mut qemu);
         if !qemu
             .fail_regex
@@ -426,13 +421,27 @@ impl Axvisor {
 
         // Joins the probe thread now that QEMU has exited.
         let probe_configured = host_probe_guard.is_some();
-        let probe_result = host_probe_guard
-            .as_ref()
-            .and_then(|guard| guard.take_result());
-        drop(host_probe_guard);
+        let probe_outcome = host_probe_guard.and_then(host_probe::HostHttpProbeGuard::finish);
+        let probe_result = match probe_outcome {
+            Some(outcome) => {
+                replay_probe_output(&outcome.output)?;
+                Some(outcome.verdict)
+            }
+            None => None,
+        };
 
         combine_results(qemu_result, probe_configured, probe_result)
     }
+}
+
+fn replay_probe_output(output: &[u8]) -> anyhow::Result<()> {
+    let mut stdout = io::stdout().lock();
+    stdout
+        .write_all(output)
+        .context("failed to replay host HTTP probe output")?;
+    stdout
+        .flush()
+        .context("failed to flush host HTTP probe output")
 }
 
 /// Combine the QEMU runner result and the HTTP probe verdict into the final

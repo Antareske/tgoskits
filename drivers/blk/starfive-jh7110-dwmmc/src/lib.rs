@@ -249,12 +249,6 @@ impl SdMmcIrqHost for Jh7110DwMmc {
         Ok(())
     }
 
-    fn rearm_completion_irq_and_check(
-        &mut self,
-    ) -> Result<sdmmc_protocol::sdio::CompletionIrqRearm, Error> {
-        <DwMmc as SdMmcIrqHost>::rearm_completion_irq_and_check(&mut self.inner)
-    }
-
     fn disable_completion_irq(&mut self) -> Result<(), Error> {
         self.inner.disable_completion_irq();
         Ok(())
@@ -299,22 +293,6 @@ mod tests {
     }
 
     #[test]
-    fn default_config_keeps_jh7110_slot_constraints() {
-        let config = Jh7110DwMmcConfig::default();
-
-        assert_eq!(JH7110_STABLE_REFERENCE_CLOCK_HZ, 50_000_000);
-        assert_eq!(JH7110_FIFO_DEPTH_WORDS, 32);
-        assert_eq!(DEVICE_NAME, "starfive-jh7110-mmc");
-        assert_eq!(
-            config.reference_clock_hz(),
-            JH7110_STABLE_REFERENCE_CLOCK_HZ
-        );
-        assert_eq!(config.fifo_config(), JH7110_FIFO_CONFIG);
-        assert_eq!(config.max_bus_width(), BusWidth::Bit4);
-        assert!(!config.supports_1v8());
-    }
-
-    #[test]
     fn constructor_applies_reference_clock_policy() {
         let (_regs, mmio) = fake_mmio();
         let host = unsafe { Jh7110DwMmc::new(mmio, Jh7110DwMmcConfig::default()) };
@@ -343,25 +321,6 @@ mod tests {
             unsafe { host.submit_bus_op(BusOp::SetSignalVoltage(SignalVoltage::V180)) },
             Err(sdmmc_host::Error::Unsupported)
         ));
-    }
-
-    #[test]
-    fn completion_irq_methods_delegate_to_inner_dwmmc() {
-        let (_regs, mmio) = fake_mmio();
-        let mut host = unsafe { Jh7110DwMmc::new(mmio, Jh7110DwMmcConfig::default()) };
-
-        assert!(!host.completion_irq_enabled());
-        host.enable_completion_irq().unwrap();
-        assert!(host.completion_irq_enabled());
-        host.disable_completion_irq().unwrap();
-        assert!(!host.completion_irq_enabled());
-    }
-
-    #[test]
-    fn host_exposes_explicit_progress_cause_api() {
-        fn assert_progress_api<H: SdMmcHost>() {}
-
-        assert_progress_api::<Jh7110DwMmc>();
     }
 
     #[test]

@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0](https://github.com/rcore-os/tgoskits/compare/someboot-v0.6.0...someboot-v0.7.0) - 2026-09-13
+
+### Other
+
+- *(someboot)* publish Linux-style CPU capacity through topology ([#2386](https://github.com/rcore-os/tgoskits/pull/2386))
+
+## [0.6.0](https://github.com/rcore-os/tgoskits/compare/someboot-v0.5.1...someboot-v0.6.0) - 2026-09-11
+
+### Other
+
+- *(ax-cpu)* [**breaking**] centralize CPU mechanisms and architecture backends ([#2363](https://github.com/rcore-os/tgoskits/pull/2363))
+
+## [0.5.1](https://github.com/rcore-os/tgoskits/compare/someboot-v0.5.0...someboot-v0.5.1) - 2026-09-09
+
+### Fixed
+
+- *(runtime)* prefer userspace over kernel TLS through build cfg ([#2339](https://github.com/rcore-os/tgoskits/pull/2339))
+
+## [0.5.0](https://github.com/rcore-os/tgoskits/compare/someboot-v0.4.2...someboot-v0.5.0) - 2026-09-09
+
+### Added
+
+- *(starry-mm)* redesign VMA lifecycle and transactional updates ([#2261](https://github.com/rcore-os/tgoskits/pull/2261))
+
+### Other
+
+- *(repo)* remove duplicated tests and configuration snapshots ([#2326](https://github.com/rcore-os/tgoskits/pull/2326))
+- *(repo)* continue removing nonfunctional test scaffolding ([#2307](https://github.com/rcore-os/tgoskits/pull/2307))
+- *(ax-task)* rebuild scheduler and runtime ownership ([#1775](https://github.com/rcore-os/tgoskits/pull/1775))
+- *(repo)* remove nonfunctional test scaffolding ([#2303](https://github.com/rcore-os/tgoskits/pull/2303))
+
+### Changed
+
+- **Breaking:** publish a validated virtual-address-space layout instead of a
+  fixed kernel range, and derive LoongArch canonical halves from CPUCFG VALEN.
+
 ## [0.4.2](https://github.com/rcore-os/tgoskits/compare/someboot-v0.4.1...someboot-v0.4.2) - 2026-08-27
 
 ### Added

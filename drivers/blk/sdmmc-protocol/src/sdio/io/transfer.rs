@@ -136,10 +136,6 @@ impl<H: SdMmcIrqHost + 'static> SdioCard<H> {
     }
 
     /// Submit an owned-DMA CMD53 read.
-    ///
-    /// Kept out-of-line (`#[inline(never)]`) so eBPF kprobe-based network
-    /// observers can attach at a stable symbol (see apps/starry/ebpf/netmon).
-    #[inline(never)]
     pub fn submit_read_dma(
         &mut self,
         function: FunctionNumber,
@@ -159,10 +155,6 @@ impl<H: SdMmcIrqHost + 'static> SdioCard<H> {
     }
 
     /// Submit an owned-DMA CMD53 write.
-    ///
-    /// Kept out-of-line (`#[inline(never)]`) so eBPF kprobe-based network
-    /// observers can attach at a stable symbol (see apps/starry/ebpf/netmon).
-    #[inline(never)]
     pub fn submit_write_dma(
         &mut self,
         function: FunctionNumber,

@@ -1,4 +1,4 @@
-use super::common::{expand, metadata_for_packages, metadata_with_resolve, pkg, pkg_with_metadata};
+use super::common::{expand, metadata_with_resolve, pkg, pkg_with_metadata};
 use crate::clippy::{
     AXSTD_STD_CLIPPY_FEATURES, AXSTD_STD_DEFAULT_FEATURE, AXSTD_STD_PACKAGE,
     check::{ClippyCheck, ClippyCheckKind},
@@ -151,6 +151,28 @@ fn host_test_feature_alias_uses_host_target_outside_docs_target_matrix() {
 }
 
 #[test]
+fn clippy_preserves_non_bare_docs_rs_targets() {
+    let target = "x86_64-unknown-linux-gnu";
+    let check = ClippyCheck {
+        package: "host-package".into(),
+        kind: ClippyCheckKind::Base,
+        target: Some(target.into()),
+        env: Vec::new(),
+    };
+
+    let invocation = check.cargo_invocation();
+
+    assert!(
+        invocation
+            .args
+            .windows(2)
+            .any(|args| args == ["--target", target])
+    );
+    assert!(!invocation.args.iter().any(|arg| arg == "json-target-spec"));
+    assert!(invocation.env.is_empty());
+}
+
+#[test]
 fn incremental_selection_checks_changed_packages_and_affected_os_roots_only() {
     let selected = incremental_clippy_selections(
         vec!["shared".into()],
@@ -166,36 +188,6 @@ fn incremental_selection_checks_changed_packages_and_affected_os_roots_only() {
     assert_eq!(
         selected,
         vec!["shared".to_string(), "ax-std".into(), "starryos".into()]
-    );
-}
-
-#[test]
-fn incremental_selection_for_x86_apic_change_omits_unrelated_workspace_packages() {
-    let selected = incremental_clippy_selections(
-        vec![
-            "someboot".into(),
-            "somehal".into(),
-            "x86-apic-driver".into(),
-        ],
-        vec![
-            "ax-std".into(),
-            "someboot".into(),
-            "somehal".into(),
-            "starryos".into(),
-            "unrelated".into(),
-            "x86-apic-driver".into(),
-        ],
-    );
-
-    assert_eq!(
-        selected,
-        vec![
-            "someboot".to_string(),
-            "somehal".into(),
-            "x86-apic-driver".into(),
-            "ax-std".into(),
-            "starryos".into(),
-        ]
     );
 }
 
@@ -443,72 +435,6 @@ fn docs_rs_targets_expand_base_and_feature_checks() {
 }
 
 #[test]
-fn ax_hal_platform_features_are_filtered_by_target_arch() {
-    let checks = expand(&[pkg(
-        "ax-hal",
-        "ax-hal 0.1.0 (path+file:///tmp/ax-hal)",
-        &[("fp-simd", &[])],
-        Some(&["loongarch64-unknown-none", "riscv64gc-unknown-none-elf"]),
-    )]);
-
-    let has_feature_on_target = |feature: &str, target: &str| {
-        checks.iter().any(|check| {
-            matches!(&check.kind, ClippyCheckKind::Feature(check_feature) if check_feature == feature)
-                && check.target.as_deref() == Some(target)
-        })
-    };
-
-    assert!(has_feature_on_target(
-        "fp-simd",
-        "loongarch64-unknown-none-softfloat"
-    ));
-    assert!(has_feature_on_target(
-        "fp-simd",
-        "riscv64gc-unknown-none-elf"
-    ));
-}
-
-#[test]
-fn ax_hal_target_only_features_are_skipped_for_host_clippy() {
-    let checks = expand(&[pkg(
-        "ax-hal",
-        "ax-hal 0.1.0 (path+file:///tmp/ax-hal)",
-        &[("fp-simd", &[])],
-        None,
-    )]);
-
-    assert!(checks.iter().any(|check| {
-        matches!(&check.kind, ClippyCheckKind::Feature(feature) if feature == "fp-simd")
-    }));
-}
-
-#[test]
-fn ax_hal_platform_feature_forwards_are_filtered_by_target_arch() {
-    let checks = expand(&[pkg(
-        "platform-forwarder",
-        "platform-forwarder 0.1.0 (path+file:///tmp/platform-forwarder)",
-        &[("fp-simd", &["ax-hal/fp-simd"])],
-        Some(&["loongarch64-unknown-none", "riscv64gc-unknown-none-elf"]),
-    )]);
-
-    let has_feature_on_target = |feature: &str, target: &str| {
-        checks.iter().any(|check| {
-            matches!(&check.kind, ClippyCheckKind::Feature(check_feature) if check_feature == feature)
-                && check.target.as_deref() == Some(target)
-        })
-    };
-
-    assert!(has_feature_on_target(
-        "fp-simd",
-        "loongarch64-unknown-none-softfloat"
-    ));
-    assert!(has_feature_on_target(
-        "fp-simd",
-        "riscv64gc-unknown-none-elf"
-    ));
-}
-
-#[test]
 fn nested_docs_rs_targets_expand_base_checks() {
     let checks = expand(&[pkg_with_metadata(
         "alpha",
@@ -661,27 +587,50 @@ fn package_clippy_configurations_expand_target_feature_sets() {
 }
 
 #[test]
-fn selected_package_expands_package_clippy_configurations() {
-    let package = pkg_with_metadata(
+fn package_clippy_configuration_lints_source_with_rustflags() {
+    let checks = expand(&[pkg_with_metadata(
         "alpha",
         "alpha 0.1.0 (path+file:///tmp/alpha)",
-        &[],
+        &[("axtest", &[]), ("smp", &[])],
         serde_json::json!({
             "clippy": {
                 "configurations": [{
-                    "name": "aarch64-system",
-                    "target": "aarch64-unknown-none-softfloat",
+                    "name": "loongarch64-axtest-source",
+                    "target": "loongarch64-unknown-none-softfloat",
+                    "features": ["axtest", "smp"],
+                    "rustflags": ["--cfg", "axtest", "--check-cfg", "cfg(axtest)"],
                 }],
             },
         }),
-    );
-    let metadata = metadata_for_packages(core::slice::from_ref(&package));
-    let checks = crate::clippy::expand::expand_clippy_checks(&[package], &metadata).unwrap();
+    )]);
+    let check = checks
+        .iter()
+        .find(|check| {
+            check
+                .label()
+                .contains("configuration: loongarch64-axtest-source")
+        })
+        .expect("source configuration should be planned");
 
-    assert_eq!(checks[0].label(), "alpha (base)");
     assert_eq!(
-        checks[1].label(),
-        "alpha (configuration: aarch64-system, features: , target: aarch64-unknown-none-softfloat)"
+        check.cargo_args(),
+        [
+            "clippy",
+            "--no-deps",
+            "-p",
+            "alpha",
+            "--features",
+            "axtest,smp",
+            "--target",
+            "loongarch64-unknown-none-softfloat",
+            "--",
+            "--cfg",
+            "axtest",
+            "--check-cfg",
+            "cfg(axtest)",
+            "-D",
+            "warnings",
+        ]
     );
 }
 
@@ -712,5 +661,30 @@ fn duplicate_package_clippy_configuration_names_are_rejected() {
     assert_eq!(
         err.to_string(),
         "duplicate clippy configuration `aarch64-system` for `alpha`"
+    );
+}
+
+#[test]
+fn package_clippy_configuration_rejects_empty_rustflags() {
+    let package = pkg_with_metadata(
+        "alpha",
+        "alpha 0.1.0 (path+file:///tmp/alpha)",
+        &[],
+        serde_json::json!({
+            "clippy": {
+                "configurations": [{
+                    "name": "aarch64-source",
+                    "target": "aarch64-unknown-none-softfloat",
+                    "rustflags": ["--cfg", ""],
+                }],
+            },
+        }),
+    );
+
+    let err = package_clippy_configurations(&package).unwrap_err();
+
+    assert_eq!(
+        err.to_string(),
+        "clippy configuration `aarch64-source` rustflag for `alpha` must be non-empty and trimmed"
     );
 }

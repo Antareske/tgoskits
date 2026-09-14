@@ -4,7 +4,11 @@ use core::{
     sync::atomic::{AtomicBool, AtomicUsize, Ordering},
     time::Duration,
 };
-use std::{sync::Mutex, thread, time::Instant};
+use std::{
+    sync::{Mutex, mpsc},
+    thread,
+    time::Instant,
+};
 
 use rdif_block::{
     ControlEvent, ControllerEvent, DeviceInfo, DriverGeneric, HardIrqHandler, IrqAck, IrqQueueMask,
@@ -24,6 +28,7 @@ struct QueueCounters {
     committed: AtomicUsize,
     drained: AtomicUsize,
     shutdown: AtomicUsize,
+    dropped: AtomicUsize,
 }
 
 #[derive(Default)]
@@ -86,6 +91,48 @@ struct CapabilityRefreshQueue {
 
 struct FailingDrainQueue {
     counters: Arc<QueueCounters>,
+}
+
+struct BlockingShutdownQueue {
+    entered: mpsc::Sender<()>,
+    release: mpsc::Receiver<()>,
+}
+
+impl DriverGeneric for BlockingShutdownQueue {
+    fn name(&self) -> &str {
+        "blocking-shutdown"
+    }
+}
+
+impl HardwareQueue for BlockingShutdownQueue {
+    fn id(&self) -> usize {
+        0
+    }
+
+    fn info(&self) -> QueueInfo {
+        test_queue_info(1)
+    }
+
+    fn submit_batch_owned(
+        &mut self,
+        _requests: &mut OwnedRequestBatch,
+        _sink: &mut dyn SubmissionSink,
+    ) -> rdif_block::BatchSubmitResult {
+        rdif_block::BatchSubmitResult::new(0, BatchSubmitDisposition::Continue)
+    }
+
+    fn commit_submissions(&mut self) -> Result<(), BlkError> {
+        Ok(())
+    }
+
+    fn drain_completions(&mut self, _sink: &mut dyn CompletionSink) -> Result<(), BlkError> {
+        Ok(())
+    }
+
+    fn shutdown(&mut self, _sink: &mut dyn CompletionSink) -> Result<(), BlkError> {
+        self.entered.send(()).map_err(|_| BlkError::Io)?;
+        self.release.recv().map_err(|_| BlkError::Io)
+    }
 }
 
 impl DriverGeneric for FailingDrainQueue {
@@ -300,6 +347,12 @@ struct UnderreportedAcceptanceQueue {
     pending: Vec<RequestId>,
 }
 
+impl Drop for UnderreportedAcceptanceQueue {
+    fn drop(&mut self) {
+        self.counters.dropped.fetch_add(1, Ordering::AcqRel);
+    }
+}
+
 impl DriverGeneric for UnderreportedAcceptanceQueue {
     fn name(&self) -> &str {
         "underreported-acceptance"
@@ -436,6 +489,14 @@ impl HardIrqHandler for QueueZeroControlIrq {
     fn ack(&mut self) -> IrqAck {
         IrqAck::masked_needs_rearm(IrqQueueMask::from_queue(0), ControlEvent::new(0, 1))
     }
+}
+
+fn queue_zero_action_with_handler(hctx: &Hctx, handler: Box<dyn HardIrqHandler>) -> BlockIrqAction {
+    BlockIrqAction::new(handler, vec![hctx.irq_target(0)])
+}
+
+fn queue_zero_action(hctx: &Hctx) -> BlockIrqAction {
+    queue_zero_action_with_handler(hctx, Box::new(QueueZeroIrq))
 }
 
 fn test_queue_info(depth: usize) -> QueueInfo {

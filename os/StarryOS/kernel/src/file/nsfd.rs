@@ -1,5 +1,4 @@
 use alloc::{borrow::Cow, sync::Arc};
-use core::task::Context;
 
 use ax_fs_ng::MountNamespace as FsMountNamespace;
 use axpoll::{IoEvents, Pollable};
@@ -51,6 +50,10 @@ impl NsFd {
 }
 
 impl FileLike for NsFd {
+    fn validate_write_access(&self) -> StarryResult {
+        Err(crate::StarryError::InvalidInput)
+    }
+
     fn path(&self) -> Cow<'_, str> {
         match self {
             NsFd::Uts(_) => "anon_inode:[uts_ns]".into(),
@@ -88,5 +91,10 @@ impl Pollable for NsFd {
         IoEvents::empty()
     }
 
-    fn register(&self, _context: &mut Context<'_>, _events: IoEvents) {}
+    unsafe fn register_shared(
+        &self,
+        _sink: &mut dyn axpoll::SharedRegistrationSink,
+        _events: IoEvents,
+    ) {
+    }
 }

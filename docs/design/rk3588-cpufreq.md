@@ -38,9 +38,9 @@ OPP。A55 是 ring-only：其 RK806 轨电压读路径存在硬件限制（MISO 
 
 ## 2. 负载归因契约
 
-governor 收到的 `busy[i]` 是**逻辑 CPU i** 的累计忙计数（内核调度 tick 维护，见
-`ax_task::cpu_busy_ticks` 与 entry.rs 的采样循环），而调频域是物理集群。归因要回答的问
-题是：逻辑 CPU i 实际运行在哪个物理集群上。
+governor 收到的 `busy_runtime_ns[i]` 是**逻辑 CPU i** 的累计非 idle 运行时间（ns；由
+ax-task 在调度事务结算当前非 idle task 时累计，经 axruntime 公共 runtime facade 读取），
+而调频域是物理集群。归因要回答的问题是：逻辑 CPU i 实际运行在哪个物理集群上。
 
 ### 2.1 逻辑编号的拥有者
 
@@ -162,7 +162,7 @@ cpufreq: busy attribution cpu0->A76b0 cpu1->A55 ...
 运行期每次 OPP 迁移输出
 `gov: <cluster> peak=<n>% opp <i>-><j> = <mhz> MHz @ <mv> mV`。精确送达频率可用
 `cpuprobe` 的 `mhz_pmc` 读取（PMU 周期计数器在启动时使能）；配套的
-`apps/starry/sysbench-board` harness（PR #1658）驱动全核负载并与 Linux 基线对比。
+`apps/starry/sysbench` harness驱动全核负载并与 Linux 基线对比。
 
 ### 5.2 频率读数
 

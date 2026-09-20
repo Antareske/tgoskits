@@ -9,6 +9,7 @@ from pathlib import Path
 
 VCPU_SAMPLE_PATTERN = re.compile(r"VCPU_PERF_SAMPLE\s+(?P<fields>.+)")
 VCPU_RESULT_PATTERN = re.compile(r"VCPU_PERF_RESULT\s+(?P<fields>.+)")
+TASK_SWITCH_PATTERN = re.compile(r"AXVISOR_TASK_SWITCH_GROUP_SUMMARY\s+(?P<fields>.+)")
 IVC_RESULT_PATTERN = re.compile(r"AXVISOR_IVC_BENCH_RESULT=(?P<status>\S+)\s*(?P<fields>.*)")
 IVC_CASE_PATTERN = re.compile(
     r"average\s+sendBandwidth\s*=\s*(?P<send>[\d.]+)\s*MB/s\s*,\s*"
@@ -23,6 +24,10 @@ LINE_PREFIXES = ("[VM 1] ", "[test_output] ")
 COLUMN_ORDER = (
     "status",
     "index",
+    "samples_per_direction",
+    "avg_cycles",
+    "min_cycles",
+    "max_cycles",
     "blocks",
     "elapsed_ns",
     "timer_wakes",
@@ -88,11 +93,16 @@ def ivc_case_table(cases: list[dict[str, str]]) -> str:
 
 
 def render_report(check_id: str, check_name: str, log_text: str) -> str:
-    vcpu_samples, vcpu_results, ivc_cases, ivc_results = parse_log(log_text)
+    vcpu_samples, vcpu_results, ivc_cases, ivc_results, task_switch_groups = parse_log(
+        log_text
+    )
 
     sections = [
         section
         for section in (
+            key_value_table("Task switch cycles (per group)", task_switch_groups)
+            if task_switch_groups
+            else "",
             key_value_table("vCPU samples (per window)", vcpu_samples)
             if vcpu_samples
             else "",
@@ -124,13 +134,17 @@ def render_report(check_id: str, check_name: str, log_text: str) -> str:
 def parse_log(log_text: str) -> tuple[
     list[dict[str, str]], list[dict[str, str]],
     list[dict[str, str]], list[dict[str, str]],
+    list[dict[str, str]],
 ]:
     vcpu_samples: list[dict[str, str]] = []
     vcpu_results: list[dict[str, str]] = []
     ivc_cases: list[dict[str, str]] = []
     ivc_results: list[dict[str, str]] = []
+    task_switch_groups: list[dict[str, str]] = []
     for raw_line in log_text.splitlines():
         line = strip_line_prefixes(raw_line)
+        if match := TASK_SWITCH_PATTERN.search(line):
+            task_switch_groups.append(parse_fields(match.group("fields")))
         if match := VCPU_SAMPLE_PATTERN.search(line):
             vcpu_samples.append(parse_fields(match.group("fields")))
         if match := VCPU_RESULT_PATTERN.search(line):
@@ -148,7 +162,7 @@ def parse_log(log_text: str) -> tuple[
             fields = {"status": match.group("status")}
             fields.update(parse_fields(match.group("fields")))
             ivc_results.append(fields)
-    return vcpu_samples, vcpu_results, ivc_cases, ivc_results
+    return vcpu_samples, vcpu_results, ivc_cases, ivc_results, task_switch_groups
 
 
 def metric_datasize(datasize: str) -> str:
@@ -157,7 +171,7 @@ def metric_datasize(datasize: str) -> str:
 
 def render_benchmarks(log_text: str) -> list[dict[str, object]]:
     """Metrics in github-action-benchmark's customBiggerIsBetter JSON format."""
-    _, vcpu_results, ivc_cases, _ = parse_log(log_text)
+    _, vcpu_results, ivc_cases, _, task_switch_groups = parse_log(log_text)
     benchmarks: list[dict[str, object]] = []
     for result in vcpu_results:
         if "blocks_per_second" in result:
@@ -178,6 +192,14 @@ def render_benchmarks(log_text: str) -> list[dict[str, object]]:
                 "name": f"ivc-bench/receive/{label}",
                 "unit": "MB/s",
                 "value": float(case["receive"]),
+            }
+        )
+    for group in sorted(task_switch_groups, key=lambda group: int(group["index"])):
+        benchmarks.append(
+            {
+                "name": f"task-switch/avg_cycles/index-{group['index']}",
+                "unit": "cycles",
+                "value": float(group["avg_cycles"]),
             }
         )
     return benchmarks

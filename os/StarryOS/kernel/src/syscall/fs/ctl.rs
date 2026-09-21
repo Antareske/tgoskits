@@ -889,10 +889,14 @@ pub fn sys_fchownat(
     // Anonymous fds that do not model ownership (eventfd, epoll, timerfd,
     // signalfd...) reject the change like Linux instead of silently
     // succeeding; only pipe/socket style inodes accept it as a no-op.
-    if let Some(path) = anon_accepts {
-        if !path.starts_with("pipe:[") && !path.starts_with("socket:[") {
-            return Err(StarryError::OperationNotSupported);
-        }
+    // Only pipe/socket style anonymous inodes model ownership changes;
+    // other anon fds (eventfd, epoll, timerfd, signalfd...) reject the
+    // change like Linux instead of silently succeeding.
+    if let Some(path) = anon_accepts
+        && !path.starts_with("pipe:[")
+        && !path.starts_with("socket:[")
+    {
+        return Err(StarryError::OperationNotSupported);
     }
 
     let uid = if uid == -1 { owner_uid } else { uid as _ };

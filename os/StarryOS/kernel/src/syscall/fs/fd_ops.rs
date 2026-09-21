@@ -329,9 +329,7 @@ fn try_open_proc_exe(
         Ok(proc_data) => proc_data,
         Err(err) => return Some(Err(err)),
     };
-    let Some(loc) = proc_data.exe_location() else {
-        return None;
-    };
+    let loc = proc_data.exe_location()?;
     let cred = current.as_thread().cred();
     let options = flags_to_options(flags as i32, 0, (cred.fsuid, cred.fsgid));
     Some(

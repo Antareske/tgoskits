@@ -209,20 +209,18 @@ impl fmt::Display for TaskStat {
 
 #[cfg(test)]
 mod tests {
-    use super::starttime_ticks;
-
     #[test]
     fn starttime_ticks_uses_user_hz_100() {
         // 1 tick = 10 ms = 10_000_000 ns at USER_HZ = 100.
-        assert_eq!(starttime_ticks(0), 0);
-        assert_eq!(starttime_ticks(9_999_999), 0);
-        assert_eq!(starttime_ticks(10_000_000), 1);
-        assert_eq!(starttime_ticks(123_456_789), 12);
+        assert_eq!(super::starttime_ticks(0), 0);
+        assert_eq!(super::starttime_ticks(9_999_999), 0);
+        assert_eq!(super::starttime_ticks(10_000_000), 1);
+        assert_eq!(super::starttime_ticks(123_456_789), 12);
         // runc reads field 22 and compares it across reads of the same
         // process; the conversion must be stable for a fixed input.
         assert_eq!(
-            starttime_ticks(42_000_000_000),
-            starttime_ticks(42_000_000_000)
+            super::starttime_ticks(42_000_000_000),
+            super::starttime_ticks(42_000_000_000)
         );
     }
 }

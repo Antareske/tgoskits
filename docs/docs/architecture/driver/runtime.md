@@ -28,7 +28,7 @@ sidebar_label: "运行时与完成"
 | 块 | 控制器维护与 hctx | 已确认 IRQ 后排空完成；定时器仅推进指定寄存器状态 |
 | 串口 | `SerialWorker` | latch、控制命令、软件 TX/RX 与配置的 polling |
 | USB | `Core`、端点 future、EventHandler | 端口变化、命令及传输事件、状态等待 |
-| 显示与输入 | 领域适配对象 | 方法调用、可选 IRQ 和输入兴趣条件 |
+| 显示与输入 | 领域适配对象 | 显示方法调用；输入由 IRQ 通知驱动任务侧排水 |
 | 网络 | `QueueGroupExecutor` | 目标 group 通知、预算、rearm 和精确 deadline |
 | vsock | 连接接口 | 数据可用与连接事件 |
 
@@ -82,7 +82,11 @@ sequenceDiagram
 
 `os/arceos/modules/axdisplay/src/rdif.rs` 将领域显示接口包装为 `DisplayDevice`，在 `need_flush()` 为真时执行 flush；构造时保存帧缓冲视图并由对象持有设备。这里没有自动创建网络式队列 owner。
 
-`os/arceos/modules/axinput/src/rdif.rs` 转换事件和能力查询。`axinput/src/lib.rs` 的 `input_polling_fallback_should_drain()` 要求用户兴趣和 IRQ 不活跃条件同时满足，不能将网络“无轮询后备”的合同用于否定该已有输入策略。
+`os/arceos/modules/axinput/src/rdif.rs` 只转换事件与能力查询，不保存接收策略。Starry 的 `os/StarryOS/kernel/src/pseudofs/dev/event.rs` 按所有者与通知分层推进输入：IRQ 在 `EventDev::handle_irq()` 中确认设备事件并发布 `irq_notify`，任务侧 `run_irq_service()` 收到通知后调用 `drain_irq_events()`，把事件写入 `read_ahead`，再通过 `PollSet` 唤醒读者。Starry 不使用按读者兴趣选择接收的周期 polling，也不按 waiter 数量或 IRQ stale 时间决定是否排水；IRQ notification 主动驱动任务侧 drain，而 `read()` 与 readiness 路径仍会同步排水当前驱动队列。`PollSet` 只负责把已有可读状态通知给等待者，不应被解释为周期设备接收的开关。
+
+Linux 对照为固定提交 [`8cd9520d35a6c38db6567e97dd93b1f11f185dc6`](https://github.com/torvalds/linux/commit/8cd9520d35a6c38db6567e97dd93b1f11f185dc6)（v7.1），它提供的是 owner/notification 职责依据：[`virtinput_recv_events()`](https://github.com/torvalds/linux/blob/8cd9520d35a6c38db6567e97dd93b1f11f185dc6/drivers/virtio/virtio_input.c#L36-L57) 只从 virtqueue 取事件并交给输入核心，回调无条件上报，不查询 evdev 的 waiter 或 client；[`evdev_pass_values()`](https://github.com/torvalds/linux/blob/8cd9520d35a6c38db6567e97dd93b1f11f185dc6/drivers/input/evdev.c#L244-L286) 先把事件写入该 client 的队列，只有完整报告（`EV_SYN`/`SYN_REPORT`）到达后才 `wake_up_interruptible_poll()` 唤醒等待集合。也就是说，等待集合是已有可读状态的通知目标，不是设备是否接收事件的开关。
+
+这里只对齐 owner 与 notification 的职责分层，不宣称 Starry 当前实现与 Linux 完全等价：Starry 走单一 `read_ahead`，`read`/readiness 会同步排水，报告边界与 per-open `evdev_client` queue 语义并不相同；per-client 队列、`SYN_DROPPED` 与 open 生命周期等差异属于后续工作，不在本次代码范围内。
 
 vsock 的 `poll_event()`、`send()` 和 `recv()` 围绕连接工作，不经过物理 Ethernet DMA 管道。连接与帧接口的服务边界见[领域服务](services.md)。
 

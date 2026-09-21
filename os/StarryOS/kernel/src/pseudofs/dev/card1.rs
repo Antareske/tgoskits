@@ -20,8 +20,8 @@ use super::drm::{DrmUnique, DrmVersion};
 use crate::{
     StarryError, StarryResult,
     file::{
-        add_file_like, current_fd_table, release_locks_on_close, File as KernelFile, FileLike,
-        IoDst, IoSrc, Kstat,
+        File as KernelFile, FileLike, IoDst, IoSrc, Kstat, add_file_like, current_fd_table,
+        dma_buf_seek, release_locks_on_close,
         dmabuf::{ContiguousDmaBuf, resolve_contiguous_dmabuf},
     },
     mm::{vm_load, vm_write_slice},
@@ -994,6 +994,10 @@ impl ExportedGemBuffer {
 }
 
 impl FileLike for ExportedGemBuffer {
+    fn seek(&self, pos: ax_io::SeekFrom) -> StarryResult<u64> {
+        dma_buf_seek(self.range.size() as u64, pos)
+    }
+
     fn validate_write_access(&self) -> StarryResult {
         Err(StarryError::InvalidInput)
     }
@@ -1268,6 +1272,16 @@ mod tests {
         assert!(
             matches!(exported.device_mmap(0, 0).unwrap(), DeviceMmap::PhysicalCached(actual, Some(_)) if actual == range)
         );
+    }
+
+    #[test]
+    fn exported_buffer_supports_dma_buf_size_probe() {
+        let range = PhysAddrRange::from_start_size(0x1234_5000.into(), 0x4000);
+        let exported = ExportedGemBuffer::new(range, GemCachePolicy::Cacheable, Arc::new(()));
+
+        assert_eq!(exported.seek(ax_io::SeekFrom::Start(0)).unwrap(), 0);
+        assert_eq!(exported.seek(ax_io::SeekFrom::End(0)).unwrap(), 0x4000);
+        assert!(exported.seek(ax_io::SeekFrom::Current(0)).is_err());
     }
 
     #[test]

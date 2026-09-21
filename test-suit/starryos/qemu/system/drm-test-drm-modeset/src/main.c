@@ -21,6 +21,7 @@
 #include <stdint.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
+#include <sys/syscall.h>
 #include <unistd.h>
 
 struct drm_mode_create_dumb {
@@ -116,6 +117,18 @@ struct drm_event_vblank {
 #define DRM_MODE_PROP_ENUM          (1 << 3)
 #define DRM_EVENT_FLIP_COMPLETE     0x02
 #define DRM_FORMAT_XRGB8888         0x34325258
+
+/* Both query APIs must observe the same committed binding. */
+static void check_binding(int fd, uint32_t plane, uint32_t crtc, uint32_t fb)
+{
+    struct drm_mode_get_plane p = { .plane_id = plane };
+    struct drm_mode_crtc c = { .crtc_id = crtc };
+    CHECK_RET(syscall(SYS_ioctl, fd, DRM_IOCTL_MODE_GETPLANE, &p), 0, "GETPLANE binding");
+    CHECK_RET(syscall(SYS_ioctl, fd, DRM_IOCTL_MODE_GETCRTC, &c), 0, "GETCRTC binding");
+    CHECK(p.fb_id == fb && c.fb_id == fb, "plane and CRTC report committed framebuffer");
+    CHECK(p.crtc_id == (fb ? crtc : 0), "plane reports committed CRTC binding");
+    CHECK(c.mode_valid == (fb ? 1u : 0u), "CRTC mode validity follows enable/disable");
+}
 
 int main(void)
 {
@@ -227,14 +240,23 @@ int main(void)
     };
     CHECK_RET(ioctl(fd, DRM_IOCTL_MODE_SETCRTC, &setcrtc), 0, "SETCRTC");
 
+    check_binding(fd, plane_ids[0], crtc_ids[0], fb.fb_id);
+
+    /* A different FB ID is essential: flipping to the original buffer cannot
+     * detect stale bindings. Both framebuffers may share the same GEM pages. */
+    struct drm_mode_fb_cmd2 next_fb = fb;
+    next_fb.fb_id = 0;
+    CHECK_RET(ioctl(fd, DRM_IOCTL_MODE_ADDFB2, &next_fb), 0, "ADDFB2 flip target");
+
     /* --- page flip with event --- */
     struct drm_mode_crtc_page_flip flip = {
-        .crtc_id = crtc_ids[0], .fb_id = fb.fb_id,
+        .crtc_id = crtc_ids[0], .fb_id = next_fb.fb_id,
         .flags = DRM_MODE_PAGE_FLIP_EVENT,
         .user_data = 0xdeadbeefcafebabeULL,
     };
     CHECK_RET(ioctl(fd, DRM_IOCTL_MODE_PAGE_FLIP, &flip), 0,
               "PAGE_FLIP (with event)");
+    check_binding(fd, plane_ids[0], crtc_ids[0], next_fb.fb_id);
 
     struct pollfd pfd = { .fd = fd, .events = POLLIN };
     int pr = poll(&pfd, 1, 2000);
@@ -270,7 +292,7 @@ int main(void)
         .count_connectors = 4,
     };
     CHECK_RET(ioctl(fd, DRM_IOCTL_MODE_GETCRTC, &getc), 0, "GETCRTC readback");
-    CHECK(getc.fb_id == fb.fb_id, "GETCRTC fb_id matches SETCRTC");
+    CHECK(getc.fb_id == next_fb.fb_id, "GETCRTC fb_id follows PAGE_FLIP");
     CHECK(getc.count_connectors == 1, "GETCRTC count_connectors == 1");
     CHECK(readback_conns[0] == conn_ids[0],
           "GETCRTC reports the connector we set");
@@ -294,11 +316,30 @@ int main(void)
     getc.count_connectors = 4;
     CHECK_RET(ioctl(fd, DRM_IOCTL_MODE_GETCRTC, &getc), 0,
               "GETCRTC after failed SETCRTC");
-    CHECK(getc.fb_id == fb.fb_id,
+    CHECK(getc.fb_id == next_fb.fb_id,
           "GETCRTC fb_id unchanged after failed SETCRTC");
+    check_binding(fd, plane_ids[0], crtc_ids[0], next_fb.fb_id);
+
+    /* Linux rejects a disable request that still names connectors and leaves
+     * the previously committed state intact. */
+    struct drm_mode_crtc bad_disable = {
+        .crtc_id = crtc_ids[0],
+        .set_connectors_ptr = (uint64_t)(uintptr_t)conn_ids,
+        .count_connectors = 1,
+    };
+    CHECK_ERR(ioctl(fd, DRM_IOCTL_MODE_SETCRTC, &bad_disable), EINVAL,
+              "disable CRTC rejects connectors");
+    check_binding(fd, plane_ids[0], crtc_ids[0], next_fb.fb_id);
+
+    struct drm_mode_crtc disable = { .crtc_id = crtc_ids[0] };
+    CHECK_RET(syscall(SYS_ioctl, fd, DRM_IOCTL_MODE_SETCRTC, &disable), 0, "disable CRTC");
+    check_binding(fd, plane_ids[0], crtc_ids[0], 0);
+    setcrtc.fb_id = next_fb.fb_id;
+    CHECK_RET(ioctl(fd, DRM_IOCTL_MODE_SETCRTC, &setcrtc), 0, "re-enable CRTC");
+    check_binding(fd, plane_ids[0], crtc_ids[0], next_fb.fb_id);
 
     /* --- SETCRTC referencing a removed fb must fail with EINVAL --- */
-    uint32_t old_fb_id = fb.fb_id;
+    uint32_t old_fb_id = next_fb.fb_id;
     CHECK_RET(ioctl(fd, DRM_IOCTL_MODE_RMFB, &old_fb_id), 0, "RMFB");
     /* The legacy binding pointed at this fb; GETCRTC must reflect the
      * unbinding so userspace doesn't keep seeing a dangling fb_id. */
@@ -308,6 +349,7 @@ int main(void)
     CHECK(getc.fb_id == 0, "GETCRTC fb_id == 0 after RMFB clears binding");
     CHECK(getc.count_connectors == 0,
           "GETCRTC count_connectors == 0 after RMFB");
+    check_binding(fd, plane_ids[0], crtc_ids[0], 0);
 
     struct drm_mode_crtc bad_fb = {
         .crtc_id = crtc_ids[0], .fb_id = old_fb_id,

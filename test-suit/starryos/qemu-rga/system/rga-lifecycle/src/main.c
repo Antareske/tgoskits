@@ -186,6 +186,12 @@ int main(void)
     /* ---- Regression A: same fd, cross-thread handle visibility. ---- */
     int d0 = alloc_dmabuf(heap, 64 * 1024);
     CHECK(d0 >= 0, "A: dma_heap alloc for the cross-thread buffer");
+    CHECK(lseek(d0, 0, SEEK_END) == 64 * 1024,
+          "A: dma_heap dma-buf SEEK_END reports allocation size");
+    CHECK(lseek(d0, 0, SEEK_SET) == 0, "A: dma_heap dma-buf accepts SEEK_SET(0)");
+    errno = 0;
+    CHECK(lseek(d0, 0, SEEK_CUR) == -1 && errno == EINVAL,
+          "A: dma_heap dma-buf rejects SEEK_CUR");
     uint32_t h0 = import_dmabuf(fd, d0);
     CHECK(h0 != 0, "A: main thread imported a handle");
 

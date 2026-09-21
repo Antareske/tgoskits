@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 import importlib.util
+import re
 import sys
 import tempfile
+import tomllib
 import unittest
 from pathlib import Path
 from typing import Any
@@ -843,6 +845,49 @@ command = "true"
         )
         self.assertEqual(plan["arceos_matrix"]["include"], [])
         self.assertEqual(plan["axvisor_matrix"]["include"], [])
+
+    def test_dualguest_robot_board_runs_both_guest_variants(self) -> None:
+        rows = self.assert_unique_ids(
+            ci_plan.build_main_plan(self.upstream)["axvisor_matrix"]["include"]
+        )
+        dualguest = rows["test-orangepi-5-plus-dualguest-robot"]
+
+        self.assertEqual(dualguest["runs_on"], ["self-hosted", "linux", "board"])
+        self.assertEqual(dualguest["timeout_minutes"], 30)
+        self.assertEqual(
+            dualguest["command"],
+            "cargo xtask starry build --config "
+            "test-suit/axvisor/normal/board-orangepi-5-plus/dual-starry-zephyr/"
+            "starry-guest-build.toml --smp 1\n"
+            "cargo xtask axvisor test board "
+            "--board orangepi-5-plus-dualguest-robot",
+        )
+
+    def test_dualguest_robot_board_markers_cannot_match_command_echo(self) -> None:
+        root = MODULE_PATH.parents[2]
+        configs = (
+            root
+            / "test-suit/axvisor/normal/board-orangepi-5-plus/dual-linux-zephyr"
+            / "board-orangepi-5-plus-dualguest-robot.toml",
+            root
+            / "test-suit/axvisor/normal/board-orangepi-5-plus/dual-starry-zephyr"
+            / "board-orangepi-5-plus-dualguest-robot.toml",
+        )
+
+        for path in configs:
+            with self.subTest(config=path):
+                config = tomllib.loads(path.read_text())
+                self.assertEqual(
+                    config["board_type"], "OrangePi-5-Plus-DualGuest-robot"
+                )
+                step = config["shell_check_steps"][-1]
+                for pattern in step["success_regex"] + step["fail_regex"]:
+                    self.assertIsNone(re.search(pattern, step["shell_cmd"]))
+                guest = "linux-zephyr" if "dual-linux" in str(path) else "starry-zephyr"
+                self.assertTrue(any(re.search(pattern, f"DUAL_PICK_CI_PASS guest={guest}\n")
+                                    for pattern in step["success_regex"]))
+                self.assertTrue(any(re.search(pattern, f"DUAL_PICK_CI_FAIL guest={guest} status=1\n")
+                                    for pattern in step["fail_regex"]))
 
     def test_fork_repository_filters_owner_checks_and_falls_back_from_qcs(
         self,

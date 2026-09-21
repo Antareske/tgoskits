@@ -94,8 +94,16 @@ pub fn sys_rt_sigpending(
     set: *mut SignalSet,
     sigsetsize: usize,
 ) -> crate::StarryResult<isize> {
-    check_sigset_size(sigsetsize)?;
-    set.vm_write(current, current.as_thread().signal().pending())?;
+    if sigsetsize > size_of::<SignalSet>() {
+        return Err(StarryError::InvalidInput);
+    }
+
+    if sigsetsize != 0 {
+        let pending = current.as_thread().signal().pending();
+        let bytes = bytemuck::bytes_of(&pending);
+        crate::mm::vm_write_slice(current, set.cast::<u8>(), &bytes[..sigsetsize])?;
+    }
+
     Ok(0)
 }
 

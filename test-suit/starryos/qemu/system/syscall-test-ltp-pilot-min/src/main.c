@@ -194,28 +194,22 @@ static void test_openat2_min(void)
      * EOPNOTSUPP deviations. */
     expect_openat2_success("openat2 RESOLVE_NO_XDEV resolves",
                            dirfd, "resolve-xdev",
-                           (struct open_how){ O_RDWR | O_CREAT, 0600, RESOLVE_NO_XDEV },
-                           sizeof(struct open_how));
+                           O_RDWR | O_CREAT, RESOLVE_NO_XDEV);
     expect_openat2_success("openat2 RESOLVE_NO_MAGICLINKS resolves",
                            dirfd, "resolve-magic",
-                           (struct open_how){ O_RDWR | O_CREAT, 0600, RESOLVE_NO_MAGICLINKS },
-                           sizeof(struct open_how));
+                           O_RDWR | O_CREAT, RESOLVE_NO_MAGICLINKS);
     expect_openat2_success("openat2 RESOLVE_NO_SYMLINKS resolves",
                            dirfd, "resolve-symlink",
-                           (struct open_how){ O_RDWR | O_CREAT, 0600, RESOLVE_NO_SYMLINKS },
-                           sizeof(struct open_how));
+                           O_RDWR | O_CREAT, RESOLVE_NO_SYMLINKS);
     expect_openat2_success("openat2 RESOLVE_BENEATH resolves",
                            dirfd, "resolve-beneath",
-                           (struct open_how){ O_RDWR | O_CREAT, 0600, RESOLVE_BENEATH },
-                           sizeof(struct open_how));
+                           O_RDWR | O_CREAT, RESOLVE_BENEATH);
     expect_openat2_success("openat2 RESOLVE_IN_ROOT resolves",
                            dirfd, "resolve-in-root",
-                           (struct open_how){ O_RDWR | O_CREAT, 0600, RESOLVE_IN_ROOT },
-                           sizeof(struct open_how));
+                           O_RDWR | O_CREAT, RESOLVE_IN_ROOT);
     expect_openat2_success("openat2 RESOLVE_CACHED resolves",
                            dirfd, "resolve-cached",
-                           (struct open_how){ O_RDWR | O_CREAT, 0600, RESOLVE_CACHED },
-                           sizeof(struct open_how));
+                           O_RDWR | O_CREAT, RESOLVE_CACHED);
 
     close(dirfd);
     rmdir(dir);

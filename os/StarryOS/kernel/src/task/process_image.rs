@@ -148,8 +148,7 @@ impl ProcessData {
 #[cfg(all(test, not(axtest)))]
 mod tests {
     use super::ProcessImageState;
-    use axfs_ng_vfs::Location;
-use crate::sync::Mutex;
+    use crate::sync::Mutex;
 
     #[test]
     fn process_image_heap_fields_use_sleepable_pi_locks() {

@@ -45,14 +45,17 @@ const ATTR_ATTACH_TYPE_OFFSET: usize = 8;
 const ATTR_QUERY_ATTACH_TYPE_OFFSET: usize = 4;
 /// Offset of `attach_type` in the `link_create` attribute layout.
 const ATTR_LINK_ATTACH_TYPE_OFFSET: usize = 8;
-/// Offset of `prog_cnt` in the query attribute's current uapi layout.
-const ATTR_QUERY_PROG_CNT_OFFSET: usize = 16;
-/// Offset of `prog_cnt` in the query attribute's original layout where
-/// `prog_ids` preceded it (still used by runc 1.1.x).
-const ATTR_QUERY_PROG_CNT_LEGACY_OFFSET: usize = 24;
+/// Offset of `prog_cnt` in the query attribute. Linux v6.6 uapi
+/// (`include/uapi/linux/bpf.h`) lays the query out as target_fd@0,
+/// attach_type@4, query_flags@8, attach_flags@12, `__aligned_u64 prog_ids`@16
+/// and `__u32 prog_cnt`@24; runc 1.1.x reads `prog_cnt` from that same
+/// offset. Offset 16 is the caller's `prog_ids` pointer and must never be
+/// written.
 /// Minimum `union bpf_attr` size covering fields through `attach_type`.
 const MIN_ATTACH_ATTR_SIZE: u32 = 12;
-/// Minimum `union bpf_attr` size covering `prog_cnt` in either layout.
+/// Offset of `prog_cnt` in the query attribute (Linux v6.6 uapi layout).
+const ATTR_QUERY_PROG_CNT_OFFSET: usize = 24;
+/// Minimum `union bpf_attr` size covering `prog_cnt`@24.
 const MIN_QUERY_ATTR_SIZE: u32 = 28;
 /// Minimum `union bpf_attr` size covering fields through `prog_type`.
 const MIN_PROG_ATTR_SIZE: u32 = 4;
@@ -225,10 +228,10 @@ fn handle(current: &crate::task::UserTaskRef, command: DeviceCommand, uattr: usi
             if !fd_exists(target_fd as i32) {
                 return Err(StarryError::BadFileDescriptor);
             }
-            // Report "no programs attached" in both known layouts so either
-            // caller concludes the cgroup is clean.
+            // Report "no programs attached" so the caller concludes the
+            // cgroup is clean. The caller's `prog_ids` pointer is left
+            // untouched.
             write_attr_u32(current, uattr, ATTR_QUERY_PROG_CNT_OFFSET, 0)?;
-            write_attr_u32(current, uattr, ATTR_QUERY_PROG_CNT_LEGACY_OFFSET, 0)?;
             Ok(0)
         }
         DeviceCommand::IdScan => Err(StarryError::NotFound),

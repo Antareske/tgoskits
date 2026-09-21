@@ -872,13 +872,13 @@ impl Thread {
         &self.signals.signalfd_waker
     }
 
-    /// Returns the OOM score adjustment value.
     /// Monotonic nanoseconds since boot when this thread was created
     /// (`/proc/[pid]/stat` `starttime` source).
     pub fn start_time_ns(&self) -> u64 {
         self.accounting.start_time_ns
     }
 
+    /// Returns the OOM score adjustment value.
     pub fn oom_score_adj(&self) -> i32 {
         self.security.oom_score_adj.load(Ordering::SeqCst)
     }

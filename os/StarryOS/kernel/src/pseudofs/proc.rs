@@ -1972,8 +1972,11 @@ fn builder(fs: Arc<SimpleFs>, view: PidView) -> DirMaker {
         "filesystems",
         SimpleFile::new_regular(fs.clone(), || {
             Ok(
-                "nodev\tsysfs\nnodev\tproc\nnodev\ttmpfs\nnodev\tramfs\nnodev\tdevtmpfs\nnodev\\
-                 tdevpts\nnodev\tcgroup2\nnodev\toverlay\n\text4\n",
+                ["nodev\tsysfs", "nodev\tproc", "nodev\ttmpfs", "nodev\tramfs",
+                 "nodev\tdevtmpfs", "nodev\tdevpts", "nodev\tcgroup2",
+                 "nodev\toverlay", "\text4"]
+                    .map(|line| format!("{line}\n"))
+                    .concat(),
             )
         }),
     );

@@ -850,7 +850,8 @@ pub fn sys_fchownat(
         ResolveAtResult::File(loc) => (Some(loc.clone()), Some(loc.metadata()?), None),
         ResolveAtResult::Other(file_like) => {
             let stat = file_like.stat()?;
-            (None, None, Some((stat.uid, stat.gid)))
+            let path = file_like.path().into_owned();
+            (None, None, Some((stat.uid, stat.gid, path)))
         }
     };
 
@@ -861,11 +862,11 @@ pub fn sys_fchownat(
     // - Changing the file group (gid) without CAP_CHOWN is allowed only if
     //   the caller owns the file and the target group is one the caller
     //   belongs to.
-    let (owner_uid, owner_gid) = match &anon_owner {
-        Some(owner) => *owner,
+    let (owner_uid, owner_gid, anon_accepts) = match &anon_owner {
+        Some((uid, gid, path)) => (*uid, *gid, Some(path.as_str())),
         None => {
             let meta = meta.as_ref().expect("file resolutions carry metadata");
-            (meta.uid, meta.gid)
+            (meta.uid, meta.gid, None)
         }
     };
     let changing_owner = uid != -1 && uid as u32 != owner_uid;
@@ -882,6 +883,15 @@ pub fn sys_fchownat(
         }
         if !cred.in_group(gid as u32) {
             return Err(StarryError::OperationNotPermitted);
+        }
+    }
+
+    // Anonymous fds that do not model ownership (eventfd, epoll, timerfd,
+    // signalfd...) reject the change like Linux instead of silently
+    // succeeding; only pipe/socket style inodes accept it as a no-op.
+    if let Some(path) = anon_accepts {
+        if !path.starts_with("pipe:[") && !path.starts_with("socket:[") {
+            return Err(StarryError::OperationNotSupported);
         }
     }
 

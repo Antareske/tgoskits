@@ -18,6 +18,7 @@ pub use uart16550::Uart16550;
 #[cfg(test)]
 mod tests {
     use alloc::{collections::VecDeque, sync::Arc, vec::Vec};
+    use core::sync::atomic::{AtomicBool, Ordering};
     use std::sync::Mutex;
 
     use axdevice_base::{
@@ -31,17 +32,30 @@ mod tests {
     struct TestBackend {
         input: Mutex<VecDeque<u8>>,
         output: Mutex<Vec<u8>>,
+        blocked: AtomicBool,
     }
 
     impl TestBackend {
         fn push_input(&self, bytes: &[u8]) {
             self.input.lock().unwrap().extend(bytes);
         }
+
+        fn set_blocked(&self, blocked: bool) {
+            self.blocked.store(blocked, Ordering::Release);
+        }
     }
 
     impl SerialBackend for TestBackend {
         fn write(&self, bytes: &[u8]) {
             self.output.lock().unwrap().extend_from_slice(bytes);
+        }
+
+        fn try_write(&self, bytes: &[u8]) -> usize {
+            if self.blocked.load(Ordering::Acquire) {
+                return 0;
+            }
+            self.write(bytes);
+            bytes.len()
         }
 
         fn read(&self, buffer: &mut [u8]) -> usize {
@@ -169,5 +183,101 @@ mod tests {
 
         uart.write(0x000, AccessWidth::Dword, b'P' as u64).unwrap();
         assert_eq!(backend.output.lock().unwrap().as_slice(), b"P");
+    }
+
+    #[test]
+    fn pl011_retains_tx_until_the_backend_accepts_it() {
+        const FR_BUSY: u64 = 1 << 3;
+        const FR_TXFE: u64 = 1 << 7;
+
+        let backend = Arc::new(TestBackend::default());
+        backend.set_blocked(true);
+        let uart = Pl011::new(
+            backend.clone(),
+            level_irq(Arc::new(TestIrqSink::default()), 33),
+        );
+
+        uart.write(0x000, AccessWidth::Dword, b'P' as u64).unwrap();
+        assert!(backend.output.lock().unwrap().is_empty());
+        let flags = uart.read(0x018, AccessWidth::Dword).unwrap();
+        assert_ne!(flags & FR_BUSY, 0);
+        assert_eq!(flags & FR_TXFE, 0);
+
+        backend.set_blocked(false);
+        uart.poll().unwrap();
+        assert_eq!(backend.output.lock().unwrap().as_slice(), b"P");
+        let flags = uart.read(0x018, AccessWidth::Dword).unwrap();
+        assert_eq!(flags & FR_BUSY, 0);
+        assert_ne!(flags & FR_TXFE, 0);
+    }
+
+    #[test]
+    fn pl011_retained_tx_waits_for_the_transmitter_to_be_reenabled() {
+        const FR_BUSY: u64 = 1 << 3;
+        const FR_TXFF: u64 = 1 << 5;
+        const FR_TXFE: u64 = 1 << 7;
+        const CR_UART_ENABLE: u64 = 1;
+        const CR_TX_ENABLE: u64 = 1 << 8;
+        const CR_RX_ENABLE: u64 = 1 << 9;
+
+        let active = CR_UART_ENABLE | CR_TX_ENABLE | CR_RX_ENABLE;
+        let cases: [(&str, u64); 3] = [
+            ("clearing CR_UART_ENABLE", active & !CR_UART_ENABLE),
+            ("clearing CR_TX_ENABLE", active & !CR_TX_ENABLE),
+            (
+                "clearing CR_UART_ENABLE and CR_TX_ENABLE",
+                active & !(CR_UART_ENABLE | CR_TX_ENABLE),
+            ),
+        ];
+
+        for (description, disabled) in cases {
+            let backend = Arc::new(TestBackend::default());
+            backend.set_blocked(true);
+            let uart = Pl011::new(
+                backend.clone(),
+                level_irq(Arc::new(TestIrqSink::default()), 33),
+            );
+
+            uart.write(0x000, AccessWidth::Dword, b'R' as u64).unwrap();
+            assert!(
+                backend.output.lock().unwrap().is_empty(),
+                "{description}: a blocked backend must retain the byte in the TX FIFO"
+            );
+
+            uart.write(0x030, AccessWidth::Dword, disabled).unwrap();
+            backend.set_blocked(false);
+
+            uart.poll().unwrap();
+            assert!(
+                backend.output.lock().unwrap().is_empty(),
+                "{description}: poll must not submit retained bytes while the transmitter is \
+                 disabled"
+            );
+            let flags = uart.read(0x018, AccessWidth::Dword).unwrap();
+            assert_eq!(
+                flags & (FR_TXFF | FR_BUSY | FR_TXFE),
+                FR_BUSY,
+                "{description}: a disabled transmitter must still report retained data as pending"
+            );
+            assert!(
+                backend.output.lock().unwrap().is_empty(),
+                "{description}: reading FR must not submit retained bytes while the transmitter \
+                 is disabled"
+            );
+
+            uart.write(0x030, AccessWidth::Dword, active).unwrap();
+            assert_eq!(
+                backend.output.lock().unwrap().as_slice(),
+                [b'R'],
+                "{description}: re-enabling the transmitter must continue the retained byte \
+                 exactly once"
+            );
+            let flags = uart.read(0x018, AccessWidth::Dword).unwrap();
+            assert_eq!(
+                flags & (FR_TXFF | FR_BUSY | FR_TXFE),
+                FR_TXFE,
+                "{description}: an enabled transmitter with an empty FIFO is idle and TXFE"
+            );
+        }
     }
 }

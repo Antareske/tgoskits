@@ -18,6 +18,7 @@ fn fake_case(root: &Path, name: &str) -> TestQemuCase {
         host_http_server: None,
         subcases: Vec::new(),
         grouped_subcase_filter: None,
+        ltp_case_id: None,
     }
 }
 

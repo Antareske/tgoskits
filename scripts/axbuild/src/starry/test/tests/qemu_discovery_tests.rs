@@ -301,6 +301,41 @@ fn starry_qemu_system_selector_keeps_full_group() {
 }
 
 #[test]
+fn starry_qemu_ltp_selection_uses_architecture_manifest() {
+    let root = tempdir().unwrap();
+    let ltp = root
+        .path()
+        .join("test-suit/starryos/qemu/system/ltp-syscalls");
+    fs::create_dir_all(&ltp).unwrap();
+    fs::write(ltp.join("CMakeLists.txt"), "project(ltp-syscalls C)\n").unwrap();
+    fs::write(ltp.join("cases.txt"), "common01\n").unwrap();
+    fs::write(ltp.join("cases-x86_64.txt"), "arch01\n").unwrap();
+
+    for arch in ["x86_64", "aarch64"] {
+        let target = format!("{arch}-unknown-none");
+        write_flat_qemu_build_config(root.path(), "qemu", &target);
+        write_flat_grouped_qemu_test_config(root.path(), "qemu", "system", arch);
+        let select = |id: &str| {
+            discover_qemu_cases(
+                root.path(),
+                arch,
+                &target,
+                Some(&format!("qemu/system/ltp-syscalls/{id}")),
+            )
+        };
+
+        assert_eq!(select("common01").unwrap().len(), 1);
+        if arch == "x86_64" {
+            assert_eq!(select("arch01").unwrap().len(), 1);
+        } else {
+            assert!(select("arch01").is_err());
+        }
+        assert!(select("missing01").is_err());
+        assert!(select("../common01").is_err());
+    }
+}
+
+#[test]
 fn starry_qemu_subcase_selector_reports_unknown_subcase() {
     let root = tempdir().unwrap();
     write_flat_qemu_build_config(root.path(), "qemu", "x86_64-unknown-none");

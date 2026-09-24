@@ -61,6 +61,12 @@ pub(super) struct DataPlaneState {
     pub event_bytes: usize,
     pub tx: TxState,
     pub active_tx: Option<ActiveTx>,
+    /// Firmware packet buffers the last flow-control reading granted, minus the
+    /// data writes completed since.  `None` means the next transmit must re-read
+    /// the register: the value is dropped when it reaches the command reserve
+    /// and whenever command traffic or cancellation may have moved the shared
+    /// pool.
+    pub tx_credits: Option<u8>,
     pub internal_tx: VecDeque<InternalTx>,
     pub internal_tx_bytes: usize,
     pub link: LinkState,
@@ -176,6 +182,7 @@ impl AicDevice {
                 event_bytes: 0,
                 tx: TxState::new(),
                 active_tx: None,
+                tx_credits: None,
                 internal_tx: VecDeque::new(),
                 internal_tx_bytes: 0,
                 link: LinkState::new(),

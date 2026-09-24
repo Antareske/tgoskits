@@ -157,6 +157,12 @@ IRQ 驱动的 RX scan，但启动 mailbox 的 credit backoff 仍返回 `RetryAt`
 提前反复读取 credit，也不会在等待发送空间时阻止接收；owner 保留 `CardIrqWait`
 和发送完成后的 rearm 边界，不根据 ready 状态无条件重开 CARD_INT。
 
+流量控制的读数同样由数据面持有：一次读取报告的固件包缓冲数授权同样多次 CMD53 写入，
+每完成一次写入本地扣除一个，缓存降到命令保留量时丢弃，下次发送重新读取。命令转发会
+从同一固件缓冲池取用（V3 的命令信箱走数据 FIFO，与数据共用该池），生命周期命令重建固件
+队列，取消后无法确定在途写入是否已被固件收下，这三种情况一律丢弃缓存；接收路径不触碰
+该池，缓存继续有效。重试期限随之缩短到固件排空一帧的时间量级，回退不再以毫秒计。
+
 该区分也固定 AIC 启动时序：Function enable、block size 和 vendor register setup
 可以在 card IRQ masked 时推进；只有 mailbox 已写入且进入 confirmation wait 后才
 开放 card IRQ。FriendlyARM vendor Linux tree

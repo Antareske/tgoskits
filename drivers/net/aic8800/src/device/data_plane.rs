@@ -11,7 +11,10 @@ use crate::{
     rx::{ParsedFrame, parse_fifo},
 };
 
-const IO_RETRY: Duration = Duration::from_millis(1);
+// The firmware drains one packet buffer per air frame, so a retry no longer
+// than a frame's air time finds fresh capacity instead of paying another
+// command round trip for an unchanged register.
+const IO_RETRY: Duration = Duration::from_micros(200);
 // The firmware reports packet buffers, not SDIO blocks. Keep two buffers
 // available for commands, as in the vendor DATA_FLOW_CTRL_THRESH contract.
 const DATA_TX_RESERVED_CREDITS: u8 = 2;
@@ -59,6 +62,7 @@ impl AicDevice {
             return action;
         }
         self.prepare_next_transmit();
+        let credit_cached = self.tx_credit_available();
         if let Some(active) = self.data.active_tx.as_mut() {
             if let Some(deadline) = active.retry_at {
                 if now < deadline {
@@ -67,10 +71,19 @@ impl AicDevice {
                 active.retry_at = None;
             }
             // DC bypasses flow control only for its separate command mailbox.
-            // Every data packet must obtain firmware capacity before CMD53.
+            // Every data packet must obtain firmware capacity before CMD53; a
+            // cached credit already grants one buffer, so only an exhausted
+            // cache pays for another register read.
+            if !credit_cached {
+                return self.emit(
+                    IoPurpose::TransmitFlow,
+                    read_byte(self.data_function(), self.registers().flow_control),
+                );
+            }
+            let frame = active.wire_frame.clone();
             return self.emit(
-                IoPurpose::TransmitFlow,
-                read_byte(self.data_function(), self.registers().flow_control),
+                IoPurpose::TransmitData,
+                write_fifo(self.data_function(), self.registers().write_fifo, frame),
             );
         }
         AicAction::WaitForInterrupt
@@ -370,12 +383,39 @@ impl AicDevice {
         self.io.receive.next_path = self.io.receive.next_path.saturating_add(1);
     }
 
+    /// Whether the cached firmware credit still grants a data write.
+    fn tx_credit_available(&self) -> bool {
+        self.data
+            .tx_credits
+            .is_some_and(|credits| credits > DATA_TX_RESERVED_CREDITS)
+    }
+
+    /// Accounts for the packet buffer a completed write handed to the firmware.
+    ///
+    /// A reading that reaches the command reserve is dropped so the next
+    /// transmit re-reads the register instead of writing on a spent quota.
+    fn spend_tx_credit(&mut self) {
+        self.data.tx_credits = self.data.tx_credits.and_then(|credits| {
+            let remaining = credits.saturating_sub(1);
+            (remaining > DATA_TX_RESERVED_CREDITS).then_some(remaining)
+        });
+    }
+
+    /// Drops the cached credit because firmware work outside this state machine
+    /// may have taken buffers from the pool the reading described.
+    pub(super) fn clear_tx_credits(&mut self) {
+        self.data.tx_credits = None;
+    }
+
     pub(super) fn consume_transmit_flow(
         &mut self,
         response: SdioResponse,
         now: MonotonicTime,
     ) -> Result<(), AicError> {
         let credits = self.registers().flow_credits(expect_byte(response)?);
+        // One written packet consumes one reported buffer, so the reading
+        // authorises the next writes until the reserve boundary.
+        self.data.tx_credits = Some(credits);
         let active = self
             .data
             .active_tx
@@ -395,6 +435,7 @@ impl AicDevice {
 
     pub(super) fn consume_transmit_data(&mut self, response: SdioResponse) -> Result<(), AicError> {
         expect_unit(response)?;
+        self.spend_tx_credit();
         let active = self
             .data
             .active_tx
@@ -1165,9 +1206,77 @@ mod tests {
                         ..
                     })
                 ),
-                "each packet requires a fresh firmware credit check"
+                "a credit spent down to the command reserve must be re-read"
             );
         }
+    }
+
+    #[test]
+    fn one_credit_read_serves_a_packet_burst() {
+        // A reading reports packet buffers, so it authorises as many writes:
+        // consecutive packets must not pay for another command round trip.
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        let now = MonotonicTime::default();
+        let AicAction::SubmitSdio(flow) = device.advance(AicInput::tick(now)) else {
+            panic!("expected the first firmware credit read")
+        };
+        let mut action = device.advance(complete(&flow, SdioResponse::Byte(32), now));
+        for packet in 2..=5u8 {
+            let AicAction::SubmitSdio(write) = action else {
+                panic!("a cached credit must admit packet {packet} without a credit read")
+            };
+            assert!(matches!(write.kind, SdioRequestKind::Write { .. }));
+            device
+                .data
+                .tx
+                .enqueue(TxToken::new(u64::from(packet)), vec![0; 60])
+                .unwrap();
+            assert!(matches!(
+                device.advance(complete(&write, SdioResponse::Unit, now)),
+                AicAction::Event(AicEvent::TransmitComplete(token))
+                    if token == TxToken::new(u64::from(packet - 1))
+            ));
+            assert_eq!(device.data.tx_credits, Some(33 - packet));
+            action = device.advance(AicInput::tick(now));
+        }
+        assert!(
+            matches!(
+                action,
+                AicAction::SubmitSdio(SdioRequest {
+                    kind: SdioRequestKind::Write { .. },
+                    ..
+                })
+            ),
+            "the burst continues while the cached credit lasts"
+        );
+    }
+
+    #[test]
+    fn command_traffic_clears_the_cached_tx_credit() {
+        // The command mailbox takes buffers from the same firmware pool as data
+        // writes, so a credit read before it can no longer be trusted.
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        let now = MonotonicTime::default();
+        device.data.tx_credits = Some(64);
+        device.lifecycle.mailbox = Some(MailboxState::confirmation_for_test(
+            now.after(Duration::from_millis(10)),
+        ));
+        device.io.pending = Some(PendingIo {
+            id: 4,
+            purpose: IoPurpose::MailboxWrite,
+        });
+
+        device.advance(AicInput {
+            now,
+            event: Some(AicInputEvent::Sdio(SdioCompletion {
+                request_id: 4,
+                result: Ok(SdioResponse::Unit),
+            })),
+        });
+        assert_eq!(
+            device.data.tx_credits, None,
+            "a mailbox write spends firmware buffers the cached credit counted"
+        );
     }
 
     fn complete(request: &SdioRequest, response: SdioResponse, now: MonotonicTime) -> AicInput {

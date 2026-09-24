@@ -157,6 +157,20 @@ impl AicDevice {
             return Ok(());
         }
         let response = completion.result.map_err(AicError::Sdio)?;
+        // The command mailbox and lifecycle commands can take buffers from the
+        // firmware packet pool that a cached credit counted on the profiles
+        // where they travel over the data FIFO, so the reading is dropped
+        // whenever command work completes.  Receive work never takes pool
+        // buffers and keeps the cached credit valid.
+        if matches!(
+            pending.purpose,
+            IoPurpose::Startup
+                | IoPurpose::Shutdown
+                | IoPurpose::MailboxFlow
+                | IoPurpose::MailboxWrite
+        ) {
+            self.clear_tx_credits();
+        }
         match pending.purpose {
             IoPurpose::Startup => self.consume_startup_response(response, now),
             IoPurpose::MailboxFlow | IoPurpose::MailboxWrite => {
@@ -207,6 +221,7 @@ impl AicDevice {
         self.lifecycle.control = None;
         self.data.link.clear_peer();
         self.data.clear_internal_tx();
+        self.clear_tx_credits();
         if self.lifecycle.state == AicState::Starting {
             self.lifecycle.startup = None;
             self.lifecycle.state = AicState::Stopped;

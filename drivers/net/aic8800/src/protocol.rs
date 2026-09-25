@@ -12,7 +12,7 @@ pub(crate) const DBG_MEM_WRITE_REQ: u16 = 0x0402;
 pub(crate) const DBG_MEM_BLOCK_WRITE_REQ: u16 = 0x040b;
 pub(crate) const DBG_START_APP_REQ: u16 = 0x040d;
 pub(crate) const DBG_MEM_MASK_WRITE_REQ: u16 = 0x0411;
-const SDIO_HEADER_SIZE: usize = 4;
+pub(crate) const SDIO_HEADER_SIZE: usize = 4;
 const DUMMY_WORD_SIZE: usize = 4;
 const LMAC_HEADER_SIZE: usize = 8;
 const HOST_DESCRIPTOR_SIZE: usize = 28;
@@ -148,6 +148,24 @@ fn exact_two_words(payload: &[u8]) -> Result<[u32; 2], DebugConfirmationError> {
         u32::from_le_bytes(payload[..4].try_into().expect("length checked above")),
         u32::from_le_bytes(payload[4..].try_into().expect("length checked above")),
     ])
+}
+
+/// Bytes one frame occupies inside a transmit stream.
+///
+/// The firmware walks a write frame by frame, stepping by the frame's declared
+/// length rounded up to the transmit alignment, and stops at the first zero
+/// length.  A write that carries several frames therefore has to leave each
+/// frame exactly that long — the block padding the single-frame form ends with
+/// is only valid after the last frame, where it reads as the end of the stream.
+///
+/// Returns `None` for a frame whose declared length does not fit the buffer.
+pub(crate) fn stream_frame_len(frame: &[u8]) -> Option<usize> {
+    let declared = match frame.first_chunk::<2>() {
+        Some([low, high]) => usize::from(u16::from_le_bytes([*low, *high])) & 0x0fff,
+        None => return None,
+    };
+    let length = align_up(SDIO_HEADER_SIZE + declared, TX_ALIGNMENT);
+    (length <= frame.len()).then_some(length)
 }
 
 /// Encapsulates one Ethernet packet for the firmware data ingress path.

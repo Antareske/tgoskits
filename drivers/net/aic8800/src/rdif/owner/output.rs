@@ -191,6 +191,7 @@ impl OwnerOutputs {
 
     pub(super) fn has_pending(&self) -> bool {
         self.pending_tx_completion.is_some()
+            || !self.pending_tx_tokens.is_empty()
             || self.pending_rx_frame.is_some()
             || self.pending_rx_completion.is_some()
             || self.pending_wifi_progress.is_some()
@@ -198,6 +199,7 @@ impl OwnerOutputs {
 
     pub(super) fn has_runnable_pending(&self) -> bool {
         self.pending_tx_completion.is_some()
+            || !self.pending_tx_tokens.is_empty()
             || self.pending_rx_completion.is_some()
             || self.pending_wifi_progress.is_some()
             || (self.pending_rx_frame.is_some() && !self.queues.rx_submit.is_empty())
@@ -435,6 +437,30 @@ mod tests {
         );
         assert!(outputs.has_pending());
         assert!(!outputs.has_runnable_pending());
+    }
+
+    #[test]
+    fn a_held_back_completion_keeps_the_owner_runnable() {
+        // A batch completion the return ring cannot take waits its turn in the
+        // retry queue.  The owner has to be told work is left, or the token
+        // would stay there until some unrelated event happened to flush it.
+        let (_, _, queues) = queue_parts(QueueConfig {
+            dma_mask: u64::MAX,
+            align: 4,
+            buf_size: 2048,
+            ring_size: 2,
+        });
+        let WifiChannels {
+            progress_tx,
+            progress_signal,
+            ..
+        } = WifiChannels::new();
+        let mut outputs = OwnerOutputs::new(queues, progress_tx, progress_signal);
+
+        outputs.pending_tx_tokens.push_back(TxToken::new(1));
+
+        assert!(outputs.has_pending());
+        assert!(outputs.has_runnable_pending());
     }
 
     #[test]

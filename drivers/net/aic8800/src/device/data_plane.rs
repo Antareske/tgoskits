@@ -6,7 +6,7 @@ use crate::{
     lmac::{
         SM_CONNECT_IND, SM_DISCONNECT_IND, parse_connect_indication, parse_disconnect_indication,
     },
-    protocol::{BLOCK_SIZE, ethernet_tx_frame},
+    protocol::{BLOCK_SIZE, ethernet_tx_frame, stream_frame_len},
     registers::ReceiveLength,
     rx::{ParsedFrame, parse_fifo},
 };
@@ -18,6 +18,9 @@ const IO_RETRY: Duration = Duration::from_micros(200);
 // The firmware reports packet buffers, not SDIO blocks. Keep two buffers
 // available for commands, as in the vendor DATA_FLOW_CTRL_THRESH contract.
 const DATA_TX_RESERVED_CREDITS: u8 = 2;
+// The vendor BSP caps one aggregated write at four 1536-byte packets
+// (`MAX_AGGR_TXPKT_LEN`), so a burst never exceeds that budget.
+const MAX_AGGREGATE_BYTES: usize = 1536 * 4;
 const INTERNAL_TX_CAPACITY: usize = 2;
 const INTERNAL_TX_BYTE_CAPACITY: usize = 8 * 1024;
 const ETHERTYPE_EAPOL: [u8; 2] = [0x88, 0x8e];
@@ -80,7 +83,7 @@ impl AicDevice {
                     read_byte(self.data_function(), self.registers().flow_control),
                 );
             }
-            let frame = active.wire_frame.clone();
+            let frame = active.wire_bytes();
             return self.emit(
                 IoPurpose::TransmitData,
                 write_fifo(self.data_function(), self.registers().write_fifo, frame),
@@ -433,15 +436,19 @@ impl AicDevice {
             return Ok(());
         }
         // The reading is the first moment the number of available firmware
-        // buffers is known, so the burst is grown here as well.
-        let limit = self.aggregate_limit();
-        self.extend_active_write(limit);
+        // buffers is known, so the burst is grown here as well.  Internal
+        // lifecycle writes stay single-packet: their completions have no user
+        // token to release.
+        if self.user_write_in_flight() {
+            let limit = self.aggregate_limit();
+            self.extend_active_write(limit);
+        }
         let active = self
             .data
             .active_tx
             .as_ref()
             .ok_or(AicError::CompletionMismatch)?;
-        let frame = active.wire_frame.clone();
+        let frame = active.wire_bytes();
         self.io.next = Some((
             IoPurpose::TransmitData,
             write_fifo(self.data_function(), self.registers().write_fifo, frame),
@@ -467,17 +474,47 @@ impl AicDevice {
                 tokens.extend(active.extra_tokens);
                 self.complete_write_tokens(tokens);
             }
-            super::owner::TxCompletion::Internal(super::owner::InternalTxKind::M2) => {}
-            super::owner::TxCompletion::Internal(super::owner::InternalTxKind::M4) => {
-                let (station_index, _) = self.data.link.peer().ok_or(AicError::WpaProtocol)?;
-                self.lifecycle
-                    .control
-                    .as_mut()
-                    .ok_or(AicError::CompletionMismatch)?
-                    .accept_m4_transmit(station_index)?;
+            super::owner::TxCompletion::Internal(kind) => {
+                // A lifecycle write carries no user packet, so it accumulates
+                // no extra token.  Releasing them here anyway keeps a buffer
+                // that ever got appended to one from staying owned forever.
+                self.complete_write_tokens(active.extra_tokens);
+                if kind == super::owner::InternalTxKind::M4 {
+                    let (station_index, _) = self.data.link.peer().ok_or(AicError::WpaProtocol)?;
+                    self.lifecycle
+                        .control
+                        .as_mut()
+                        .ok_or(AicError::CompletionMismatch)?
+                        .accept_m4_transmit(station_index)?;
+                }
             }
         }
         Ok(())
+    }
+
+    /// Whether the write in flight carries user packets rather than a lifecycle
+    /// frame.
+    /// Takes the write in flight, returning the tokens of the packets it
+    /// carried in the order they were handed over.
+    pub(super) fn take_active_write_tokens(&mut self) -> Vec<TxToken> {
+        let Some(active) = self.data.active_tx.take() else {
+            return Vec::new();
+        };
+        let mut tokens = active.extra_tokens;
+        if let super::owner::TxCompletion::User(token) = active.completion {
+            tokens.insert(0, token);
+        }
+        tokens
+    }
+
+    fn user_write_in_flight(&self) -> bool {
+        matches!(
+            self.data
+                .active_tx
+                .as_ref()
+                .map(|active| &active.completion),
+            Some(super::owner::TxCompletion::User(_))
+        )
     }
 
     /// Publishes the packets one transmit write completed.  A write that
@@ -486,7 +523,10 @@ impl AicDevice {
     /// receive frames and two thirds of an acknowledgement stream must not be
     /// displaced by them.  With no room the tokens wait instead of displacing
     /// anything: a completion only ever returns a buffer.
-    fn complete_write_tokens(&mut self, tokens: Vec<TxToken>) {
+    pub(super) fn complete_write_tokens(&mut self, tokens: Vec<TxToken>) {
+        if tokens.is_empty() {
+            return;
+        }
         if self.data.event_room() == 0 {
             self.data.pending_completions.extend(tokens);
             return;
@@ -515,12 +555,10 @@ impl AicDevice {
             ) else {
                 return;
             };
-            self.data.active_tx = Some(ActiveTx {
-                retry_at: None,
-                completion: super::owner::TxCompletion::Internal(internal.kind),
+            self.data.active_tx = Some(ActiveTx::new(
+                super::owner::TxCompletion::Internal(internal.kind),
                 wire_frame,
-                extra_tokens: Vec::new(),
-            });
+            ));
             return;
         }
         let Some(frame) = self.data.tx.take_wire_frame(
@@ -532,19 +570,14 @@ impl AicDevice {
         };
         match frame {
             Ok((token, wire_frame)) => {
-                self.data.active_tx = Some(ActiveTx {
-                    retry_at: None,
-                    completion: super::owner::TxCompletion::User(token),
+                self.data.active_tx = Some(ActiveTx::new(
+                    super::owner::TxCompletion::User(token),
                     wire_frame,
-                    extra_tokens: Vec::new(),
-                });
+                ));
                 let limit = self.aggregate_limit();
                 self.extend_active_write(limit);
             }
-            Err(token) => self
-                .data
-                .events
-                .push_back(AicEvent::TransmitComplete(token)),
+            Err(token) => self.complete_write_tokens(vec![token]),
         }
     }
 
@@ -574,7 +607,12 @@ impl AicDevice {
                 .active_tx
                 .as_ref()
                 .map_or(0, super::owner::ActiveTx::packets);
-            if packets == 0 || packets >= limit {
+            let bytes = self
+                .data
+                .active_tx
+                .as_ref()
+                .map_or(0, |active| active.stream_len);
+            if packets == 0 || packets >= limit || bytes >= MAX_AGGREGATE_BYTES {
                 return;
             }
             let Some(next) = self
@@ -586,15 +624,16 @@ impl AicDevice {
             };
             match next {
                 Ok((token, frame)) => {
+                    let Some(length) = stream_frame_len(&frame) else {
+                        self.complete_write_tokens(vec![token]);
+                        continue;
+                    };
                     if let Some(active) = self.data.active_tx.as_mut() {
-                        active.wire_frame.extend_from_slice(&frame);
+                        active.append_frame(&frame, length);
                         active.extra_tokens.push(token);
                     }
                 }
-                Err(token) => self
-                    .data
-                    .events
-                    .push_back(AicEvent::TransmitComplete(token)),
+                Err(token) => self.complete_write_tokens(vec![token]),
             }
         }
     }
@@ -1355,7 +1394,11 @@ mod tests {
         let now = MonotonicTime::default();
         let mut single = ready_transmitter(ChipVariant::Aic8800D80, 60);
         single.data.tx_credits = Some(16);
-        let single_frame = write_frame_len(&single.advance(AicInput::tick(now)));
+        assert_eq!(
+            written_frames(&single.advance(AicInput::tick(now))),
+            vec![74],
+            "a single-packet write ends its stream after its own frame"
+        );
 
         let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
         device.set_tx_aggregation(4);
@@ -1363,18 +1406,22 @@ mod tests {
         let batched = device.advance(AicInput {
             now,
             event: Some(AicInputEvent::TxBatch(vec![
-                (TxToken::new(2), vec![0; 60]),
-                (TxToken::new(3), vec![0; 60]),
-                (TxToken::new(4), vec![0; 60]),
+                (TxToken::new(2), vec![0; 64]),
+                (TxToken::new(3), vec![0; 68]),
+                (TxToken::new(4), vec![0; 72]),
             ])),
         });
         let AicAction::SubmitSdio(write) = batched else {
             panic!("a cached credit must admit the whole batch")
         };
         assert_eq!(
-            write_frame_len(&AicAction::SubmitSdio(write.clone())),
-            4 * single_frame,
-            "each packet keeps its own padded frame inside the write"
+            written_frames(&AicAction::SubmitSdio(write.clone())),
+            vec![74, 78, 82, 86],
+            "the firmware's walk must reach every packet the write carries"
+        );
+        assert!(
+            write_frame_len(&AicAction::SubmitSdio(write.clone())).is_multiple_of(BLOCK_SIZE),
+            "the write as a whole stays block aligned"
         );
         assert_eq!(
             device.data.tx_credits,
@@ -1401,6 +1448,240 @@ mod tests {
             Some(12),
             "one firmware buffer per packet the write carried"
         );
+    }
+
+    #[test]
+    fn a_full_event_queue_defers_batch_completions_without_displacing_receive_frames() {
+        // Completions share the event queue with received frames.  A burst must
+        // wait for room instead of evicting a frame, and must be published once
+        // the queue drains, without any further stimulus.
+        let now = MonotonicTime::default();
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        device.set_tx_aggregation(4);
+        device.data.tx_credits = Some(16);
+        let AicAction::SubmitSdio(write) = device.advance(AicInput {
+            now,
+            event: Some(AicInputEvent::TxBatch(vec![
+                (TxToken::new(2), vec![0; 64]),
+                (TxToken::new(3), vec![0; 68]),
+                (TxToken::new(4), vec![0; 72]),
+            ])),
+        }) else {
+            panic!("a cached credit must admit the whole batch")
+        };
+        for _ in 0..RX_CAPACITY {
+            device
+                .data
+                .push_event(AicEvent::Receive(vec![0; 64]))
+                .unwrap();
+        }
+
+        let first = device.advance(complete(&write, SdioResponse::Unit, now));
+
+        assert!(matches!(first, AicAction::Event(AicEvent::Receive(_))));
+        assert_eq!(
+            device
+                .data
+                .pending_completions
+                .iter()
+                .copied()
+                .collect::<Vec<_>>(),
+            vec![
+                TxToken::new(1),
+                TxToken::new(2),
+                TxToken::new(3),
+                TxToken::new(4)
+            ],
+            "a full queue holds the write's packets back"
+        );
+        assert_eq!(
+            device.data.events.len(),
+            RX_CAPACITY - 1,
+            "no received frame is displaced by the completions"
+        );
+
+        let mut received = 0;
+        let mut completed = Vec::new();
+        while !device.data.events.is_empty() || !device.data.pending_completions.is_empty() {
+            match device.advance(AicInput::tick(now)) {
+                AicAction::Event(AicEvent::Receive(_)) => received += 1,
+                AicAction::Event(AicEvent::TransmitComplete(token)) => completed.push(token),
+                AicAction::Event(AicEvent::TransmitAggregateComplete(tokens)) => {
+                    completed.extend(tokens);
+                }
+                other => panic!("the queue must drain before anything else: {other:?}"),
+            }
+        }
+
+        assert_eq!(
+            received,
+            RX_CAPACITY - 1,
+            "every queued frame survives the completion burst"
+        );
+        assert_eq!(
+            completed,
+            vec![
+                TxToken::new(1),
+                TxToken::new(2),
+                TxToken::new(3),
+                TxToken::new(4)
+            ],
+            "the held-back completions are published once the queue drains"
+        );
+    }
+
+    #[test]
+    fn a_lifecycle_write_never_carries_user_packets() {
+        // A lifecycle write is emitted while user frames are queued.  Its
+        // completion carries no user token, so a packet appended to it would
+        // never return its buffer.
+        let now = MonotonicTime::default();
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        device.set_tx_aggregation(4);
+        device
+            .queue_internal_eapol(super::super::owner::InternalTxKind::M2, vec![0; 95])
+            .unwrap();
+        // The cache is spent down to the reserve, so the transmit has to read
+        // firmware buffers first: the moment a burst is normally grown.
+        device.data.tx_credits = Some(DATA_TX_RESERVED_CREDITS);
+
+        let AicAction::SubmitSdio(flow) = device.advance(AicInput::tick(now)) else {
+            panic!("a spent credit must be re-read before writing")
+        };
+        let write = device.advance(complete(&flow, SdioResponse::Byte(16), now));
+
+        assert_eq!(
+            written_frames(&write),
+            vec![123],
+            "the lifecycle write carries its own frame only"
+        );
+        assert_eq!(
+            device.data.tx.len(),
+            1,
+            "the queued user frame stays queued for a user write"
+        );
+        assert!(
+            device
+                .data
+                .active_tx
+                .as_ref()
+                .is_some_and(|active| active.extra_tokens.is_empty()),
+            "a lifecycle write owns no user token"
+        );
+    }
+
+    #[test]
+    fn a_batch_that_does_not_fit_releases_the_tokens_it_drops() {
+        // The transmit queue is bounded.  A batch that cannot be queued in full
+        // must not fail the device, and every packet it drops must still return
+        // its buffer.
+        let now = MonotonicTime::default();
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        while device.data.tx.len() + 1 < crate::tx::TX_CAPACITY {
+            let token = TxToken::new(device.data.tx.len() as u64 + 1);
+            device
+                .data
+                .tx
+                .enqueue(token, vec![0; 60])
+                .expect("the queue is filled below its capacity");
+        }
+
+        let action = device.advance(AicInput {
+            now,
+            event: Some(AicInputEvent::TxBatch(vec![
+                (TxToken::new(200), vec![0; 60]),
+                (TxToken::new(201), vec![0; 60]),
+                (TxToken::new(202), vec![0; 60]),
+            ])),
+        });
+
+        assert_eq!(
+            device.state(),
+            AicState::Ready,
+            "a batch larger than the free room must not fail the device"
+        );
+        assert_eq!(
+            action,
+            AicAction::Event(AicEvent::TransmitAggregateComplete(vec![
+                TxToken::new(201),
+                TxToken::new(202)
+            ])),
+            "the dropped packets are reported complete"
+        );
+        assert_eq!(device.data.tx.len(), crate::tx::TX_CAPACITY);
+    }
+
+    #[test]
+    fn cancellation_releases_the_write_in_flight() {
+        // Cancelling aborts the transaction in flight.  The aborted write is
+        // dropped, so its packets are reported complete instead of being
+        // written later.
+        let now = MonotonicTime::default();
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        device.data.tx_credits = Some(16);
+        let AicAction::SubmitSdio(write) = device.advance(AicInput::tick(now)) else {
+            panic!("a cached credit must admit the queued frame")
+        };
+        let mut control = super::super::control::build(
+            ControlRequest::Connect {
+                ssid: b"network".to_vec(),
+                pmk: None,
+                entropy: None,
+            },
+            [2, 0, 0, 0, 0, 1],
+            Some(0),
+        )
+        .unwrap();
+        control.commands.clear();
+        device.lifecycle.control = Some(control);
+
+        let AicAction::AbortSdio { request_id } = device.advance(AicInput {
+            now,
+            event: Some(AicInputEvent::Control(ControlRequest::Cancel)),
+        }) else {
+            panic!("cancellation must abort the write in flight")
+        };
+        assert_eq!(request_id, write.id);
+
+        let abort = device.advance(AicInput {
+            now,
+            event: Some(AicInputEvent::Sdio(SdioCompletion {
+                request_id,
+                result: Err(SdioFailure::Aborted),
+            })),
+        });
+
+        assert_eq!(
+            abort,
+            AicAction::Event(AicEvent::TransmitComplete(TxToken::new(1))),
+            "the aborted write returns its packet's buffer"
+        );
+        assert!(device.data.active_tx.is_none());
+        assert!(device.data.tx.is_empty());
+    }
+
+    /// Walks the frames inside a transmit write the way the firmware does: over
+    /// each frame's declared length rounded up to the transmit alignment, and
+    /// stopping at the first zero length.  Returns the declared length of every
+    /// frame the walk reached.
+    fn written_frames(action: &AicAction) -> Vec<usize> {
+        let AicAction::SubmitSdio(request) = action else {
+            panic!("expected a transmit write, got {action:?}")
+        };
+        let SdioRequestKind::Write { bytes, .. } = &request.kind else {
+            panic!("expected a transmit write")
+        };
+        let mut frames = Vec::new();
+        let mut offset = 0;
+        while let Some(header) = bytes.get(offset..offset + 2) {
+            let declared = usize::from(u16::from_le_bytes([header[0], header[1]])) & 0x0fff;
+            if declared == 0 {
+                break;
+            }
+            frames.push(declared);
+            offset += (crate::protocol::SDIO_HEADER_SIZE + declared).next_multiple_of(4);
+        }
+        frames
     }
 
     fn write_frame_len(action: &AicAction) -> usize {

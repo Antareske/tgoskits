@@ -7,28 +7,69 @@ use super::{
 use crate::{
     common::ChipVariant,
     profile::ChipProfile,
+    protocol::{BLOCK_SIZE, stream_frame_len},
     rx::{RX_BYTE_CAPACITY, RX_CAPACITY},
     tx::TxState,
 };
 
 pub(super) struct ActiveTx {
     pub completion: TxCompletion,
-    /// One or more complete wire frames; the firmware walks them by their
-    /// length fields.
+    /// The frames this write carries, laid out the way the firmware walks
+    /// them: one frame after another, each as long as its own declared length
+    /// rounded up to the transmit alignment.
     pub wire_frame: Vec<u8>,
+    /// Stream length inside `wire_frame`.  Everything past it is the block
+    /// padding the write form ends with, which the firmware reads as the end
+    /// of the stream and which a further frame replaces.
+    pub stream_len: usize,
     pub retry_at: Option<MonotonicTime>,
     /// Tokens of the packets this write carries beyond the first.
     pub extra_tokens: Vec<TxToken>,
 }
 
 impl ActiveTx {
+    /// Starts a write that carries one complete wire frame.
+    pub(super) fn new(completion: TxCompletion, wire_frame: Vec<u8>) -> Self {
+        let stream_len = stream_frame_len(&wire_frame).unwrap_or(wire_frame.len());
+        Self {
+            completion,
+            wire_frame,
+            stream_len,
+            retry_at: None,
+            extra_tokens: Vec::new(),
+        }
+    }
+
     /// Packets this write carries.
     pub(super) fn packets(&self) -> usize {
         1 + self.extra_tokens.len()
     }
+
+    /// Appends one more frame, dropping the padding that ended the stream after
+    /// the frame before it.
+    pub(super) fn append_frame(&mut self, frame: &[u8], length: usize) {
+        self.wire_frame.truncate(self.stream_len);
+        self.wire_frame.extend_from_slice(&frame[..length]);
+        self.stream_len += length;
+    }
+
+    /// The bytes one CMD53 carries: the frame stream padded to whole blocks.
+    pub(super) fn wire_bytes(&self) -> Vec<u8> {
+        padded_wire_write(&self.wire_frame[..self.stream_len])
+    }
 }
 
-#[derive(Clone, Copy)]
+/// Pads one write to whole SDIO blocks, as the vendor's aggregation send does.
+/// The padding only ever follows the last frame: it reads as a zero length, the
+/// terminator of the firmware's walk over the frames of a write.
+fn padded_wire_write(frame: &[u8]) -> Vec<u8> {
+    let mut bytes = frame.to_vec();
+    let padding = (BLOCK_SIZE - bytes.len() % BLOCK_SIZE) % BLOCK_SIZE;
+    bytes.resize(bytes.len() + padding, 0);
+    bytes
+}
+
+#[derive(Clone, Copy, Eq, PartialEq)]
 pub(super) enum InternalTxKind {
     M2,
     M4,

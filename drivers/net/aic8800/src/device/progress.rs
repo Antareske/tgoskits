@@ -100,12 +100,20 @@ impl AicDevice {
                 if self.lifecycle.state != AicState::Ready {
                     return Err(AicError::Busy);
                 }
-                for (token, frame) in frames {
+                let mut frames = frames.into_iter();
+                while let Some((token, frame)) = frames.next() {
                     let depth = self.data.tx.len();
-                    self.data
-                        .tx
-                        .enqueue(token, frame)
-                        .map_err(|_| AicError::TxQueueFull)?;
+                    if self.data.tx.enqueue(token, frame).is_err() {
+                        // The queue is full: drop this frame and the rest of the
+                        // batch, releasing their tokens so their DMA buffers
+                        // return to the runtime instead of failing the device.
+                        self.complete_write_tokens(
+                            core::iter::once(token)
+                                .chain(frames.map(|(token, _)| token))
+                                .collect(),
+                        );
+                        return Ok(());
+                    }
                     self.data.probe.frame_arrived(depth);
                 }
                 Ok(())
@@ -234,10 +242,13 @@ impl AicDevice {
                 request_id: pending.id,
             };
         }
-        let tokens: Vec<_> = self.data.tx.drain_tokens().collect();
-        for token in tokens {
-            let _ = self.data.push_event(AicEvent::TransmitComplete(token));
-        }
+        // Nothing queued will be transmitted any more, so the packets the
+        // device still holds are reported complete and their buffers return to
+        // the runtime.
+        let tokens = self.take_active_write_tokens();
+        self.complete_write_tokens(tokens);
+        let queued: Vec<_> = self.data.tx.drain_tokens().collect();
+        self.complete_write_tokens(queued);
         self.emit(
             IoPurpose::Shutdown,
             write_byte(self.data_function(), self.registers().interrupt_enable, 0),
@@ -246,6 +257,10 @@ impl AicDevice {
 
     fn finish_cancel(&mut self) {
         self.data.probe.abandon();
+        // The aborted write is dropped rather than retried, so its packets are
+        // reported complete and their buffers return to the runtime.
+        let tokens = self.take_active_write_tokens();
+        self.complete_write_tokens(tokens);
         self.lifecycle.cancel_pending = false;
         self.lifecycle.mailbox = None;
         self.lifecycle.control = None;
@@ -267,13 +282,8 @@ impl AicDevice {
         self.lifecycle.mailbox = None;
         self.lifecycle.control = None;
         self.data.link.clear_peer();
-        if let Some(active) = self.data.active_tx.take() {
-            if let super::owner::TxCompletion::User(token) = active.completion {
-                let _ = self.data.push_event(AicEvent::TransmitComplete(token));
-            }
-            for token in active.extra_tokens {
-                let _ = self.data.push_event(AicEvent::TransmitComplete(token));
-            }
+        for token in self.take_active_write_tokens() {
+            let _ = self.data.push_event(AicEvent::TransmitComplete(token));
         }
         self.data.clear_internal_tx();
         let tokens: Vec<_> = self.data.tx.drain_tokens().collect();
@@ -540,12 +550,10 @@ mod tests {
         device.lifecycle.state = AicState::Ready;
         let active = TxToken::new(7);
         let queued = TxToken::new(8);
-        device.data.active_tx = Some(ActiveTx {
-            retry_at: None,
-            completion: super::owner::TxCompletion::User(active),
-            wire_frame: vec![1],
-            extra_tokens: Vec::new(),
-        });
+        device.data.active_tx = Some(ActiveTx::new(
+            super::owner::TxCompletion::User(active),
+            vec![1],
+        ));
         device.data.tx.enqueue(queued, vec![2]).unwrap();
 
         assert_eq!(

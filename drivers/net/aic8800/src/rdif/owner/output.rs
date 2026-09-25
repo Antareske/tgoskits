@@ -58,6 +58,11 @@ impl OwnerOutputs {
         }
     }
 
+    /// Frames the protocol has handed over and the owner has not pulled yet.
+    pub(super) fn tx_submit_depth(&self) -> usize {
+        self.queues.tx_submit.observe().occupied_len()
+    }
+
     pub(super) fn take_tx_frame(&mut self) -> Option<(TxToken, Vec<u8>)> {
         let buffer = self.queues.tx_submit.try_pop()?;
         let length = buffer.len();

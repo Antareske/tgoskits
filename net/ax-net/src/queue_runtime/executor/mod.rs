@@ -18,11 +18,13 @@ use crate::device::{
     ProtocolRxFrame, RxBufferRecycler,
 };
 
+mod probe;
 mod wifi;
 
 #[cfg(test)]
 mod queue_tests;
 
+use probe::ExecutorProbe;
 pub(super) use wifi::WifiExecutorSlot;
 use wifi::process_wifi_requests;
 
@@ -537,7 +539,14 @@ impl QueueGroupExecutor {
         Ok(())
     }
 
-    fn poll(&mut self, cpu_budget: usize) -> GroupPollOutcome {
+    fn poll(&mut self, cpu_budget: usize, probe: &mut ExecutorProbe) -> GroupPollOutcome {
+        let start_nanos = ax_hal::time::monotonic_time_nanos();
+        let outcome = self.poll_inner(cpu_budget, probe);
+        probe.poll(start_nanos, ax_hal::time::monotonic_time_nanos());
+        outcome
+    }
+
+    fn poll_inner(&mut self, cpu_budget: usize, probe: &mut ExecutorProbe) -> GroupPollOutcome {
         if self.shared.is_disabled() {
             return GroupPollOutcome::Failed;
         }
@@ -562,6 +571,7 @@ impl QueueGroupExecutor {
                 break;
             };
             tx_completed += 1;
+            probe.tx_reclaimed();
             work += 1;
             if let Err(buffer) = self.tx_free.push(buffer) {
                 self.pending_tx_free = Some(buffer);
@@ -584,6 +594,7 @@ impl QueueGroupExecutor {
             {
                 Ok(()) => {
                     submitted += 1;
+                    probe.tx_submitted();
                     work += 1;
                 }
                 Err(error) => {
@@ -671,6 +682,7 @@ impl QueueGroupExecutor {
                 break;
             };
             received += 1;
+            probe.rx_reclaimed();
             work += 1;
             let replacement = match self.take_rx_replacement() {
                 Some(buffer) => buffer,
@@ -718,15 +730,19 @@ impl QueueGroupExecutor {
         }
     }
 
-    fn finish_idle(&mut self) {
+    fn finish_idle(&mut self, probe: &mut ExecutorProbe) {
         if !self.shared.begin_rearm() {
+            probe.owner_skipped();
             return;
         }
-        match self
-            .group
-            .irq_control
-            .rearm_and_check(ax_hal::time::monotonic_time_nanos())
-        {
+        let start_nanos = ax_hal::time::monotonic_time_nanos();
+        let result = self.group.irq_control.rearm_and_check(start_nanos);
+        probe.owner_call(
+            start_nanos,
+            ax_hal::time::monotonic_time_nanos(),
+            self.tx_ready.len(),
+        );
+        match result {
             Ok(NetRearmResult::Idle) => {}
             Ok(NetRearmResult::WorkPending(_)) => {
                 self.shared.stats.rearm_race.fetch_add(1, Ordering::Relaxed);
@@ -876,6 +892,7 @@ pub(super) fn queue_executor_main(
         control.notify.wait(&waiter);
     }
 
+    let mut probe = ExecutorProbe::default();
     loop {
         if let Some(irq_synchronized) =
             requested_irq_synchronization(control.command.load(Ordering::Acquire))
@@ -885,6 +902,13 @@ pub(super) fn queue_executor_main(
         }
 
         let now_nanos = ax_hal::time::monotonic_time_nanos();
+        probe.tick(
+            now_nanos,
+            groups
+                .iter()
+                .map(|group| group.shared.stats.irq.load(Ordering::Relaxed))
+                .sum(),
+        );
         for group in &mut groups {
             group.schedule_elapsed_retry(now_nanos);
         }
@@ -895,10 +919,10 @@ pub(super) fn queue_executor_main(
                 continue;
             }
             runnable = true;
-            match group.poll(CPU_ROUND_BUDGET - cpu_work) {
+            match group.poll(CPU_ROUND_BUDGET - cpu_work, &mut probe) {
                 GroupPollOutcome::Idle(work) => {
                     cpu_work += work;
-                    group.finish_idle();
+                    group.finish_idle(&mut probe);
                 }
                 GroupPollOutcome::More(work) => {
                     cpu_work += work;
@@ -911,6 +935,7 @@ pub(super) fn queue_executor_main(
             }
         }
         if runnable && cpu_work >= CPU_ROUND_BUDGET {
+            probe.yielded();
             crate::yield_network_thread();
             continue;
         }
@@ -929,12 +954,20 @@ pub(super) fn queue_executor_main(
                 .filter_map(WifiExecutorSlot::deadline)
                 .chain(groups.iter().filter_map(|group| group.retry_at))
                 .min();
-            match executor_wait(ax_hal::time::monotonic_time_nanos(), deadline_nanos) {
-                ExecutorWait::Notification => control.notify.wait(&waiter),
+            let wait_start = ax_hal::time::monotonic_time_nanos();
+            let waited = match executor_wait(wait_start, deadline_nanos) {
+                ExecutorWait::Notification => {
+                    control.notify.wait(&waiter);
+                    true
+                }
                 ExecutorWait::Deadline(duration) => {
                     control.notify.wait_timeout(&waiter, duration);
+                    true
                 }
-                ExecutorWait::Ready => {}
+                ExecutorWait::Ready => false,
+            };
+            if waited {
+                probe.wait(wait_start, ax_hal::time::monotonic_time_nanos());
             }
         }
     }

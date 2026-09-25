@@ -268,6 +268,7 @@ impl AicDevice {
                     header_words,
                 }
             })?;
+        self.data.probe.rx_parsed(frames.len());
         for frame in frames {
             match frame {
                 ParsedFrame::Data {
@@ -413,6 +414,8 @@ impl AicDevice {
         now: MonotonicTime,
     ) -> Result<(), AicError> {
         let credits = self.registers().flow_credits(expect_byte(response)?);
+        self.data.probe.credit(credits);
+        self.data.probe.credit_read();
         // One written packet consumes one reported buffer, so the reading
         // authorises the next writes until the reserve boundary.
         self.data.tx_credits = Some(credits);
@@ -422,6 +425,7 @@ impl AicDevice {
             .as_mut()
             .ok_or(AicError::CompletionMismatch)?;
         if credits <= DATA_TX_RESERVED_CREDITS {
+            self.data.probe.credit_backoff(now);
             active.retry_at = Some(now.after(IO_RETRY));
             return Ok(());
         }

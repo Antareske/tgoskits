@@ -122,7 +122,7 @@ fn rx_allocation_failure_recovers_without_disabling_tx() {
         shared,
     };
     DMA.0.store(true, Ordering::Relaxed);
-    let outcome = executor.poll(1);
+    let outcome = executor.poll(1, &mut ExecutorProbe::default());
     DMA.0.store(false, Ordering::Relaxed);
     assert!(
         !matches!(outcome, GroupPollOutcome::Failed),
@@ -146,8 +146,14 @@ fn rx_allocation_failure_recovers_without_disabling_tx() {
             })
             .is_ok()
     );
-    assert!(matches!(executor.poll(256), GroupPollOutcome::More(_)));
-    assert!(matches!(executor.poll(256), GroupPollOutcome::Idle(_)));
+    assert!(matches!(
+        executor.poll(256, &mut ExecutorProbe::default()),
+        GroupPollOutcome::More(_)
+    ));
+    assert!(matches!(
+        executor.poll(256, &mut ExecutorProbe::default()),
+        GroupPollOutcome::Idle(_)
+    ));
     let packet = received
         .pop()
         .expect("RX must resume after allocation recovers");
@@ -703,8 +709,14 @@ fn rx_refill_retry_drains_completions_and_preserves_tx_flush() {
         shared,
     };
 
-    assert!(matches!(executor.poll(2), GroupPollOutcome::More(2)));
-    assert!(matches!(executor.poll(256), GroupPollOutcome::More(_)));
+    assert!(matches!(
+        executor.poll(2, &mut ExecutorProbe::default()),
+        GroupPollOutcome::More(2)
+    ));
+    assert!(matches!(
+        executor.poll(256, &mut ExecutorProbe::default()),
+        GroupPollOutcome::More(_)
+    ));
     assert_eq!(
         &*trace.lock().unwrap(),
         &["tx", "flush", "rx", "retry", "rx"]
@@ -715,13 +727,19 @@ fn rx_refill_retry_drains_completions_and_preserves_tx_flush() {
     );
     assert_eq!(executor.pending_rx_refill.len(), 2);
 
-    assert!(matches!(executor.poll(256), GroupPollOutcome::Blocked(_)));
+    assert!(matches!(
+        executor.poll(256, &mut ExecutorProbe::default()),
+        GroupPollOutcome::Blocked(_)
+    ));
     let first = received.pop().unwrap();
     first
         .buffer
         .read_with_cpu(60, |packet| assert_eq!(packet, &[1; 60]));
     assert!(executor.pending_rx.is_some());
-    assert!(matches!(executor.poll(256), GroupPollOutcome::Idle(_)));
+    assert!(matches!(
+        executor.poll(256, &mut ExecutorProbe::default()),
+        GroupPollOutcome::Idle(_)
+    ));
     let second = received.pop().unwrap();
     second
         .buffer
@@ -832,8 +850,8 @@ fn tx_backpressure_allows_rx_delivery_before_tx_resumes() {
     // A software-backed NIC may need its completed RX slots drained before
     // the common owner can finish outstanding TX. Keep TX blocked until RX
     // delivery is proven, rather than relying on an IRQ or a timed retry.
-    executor.poll(256);
-    executor.poll(256);
+    executor.poll(256, &mut ExecutorProbe::default());
+    executor.poll(256, &mut ExecutorProbe::default());
     for byte in [1, 0] {
         let completion = received
             .pop()
@@ -844,12 +862,15 @@ fn tx_backpressure_allows_rx_delivery_before_tx_resumes() {
     }
     assert!(packets.lock().unwrap().is_empty());
     assert!(
-        matches!(executor.poll(256), GroupPollOutcome::Idle(_)),
+        matches!(
+            executor.poll(256, &mut ExecutorProbe::default()),
+            GroupPollOutcome::Idle(_)
+        ),
         "a still-blocked TX must rearm instead of busy-polling"
     );
     blocked.store(false, Ordering::Relaxed);
-    executor.poll(256);
-    executor.poll(256);
+    executor.poll(256, &mut ExecutorProbe::default());
+    executor.poll(256, &mut ExecutorProbe::default());
     assert_eq!(
         *packets.lock().unwrap(),
         vec![vec![0xa5; 60], vec![0x5a; 60]]

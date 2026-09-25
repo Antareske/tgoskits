@@ -79,6 +79,14 @@ impl<T> SpscProducer<T> {
 }
 
 impl<T> SpscConsumer<T> {
+    /// Items published by the producer and not yet popped.
+    pub(super) fn len(&self) -> usize {
+        let len = self.core.slots.len();
+        let head = self.core.head.load(Ordering::Relaxed);
+        let tail = self.core.tail.load(Ordering::Acquire);
+        (tail + len - head) % len
+    }
+
     pub(super) fn pop(&mut self) -> Option<T> {
         let head = self.core.head.load(Ordering::Relaxed);
         if head == self.core.tail.load(Ordering::Acquire) {

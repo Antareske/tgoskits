@@ -22,6 +22,14 @@ impl TxState {
         }
     }
 
+    pub(crate) fn len(&self) -> usize {
+        self.queue.len()
+    }
+
+    pub(crate) fn is_empty(&self) -> bool {
+        self.queue.is_empty()
+    }
+
     pub(crate) fn enqueue(&mut self, token: TxToken, frame: Vec<u8>) -> Result<(), Vec<u8>> {
         if self.queue.len() >= TX_CAPACITY {
             return Err(frame);

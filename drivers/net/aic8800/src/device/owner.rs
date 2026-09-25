@@ -2,7 +2,7 @@ use alloc::{collections::VecDeque, vec::Vec};
 
 use super::{
     AicError, AicEvent, AicState, ControlState, IoPurpose, LinkState, MailboxState, MonotonicTime,
-    PendingIo, SdioRequestKind, StartupState, TxToken,
+    PendingIo, SdioRequestKind, StartupState, TxToken, probe::TxProbe,
 };
 use crate::{
     common::ChipVariant,
@@ -70,6 +70,8 @@ pub(super) struct DataPlaneState {
     pub internal_tx: VecDeque<InternalTx>,
     pub internal_tx_bytes: usize,
     pub link: LinkState,
+    /// Board-measurement counters; diagnostic only.
+    pub probe: TxProbe,
 }
 
 impl DataPlaneState {
@@ -186,6 +188,7 @@ impl AicDevice {
                 internal_tx: VecDeque::new(),
                 internal_tx_bytes: 0,
                 link: LinkState::new(),
+                probe: TxProbe::default(),
             },
         })
     }

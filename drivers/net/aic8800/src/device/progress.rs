@@ -19,6 +19,8 @@ impl AicDevice {
 
     /// Advances at most one externally visible transition.
     pub fn advance(&mut self, input: AicInput) -> AicAction {
+        self.data.probe.set_now(input.now);
+        self.data.probe.flush_window();
         if let Err(error) = self.observe_time(input.now) {
             return self.fail(error);
         }
@@ -85,10 +87,13 @@ impl AicDevice {
                 if self.lifecycle.state != AicState::Ready {
                     return Err(AicError::Busy);
                 }
+                let depth = self.data.tx.len();
                 self.data
                     .tx
                     .enqueue(token, frame)
-                    .map_err(|_| AicError::TxQueueFull)
+                    .map_err(|_| AicError::TxQueueFull)?;
+                self.data.probe.frame_arrived(depth);
+                Ok(())
             }
         }
     }
@@ -157,6 +162,14 @@ impl AicDevice {
             return Ok(());
         }
         let response = completion.result.map_err(AicError::Sdio)?;
+        self.data.probe.completed(&pending.purpose);
+        if pending.purpose == IoPurpose::TransmitData {
+            // The next frame is looked for here, before the completion is
+            // handed to the core, so the sample describes what the gap that
+            // follows had to wait for.
+            let core_ready = !self.data.tx.is_empty() || !self.data.internal_tx.is_empty();
+            self.data.probe.write_done(core_ready, probe::take_depth());
+        }
         // The command mailbox and lifecycle commands can take buffers from the
         // firmware packet pool that a cached credit counted on the profiles
         // where they travel over the data FIFO, so the reading is dropped
@@ -193,6 +206,7 @@ impl AicDevice {
     }
 
     pub(super) fn emit(&mut self, purpose: IoPurpose, kind: SdioRequestKind) -> AicAction {
+        self.data.probe.emitted(&purpose, &kind);
         let id = self.io.next_request_id;
         self.io.next_request_id = self.io.next_request_id.wrapping_add(1).max(1);
         self.io.pending = Some(PendingIo { id, purpose });
@@ -216,6 +230,7 @@ impl AicDevice {
     }
 
     fn finish_cancel(&mut self) {
+        self.data.probe.abandon();
         self.lifecycle.cancel_pending = false;
         self.lifecycle.mailbox = None;
         self.lifecycle.control = None;
@@ -231,6 +246,7 @@ impl AicDevice {
 
     pub(super) fn fail(&mut self, error: AicError) -> AicAction {
         self.lifecycle.state = AicState::Failed;
+        self.data.probe.abandon();
         self.io.pending = None;
         self.io.next = None;
         self.lifecycle.mailbox = None;

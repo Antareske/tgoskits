@@ -6,6 +6,7 @@ mod link;
 mod mailbox;
 mod model;
 mod owner;
+pub(crate) mod probe;
 mod progress;
 mod request;
 mod startup;

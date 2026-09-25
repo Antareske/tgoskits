@@ -239,7 +239,9 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         mut cause: ProgressCause,
         rearm_after_step: bool,
     ) -> Result<OwnerProgress, AicRdifError> {
+        crate::device::probe::owner_call();
         for _ in 0..OWNER_STEP_BUDGET {
+            crate::device::probe::owner_step();
             if let Some(init) = &mut self.init {
                 match self.card.advance_init_request(init, cause)? {
                     OperationProgress::Pending => {
@@ -314,6 +316,9 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         completion: OperationCompletion,
         now_nanos: u64,
     ) -> Result<AicAction, AicRdifError> {
+        // Sampled before the core sees the completion: a transmit write reports
+        // whether the next frame was already handed over by then.
+        crate::device::probe::note_rdif_tx_depth(self.outputs.tx_submit_depth());
         Ok(self.device_mut()?.advance(AicInput {
             now: MonotonicTime::from_nanos(now_nanos),
             event: Some(AicInputEvent::Sdio(SdioCompletion {

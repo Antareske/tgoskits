@@ -13,8 +13,19 @@ use crate::{
 
 pub(super) struct ActiveTx {
     pub completion: TxCompletion,
+    /// One or more complete wire frames; the firmware walks them by their
+    /// length fields.
     pub wire_frame: Vec<u8>,
     pub retry_at: Option<MonotonicTime>,
+    /// Tokens of the packets this write carries beyond the first.
+    pub extra_tokens: Vec<TxToken>,
+}
+
+impl ActiveTx {
+    /// Packets this write carries.
+    pub(super) fn packets(&self) -> usize {
+        1 + self.extra_tokens.len()
+    }
 }
 
 #[derive(Clone, Copy)]
@@ -70,6 +81,8 @@ pub(super) struct DataPlaneState {
     pub internal_tx: VecDeque<InternalTx>,
     pub internal_tx_bytes: usize,
     pub link: LinkState,
+    /// Transmit completions that did not fit the event queue.
+    pub pending_completions: VecDeque<TxToken>,
     /// Board-measurement counters; diagnostic only.
     pub probe: TxProbe,
 }
@@ -132,6 +145,18 @@ impl DataPlaneState {
         self.internal_tx.clear();
         self.internal_tx_bytes = 0;
     }
+
+    /// Publishes transmit completions that were held back because the event
+    /// queue was full.  Aggregated writes complete several packets at once, so
+    /// a burst can outrun the queue.
+    pub(super) fn promote_pending_completions(&mut self) {
+        while let Some(token) = self.pending_completions.front().copied() {
+            if self.push_event(AicEvent::TransmitComplete(token)).is_err() {
+                return;
+            }
+            self.pending_completions.pop_front();
+        }
+    }
 }
 
 fn event_payload_bytes(event: &AicEvent) -> usize {
@@ -147,9 +172,22 @@ pub struct AicDevice {
     pub(super) lifecycle: LifecycleState,
     pub(super) io: IoState,
     pub(super) data: DataPlaneState,
+    /// Packets one transmit write may carry.  One unless the layer that hands
+    /// frames over asks for batching.
+    pub(super) tx_aggregation: usize,
 }
 
 impl AicDevice {
+    /// Sets how many packets one transmit write may carry.
+    pub fn set_tx_aggregation(&mut self, packets: usize) {
+        self.tx_aggregation = packets.max(1);
+    }
+
+    /// Packets one transmit write may carry.
+    pub const fn tx_aggregation(&self) -> usize {
+        self.tx_aggregation
+    }
+
     /// Creates a stopped device owner for one supported chip.
     ///
     /// # Errors
@@ -160,6 +198,7 @@ impl AicDevice {
         let profile = ChipProfile::for_variant(chip).ok_or(AicError::UnsupportedChip)?;
         Ok(Self {
             profile,
+            tx_aggregation: 1,
             lifecycle: LifecycleState {
                 state: AicState::Stopped,
                 startup: None,
@@ -188,6 +227,7 @@ impl AicDevice {
                 internal_tx: VecDeque::new(),
                 internal_tx_bytes: 0,
                 link: LinkState::new(),
+                pending_completions: VecDeque::new(),
                 probe: TxProbe::default(),
             },
         })

@@ -200,7 +200,15 @@ pub enum AicInputEvent {
     Sdio(SdioCompletion),
     Irq(IrqSnapshot),
     Control(ControlRequest),
-    Tx { token: TxToken, frame: Vec<u8> },
+    Tx {
+        token: TxToken,
+        frame: Vec<u8>,
+    },
+    /// Several frames handed over in one call, so a single CMD53 can carry
+    /// them.  The firmware parses a write as a stream of self-delimiting
+    /// frames, which is how the vendor driver reaches many packets per
+    /// transaction.
+    TxBatch(Vec<(TxToken, Vec<u8>)>),
 }
 
 /// Input to one finite advancement.

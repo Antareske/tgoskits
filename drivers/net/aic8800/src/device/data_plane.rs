@@ -419,16 +419,28 @@ impl AicDevice {
         // One written packet consumes one reported buffer, so the reading
         // authorises the next writes until the reserve boundary.
         self.data.tx_credits = Some(credits);
-        let active = self
-            .data
-            .active_tx
-            .as_mut()
-            .ok_or(AicError::CompletionMismatch)?;
+        if self.data.active_tx.is_none() {
+            return Err(AicError::CompletionMismatch);
+        }
         if credits <= DATA_TX_RESERVED_CREDITS {
             self.data.probe.credit_backoff(now);
+            let active = self
+                .data
+                .active_tx
+                .as_mut()
+                .ok_or(AicError::CompletionMismatch)?;
             active.retry_at = Some(now.after(IO_RETRY));
             return Ok(());
         }
+        // The reading is the first moment the number of available firmware
+        // buffers is known, so the burst is grown here as well.
+        let limit = self.aggregate_limit();
+        self.extend_active_write(limit);
+        let active = self
+            .data
+            .active_tx
+            .as_ref()
+            .ok_or(AicError::CompletionMismatch)?;
         let frame = active.wire_frame.clone();
         self.io.next = Some((
             IoPurpose::TransmitData,
@@ -439,15 +451,21 @@ impl AicDevice {
 
     pub(super) fn consume_transmit_data(&mut self, response: SdioResponse) -> Result<(), AicError> {
         expect_unit(response)?;
-        self.spend_tx_credit();
         let active = self
             .data
             .active_tx
             .take()
             .ok_or(AicError::CompletionMismatch)?;
+        // Every packet the write carried consumed one firmware buffer.
+        for _ in 0..active.packets() {
+            self.spend_tx_credit();
+        }
         match active.completion {
             super::owner::TxCompletion::User(token) => {
-                self.data.push_event(AicEvent::TransmitComplete(token))?
+                self.complete_tx_token(token);
+                for token in active.extra_tokens {
+                    self.complete_tx_token(token);
+                }
             }
             super::owner::TxCompletion::Internal(super::owner::InternalTxKind::M2) => {}
             super::owner::TxCompletion::Internal(super::owner::InternalTxKind::M4) => {
@@ -460,6 +478,19 @@ impl AicDevice {
             }
         }
         Ok(())
+    }
+
+    /// Publishes one transmit completion.  A full event queue holds the token
+    /// back instead of failing the device: aggregated writes complete several
+    /// packets in one step.
+    fn complete_tx_token(&mut self, token: TxToken) {
+        if self
+            .data
+            .push_event(AicEvent::TransmitComplete(token))
+            .is_err()
+        {
+            self.data.pending_completions.push_back(token);
+        }
     }
 
     fn prepare_next_transmit(&mut self) {
@@ -482,6 +513,7 @@ impl AicDevice {
                 retry_at: None,
                 completion: super::owner::TxCompletion::Internal(internal.kind),
                 wire_frame,
+                extra_tokens: Vec::new(),
             });
             return;
         }
@@ -498,12 +530,66 @@ impl AicDevice {
                     retry_at: None,
                     completion: super::owner::TxCompletion::User(token),
                     wire_frame,
+                    extra_tokens: Vec::new(),
                 });
+                let limit = self.aggregate_limit();
+                self.extend_active_write(limit);
             }
             Err(token) => self
                 .data
                 .events
                 .push_back(AicEvent::TransmitComplete(token)),
+        }
+    }
+
+    /// Packets the next write may carry: bounded by the layer that hands frames
+    /// over and by the cached credit, which is what the firmware still has for
+    /// data.  Without a reading the write carries one packet, because the
+    /// number of firmware buffers has to be known before a burst is committed.
+    fn aggregate_limit(&self) -> usize {
+        match self.data.tx_credits {
+            Some(credits) => usize::from(credits.saturating_sub(DATA_TX_RESERVED_CREDITS))
+                .min(self.tx_aggregation),
+            None => 1,
+        }
+    }
+
+    /// Grows the pending write up to `limit` packets by appending frames that
+    /// are already queued.  Each frame keeps its own header inside the write,
+    /// so the firmware walks them as a stream.
+    fn extend_active_write(&mut self, limit: usize) {
+        let Some((interface_index, station_index)) = self.data.link.tx_indices() else {
+            return;
+        };
+        let crc = self.transport_uses_header_crc();
+        loop {
+            let packets = self
+                .data
+                .active_tx
+                .as_ref()
+                .map_or(0, super::owner::ActiveTx::packets);
+            if packets == 0 || packets >= limit {
+                return;
+            }
+            let Some(next) = self
+                .data
+                .tx
+                .take_wire_frame(interface_index, station_index, crc)
+            else {
+                return;
+            };
+            match next {
+                Ok((token, frame)) => {
+                    if let Some(active) = self.data.active_tx.as_mut() {
+                        active.wire_frame.extend_from_slice(&frame);
+                        active.extra_tokens.push(token);
+                    }
+                }
+                Err(token) => self
+                    .data
+                    .events
+                    .push_back(AicEvent::TransmitComplete(token)),
+            }
         }
     }
 
@@ -1253,6 +1339,76 @@ mod tests {
             ),
             "the burst continues while the cached credit lasts"
         );
+    }
+
+    #[test]
+    fn one_write_carries_a_packet_batch_and_completes_every_token() {
+        // A transmit write is a stream of self-delimiting frames, so several
+        // queued packets can share one CMD53.  Every packet still consumes one
+        // firmware buffer and completes its own token.
+        let now = MonotonicTime::default();
+        let mut single = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        single.data.tx_credits = Some(16);
+        let single_frame = write_frame_len(&single.advance(AicInput::tick(now)));
+
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        device.set_tx_aggregation(4);
+        device.data.tx_credits = Some(16);
+        let batched = device.advance(AicInput {
+            now,
+            event: Some(AicInputEvent::TxBatch(vec![
+                (TxToken::new(2), vec![0; 60]),
+                (TxToken::new(3), vec![0; 60]),
+                (TxToken::new(4), vec![0; 60]),
+            ])),
+        });
+        let AicAction::SubmitSdio(write) = batched else {
+            panic!("a cached credit must admit the whole batch")
+        };
+        assert_eq!(
+            write_frame_len(&AicAction::SubmitSdio(write.clone())),
+            4 * single_frame,
+            "each packet keeps its own padded frame inside the write"
+        );
+        assert_eq!(
+            device.data.tx_credits,
+            Some(16),
+            "credits are spent when the write completes, not when it is emitted"
+        );
+
+        let mut completed = Vec::new();
+        let mut input = complete(&write, SdioResponse::Unit, now);
+        for _ in 0..4 {
+            match device.advance(input) {
+                AicAction::Event(AicEvent::TransmitComplete(token)) => completed.push(token),
+                other => panic!("unexpected action for an aggregated write: {other:?}"),
+            }
+            input = AicInput { now, event: None };
+        }
+        assert_eq!(
+            completed,
+            vec![
+                TxToken::new(1),
+                TxToken::new(2),
+                TxToken::new(3),
+                TxToken::new(4)
+            ]
+        );
+        assert_eq!(
+            device.data.tx_credits,
+            Some(12),
+            "one firmware buffer per packet the write carried"
+        );
+    }
+
+    fn write_frame_len(action: &AicAction) -> usize {
+        let AicAction::SubmitSdio(request) = action else {
+            panic!("expected a transmit write, got {action:?}")
+        };
+        let SdioRequestKind::Write { bytes, .. } = &request.kind else {
+            panic!("expected a transmit write")
+        };
+        bytes.len()
     }
 
     #[test]

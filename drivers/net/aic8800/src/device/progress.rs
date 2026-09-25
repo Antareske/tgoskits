@@ -29,6 +29,7 @@ impl AicDevice {
         {
             return self.fail(error);
         }
+        self.data.promote_pending_completions();
         if let Some(event) = self.data.pop_event() {
             return AicAction::Event(event);
         }
@@ -93,6 +94,20 @@ impl AicDevice {
                     .enqueue(token, frame)
                     .map_err(|_| AicError::TxQueueFull)?;
                 self.data.probe.frame_arrived(depth);
+                Ok(())
+            }
+            AicInputEvent::TxBatch(frames) => {
+                if self.lifecycle.state != AicState::Ready {
+                    return Err(AicError::Busy);
+                }
+                for (token, frame) in frames {
+                    let depth = self.data.tx.len();
+                    self.data
+                        .tx
+                        .enqueue(token, frame)
+                        .map_err(|_| AicError::TxQueueFull)?;
+                    self.data.probe.frame_arrived(depth);
+                }
                 Ok(())
             }
         }
@@ -252,14 +267,21 @@ impl AicDevice {
         self.lifecycle.mailbox = None;
         self.lifecycle.control = None;
         self.data.link.clear_peer();
-        if let Some(active) = self.data.active_tx.take()
-            && let super::owner::TxCompletion::User(token) = active.completion
-        {
-            let _ = self.data.push_event(AicEvent::TransmitComplete(token));
+        if let Some(active) = self.data.active_tx.take() {
+            if let super::owner::TxCompletion::User(token) = active.completion {
+                let _ = self.data.push_event(AicEvent::TransmitComplete(token));
+            }
+            for token in active.extra_tokens {
+                let _ = self.data.push_event(AicEvent::TransmitComplete(token));
+            }
         }
         self.data.clear_internal_tx();
         let tokens: Vec<_> = self.data.tx.drain_tokens().collect();
         for token in tokens {
+            let _ = self.data.push_event(AicEvent::TransmitComplete(token));
+        }
+        let stalled: Vec<_> = self.data.pending_completions.drain(..).collect();
+        for token in stalled {
             let _ = self.data.push_event(AicEvent::TransmitComplete(token));
         }
         let _ = self.data.push_event(AicEvent::Failed(error));
@@ -522,6 +544,7 @@ mod tests {
             retry_at: None,
             completion: super::owner::TxCompletion::User(active),
             wire_frame: vec![1],
+            extra_tokens: Vec::new(),
         });
         device.data.tx.enqueue(queued, vec![2]).unwrap();
 

@@ -1,4 +1,4 @@
-use alloc::sync::Arc;
+use alloc::{sync::Arc, vec::Vec};
 
 use rdif_eth::WifiControlProgress;
 use ringbuf::traits::Consumer;
@@ -23,6 +23,11 @@ use crate::{
 };
 
 const OWNER_STEP_BUDGET: usize = 16;
+/// Board-measurement knob: packets one transmit write may carry.  A write is
+/// one CMD53, and the firmware treats it as a stream of frames, so batching
+/// trades per-transaction cost against the delay a burst adds to receive work
+/// sharing the same bus.
+const TX_AGGREGATION_PACKETS: usize = 4;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum OwnerWait {
@@ -425,6 +430,7 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         let variant = detect_sdio_card_variant(info, function)?;
         log::info!("[wifi] detected supported AIC SDIO variant {variant:?}");
         let mut device = AicDevice::new(variant)?;
+        device.set_tx_aggregation(TX_AGGREGATION_PACKETS);
         device.start(MonotonicTime::from_nanos(now_nanos))?;
         self.device = Some(device);
         self.started = true;
@@ -435,12 +441,22 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         if self.device()?.state() != AicState::Ready {
             return Ok(None);
         }
-        let Some((token, frame)) = self.outputs.take_tx_frame() else {
+        // Hand over a burst of frames so one CMD53 can carry several packets.
+        // The core bounds the burst again by the cached credit.
+        let limit = self.device()?.tx_aggregation();
+        let mut batch = Vec::new();
+        while batch.len() < limit {
+            let Some(frame) = self.outputs.take_tx_frame() else {
+                break;
+            };
+            batch.push(frame);
+        }
+        if batch.is_empty() {
             return Ok(None);
-        };
+        }
         Ok(Some(self.device_mut()?.advance(AicInput {
             now: MonotonicTime::from_nanos(now_nanos),
-            event: Some(AicInputEvent::Tx { token, frame }),
+            event: Some(AicInputEvent::TxBatch(batch)),
         })))
     }
 

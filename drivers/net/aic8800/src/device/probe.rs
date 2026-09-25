@@ -115,9 +115,10 @@ pub(super) struct TxProbe {
     class_min: [u64; CLASSES],
     /// Owner turns a class's round trip spans.
     class_calls: [u64; CLASSES],
-    /// Transmit writes by wire length: one, two, three, more blocks.
-    write_size_count: [u64; 4],
-    write_size_nanos: [u64; 4],
+    /// Transmit writes by wire length: one, two, three, then aggregated
+    /// ranges.
+    write_size_count: [u64; WRITE_SIZE_BUCKETS],
+    write_size_nanos: [u64; WRITE_SIZE_BUCKETS],
     rx_size_count: [u64; RX_SIZE_BUCKETS],
     rx_size_nanos: [u64; RX_SIZE_BUCKETS],
     /// Firmware flow-control readings.
@@ -318,8 +319,8 @@ impl TxProbe {
         self.class_max = [0; CLASSES];
         self.class_min = [u64::MAX; CLASSES];
         self.class_calls = [0; CLASSES];
-        self.write_size_count = [0; 4];
-        self.write_size_nanos = [0; 4];
+        self.write_size_count = [0; WRITE_SIZE_BUCKETS];
+        self.write_size_nanos = [0; WRITE_SIZE_BUCKETS];
         self.rx_size_count = [0; RX_SIZE_BUCKETS];
         self.rx_size_nanos = [0; RX_SIZE_BUCKETS];
         self.credit_samples = 0;
@@ -347,10 +348,10 @@ impl TxProbe {
         let calls = OWNER_CALLS.load(Ordering::Relaxed) - self.owner_calls_at_open;
         log::info!(
             "[wifi-probe] pkts={} dt={}ms period_avg={}us max={}us hist={}/{}/{}/{}/{} | write \
-             n={} avg={}us min={}us max={}us bytes={} calls={}.{} | size 1/2/3/>3blk \
-             n={}/{}/{}/{} avg={}/{}/{}/{}us | credit n={} min={} max={} avgx10={} backoff={} \
-             avg={}us | gap rx0 n={} avg={}us | rx1 n={} avg={}us | rx2+ n={} avg={}us | supply \
-             core n={} avg={}us | ring n={} avg={}us | none n={} avg={}us | steps={} \
+             n={} avg={}us min={}us max={}us bytes={} calls={}.{} | size blk 1/2/3/4-6/7-9/10+ \
+             n={}/{}/{}/{}/{}/{} avg={}/{}/{}/{}/{}/{}us | credit n={} min={} max={} avgx10={} \
+             backoff={} avg={}us | gap rx0 n={} avg={}us | rx1 n={} avg={}us | rx2+ n={} avg={}us \
+             | supply core n={} avg={}us | ring n={} avg={}us | none n={} avg={}us | steps={} \
              per_pkt={}.{} owner_calls={}",
             self.packets,
             dt_ms,
@@ -372,10 +373,14 @@ impl TxProbe {
             self.write_size_count[1],
             self.write_size_count[2],
             self.write_size_count[3],
+            self.write_size_count[4],
+            self.write_size_count[5],
             average_us(self.write_size_nanos[0], self.write_size_count[0]),
             average_us(self.write_size_nanos[1], self.write_size_count[1]),
             average_us(self.write_size_nanos[2], self.write_size_count[2]),
             average_us(self.write_size_nanos[3], self.write_size_count[3]),
+            average_us(self.write_size_nanos[4], self.write_size_count[4]),
+            average_us(self.write_size_nanos[5], self.write_size_count[5]),
             self.credit_samples,
             self.credit_min,
             self.credit_max,
@@ -473,7 +478,8 @@ fn request_bytes(kind: &SdioRequestKind) -> u64 {
 }
 
 /// Wire frames are padded to whole 512-byte blocks, so the length identifies
-/// how many blocks one write carried.
+/// how many blocks one write carried: 1, 2, 3 for a single frame, then the
+/// aggregated ranges.
 const fn write_size_bucket(bytes: u64) -> usize {
     if bytes <= 512 {
         0
@@ -481,10 +487,17 @@ const fn write_size_bucket(bytes: u64) -> usize {
         1
     } else if bytes <= 1536 {
         2
-    } else {
+    } else if bytes <= 3072 {
         3
+    } else if bytes <= 4608 {
+        4
+    } else {
+        5
     }
 }
+
+/// Transmit write length buckets.
+const WRITE_SIZE_BUCKETS: usize = 6;
 
 const fn rx_size_bucket(bytes: u64) -> usize {
     if bytes <= 512 {

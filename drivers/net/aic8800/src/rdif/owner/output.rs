@@ -11,6 +11,18 @@ use crate::{
     },
 };
 
+/// Outcome of handing one transmit completion back to the runtime.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum TxPublish {
+    /// The buffer is visible to the runtime.
+    Published,
+    /// The buffer is held for the next flush because another one is ahead of
+    /// it; the token is consumed.
+    Deferred,
+    /// Nothing was consumed: the token has to be retried.
+    Waiting,
+}
+
 /// Bounded output ownership and backpressure state for one AIC owner.
 pub(super) struct OwnerOutputs {
     queues: QueueOwnerPorts,
@@ -18,6 +30,9 @@ pub(super) struct OwnerOutputs {
     wifi_progress_signal: Arc<WifiProgressSignal>,
     tx_tokens: VecDeque<(TxToken, DmaBuffer)>,
     pending_tx_completion: Option<DmaBuffer>,
+    /// Completions the return ring could not take yet.  An aggregated write
+    /// completes several packets at once, so a burst must not strand buffers.
+    pending_tx_tokens: VecDeque<TxToken>,
     pending_rx_frame: Option<Vec<u8>>,
     pending_rx_completion: Option<RxCompletion>,
     pending_wifi_progress: Option<Result<WifiControlProgress, AicError>>,
@@ -42,6 +57,7 @@ impl OwnerOutputs {
             wifi_progress_signal,
             tx_tokens: VecDeque::new(),
             pending_tx_completion: None,
+            pending_tx_tokens: VecDeque::new(),
             pending_rx_frame: None,
             pending_rx_completion: None,
             pending_wifi_progress: None,
@@ -89,7 +105,14 @@ impl OwnerOutputs {
                 blocked
             }
             AicEvent::Receive(frame) => !self.publish_rx(frame)?,
-            AicEvent::TransmitComplete(token) => !self.publish_tx_completion(token)?,
+            AicEvent::TransmitComplete(token) => match self.publish_tx_completion(token)? {
+                TxPublish::Published => false,
+                TxPublish::Deferred => true,
+                TxPublish::Waiting => {
+                    self.pending_tx_tokens.push_back(token);
+                    true
+                }
+            },
             AicEvent::Failed(error) => {
                 let blocked = self.wifi_active && !self.publish_wifi_progress(Err(error.clone()));
                 self.wifi_active = false;
@@ -109,6 +132,14 @@ impl OwnerOutputs {
     }
 
     pub(super) fn flush(&mut self) -> Result<bool, AicRdifError> {
+        while let Some(token) = self.pending_tx_tokens.front().copied() {
+            match self.publish_tx_completion(token)? {
+                TxPublish::Published | TxPublish::Deferred => {
+                    self.pending_tx_tokens.pop_front();
+                }
+                TxPublish::Waiting => break,
+            }
+        }
         if let Some(buffer) = self.pending_tx_completion.take() {
             match self.queues.tx_complete.try_push(buffer) {
                 Ok(()) => {
@@ -162,9 +193,9 @@ impl OwnerOutputs {
         core::mem::take(&mut self.queue_progress)
     }
 
-    fn publish_tx_completion(&mut self, token: TxToken) -> Result<bool, AicRdifError> {
+    fn publish_tx_completion(&mut self, token: TxToken) -> Result<TxPublish, AicRdifError> {
         if self.pending_tx_completion.is_some() {
-            return Ok(false);
+            return Ok(TxPublish::Waiting);
         }
         let index = self
             .tx_tokens
@@ -178,11 +209,11 @@ impl OwnerOutputs {
         match self.queues.tx_complete.try_push(buffer) {
             Ok(()) => {
                 self.queue_progress = true;
-                Ok(true)
+                Ok(TxPublish::Published)
             }
             Err(buffer) => {
                 self.pending_tx_completion = Some(buffer);
-                Ok(false)
+                Ok(TxPublish::Deferred)
             }
         }
     }

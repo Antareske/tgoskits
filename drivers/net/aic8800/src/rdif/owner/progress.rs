@@ -395,7 +395,10 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
                     return Ok(Some(OwnerProgress::Ready));
                 }
                 AicAction::Event(event) => {
-                    let transmit_completed = matches!(event, AicEvent::TransmitComplete(_));
+                    let transmit_completed = matches!(
+                        event,
+                        AicEvent::TransmitComplete(_) | AicEvent::TransmitAggregateComplete(_)
+                    );
                     let output_blocked = self.outputs.consume_event(event)?;
                     return Ok(self
                         .card_irq_wait

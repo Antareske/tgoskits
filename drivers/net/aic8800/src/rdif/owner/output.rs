@@ -113,6 +113,20 @@ impl OwnerOutputs {
                     true
                 }
             },
+            AicEvent::TransmitAggregateComplete(tokens) => {
+                let mut blocked = false;
+                for token in tokens {
+                    match self.publish_tx_completion(token)? {
+                        TxPublish::Published => {}
+                        TxPublish::Deferred => blocked = true,
+                        TxPublish::Waiting => {
+                            self.pending_tx_tokens.push_back(token);
+                            blocked = true;
+                        }
+                    }
+                }
+                blocked
+            }
             AicEvent::Failed(error) => {
                 let blocked = self.wifi_active && !self.publish_wifi_progress(Err(error.clone()));
                 self.wifi_active = false;

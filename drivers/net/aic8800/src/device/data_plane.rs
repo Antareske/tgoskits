@@ -462,10 +462,10 @@ impl AicDevice {
         }
         match active.completion {
             super::owner::TxCompletion::User(token) => {
-                self.complete_tx_token(token);
-                for token in active.extra_tokens {
-                    self.complete_tx_token(token);
-                }
+                let mut tokens = Vec::with_capacity(active.packets());
+                tokens.push(token);
+                tokens.extend(active.extra_tokens);
+                self.complete_write_tokens(tokens);
             }
             super::owner::TxCompletion::Internal(super::owner::InternalTxKind::M2) => {}
             super::owner::TxCompletion::Internal(super::owner::InternalTxKind::M4) => {
@@ -480,17 +480,23 @@ impl AicDevice {
         Ok(())
     }
 
-    /// Publishes one transmit completion.  A full event queue holds the token
-    /// back instead of failing the device: aggregated writes complete several
-    /// packets in one step.
-    fn complete_tx_token(&mut self, token: TxToken) {
-        if self
-            .data
-            .push_event(AicEvent::TransmitComplete(token))
-            .is_err()
-        {
-            self.data.pending_completions.push_back(token);
+    /// Publishes the packets one transmit write completed.  A write that
+    /// carried a single packet keeps the per-packet event; a burst is
+    /// published as one event, because completions share the event queue with
+    /// receive frames and two thirds of an acknowledgement stream must not be
+    /// displaced by them.  With no room the tokens wait instead of displacing
+    /// anything: a completion only ever returns a buffer.
+    fn complete_write_tokens(&mut self, tokens: Vec<TxToken>) {
+        if self.data.event_room() == 0 {
+            self.data.pending_completions.extend(tokens);
+            return;
         }
+        let event = if tokens.len() == 1 {
+            AicEvent::TransmitComplete(tokens[0])
+        } else {
+            AicEvent::TransmitAggregateComplete(tokens)
+        };
+        let _ = self.data.push_event(event);
     }
 
     fn prepare_next_transmit(&mut self) {
@@ -1376,15 +1382,10 @@ mod tests {
             "credits are spent when the write completes, not when it is emitted"
         );
 
-        let mut completed = Vec::new();
-        let mut input = complete(&write, SdioResponse::Unit, now);
-        for _ in 0..4 {
-            match device.advance(input) {
-                AicAction::Event(AicEvent::TransmitComplete(token)) => completed.push(token),
-                other => panic!("unexpected action for an aggregated write: {other:?}"),
-            }
-            input = AicInput { now, event: None };
-        }
+        let completed = match device.advance(complete(&write, SdioResponse::Unit, now)) {
+            AicAction::Event(AicEvent::TransmitAggregateComplete(tokens)) => tokens,
+            other => panic!("unexpected action for an aggregated write: {other:?}"),
+        };
         assert_eq!(
             completed,
             vec![
@@ -1392,7 +1393,8 @@ mod tests {
                 TxToken::new(2),
                 TxToken::new(3),
                 TxToken::new(4)
-            ]
+            ],
+            "one write publishes its packets as one completion event"
         );
         assert_eq!(
             device.data.tx_credits,

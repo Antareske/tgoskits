@@ -257,12 +257,18 @@ pub enum MailboxRequest {
 /// Completion or data event emitted by the pure core.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum AicEvent {
-    Started { mac_address: [u8; 6] },
+    Started {
+        mac_address: [u8; 6],
+    },
     ControlComplete,
     ControlCancelled,
     ControlFailed(AicError),
     Receive(Vec<u8>),
     TransmitComplete(TxToken),
+    /// One transmit write carried several packets and completed them together.
+    /// They are published as one event so a burst of completions cannot crowd
+    /// the receive frames that share the event queue.
+    TransmitAggregateComplete(Vec<TxToken>),
     Stopped,
     Failed(AicError),
 }

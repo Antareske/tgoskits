@@ -150,12 +150,20 @@ impl DataPlaneState {
     /// queue was full.  Aggregated writes complete several packets at once, so
     /// a burst can outrun the queue.
     pub(super) fn promote_pending_completions(&mut self) {
-        while let Some(token) = self.pending_completions.front().copied() {
+        while self.event_room() > 0 {
+            let Some(token) = self.pending_completions.pop_front() else {
+                return;
+            };
             if self.push_event(AicEvent::TransmitComplete(token)).is_err() {
+                self.pending_completions.push_front(token);
                 return;
             }
-            self.pending_completions.pop_front();
         }
+    }
+
+    /// Room for another event without displacing a queued receive frame.
+    pub(super) fn event_room(&self) -> usize {
+        RX_CAPACITY.saturating_sub(self.events.len())
     }
 }
 

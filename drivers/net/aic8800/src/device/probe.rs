@@ -94,6 +94,9 @@ struct InFlight {
     class: usize,
     start: MonotonicTime,
     bytes: u64,
+    /// Owner entry point the transaction was emitted at, to count how many
+    /// owner turns its round trip spans.
+    calls: u64,
 }
 
 #[derive(Default)]
@@ -109,6 +112,12 @@ pub(super) struct TxProbe {
     class_bytes: [u64; CLASSES],
     class_nanos: [u64; CLASSES],
     class_max: [u64; CLASSES],
+    class_min: [u64; CLASSES],
+    /// Owner turns a class's round trip spans.
+    class_calls: [u64; CLASSES],
+    /// Transmit writes by wire length: one, two, three, more blocks.
+    write_size_count: [u64; 4],
+    write_size_nanos: [u64; 4],
     rx_size_count: [u64; RX_SIZE_BUCKETS],
     rx_size_nanos: [u64; RX_SIZE_BUCKETS],
     /// Firmware flow-control readings.
@@ -178,6 +187,7 @@ impl TxProbe {
             class,
             start: self.now,
             bytes: request_bytes(kind),
+            calls: OWNER_CALLS.load(Ordering::Relaxed),
         });
     }
 
@@ -190,11 +200,21 @@ impl TxProbe {
             .now
             .as_nanos()
             .saturating_sub(in_flight.start.as_nanos());
-        self.class_count[in_flight.class] += 1;
-        self.class_bytes[in_flight.class] += in_flight.bytes;
-        self.class_nanos[in_flight.class] += rtt;
-        self.class_max[in_flight.class] = self.class_max[in_flight.class].max(rtt);
+        let class = in_flight.class;
+        self.class_count[class] += 1;
+        self.class_bytes[class] += in_flight.bytes;
+        self.class_nanos[class] += rtt;
+        self.class_max[class] = self.class_max[class].max(rtt);
+        self.class_min[class] = self.class_min[class].min(rtt);
+        self.class_calls[class] += OWNER_CALLS
+            .load(Ordering::Relaxed)
+            .saturating_sub(in_flight.calls);
         match classify(purpose) {
+            TX_WRITE => {
+                let bucket = write_size_bucket(in_flight.bytes);
+                self.write_size_count[bucket] += 1;
+                self.write_size_nanos[bucket] += rtt;
+            }
             RX_DATA => {
                 let bucket = rx_size_bucket(in_flight.bytes);
                 self.rx_size_count[bucket] += 1;
@@ -296,6 +316,10 @@ impl TxProbe {
         self.class_bytes = [0; CLASSES];
         self.class_nanos = [0; CLASSES];
         self.class_max = [0; CLASSES];
+        self.class_min = [u64::MAX; CLASSES];
+        self.class_calls = [0; CLASSES];
+        self.write_size_count = [0; 4];
+        self.write_size_nanos = [0; 4];
         self.rx_size_count = [0; RX_SIZE_BUCKETS];
         self.rx_size_nanos = [0; RX_SIZE_BUCKETS];
         self.credit_samples = 0;
@@ -323,7 +347,8 @@ impl TxProbe {
         let calls = OWNER_CALLS.load(Ordering::Relaxed) - self.owner_calls_at_open;
         log::info!(
             "[wifi-probe] pkts={} dt={}ms period_avg={}us max={}us hist={}/{}/{}/{}/{} | write \
-             n={} avg={}us max={}us bytes={} | credit n={} min={} max={} avgx10={} backoff={} \
+             n={} avg={}us min={}us max={}us bytes={} calls={}.{} | size 1/2/3/>3blk \
+             n={}/{}/{}/{} avg={}/{}/{}/{}us | credit n={} min={} max={} avgx10={} backoff={} \
              avg={}us | gap rx0 n={} avg={}us | rx1 n={} avg={}us | rx2+ n={} avg={}us | supply \
              core n={} avg={}us | ring n={} avg={}us | none n={} avg={}us | steps={} \
              per_pkt={}.{} owner_calls={}",
@@ -338,8 +363,19 @@ impl TxProbe {
             self.period_count[4],
             self.class_count[TX_WRITE],
             average_us(self.class_nanos[TX_WRITE], self.class_count[TX_WRITE]),
+            self.class_min[TX_WRITE] / 1_000,
             self.class_max[TX_WRITE] / 1_000,
             self.class_bytes[TX_WRITE],
+            self.class_calls[TX_WRITE] * 10 / self.class_count[TX_WRITE].max(1) / 10,
+            self.class_calls[TX_WRITE] * 100 / self.class_count[TX_WRITE].max(1) % 100,
+            self.write_size_count[0],
+            self.write_size_count[1],
+            self.write_size_count[2],
+            self.write_size_count[3],
+            average_us(self.write_size_nanos[0], self.write_size_count[0]),
+            average_us(self.write_size_nanos[1], self.write_size_count[1]),
+            average_us(self.write_size_nanos[2], self.write_size_count[2]),
+            average_us(self.write_size_nanos[3], self.write_size_count[3]),
             self.credit_samples,
             self.credit_min,
             self.credit_max,
@@ -373,12 +409,13 @@ impl TxProbe {
             calls,
         );
         log::info!(
-            "[wifi-probe-rx] data n={} avg={}us max={}us bytes={} frames={} | size <=512 n={} \
-             avg={}us | <=2k n={} avg={}us | <=8k n={} avg={}us | >8k n={} avg={}us | control \
-             n={} avg={}us max={}us | credit n={} avg={}us | other n={} avg={}us | rdif_at_write \
-             0/1/2-3/4+={}/{}/{}/{} | queue_at_arrival={}/{}/{}/{}",
+            "[wifi-probe-rx] data n={} avg={}us min={}us max={}us bytes={} frames={} | size <=512 \
+             n={} avg={}us | <=2k n={} avg={}us | <=8k n={} avg={}us | >8k n={} avg={}us | \
+             control n={} avg={}us min={}us max={}us | credit n={} avg={}us | other n={} avg={}us \
+             | rdif_at_write 0/1/2-3/4+={}/{}/{}/{} | queue_at_arrival={}/{}/{}/{}",
             self.class_count[RX_DATA],
             average_us(self.class_nanos[RX_DATA], self.class_count[RX_DATA]),
+            self.class_min[RX_DATA] / 1_000,
             self.class_max[RX_DATA] / 1_000,
             self.class_bytes[RX_DATA],
             self.rx_frames,
@@ -392,6 +429,7 @@ impl TxProbe {
             average_us(self.rx_size_nanos[3], self.rx_size_count[3]),
             self.class_count[RX_CONTROL],
             average_us(self.class_nanos[RX_CONTROL], self.class_count[RX_CONTROL]),
+            self.class_min[RX_CONTROL] / 1_000,
             self.class_max[RX_CONTROL] / 1_000,
             self.class_count[TX_CREDIT],
             average_us(self.class_nanos[TX_CREDIT], self.class_count[TX_CREDIT]),
@@ -431,6 +469,20 @@ fn request_bytes(kind: &SdioRequestKind) -> u64 {
         SdioRequestKind::Read { length, .. } => *length as u64,
         SdioRequestKind::Write { bytes, .. } => bytes.len() as u64,
         _ => 1,
+    }
+}
+
+/// Wire frames are padded to whole 512-byte blocks, so the length identifies
+/// how many blocks one write carried.
+const fn write_size_bucket(bytes: u64) -> usize {
+    if bytes <= 512 {
+        0
+    } else if bytes <= 1024 {
+        1
+    } else if bytes <= 1536 {
+        2
+    } else {
+        3
     }
 }
 

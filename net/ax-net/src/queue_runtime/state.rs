@@ -81,6 +81,8 @@ pub(super) struct PollGroupState {
     notify: Arc<QueueNotification>,
     pub(super) stats: QueueStatsAtomic,
     rx_drops: AtomicU64,
+    /// Board-measurement probe: when the device last interrupted.
+    pub(super) last_irq_nanos: AtomicU64,
 }
 
 impl PollGroupState {
@@ -92,6 +94,7 @@ impl PollGroupState {
             notify,
             stats: QueueStatsAtomic::new(),
             rx_drops: AtomicU64::new(0),
+            last_irq_nanos: AtomicU64::new(0),
         }
     }
 
@@ -125,6 +128,8 @@ impl PollGroupState {
     pub(super) fn schedule_irq(&self) {
         let cpu = ax_hal::percpu::this_cpu_id();
         self.stats.irq.fetch_add(1, Ordering::Relaxed);
+        self.last_irq_nanos
+            .store(ax_hal::time::monotonic_time_nanos(), Ordering::Relaxed);
         self.stats.last_irq_cpu.store(cpu, Ordering::Release);
         if self.startup_absent() {
             return;

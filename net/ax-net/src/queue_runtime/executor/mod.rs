@@ -736,12 +736,14 @@ impl QueueGroupExecutor {
             return;
         }
         let start_nanos = ax_hal::time::monotonic_time_nanos();
+        let last_irq = match self.shared.last_irq_nanos.load(Ordering::Relaxed) {
+            0 => None,
+            nanos => Some(nanos),
+        };
         let result = self.group.irq_control.rearm_and_check(start_nanos);
-        probe.owner_call(
-            start_nanos,
-            ax_hal::time::monotonic_time_nanos(),
-            self.tx_ready.len(),
-        );
+        let end_nanos = ax_hal::time::monotonic_time_nanos();
+        probe.owner_call(start_nanos, end_nanos, self.tx_ready.len());
+        probe.wake(end_nanos, last_irq);
         match result {
             Ok(NetRearmResult::Idle) => {}
             Ok(NetRearmResult::WorkPending(_)) => {
@@ -955,20 +957,21 @@ pub(super) fn queue_executor_main(
                 .chain(groups.iter().filter_map(|group| group.retry_at))
                 .min();
             let wait_start = ax_hal::time::monotonic_time_nanos();
-            let waited = match executor_wait(wait_start, deadline_nanos) {
+            let timed = match executor_wait(wait_start, deadline_nanos) {
                 ExecutorWait::Notification => {
                     control.notify.wait(&waiter);
-                    true
+                    false
                 }
                 ExecutorWait::Deadline(duration) => {
                     control.notify.wait_timeout(&waiter, duration);
                     true
                 }
-                ExecutorWait::Ready => false,
+                ExecutorWait::Ready => continue,
             };
-            if waited {
-                probe.wait(wait_start, ax_hal::time::monotonic_time_nanos());
-            }
+            let wait_end = ax_hal::time::monotonic_time_nanos();
+            // A timed wait that reached its deadline was not notified first.
+            let by_deadline = timed && deadline_nanos.is_some_and(|deadline| wait_end >= deadline);
+            probe.wait(wait_start, wait_end, by_deadline);
         }
     }
 }

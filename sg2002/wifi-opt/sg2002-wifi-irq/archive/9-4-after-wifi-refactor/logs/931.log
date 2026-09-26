@@ -1,0 +1,214 @@
+U-Boot 2021.10 (Jan 22 2026 - 14:08:22 +0800) soph
+
+DRAM:  254 MiB
+gd->relocaddr=0x88a33000. offset=0x8833000
+MMC:   cv-sd@4310000: 0, wifi-sd@4320000: 1
+Loading Environment from nowhere... OK
+In:    serial
+Out:   serial
+Err:   serial
+Net:
+Warning: ethernet@4070000 (eth0) using random MAC address - aa:2a:10:2a:61:3f
+eth0: ethernet@4070000
+Hit any key to stop autoboot:  0
+Device: cv-sd@4310000
+Manufacturer ID: 3
+OEM: 5344
+Name: SK64G
+Bus Speed: 25000000
+Mode: SD High Speed (50MHz)
+Rd Block Len: 512
+SD version 3.0
+High Capacity: Yes
+Capacity: 59.5 GiB
+Bus Width: 4-bit
+Erase Group Size: 512 Bytes
+** Unable to read file uEnv.txt **
+Failed to load 'uEnv.txt'
+cvi_vo_probe: Warning: cannot get power GPIO: ret=-2
+** Unable to read file board **
+Failed to load 'board'
+Failed to load file: board
+Init panel zct2133v1-800x1280
+dm_gpio_set_value(disp_power_ct_gpio, deassert) failed: -2switch to partitions #0, OK
+mmc0 is current device
+** Unable to read file logo.jpeg **
+Failed to load 'logo.jpeg'
+
+start jpeg dec task!, bs_addr 0000000084080000, yuv_addr 0000000088d30000, size 524288
+[ERR] JpegDecodeHeader = 1307, DONE_DEC_HEADER
+[ERR] JpegDecodeHeader = 1439, fail
+[ERR] JPU_DecGetInitialInfo = 209, JpegDecodeHeader
+jpeg_decode_helper = 251, JPU_DecGetInitialInfo failed Error code is 0x1, inst=0
+Boot from SD dev 0 ...
+switch to partitions #0, OK
+mmc0 is current device
+17506200 bytes read in 1549 ms (10.8 MiB/s)
+## Loading kernel from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'kernel-1' kernel subimage
+     Description:  StarryOS kernel
+     Type:         Kernel Image
+     Compression:  uncompressed
+     Data Start:   0x818000d4
+     Data Size:    14954400 Bytes = 14.3 MiB
+     Architecture: RISC-V
+     OS:           Linux
+     Load Address: 0x80200000
+     Entry Point:  0x80200000
+     Hash algo:    crc32
+     Hash value:   dd328f38
+   Verifying Hash Integrity ... crc32+ OK
+## Loading ramdisk from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'ramdisk-1' ramdisk subimage
+     Description:  cvitek ramdisk
+     Type:         RAMDisk Image
+     Compression:  uncompressed
+     Data Start:   0x82643154
+     Data Size:    2527648 Bytes = 2.4 MiB
+     Architecture: RISC-V
+     OS:           Linux
+     Load Address: unavailable
+     Entry Point:  unavailable
+     Hash algo:    crc32
+     Hash value:   1330f105
+   Verifying Hash Integrity ... crc32+ OK
+## Loading fdt from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'fdt-sg2002_licheervnano_sd' fdt subimage
+     Description:  cvitek device tree - sg2002_licheervnano_sd
+     Type:         Flat Device Tree
+     Compression:  uncompressed
+     Data Start:   0x828ac3e0
+     Data Size:    22679 Bytes = 22.1 KiB
+     Architecture: RISC-V
+     Hash algo:    sha256
+     Hash value:   8d71cc1298be070dc0e7c229efe5930243511d099456b21cff87d3a945de0596
+   Verifying Hash Integrity ... sha256+ OK
+   Booting using the fdt blob at 0x828ac3e0
+   Loading Kernel Image
+   Decompressing 14954400 bytes used 18ms
+   Loading Ramdisk to 87e81000, end 880ea1a0 ... OK
+ERROR: reserving fdt memory region failed (addr=80000000 size=40000 flags=0)
+   Loading Device Tree to 0000000087e78000, end 0000000087e80896 ... OK
+
+Starting kernel ...
+
+RISC-V64 SBI kernel entry.
+root=/dev/mmcblk0p2 rootwait rw console=ttyS0,115200 earlycon=sbi riscv.fwsz=0x80000 release loglevel=0
+VM Load @PA:0x80200000
+VM Load Offset: 0x100200000
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080080000 (512 KiB)
+  Free   0x00000080080000 - 0x00000080200000 (1.5 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Free   0x00000081200000 - 0x00000087e81000 (108.5 MiB)
+  Rsv    0x00000087e81000 - 0x000000880eb000 (2.41 MiB)
+  Free   0x000000880eb000 - 0x0000008fe00000 (125.08 MiB)
+Initialize RAM allocator: 0x81200000..0x87e81000
+Reserving CPU-local areas
+CPU-local area stride: 0x41000 bytes
+Total CPU-local allocation: 0x41000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x81200000..0x81207000, current: 0x81207000
+Flushed RAM used range to memory map: 0x81207000..0x81248000, current: 0x81248000
+CPU-local areas allocated at 0x81207000 - 0x81248000
+Mapping early memory regions...
+Ram                 : [0x0000000080000000, 0x000000008fe00000) -> [0x0000000080000000, 0x000000008fe00000) (254 MiB)
+Ram                 : [0xffffffc080000000, 0xffffffc08fe00000) -> [0x0000000080000000, 0x000000008fe00000) (254 MiB)
+KImage              : [0xffffffff80000000, 0xffffffff81000000) -> [0x0000000080200000, 0x0000000081200000) (16 MiB)
+PerCpu              : [0xffffffe081207000, 0xffffffe081248000) -> [0x0000000081207000, 0x0000000081248000) (260 KiB)
+Boot page table at physical address: 0x81248000
+MMU Entry point at physical address: 0x804fb3c8
+Enabling MMU...
+MMU enabled, jumping to 0xffffffff802fb3c8, sp=0xffffffe081248000
+Trap vector at 0xffffffff802f6e3c
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080080000 (512 KiB)
+  Free   0x00000080080000 - 0x00000080200000 (1.5 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Rsv    0x00000081200000 - 0x00000081207000 (28 KiB)
+  PerCPU 0x00000081207000 - 0x00000081248000 (260 KiB)
+  Rsv    0x00000081248000 - 0x00000081354000 (1.05 MiB)
+  Free   0x00000081354000 - 0x00000087e81000 (107.18 MiB)
+  Rsv    0x00000087e81000 - 0x000000880eb000 (2.41 MiB)
+  Free   0x000000880eb000 - 0x0000008fe00000 (125.08 MiB)
+Jumping to main entry point at 0xffffffff802ea544 with SP 0xffffffe081248000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = riscv64
+platform = LicheeRv Nano
+target = riscv64gc-unknown-none-elf
+build_mode =
+log_level = info
+backtrace = false
+smp = 1
+
+[  4.918557 0 ax_runtime:233] Logging is enabled.
+[  4.925096 0 ax_runtime:234] Primary CPU 0 started, arg = 0x81200000.
+[  4.933519 0 ax_runtime:236] Found physcial memory regions:
+[  4.941075 0 ax_runtime:238]   [PA:0x80000000, PA:0x80080000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  4.952783 0 ax_runtime:238]   [PA:0x80080000, PA:0x80200000) free memory (READ | WRITE | FREE)
+[  4.963535 0 ax_runtime:238]   [PA:0x80200000, PA:0x81200000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  4.975273 0 ax_runtime:238]   [PA:0x81200000, PA:0x81207000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  4.987010 0 ax_runtime:238]   [PA:0x81207000, PA:0x81248000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  4.998748 0 ax_runtime:238]   [PA:0x81248000, PA:0x81354000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.010485 0 ax_runtime:238]   [PA:0x81354000, PA:0x87e81000) free memory (READ | WRITE | FREE)
+[  5.021237 0 ax_runtime:238]   [PA:0x87e81000, PA:0x880eb000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.032975 0 ax_runtime:238]   [PA:0x880eb000, PA:0x8fe00000) free memory (READ | WRITE | FREE)
+[  5.043727 0 ax_runtime:373] Initialize global memory allocator...
+[  5.051880 0 ax_runtime:374]   use buddy-slab-allocator allocator.
+[  5.060036 0 ax_alloc::buddy_slab:158] Initialize global memory allocator, start_vaddr: 0xffffffc0880eb000, size: 0x7d15000
+[  5.073497 0 ax_alloc::buddy_slab:424] global allocator initialized
+[  5.081578 0 ax_alloc::buddy_slab:168] Add memory region, start_vaddr: 0xffffffc080080000, size: 0x180000
+[  5.093227 0 buddy_slab_allocator::global:151] GlobalAllocator: skip region 0xffffffc080080000+0x180000, no allocator-visible memory after 2097152 alignment
+[  5.109445 0 ax_alloc::buddy_slab:168] Add memory region, start_vaddr: 0xffffffc081354000, size: 0x6b2d000
+[  5.121355 0 ax_runtime:273] kernel aspace: [VA:0xffffffc000000000, VA:0xffffffffffffffff)
+[  5.131498 0 ax_mm:107] Initialize virtual memory management...
+[  5.141589 0 ax_runtime:285] Initialize platform devices...
+[  5.167803 0 somehal::driver:5] Initializing rdrive with FDT at 0xffffffc081200000
+[  5.249066 0 ax_task::api:175] Initialize scheduling...
+[  5.256205 0:2 ax_task::api:183]   use Round-robin scheduler.
+[  5.263800 0:2 ax_runtime:304] Initialize interrupt handlers...
+[  5.271867 0:2 ax_runtime::devices:2] Probe platform devices...
+[  5.284957 0:2 ax_driver::serial::ns16550:49] Probing NS16550 serial device: serial@04140000
+[  5.295609 0:2 ax_driver::serial::ns16550:92] NS16550 serial@0xffffffc004140000 registered successfully
+[  5.307130 0:2 ax_driver::serial::ns16550:49] Probing NS16550 serial device: serial@04150000
+[  5.317671 0:2 ax_driver::serial::ns16550:92] NS16550 serial@0xffffffc004150000 registered successfully
+[  5.329187 0:2 ax_driver::serial::ns16550:49] Probing NS16550 serial device: serial@04160000
+[  5.339708 0:2 ax_driver::serial::ns16550:92] NS16550 serial@0xffffffc004160000 registered successfully
+[  5.351220 0:2 ax_driver::serial::ns16550:49] Probing NS16550 serial device: serial@04170000
+[  5.361747 0:2 ax_driver::serial::ns16550:92] NS16550 serial@0xffffffc004170000 registered successfully
+[  5.375766 0:2 ax_driver::block::cvsd:66] cvsd probe: node=cv-sd@4310000, src=375000000Hz min=400000Hz max=25000000Hz bus_width=Bit4 no_1v8=true no_mmc=true no_sdio=true cd_gpio=true
+[  5.394497 0:2 ax_driver::block::cvsd:97] cvsd block device registered irq=None
+[  5.404306 0:2 ax_driver::net::aic8800:70] [wifi] SDIO1 resources prepared (node=wifi-sd@4320000, controller=0x4320000, src=375000000Hz, bus=Bit4)
+[  5.419673 0:2 ax_driver::net::aic8800:98] [wifi] wlan0 device registered (probe stage done)
+[  5.430751 0:2 ax_runtime::serial:898] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [44, 4] }))), polling=false
+[  5.448668 0:2 ax_runtime::serial:898] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [45, 4] }))), polling=false
+[  5.466578 0:2 ax_runtime::serial:898] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [46, 4] }))), polling=false
+[  5.484552 0:2 ax_runtime::serial:898] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [47, 4] }))), polling=false
+[  7.566725 0:2 ax_runtime:315] runtime console active: serial0, ttyS0
+Boot at 1970-01-01 00:00:07.566758960 UTC
+
+[  7.567256 0:9 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op ResetAll
+[  7.567495 0:9 ax_fs_ng::block::runtime::hctx:237] prepared block hctx 0 on CPU 0 with hardware depth 1
+[  7.567665 0:9 ax_fs_ng::block::runtime::lifecycle::device:325] block device cvsd IRQ source 0 (IrqId { domain: IrqDomainId(7), hwirq: HwIrq(36) }) fixed to CPU 0 for queue mask 0x1
+[  7.568598 0:10 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op PowerOn
+[  7.578822 0:10 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op SwitchVoltage(V330)
+[  7.580518 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit1)
+[  7.580612 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Identification)
+[  7.603989 0:10 sdmmc_protocol::sdio::init::state_machine::identify:175] sdio: detected Sd ocr=0xc1ff8000
+[  7.605796 0:10 sdmmc_protocol::sdio::init::state_machine::identify:340] sdio: CSD capacity_blocks=Some(124735488)
+[  7.606277 0:10 sdpanicked at os/arceos/modules/axruntime/src/devices.rs:97:29:
+failed to initialize network queue runtime: network queue initialization failed: Other error: AIC core failed: AIC CMD52 RAW readback mismatch: expected 0x11, received 0x01
+BACKTRACE_BEGIN kind=panic arch=riscv64 alloc=false dwarf=false
+BT_ERROR requires_alloc
+BACKTRACE_END

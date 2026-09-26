@@ -1,0 +1,47 @@
+root@starry:/root # iperf3 -s 1
+[ 31.332456 0:25 starry_kernel::syscall::task::wait:244] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[ 31.332803 0:41 starry_kernel::task::user:25] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.50.2, port 59442
+[  5] local 192.168.50.1 port 5201 connected to 192.168.50.2 port 59458
+[ 39.793248 0:42 starry_kernel::task::user:25] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  1.12 MBytes  9.43 Mbits/sec    0   0.00 Bytes
+[  5]   1.00-2.00   sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+[  5]   2.00-3.00   sec  1.12 MBytes  9.43 Mbits/sec    0   0.00 Bytes
+[  5]   3.00-4.00   sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+[  5]   4.00-5.00   sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+[  5]   5.00-6.00   sec  1.12 MBytes  9.44 Mbits/sec    0   0.00 Bytes
+[  5]   6.00-7.00   sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+[  5]   7.00-8.00   sec  1.12 MBytes  9.44 Mbits/sec    0   0.00 Bytes
+[  5]   8.00-9.00   sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+[  5]   9.00-10.00  sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.02  sec  12.0 MBytes  10.0 Mbits/sec    0            sender
+[ 49.885979 0:42 starry_kernel::task::ops:398] Task(42, "iperf3") exit with code: 0
+-----------------------------------------------------------
+Server listening on 5201 (test #2)
+-----------------------------------------------------------
+[ 52.772210 0:15 ax_net::device::ethernet:485] wlan0: ARP 192.168.50.2 -> 90-de-80-92-bc-cd
+Accepted connection from 192.168.50.2, port 59476
+[  5] local 192.168.50.1 port 5201 connected to 192.168.50.2 port 59486
+[ 53.831447 0:43 starry_kernel::task::user:25] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  1.25 MBytes  10.5 Mbits/sec
+[  5]   1.00-2.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   2.00-3.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   3.00-4.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   4.00-5.00   sec  1.38 MBytes  11.5 Mbits/sec
+[  5]   5.00-6.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   6.00-7.00   sec  1.38 MBytes  11.5 Mbits/sec
+[  5]   7.00-8.00   sec  1.00 MBytes  8.38 Mbits/sec
+[  5]   8.00-9.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   9.00-10.00  sec  1.38 MBytes  11.5 Mbits/sec
+[  5]  10.00-10.03  sec   128 KBytes  43.6 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-10.03  sec  14.0 MBytes  11.7 Mbits/sec                  receiver
+[ 63.859620 0:43 starry_kernel::task::ops:398] Task(43, "iperf3") exit with code: 0

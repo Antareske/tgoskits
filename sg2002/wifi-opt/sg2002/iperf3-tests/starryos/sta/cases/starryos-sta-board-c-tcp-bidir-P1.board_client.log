@@ -1,0 +1,82 @@
+﻿
+===== [2026-09-17 16:36:00.786] manual starryos-sta-board-c-tcp-bidir-P1 :: iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 1 --get-server-output --bidir
+iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 1 --get-server-ou
+tput --bidir
+[37m[136.745495 0:12884901914 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff570[m[m
+[37m[136.754802 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[136.868595 0:12884901914 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.76:49154 to 192.168.137.1:5201[m[m
+Connecting to host 192.168.137.1, port 5201
+[37m[137.889309 0:12884901914 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.76:49155 to 192.168.137.1:5201[m[m
+[  5] local 192.168.137.76 port 49155 connected to 192.168.137.1 port 5201
+[37m[137.912782 0:12884901914 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.76:49156 to 192.168.137.1:5201[m[m
+[  7] local 192.168.137.76 port 49156 connected to 192.168.137.1 port 5201
+[37m[137.946450 0:77309411353 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x601524d0, sp=0x448af0[m[m
+[37m[137.957886 0:4294967323 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x601524d0, sp=0x46baf0[m[m
+[ ID][Role] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5][TX-C]   0.00-1.00   sec  1.12 MBytes  9.43 Mbits/sec    0   0.00 Bytes       (omitted)
+[  7][RX-C]   0.00-1.00   sec   128 KBytes  1.05 Mbits/sec                  (omitted)
+[  5][TX-C]   1.00-2.01   sec   768 KBytes  6.26 Mbits/sec    0   0.00 Bytes       (omitted)
+[  7][RX-C]   1.00-2.01   sec   128 KBytes  1.05 Mbits/sec                  (omitted)
+[  5][TX-C]   2.01-3.00   sec   896 KBytes  7.37 Mbits/sec    0   0.00 Bytes       (omitted)
+[  7][RX-C]   2.01-3.00   sec   128 KBytes  1.05 Mbits/sec                  (omitted)
+[  5][TX-C]   0.00-1.00   sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]   0.00-1.00   sec   128 KBytes  1.05 Mbits/sec                  
+[  5][TX-C]   1.00-2.00   sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]   1.00-2.00   sec   128 KBytes  1.05 Mbits/sec                  
+[  5][TX-C]   2.00-3.00   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]   2.00-3.00   sec   256 KBytes  2.10 Mbits/sec                  
+[  5][TX-C]   3.00-4.00   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]   3.00-4.00   sec   128 KBytes  1.05 Mbits/sec                  
+[  5][TX-C]   4.00-5.00   sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]   4.00-5.00   sec   256 KBytes  2.10 Mbits/sec                  
+[  5][TX-C]   5.00-6.00   sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]   5.00-6.00   sec   256 KBytes  2.10 Mbits/sec                  
+[  5][TX-C]   6.00-7.00   sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]   6.00-7.00   sec   256 KBytes  2.09 Mbits/sec                  
+[  5][TX-C]   7.00-8.00   sec   896 KBytes  7.37 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]   7.00-8.00   sec   256 KBytes  2.11 Mbits/sec                  
+[  5][TX-C]   8.00-9.00   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]   8.00-9.00   sec   256 KBytes  2.10 Mbits/sec                  
+[  5][TX-C]   9.00-10.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]   9.00-10.00  sec   128 KBytes  1.05 Mbits/sec                  
+[  5][TX-C]  10.00-11.00  sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  10.00-11.00  sec   128 KBytes  1.05 Mbits/sec                  
+[  5][TX-C]  11.00-12.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  11.00-12.00  sec   128 KBytes  1.05 Mbits/sec                  
+[  5][TX-C]  12.00-13.00  sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  12.00-13.00  sec   128 KBytes  1.05 Mbits/sec                  
+[  5][TX-C]  13.00-14.00  sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  13.00-14.00  sec   256 KBytes  2.10 Mbits/sec                  
+[  5][TX-C]  14.00-15.00  sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  14.00-15.00  sec   128 KBytes  1.05 Mbits/sec                  
+[  5][TX-C]  15.00-16.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  15.00-16.00  sec   256 KBytes  2.10 Mbits/sec                  
+[  5][TX-C]  16.00-17.00  sec   896 KBytes  7.35 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  16.00-17.00  sec   256 KBytes  2.10 Mbits/sec                  
+[  5][TX-C]  17.00-18.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  17.00-18.00  sec   256 KBytes  2.10 Mbits/sec                  
+[  5][TX-C]  18.00-19.00  sec   896 KBytes  7.35 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  18.00-19.00  sec   512 KBytes  4.20 Mbits/sec                  
+[  5][TX-C]  19.00-20.00  sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  19.00-20.00  sec   512 KBytes  4.19 Mbits/sec                  
+[  5][TX-C]  20.00-21.00  sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  20.00-21.00  sec   512 KBytes  4.20 Mbits/sec                  
+[  5][TX-C]  21.00-22.00  sec  1.00 MBytes  8.37 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  21.00-22.00  sec   512 KBytes  4.18 Mbits/sec                  
+[  5][TX-C]  22.00-23.00  sec   512 KBytes  4.20 Mbits/sec    0   0.00 Bytes       
+[  7][RX-C]  22.00-23.00  sec   384 KBytes  3.15 Mbits/sec                  
+[  5][TX-C]  23.00-24.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  7][RX-C]  23.00-24.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  5][TX-C]  24.00-25.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  7][RX-C]  24.00-25.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  5][TX-C]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  7][RX-C]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  5][TX-C]  26.00-27.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  7][RX-C]  26.00-27.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  5][TX-C]  27.00-28.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  7][RX-C]  27.00-28.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  5][TX-C]  28.00-29.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  7][RX-C]  28.00-29.00  sec  0.00 Bytes  0.00 bits/sec                  
+[37m[170.940574 0:12884901914 [37mstarry_kernel::task::signal:703] [32mSend signal SIGRT1 to thread 22[m[m
+[37m[170.942732 0:77309411353 [37mstarry_kernel::task::ops:539] [32mTask(77309411353, "iperf3") exit with code: 0[m[m
+

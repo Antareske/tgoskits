@@ -1,0 +1,141 @@
+# SDHCI XFER_COMPLETE 中断驱动 PIO 传输完成的实现
+
+## 背景
+
+SG2002 荔枝派的 SDHCI 通过 PIO 模式与 AIC8800 WiFi 芯片通信。CMD53 数据传输完成后（读或写完一帧），硬件在 `INT_STATUS_NORM` 寄存器中置位 `XFER_COMPLETE` 为 1，若此时 `NORM_INT_SIG_EN` 的 `XFER_COMPLETE` 设为 1，则 SDHCI 会通过 PLIC 触发中断唤醒阻塞的任务，将传输完成到任务恢复的延迟降至中断响应时间。
+
+## 整体流程
+
+```
+CMD53 数据传输完成
+  │
+  ▼
+硬件: INT_STATUS_NORM.XFER_COMPLETE = 1
+  │
+  ▼
+PLIC → sdhci_irq_handler()          [irq.rs]
+  │
+  ├─ 读 INT_STATUS_NORM
+  ├─ mask XFER_COMPLETE SIG_EN       (防止 ISR 重复触发)
+  └─ pio_wake_callback.invoke()
+       │
+       ▼
+     sdhci_pio_wake_callback()      [wifi_glue.rs]
+       │
+       └─ SDHCI_PIO_WQ.notify_one_from_irq()
+            │
+            ▼
+         唤醒 ArceosDelay::block_timeout()  [wifi_glue.rs]
+            │
+            ▼
+         poll_int_status() recheck  [lib.rs]
+            │
+            └─ W1C 清除 INT_STATUS_NORM.XFER_COMPLETE (由任务端消费)
+```
+
+## 具体实现
+
+### 1. CallbackSlot — ISR 回调注册机制
+
+**文件:** `components/sdhci-cv1800/src/irq.rs`
+
+`CallbackSlot` 是一个零分配、ISR 安全的函数指针槽：为 CARD_INT 和 XFER_COMPLETE 两种中断的 ISR 回调写了一个简单的封装，可以在初始化时注册回调，并在合适时机调用。
+
+### 2. sdhci_irq_handler — ISR 入口
+
+**文件:** `components/sdhci-cv1800/src/irq.rs`
+
+注册到 PLIC 的 SDHCI 中断处理函数，处理两种中断：
+
+**CARD_INT:**
+1. mask 信号（`mask_card_irq_raw(base, true)` — 对 SIG_EN 做 RMW 清零 CARD_INT 位）
+2. 调用 `card_irq_callback` 通知上层
+
+**XFER_COMPLETE:**
+1. mask 信号（`rmw_norm_sig_en(base, 0, NORM_INT_XFER_COMPLETE)` — 对 SIG_EN 写 0），防止退出后重新触发中断
+2. 调用 `pio_wake_callback` 唤醒阻塞任务
+3. 不在 ISR 中 W1C 清除 sticky 状态位：
+   - 若 ISR 清除状态位，被唤醒任务的 recheck 将看不到该位，破坏唤醒条件并导致必然的 200ms 超时
+   - 状态位由被唤醒任务在 `poll_status_once` 中观察并 W1C 消费
+
+ISR 只 mask SIG_EN 不碰 STATUS：ISR 仅"通知任务有事件发生"，不"消费事件"。XFER_COMPLETE 的 sticky 状态位由任务端在 recheck 时通过 W1C 清除，确保唤醒-消费的原子性。
+
+### 3. SDHCI_PIO_WQ — 共享唤醒队列
+
+**文件:** `os/arceos/modules/axruntime/src/wifi_glue.rs`
+
+```rust
+static SDHCI_PIO_WQ: WaitQueue = WaitQueue::new();
+```
+
+PIO 任务阻塞在这个队列。同一时刻至多一个任务（TX 或 RX）阻塞于此——SDIO 总线锁（`SdioTransport`）序列化所有传输。
+
+### 4. sdhci_pio_wake_callback — 唤醒回调
+
+**文件:** `os/arceos/modules/axruntime/src/wifi_glue.rs`
+
+```rust
+fn sdhci_pio_wake_callback() {
+    SDHCI_PIO_WQ.notify_one_from_irq();
+}
+```
+
+XFER_COMPLETE 触发中断调用的回调函数，用 `notify_one_from_irq()` 唤醒该队列的一个任务。这个回调的注册也在 `wifi_glue.rs`。
+
+### 5. block_timeout — 中断驱动阻塞等待
+
+**文件:** `os/arceos/modules/axruntime/src/wifi_glue.rs`
+
+```rust
+fn block_timeout(&self, timeout_ms: u64) -> bool {
+    SDHCI_PIO_WQ.wait_timeout(Duration::from_millis(timeout_ms))
+}
+```
+
+- 替换默认的纯 sleep 实现，改为在 `SDHCI_PIO_WQ` 上阻塞。
+- 被用于 PIO 轮询置位的二阶段等待操作，期间仅有 XFER_COMPLETE 中断可以通过上述机制提前唤醒，其它置位通常会在 Phase 1 自旋阶段命中，若进入 Phase 2 则走纯超时 sleep 回退。
+
+### 6. SdhciDelay trait
+
+**文件:** `components/sdhci-cv1800/src/runtime.rs`
+
+```rust
+pub trait SdhciDelay: Send + Sync + 'static {
+    fn delay_ms(&self, ms: u64);
+    fn block_timeout(&self, timeout_ms: u64) -> bool;
+}
+```
+
+加入 `block_timeout`：阻塞当前任务直至硬件中断唤醒或超时。默认实现回退到 `delay_ms`（纯 sleep），兼容未更新的 OS 胶水层。被 impl 到 `ArceosDelay` 且 `block_timeout` 被拓展为 `SDHCI_PIO_WQ.wait_timeout`，见第 5 节。
+
+### 7. poll_int_status — 两阶段等待
+
+**文件:** `components/sdhci-cv1800/src/lib.rs`
+
+**Phase 1:** 自旋轮询 `INT_STATUS`。
+
+【重要】在入口处 `SeqCst` fence 排空 CPU 的存储缓冲区，确保 PIO 写入在轮询开始前已被硬件接收。这是因为寄存器是 MMIO 映射的，CPU 对不同内存地址的读写可能重排——PIO 的写操作滞后于 Phase 1 的自旋轮询 `INT_STATUS` 的话，二者在 SDHCI 总线上竞争，造成等待位（`BUF_WR_READY`、`CMD_COMPLETE` 等）在 Phase 1 窗口内不可见，落进 Phase 2。
+
+**Phase 2:** XFER_COMPLETE 走中断驱动等待，其他位（`CMD_COMPLETE`、`BUF_RD_READY`、`BUF_WR_READY`）走纯超时 sleep。
+
+### 8. 选择性 W1C — 保护 XFER_COMPLETE 不被错误清除
+
+**文件:** `components/sdhci-cv1800/src/lib.rs`
+
+- **`clear_stale_status()`:** 在发送命令前清除残留 `INT_STATUS`，但跳过 XFER_COMPLETE——它可能正被阻塞在 `poll_int_status` Phase 2 的任务消费。若此处清除，任务的 recheck 将永远看不到该位。
+- **`poll_status_once()` 错误分支:** 检测到错误时，清除错误位、被等待的位和 XFER_COMPLETE。XFER_COMPLETE 可能与错误同时置位（例如数据阶段完成后 DAT 上出现 CRC 错误），在此消费掉（本次传输失败，丢了一帧）。
+- **`poll_int_status()` 超时分支:** 清除错误位、被等待的位和 XFER_COMPLETE 并复位 DAT 线，防止总线被焊死。
+
+## 提交列表
+
+| 提交 | 说明 |
+|---|---|
+| `7c74a3ca2` | 修复 WiFi 启动流程，引入 SG2002 WiFi 配置 |
+| `a9a2fce27` | 引入中断驱动 PIO 传输完成机制（CallbackSlot、ISR、WakeQueue、block_timeout） |
+| `4ec9d3ec3` | 添加 per-bit poll_int_status 诊断计数器（后续被 revert） |
+| `32d28faa1` | Revert 诊断计数器 |
+| `d1af2e93d` | 在 Phase 1 MMIO 轮询前插入 store buffer fence |
+| `cb0fb20e4` | 使用选择性 W1C 保护 XFER_COMPLETE 不被命令和错误路径破坏 |
+| `75d32b71b` | 在错误和超时退出路径中消费 XFER_COMPLETE，防止 stale bit 泄漏 |
+| `c61334d3a` | 将新增注释翻译为中文以保持一致性 |
+| `14c0d6c68` | 从 licheerv-nano-sg2002 基础配置中移除 aic8800-wifi feature（对齐主线） |

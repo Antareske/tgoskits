@@ -1,0 +1,145 @@
+=~=~=~=~=~=~=~=~=~=~=~= MobaXterm log 2026.09.24 18:54:03 =~=~=~=~=~=~=~=~=~=~=~=
+
+root@starry:~# 
+root@starry:~# ip addr
+[191.400442 0:73014444059 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+[191.403095 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+[191.453111 0:73014444059 starry_kernel::task::ops:539] Task(73014444059, "busybox") exit with code: 0
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+[191.453796 0:73014444059 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+    inet 127.0.0.1/8 scope host dynamic lo
+[191.455525 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+2: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP qlen 1000
+    link/ether 38:7a:cc:9b:2c:c8 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.137.160/24 brd 192.168.137.255 scope global dynamic wlan0
+root@starry:~# 
+root@starry:~# 
+root@starry:~# iperf 3 -s 1
+[224.215980 0:77309411355 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+[224.218331 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 65013
+[  5] local 192.168.137.160 port 5201 connected to 192.168.137.1 port 65014
+[249.485306 0:4294967324 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  2.00 MBytes  16.7 Mbits/sec                  
+[  5]   1.00-2.00   sec  2.25 MBytes  18.9 Mbits/sec                  
+[  5]   2.00-3.00   sec  2.12 MBytes  17.8 Mbits/sec                  
+[  5]   3.00-4.00   sec  2.50 MBytes  21.0 Mbits/sec                  
+[  5]   4.00-5.00   sec  1.50 MBytes  12.6 Mbits/sec                  
+[  5]   5.00-6.00   sec  1.38 MBytes  11.5 Mbits/sec                  
+[  5]   6.00-7.00   sec  1.75 MBytes  14.7 Mbits/sec                  
+[  5]   7.00-8.00   sec  1.38 MBytes  11.5 Mbits/sec                  
+[258.076835 0:4294967307 aic8800::device::probe:102] [wifi-probe] pkts=2000 period_avg=124437us period_max=238613587us | credit n=2000 min=4 max=132 avgx10=1187 backoff=0 backoff_avg=0us | c52 n=2000 avg=62us max=1504us | c53 n=2000 avg=190us max=2091us | txq backlog=1652/2006
+[  5]   8.00-9.00   sec  2.38 MBytes  19.9 Mbits/sec                  
+[  5]   9.00-9.74   sec  2.12 MBytes  24.2 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-9.74   sec  19.4 MBytes  16.7 Mbits/sec                  receiver
+[259.241721 0:4294967324 starry_kernel::task::ops:539] Task(4294967324, "iperf3") exit with code: 0
+-----------------------------------------------------------
+Server listening on 5201 (test #2)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 65023
+[  5] local 192.168.137.160 port 5201 connected to 192.168.137.1 port 65024
+[268.310549 0:8589934620 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  5]   1.00-2.00   sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  5]   2.00-3.00   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[271.335029 0:4294967307 aic8800::device::probe:102] [wifi-probe] pkts=4000 period_avg=65518us period_max=238613587us | credit n=4000 min=4 max=132 avgx10=1108 backoff=0 backoff_avg=0us | c52 n=4000 avg=73us max=1693us | c53 n=4000 avg=335us max=2809us | txq backlog=2179/3998
+[  5]   3.00-4.00   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  5]   4.00-5.00   sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[274.302652 0:4294967307 aic8800::device::probe:102] [wifi-probe] pkts=6000 period_avg=44170us period_max=238613587us | credit n=6173 min=2 max=132 avgx10=982 backoff=173 backoff_avg=1363us | c52 n=6173 avg=75us max=1863us | c53 n=6000 avg=432us max=3134us | txq backlog=3332/6007
+[  5]   5.00-6.00   sec  1.12 MBytes  9.45 Mbits/sec    0   0.00 Bytes       
+[  5]   6.00-7.00   sec  1.12 MBytes  9.44 Mbits/sec    0   0.00 Bytes       
+[  5]   7.00-8.00   sec   512 KBytes  4.20 Mbits/sec    0   0.00 Bytes       
+[  5]   8.00-9.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   9.00-9.64   sec   256 KBytes  3.26 Mbits/sec    0   0.00 Bytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-9.64   sec  7.00 MBytes  6.09 Mbits/sec    0            sender
+[278.427677 0:8589934620 starry_kernel::task::ops:539] Task(8589934620, "iperf3") exit with code: 0
+-----------------------------------------------------------
+Server listening on 5201 (test #3)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 65030
+[287.480795 0:4294967307 aic8800::device::probe:102] [wifi-probe] pkts=8000 period_avg=34773us period_max=238613587us | credit n=9612 min=2 max=132 avgx10=785 backoff=1612 backoff_avg=1382us | c52 n=9612 avg=72us max=1863us | c53 n=8000 avg=475us max=3134us | txq backlog=4606/7998
+[  5] local 192.168.137.160 port 5201 connected to 192.168.137.1 port 65033
+[  8] local 192.168.137.160 port 5201 connected to 192.168.137.1 port 65034
+[287.563329 0:12884901916 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x448af0
+[287.573038 0:4294967325 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x46baf0
+[ ID][Role] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5][RX-S]   0.00-1.00   sec   768 KBytes  6.28 Mbits/sec                  
+[  8][TX-S]   0.00-1.00   sec  1.12 MBytes  9.41 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]   1.00-2.00   sec   896 KBytes  7.35 Mbits/sec                  
+[  8][TX-S]   1.00-2.00   sec  1.00 MBytes  8.40 Mbits/sec    0   0.00 Bytes       
+[290.110742 0:4294967307 aic8800::device::probe:102] [wifi-probe] pkts=10000 period_avg=28081us period_max=238613587us | credit n=11769 min=2 max=132 avgx10=768 backoff=1769 backoff_avg=1400us | c52 n=11769 avg=73us max=1863us | c53 n=10000 avg=486us max=3134us | txq backlog=6619/10023
+[  5][RX-S]   2.00-3.00   sec   896 KBytes  7.33 Mbits/sec                  
+[  8][TX-S]   2.00-3.01   sec  1.00 MBytes  8.34 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]   3.00-4.00   sec   384 KBytes  3.15 Mbits/sec                  
+[  8][TX-S]   3.01-4.00   sec   896 KBytes  7.39 Mbits/sec    0   0.00 Bytes       
+[292.532667 0:4294967307 aic8800::device::probe:102] [wifi-probe] pkts=12000 period_avg=23602us period_max=238613587us | credit n=14002 min=2 max=132 avgx10=745 backoff=2002 backoff_avg=1403us | c52 n=14002 avg=74us max=2380us | c53 n=12000 avg=491us max=4387us | txq backlog=8445/12021
+[  5][RX-S]   4.00-5.00   sec   512 KBytes  4.19 Mbits/sec                  
+[  8][TX-S]   4.00-5.00   sec  1.00 MBytes  8.38 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]   5.00-6.00   sec   512 KBytes  4.20 Mbits/sec                  
+[  8][TX-S]   5.00-6.00   sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]   6.00-7.00   sec   768 KBytes  6.29 Mbits/sec                  
+[  8][TX-S]   6.00-7.00   sec  1.12 MBytes  9.45 Mbits/sec    0   0.00 Bytes       
+[295.082222 0:4294967307 aic8800::device::probe:102] [wifi-probe] pkts=14000 period_avg=20412us period_max=238613587us | credit n=16242 min=2 max=132 avgx10=746 backoff=2242 backoff_avg=1395us | c52 n=16242 avg=74us max=3251us | c53 n=14000 avg=502us max=4387us | txq backlog=10447/14023
+[  5][RX-S]   7.00-8.00   sec   640 KBytes  5.24 Mbits/sec                  
+[  8][TX-S]   7.00-8.00   sec  1.12 MBytes  9.43 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]   8.00-9.00   sec   768 KBytes  6.29 Mbits/sec                  
+[  8][TX-S]   8.00-9.00   sec  1.12 MBytes  9.41 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]   9.00-9.65   sec   256 KBytes  3.26 Mbits/sec                  
+[297.215282 0:12884901916 starry_kernel::task::ops:539] Task(12884901916, "iperf3") exit with code: 0
+[  8][TX-S]   9.00-9.65   sec   640 KBytes  8.17 Mbits/sec    0   0.00 Bytes       
+[297.217248 0:4294967325 starry_kernel::task::ops:539] Task(4294967325, "iperf3") exit with code: 0
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID][Role] Interval           Transfer     Bitrate         Retr
+[  5][RX-S]   0.00-9.65   sec  6.38 MBytes  5.54 Mbits/sec                  receiver
+[  8][TX-S]   0.00-9.65   sec  9.88 MBytes  8.59 Mbits/sec    0            sender
+-----------------------------------------------------------
+Server listening on 5201 (test #4)
+-----------------------------------------------------------
+^C
+^C^C^C
+
+
+
+
+[312.711058 0:4294967308 ax_net::device::ethernet:338] wlan0: requesting ARP for 192.168.137.1
+[312.712998 0:4294967308 ax_net::device::ethernet:409] wlan0: ARP 192.168.137.1 -> 66-d6-9a-fb-71-56
+[312.713093 0:4294967308 ax_net::device::ethernet:479] wlan0: sending pending IPv4 packet to 192.168.137.1 via 66-d6-9a-fb-71-56
+^C[322.340432 0:4294967308 ax_net::orphan:156] Reaped expired orphan socket #2
+
+
+
+
+Accepted connection from 192.168.137.1, port 54937
+[  5] local 192.168.137.160 port 5201 connected to 192.168.137.1 port 54938
+[336.438808 0:8589934621 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x428af0
+[337.143789 0:4294967307 aic8800::device::probe:102] [wifi-probe] pkts=16000 period_avg=20489us period_max=238613587us | credit n=18325 min=2 max=132 avgx10=756 backoff=2325 backoff_avg=1404us | c52 n=18325 avg=75us max=3251us | c53 n=16000 avg=510us max=4387us | txq backlog=12379/16001
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  2.25 MBytes  18.8 Mbits/sec                  
+[  5]   1.00-2.00   sec  3.12 MBytes  26.3 Mbits/sec                  
+[  5]   2.00-3.00   sec  3.00 MBytes  25.2 Mbits/sec                  
+[  5]   3.00-4.00   sec  3.12 MBytes  26.2 Mbits/sec                  
+[  5]   4.00-5.00   sec  3.50 MBytes  29.3 Mbits/sec                  
+[341.444255 0:77309411355 starry_kernel::task::signal:716] Send signal SIGRT1 to thread 24
+[  5]   4.00-5.00   sec  3.50 MBytes  29.3 Mbits/sec                  
+[341.447891 0:8589934621 starry_kernel::task::ops:539] Task(8589934621, "iperf3") exit with code: 0
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-5.00   sec  15.0 MBytes  25.1 Mbits/sec                  receiver
+iperf3: the client has terminated
+-----------------------------------------------------------
+Server listening on 5201 (test #5)
+-----------------------------------------------------------
+^C^C^C^Cext^H^H^H^H
+
+
+^H^H

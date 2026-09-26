@@ -1,0 +1,542 @@
+U-Boot 2021.10 (Jan 22 2026 - 14:08:22 +0800) soph
+
+DRAM:  254 MiB
+gd->relocaddr=0x88a33000. offset=0x8833000
+MMC:   cv-sd@4310000: 0, wifi-sd@4320000: 1
+Loading Environment from nowhere... OK
+In:    serial
+Out:   serial
+Err:   serial
+Net:
+Warning: ethernet@4070000 (eth0) using random MAC address - 42:07:65:a6:45:b9
+eth0: ethernet@4070000
+Hit any key to stop autoboot:  0
+Device: cv-sd@4310000
+Manufacturer ID: 3
+OEM: 5344
+Name: SK64G
+Bus Speed: 25000000
+Mode: SD High Speed (50MHz)
+Rd Block Len: 512
+SD version 3.0
+High Capacity: Yes
+Capacity: 59.5 GiB
+Bus Width: 4-bit
+Erase Group Size: 512 Bytes
+** Unable to read file uEnv.txt **
+Failed to load 'uEnv.txt'
+cvi_vo_probe: Warning: cannot get power GPIO: ret=-2
+** Unable to read file board **
+Failed to load 'board'
+Failed to load file: board
+Init panel zct2133v1-800x1280
+dm_gpio_set_value(disp_power_ct_gpio, deassert) failed: -2switch to partitions #0, OK
+mmc0 is current device
+** Unable to read file logo.jpeg **
+Failed to load 'logo.jpeg'
+
+start jpeg dec task!, bs_addr 0000000084080000, yuv_addr 0000000088d30000, size 524288
+[ERR] JpegDecodeHeader = 1307, DONE_DEC_HEADER
+[ERR] JpegDecodeHeader = 1439, fail
+[ERR] JPU_DecGetInitialInfo = 209, JpegDecodeHeader
+jpeg_decode_helper = 251, JPU_DecGetInitialInfo failed Error code is 0x1, inst=0
+Boot from SD dev 0 ...
+switch to partitions #0, OK
+mmc0 is current device
+17416072 bytes read in 1565 ms (10.6 MiB/s)
+## Loading kernel from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'kernel-1' kernel subimage
+     Description:  StarryOS kernel
+     Type:         Kernel Image
+     Compression:  uncompressed
+     Data Start:   0x818000d4
+     Data Size:    14864272 Bytes = 14.2 MiB
+     Architecture: RISC-V
+     OS:           Linux
+     Load Address: 0x80200000
+     Entry Point:  0x80200000
+     Hash algo:    crc32
+     Hash value:   46c73dd7
+   Verifying Hash Integrity ... crc32+ OK
+## Loading ramdisk from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'ramdisk-1' ramdisk subimage
+     Description:  cvitek ramdisk
+     Type:         RAMDisk Image
+     Compression:  uncompressed
+     Data Start:   0x8262d144
+     Data Size:    2527648 Bytes = 2.4 MiB
+     Architecture: RISC-V
+     OS:           Linux
+     Load Address: unavailable
+     Entry Point:  unavailable
+     Hash algo:    crc32
+     Hash value:   1330f105
+   Verifying Hash Integrity ... crc32+ OK
+## Loading fdt from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'fdt-sg2002_licheervnano_sd' fdt subimage
+     Description:  cvitek device tree - sg2002_licheervnano_sd
+     Type:         Flat Device Tree
+     Compression:  uncompressed
+     Data Start:   0x828963d0
+     Data Size:    22679 Bytes = 22.1 KiB
+     Architecture: RISC-V
+     Hash algo:    sha256
+     Hash value:   8d71cc1298be070dc0e7c229efe5930243511d099456b21cff87d3a945de0596
+   Verifying Hash Integrity ... sha256+ OK
+   Booting using the fdt blob at 0x828963d0
+   Loading Kernel Image
+   Decompressing 14864272 bytes used 19ms
+   Loading Ramdisk to 87e81000, end 880ea1a0 ... OK
+ERROR: reserving fdt memory region failed (addr=80000000 size=40000 flags=0)
+   Loading Device Tree to 0000000087e78000, end 0000000087e80896 ... OK
+
+Starting kernel ...
+
+RISC-V64 SBI kernel entry.
+root=/dev/mmcblk0p2 rootwait rw console=ttyS0,115200 earlycon=sbi riscv.fwsz=0x80000 release loglevel=0
+VM Load @PA:0x80200000
+VM Load Offset: 0x100200000
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080080000 (512 KiB)
+  Free   0x00000080080000 - 0x00000080200000 (1.5 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Free   0x00000081200000 - 0x00000087e81000 (108.5 MiB)
+  Rsv    0x00000087e81000 - 0x000000880eb000 (2.41 MiB)
+  Free   0x000000880eb000 - 0x0000008fe00000 (125.08 MiB)
+Initialize RAM allocator: 0x81200000..0x87e81000
+Reserving CPU-local areas
+CPU-local area stride: 0x41000 bytes
+Total CPU-local allocation: 0x41000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x81200000..0x81207000, current: 0x81207000
+Flushed RAM used range to memory map: 0x81207000..0x81248000, current: 0x81248000
+CPU-local areas allocated at 0x81207000 - 0x81248000
+Mapping early memory regions...
+Ram                 : [0x0000000080000000, 0x000000008fe00000) -> [0x0000000080000000, 0x000000008fe00000) (254 MiB)
+Ram                 : [0xffffffc080000000, 0xffffffc08fe00000) -> [0x0000000080000000, 0x000000008fe00000) (254 MiB)
+KImage              : [0xffffffff80000000, 0xffffffff81000000) -> [0x0000000080200000, 0x0000000081200000) (16 MiB)
+PerCpu              : [0xffffffe081207000, 0xffffffe081248000) -> [0x0000000081207000, 0x0000000081248000) (260 KiB)
+Boot page table at physical address: 0x81248000
+MMU Entry point at physical address: 0x804f43c4
+Enabling MMU...
+MMU enabled, jumping to 0xffffffff802f43c4, sp=0xffffffe081248000
+Trap vector at 0xffffffff802efe30
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080080000 (512 KiB)
+  Free   0x00000080080000 - 0x00000080200000 (1.5 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Rsv    0x00000081200000 - 0x00000081207000 (28 KiB)
+  PerCPU 0x00000081207000 - 0x00000081248000 (260 KiB)
+  Rsv    0x00000081248000 - 0x00000081354000 (1.05 MiB)
+  Free   0x00000081354000 - 0x00000087e81000 (107.18 MiB)
+  Rsv    0x00000087e81000 - 0x000000880eb000 (2.41 MiB)
+  Free   0x000000880eb000 - 0x0000008fe00000 (125.08 MiB)
+Jumping to main entry point at 0xffffffff802e344c with SP 0xffffffe081248000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = riscv64
+platform = LicheeRv Nano
+target = riscv64gc-unknown-none-elf
+build_mode =
+log_level = info
+backtrace = false
+smp = 1
+
+ax_runtime:230] Logging is enabled.
+ax_runtime:231] Primary CPU 0 started, arg = 0x81200000.
+ax_runtime:233] Found physcial memory regions:
+ax_runtime:235]   [PA:0x80000000, PA:0x80080000) reserved (READ | WRITE | EXECUTE | RESERVED)
+ax_runtime:235]   [PA:0x80080000, PA:0x80200000) free memory (READ | WRITE | FREE)
+ax_runtime:235]   [PA:0x80200000, PA:0x81200000) reserved (READ | WRITE | EXECUTE | RESERVED)
+ax_runtime:235]   [PA:0x81200000, PA:0x81207000) reserved (READ | WRITE | EXECUTE | RESERVED)
+ax_runtime:235]   [PA:0x81207000, PA:0x81248000) reserved (READ | WRITE | EXECUTE | RESERVED)
+ax_runtime:235]   [PA:0x81248000, PA:0x81354000) reserved (READ | WRITE | EXECUTE | RESERVED)
+ax_runtime:235]   [PA:0x81354000, PA:0x87e81000) free memory (READ | WRITE | FREE)
+ax_runtime:235]   [PA:0x87e81000, PA:0x880eb000) reserved (READ | WRITE | EXECUTE | RESERVED)
+ax_runtime:235]   [PA:0x880eb000, PA:0x8fe00000) free memory (READ | WRITE | FREE)
+ax_runtime:370] Initialize global memory allocator...
+ax_runtime:371]   use buddy-slab-allocator allocator.
+ax_alloc::buddy_slab:158] Initialize global memory allocator, start_vaddr: 0xffffffc0880eb000, size: 0x7d15000
+ax_alloc::buddy_slab:424] global allocator initialized
+ax_alloc::buddy_slab:168] Add memory region, start_vaddr: 0xffffffc080080000, size: 0x180000
+buddy_slab_allocator::global:151] GlobalAllocator: skip region 0xffffffc080080000+0x180000, no allocator-visible memory after 2097152 alignment
+ax_alloc::buddy_slab:168] Add memory region, start_vaddr: 0xffffffc081354000, size: 0x6b2d000
+ax_runtime:270] kernel aspace: [VA:0xffffffc000000000, VA:0xffffffffffffffff)
+ax_mm:107] Initialize virtual memory management...
+ax_runtime:282] Initialize platform devices...
+somehal::driver:5] Initializing rdrive with FDT at 0xffffffc081200000
+ax_task::api:175] Initialize scheduling...
+ax_task::api:183]   use Round-robin scheduler.
+ax_runtime:301] Initialize interrupt handlers...
+ax_runtime::devices:2] Probe platform devices...
+ax_driver::serial::ns16550:49] Probing NS16550 serial device: serial@04140000
+ax_driver::serial::ns16550:92] NS16550 serial@0xffffffc004140000 registered successfully
+ax_driver::serial::ns16550:49] Probing NS16550 serial device: serial@04150000
+ax_driver::serial::ns16550:92] NS16550 serial@0xffffffc004150000 registered successfully
+ax_driver::serial::ns16550:49] Probing NS16550 serial device: serial@04160000
+ax_driver::serial::ns16550:92] NS16550 serial@0xffffffc004160000 registered successfully
+ax_driver::serial::ns16550:49] Probing NS16550 serial device: serial@04170000
+ax_driver::serial::ns16550:92] NS16550 serial@0xffffffc004170000 registered successfully
+ax_driver::block::cvsd:66] cvsd probe: node=cv-sd@4310000, src=375000000Hz min=400000Hz max=25000000Hz bus_width=Bit4 no_1v8=true no_mmc=true no_sdio=true cd_gpio=true
+ax_driver::block::cvsd:97] cvsd block device registered irq=None
+ax_driver::net::aic8800:69] [wifi] SDIO1 resources prepared (node=wifi-sd@4320000, controller=0x4320000, src=375000000Hz, bus=Bit4)
+ax_driver::net::aic8800:97] [wifi] wlan0 device registered (probe stage done)
+ax_runtime::serial:895] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [44, 4] }))), polling=false
+ax_runtime::serial:895] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [45, 4] }))), polling=false
+ax_runtime::serial:895] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [46, 4] }))), polling=false
+ax_runtime::serial:895] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [47, 4] }))), polling=false
+[  9.553501 0:2 ax_runtime:312] runtime console active: serial0, ttyS0
+Boot at 1970-01-01 00:00:09.553534280 UTC
+
+[  9.553995 0:9 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op ResetAll
+[  9.554248 0:9 ax_fs_ng::block::runtime::hctx:177] block hctx 0 bound to CPU 0 with hardware depth 1
+[  9.554449 0:9 ax_fs_ng::block::runtime::lifecycle::device:333] block device cvsd IRQ source 0 (IrqId { domain: IrqDomainId(7), hwirq: HwIrq(36) }) fixed to CPU 0 for queue mask 0x1
+[  9.555494 0:10 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op PowerOn
+[  9.565935 0:10 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op SwitchVoltage(V330)
+[  9.567276 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit1)
+[  9.567626 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Identification)
+[  9.590977 0:10 sdmmc_protocol::sdio::init::state_machine::identify:175] sdio: detected Sd ocr=0xc1ff8000
+[  9.592718 0:10 sdmmc_protocol::sdio::init::state_machine::identify:340] sdio: CSD capacity_blocks=Some(124735488)
+[  9.593178 0:10 sdmmc_protocol::sdio::init::state_machine::identify:354] sdio: switch SD bus width to 4-bit
+[  9.594026 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit4)
+[  9.594681 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Default)
+[  9.599314 0:10 sdmmc_protocol::sdio::init::state_machine::sd:185] sdio: SD speed selected HighSpeed
+[  9.599671 0:10 sdmmc_protocol::sdio::init::state_machine:237] sdio: init done kind=Sd sd_v2=true high_capacity=true rca=0xaaaa ocr=0xc1ff8000 host_bus_width=Bit4 ext_csd_bus_width=None ext_csd_timing=None
+[  9.599712 0:10 sdmmc_protocol::rdif::queue:173] sdmmc block init complete: kind=Sd high_capacity=true rca=43690 capacity_blocks=124735488 cache_enabled=false
+[  9.602401 0:2 ax_fs_ng::root:349]     partition 1 name=None fs=None lba 2048..133120
+[  9.603417 0:2 ax_fs_ng::root:349]     partition 2 name=None fs=Some(Ext4) lba 133120..4331520
+[  9.603471 0:2 ax_fs_ng::root:365]   block device 0 (cvsd) has Mbr partition table with 2 partitions
+[  9.604133 0:2 ax_fs_ng::root:475]   matched root by device path on disk0 partition 2 (<unnamed>, fs=ext4, lba 133120..4331520)
+[  9.604197 0:2 ax_fs_ng:95] Initialize filesystem subsystem...
+[  9.604220 0:2 ax_fs_ng:96]   selected root device: disk0 partition 2 (<unnamed>, fs=ext4, lba 133120..4331520)
+[  9.986899 0:2 ax_fs_ng:108]   filesystem type: "ext4"
+[  9.987361 0:2 ax_runtime:343] Primary CPU 0 init OK.
+[  9.987689 0:2 ax_fs_ng::block::runtime::lifecycle::device:409] block device cvsd online with 1 hctxs across 1 CPUs
+[ 10.009575 0:11 aic8800::device::startup:262] aic: startup stage VendorSetup(2)
+[ 10.020790 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.032313 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.046814 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.058350 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.069981 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.081526 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.093119 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.104687 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.116282 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.127840 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.139472 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.151053 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.165442 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.176984 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.188633 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.200252 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.211799 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.223428 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.235009 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.246455 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.260926 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.272451 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.284023 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.295448 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.306917 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.318483 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.330060 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.341609 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.353137 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.367676 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.379300 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.390806 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.402236 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.413744 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.425393 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.436873 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.448401 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.462829 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.474457 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.485952 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.497497 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.509008 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.520495 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.532225 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.543916 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.555456 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.566929 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.581362 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.592832 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.604318 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.615877 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.627402 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.638961 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.650541 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.662073 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.676613 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.688133 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.699700 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.711279 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.722739 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.734310 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.745874 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.757410 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.768981 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.783483 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.795011 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.806550 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.818085 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.829608 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.841243 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.852814 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.864350 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.878853 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.890451 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.901976 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.913430 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.913589 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.916298 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.916453 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.918929 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.919148 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.919306 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.921784 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.922002 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.922159 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.924724 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.924942 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.925098 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.927581 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.927800 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.927957 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.930425 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.930642 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.930798 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.933357 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.933617 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.933775 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.936260 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.936475 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.936633 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.939103 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.939320 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.939476 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.942056 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.942276 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.942431 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.944906 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.945122 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.945280 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.947756 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.947974 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.948130 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.950595 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.950812 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.950970 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.953486 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.953705 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.953859 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.956375 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.956639 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.956798 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.959276 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.959492 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.959648 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.962160 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.962422 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.962580 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.965100 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.965322 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 10.965480 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.967967 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.968179 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040b expected=0x040c frame_len=512
+[ 10.968338 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.970728 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.970923 0:11 aic8800::device::startup:262] aic: startup stage UploadPatch(0)
+[ 10.970955 0:11 aic8800::device::startup:262] aic: startup stage StartApplication
+[ 10.970989 0:11 aic8800::device::mailbox:275] aic: mailbox begin id=0x040d expected=0x040e frame_len=512
+[ 10.971131 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=4 raw=0x04
+[ 10.989359 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 10.989596 0:11 aic8800::device::startup:262] aic: startup stage Reinitialize(0)
+[ 10.989688 0:11 aic8800::device::startup:262] aic: startup stage Reinitialize(1)
+[ 11.189756 0:11 aic8800::device::startup:262] aic: startup stage Reinitialize(2)
+[ 11.189848 0:11 aic8800::device::startup:262] aic: startup stage Reinitialize(3)
+[ 11.189932 0:11 aic8800::device::startup:262] aic: startup stage Reinitialize(4)
+[ 11.189959 0:11 aic8800::device::startup:262] aic: startup stage StackStart
+[ 11.189996 0:11 aic8800::device::mailbox:300] aic: mailbox begin id=0x007b expected=0x007c frame_len=512
+[ 11.190134 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=127 raw=0x7f
+[ 11.192526 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 11.192728 0:11 aic8800::device::mailbox:300] aic: mailbox begin id=0x0073 expected=0x0074 frame_len=512
+[ 11.192874 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=127 raw=0x7f
+[ 11.195212 0:11 aic8800::device::mailbox:164] aic: mailbox count raw=0x01
+[ 11.195503 0:11 aic8800::device::startup:262] aic: startup stage Complete
+[ 11.196271 0:2 ax_net:248] Initialize network subsystem...
+[ 11.197152 0:2 ax_net:270]   use NIC 0: "wlan0"
+[ 11.198012 0:2 ax_net:309]   Wi-Fi control for eth0 is owned by CPU 0
+[ 11.198048 0:2 ax_net:321] eth0:
+[ 11.198070 0:2 ax_net:322]   id:   2
+[ 11.198089 0:2 ax_net:323]   mac:  38-7a-cc-9b-2c-c8
+[ 11.198125 0:2 ax_net:340]   mode: dhcp
+[ 11.198164 0:2 ax_net:389] Device: lo
+[ 11.198195 0:2 ax_net:389] Device: eth0
+[ 11.198254 0:2 ax_net::service:529] eth0: DHCP enabled
+[ 13.219488 0:2 ax_net:841] DHCP bootstrap timed out
+
+[ 13.219684 0:2 ax_tracepoint:327] tracepoint_data_start: 0xffffffff805c8450, tracepoint_data_end: 0xffffffff805c84e0
+[ 13.219745 0:2 ax_tracepoint:370] tracepoint_data_len: 6
+[ 13.219781 0:2 ax_tracepoint:389] tracepoint registered: sched:sched_process_exit
+[ 13.219830 0:2 ax_tracepoint:389] tracepoint registered: sched:sched_process_fork
+[ 13.219860 0:2 ax_tracepoint:389] tracepoint registered: sched:sched_switch
+[ 13.219889 0:2 ax_tracepoint:389] tracepoint registered: syscalls:sys_clone
+[ 13.219918 0:2 ax_tracepoint:389] tracepoint registered: syscalls:sys_enter_openat
+[ 13.219947 0:2 ax_tracepoint:389] tracepoint registered: syscalls:sys_mkdirat
+Initialized 6 tracepoints
+kmod subsystem initialized
+[ 13.220211 0:2 starry_kernel::pseudofs:88] Initialize pseudofs...
+[ 13.220837 0:2 starry_kernel::pseudofs::dev::tty::serial:244] ttyS0 registered: path=/serial@04140000, alias=Some(0), paddr=0x4140000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [44, 4] })))
+[ 13.221095 0:2 starry_kernel::pseudofs::dev::tty::serial:244] ttyS1 registered: path=/serial@04150000, alias=Some(1), paddr=0x4150000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [45, 4] })))
+[ 13.221343 0:2 starry_kernel::pseudofs::dev::tty::serial:244] ttyS2 registered: path=/serial@04160000, alias=Some(2), paddr=0x4160000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [46, 4] })))
+Welcome to Starry OS!
+[ 13.221569 0:2 starry_kernel::pseudofs::dev::tty::serial:244] ttyS3 registered: path=/serial@04170000, alias=Some(3), paddr=0x4170000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [47, 4] })))
+USER=root
+[ 13.221635 0:2 starry_kernel::pseudofs::dev::tty::serial:188] /dev/console bound to runtime console ttyS0
+HOSTNAME=starry
+[ 13.226269 0:2 starry_kernel::pseudofs::usbfs:55] usbfs: initializing manager
+SHLVL=1
+[ 13.276555 0:2 starry_kernel::task::timer:394] Initialize alarm...
+HOME=/root
+[ 13.584858 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+TERM=xterm-256color
+[ 13.738811 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+[ 13.890331 0:26 starry_kernel::task::ops:348] Task(26, "busybox") exit with code: 0
+PWD=/
+[ 13.907032 0:26 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+
+[ 13.907663 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+Use apk to install packages.
+[ 13.908039 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+
+[ 13.921008 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+root@starry:/root # [ 13.921874 0:27 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffeb80
+
+[ 13.973253 0:27 starry_kernel::task::ops:348] Task(27, "busybox") exit with code: 0
+root@starry:/root # [ 13.990024 0:27 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 13.990656 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 13.991036 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.004153 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.005025 0:28 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 14.056894 0:28 starry_kernel::task::ops:348] Task(28, "busybox") exit with code: 0
+[ 14.073570 0:28 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 14.074198 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.074573 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.087479 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.088340 0:29 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 14.141799 0:29 starry_kernel::task::ops:348] Task(29, "busybox") exit with code: 0
+[ 14.158659 0:29 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 14.159287 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.159662 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.172542 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.173472 0:30 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 14.225285 0:30 starry_kernel::task::ops:348] Task(30, "busybox") exit with code: 0
+[ 14.242070 0:30 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 14.242704 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.243083 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.255980 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.256843 0:31 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 14.308373 0:31 starry_kernel::task::ops:348] Task(31, "busybox") exit with code: 0
+[ 14.325307 0:31 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 14.325992 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.326368 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.339332 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.340198 0:32 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 14.391473 0:32 starry_kernel::task::ops:348] Task(32, "busybox") exit with code: 0
+[ 14.408173 0:32 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 14.408805 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.409186 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.422009 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.422880 0:33 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 14.474593 0:33 starry_kernel::task::ops:348] Task(33, "busybox") exit with code: 0
+[ 14.491336 0:33 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 14.491965 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.492341 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.505305 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.506172 0:34 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 14.557374 0:34 starry_kernel::task::ops:348] Task(34, "busybox") exit with code: 0
+[ 14.574070 0:34 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 14.574700 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.575080 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.587923 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.588779 0:35 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 14.642001 0:35 starry_kernel::task::ops:348] Task(35, "busybox") exit with code: 0
+[ 14.658691 0:35 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 14.659321 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.659695 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.678776 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.679216 0:36 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffed40
+[ 14.721830 0:36 starry_kernel::task::ops:348] Task(36, "busybox") exit with code: 0
+[ 14.738457 0:36 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 14.739082 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.739459 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root # ip addr
+[ 21.469088 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+[ 21.469491 0:37 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+[ 21.523200 0:37 starry_kernel::task::ops:348] Task(37, "busybox") exit with code: 0
+    inet 127.0.0.1/8 scope host dynamic lo
+[ 21.540429 0:37 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP qlen 1000
+[ 21.541443 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+    link/ether 38:7a:cc:9b:2c:c8 brd ff:ff:ff:ff:ff:ff
+[ 21.541815 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+root@starry:/root #
+root@starry:/root #
+root@starry:/root # wifi-ctl eth0 ap SG2002 6
+[ 34.932720 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[ 34.933131 0:38 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+[ 34.956953 0:11 aic8800::device::mailbox:300] aic: mailbox begin id=0x0006 expected=0x0007 frame_len=512
+ioctl[ 34.957103 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=124 raw=0x7c
+:[ 39.960569 0:38 starry_kernel::task::ops:348] Task(38, "wifi-ctl") exit with code: -256
+ [ 39.963239 0:38 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+Bad address[ 39.963925 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+
+[ 39.964293 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+root@starry:/root #
+root@starry:/root # wifi-ctl eth0 ap SG2002 6[118.895295 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+
+[118.895817 0:39 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+ioctl[118.917196 0:39 starry_kernel::task::ops:348] Task(39, "wifi-ctl") exit with code: -256
+:[118.919903 0:39 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+ [118.920522 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+Bad address[118.920890 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+
+root@starry:/root # wifi-ctl eth0 sta SG2002
+[128.728113 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[128.728577 0:40 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+ioctl[128.850033 0:40 starry_kernel::task::ops:348] Task(40, "wifi-ctl") exit with code: -256
+:[128.852760 0:40 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+ [128.853433 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+Invalid argument[128.853804 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+
+root@starry:/root # wifi-ctl eth0 ap SG2002 4
+[133.521014 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+ioctl[133.521478 0:41 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+:[133.542353 0:41 starry_kernel::task::ops:348] Task(41, "wifi-ctl") exit with code: -256
+ [133.545092 0:41 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+Bad address[133.545714 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+
+[133.546083 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+root@starry:/root #

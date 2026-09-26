@@ -1,0 +1,46 @@
+﻿cat /tmp/iperf3_srv_linux-ap-board-s-udp-tx-P1.log; echo SRVLOG_DONE
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 10.187.134.2, port 65011
+[  6] local 10.187.134.1 port 5201 connected to 10.187.134.2 port 59809
+[ ID] Interval           Transfer     Bitrate         Total Datagrams
+[  6]   0.00-1.00   sec  5.89 MBytes  49.3 Mbits/sec  4230  (omitted)
+[  6]   1.00-2.00   sec  5.57 MBytes  46.7 Mbits/sec  4000  (omitted)
+[  6]   2.00-3.00   sec  5.76 MBytes  48.4 Mbits/sec  4140  (omitted)
+[  6]   0.00-1.00   sec  5.61 MBytes  47.0 Mbits/sec  4030  
+[  6]   1.00-2.00   sec  5.81 MBytes  48.6 Mbits/sec  4170  
+[  6]   2.00-3.00   sec  5.68 MBytes  47.7 Mbits/sec  4080  
+[  6]   3.00-4.00   sec  5.61 MBytes  47.0 Mbits/sec  4030  
+[  6]   4.00-5.00   sec  5.72 MBytes  48.1 Mbits/sec  4110  
+[  6]   5.00-6.00   sec  5.75 MBytes  48.3 Mbits/sec  4130  
+[  6]   6.00-7.00   sec  5.82 MBytes  48.8 Mbits/sec  4180  
+[  6]   7.00-8.00   sec  5.46 MBytes  45.7 Mbits/sec  3920  
+[  6]   8.00-9.00   sec  5.79 MBytes  48.7 Mbits/sec  4160  
+[  6]   9.00-10.00  sec  5.82 MBytes  48.9 Mbits/sec  4180  
+[  6]  10.00-11.00  sec  5.63 MBytes  47.2 Mbits/sec  4040  
+[  6]  11.00-12.00  sec  5.69 MBytes  47.7 Mbits/sec  4090  
+[  6]  12.00-13.00  sec  5.49 MBytes  46.1 Mbits/sec  3940  
+[  6]  13.00-14.00  sec  5.43 MBytes  45.6 Mbits/sec  3900  
+[  6]  14.00-15.00  sec  5.89 MBytes  49.4 Mbits/sec  4230  
+[  6]  15.00-16.00  sec  5.35 MBytes  44.9 Mbits/sec  3840  
+[  6]  16.00-17.00  sec  5.39 MBytes  45.1 Mbits/sec  3870  
+[  6]  17.00-18.00  sec  5.56 MBytes  46.7 Mbits/sec  3990  
+[  6]  18.00-19.00  sec  4.85 MBytes  40.6 Mbits/sec  3480  
+[  6]  19.00-20.00  sec  5.17 MBytes  43.3 Mbits/sec  3710  
+[  6]  20.00-21.00  sec  5.83 MBytes  48.9 Mbits/sec  4190  
+[  6]  21.00-22.00  sec  5.96 MBytes  50.1 Mbits/sec  4280  
+[  6]  22.00-23.00  sec  5.63 MBytes  47.1 Mbits/sec  4040  
+[  6]  23.00-24.00  sec  5.54 MBytes  46.6 Mbits/sec  3980  
+[  6]  24.00-25.00  sec  5.46 MBytes  45.9 Mbits/sec  3920  
+[  6]  25.00-26.00  sec  5.75 MBytes  48.2 Mbits/sec  4130  
+[  6]  26.00-27.00  sec  5.63 MBytes  47.1 Mbits/sec  4040  
+[  6]  27.00-28.00  sec  5.72 MBytes  48.1 Mbits/sec  4110  
+[  6]  28.00-29.01  sec  5.10 MBytes  42.5 Mbits/sec  3660  
+[  6]  29.01-30.00  sec  5.75 MBytes  48.6 Mbits/sec  4130  
+[  6]  30.00-30.02  sec  57.0 KBytes  22.2 Mbits/sec  40  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  6]   0.00-30.02  sec   168 MBytes  46.9 Mbits/sec  0.000 ms  0/120600 (0%)  sender
+SRVLOG_DONE
+# 

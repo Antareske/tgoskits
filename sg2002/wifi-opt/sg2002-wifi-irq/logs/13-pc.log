@@ -1,0 +1,43 @@
+asta@Astalia:~$ ping 192.168.137.27
+PING 192.168.137.27 (192.168.137.27) 56(84) bytes of data.
+64 bytes from 192.168.137.27: icmp_seq=1 ttl=63 time=17.6 ms
+64 bytes from 192.168.137.27: icmp_seq=2 ttl=63 time=6.89 ms
+64 bytes from 192.168.137.27: icmp_seq=3 ttl=63 time=4.62 ms
+64 bytes from 192.168.137.27: icmp_seq=4 ttl=63 time=4.38 ms
+64 bytes from 192.168.137.27: icmp_seq=5 ttl=63 time=6.21 ms
+64 bytes from 192.168.137.27: icmp_seq=6 ttl=63 time=4.16 ms
+64 bytes from 192.168.137.27: icmp_seq=7 ttl=63 time=6.27 ms
+64 bytes from 192.168.137.27: icmp_seq=8 ttl=63 time=4.21 ms
+64 bytes from 192.168.137.27: icmp_seq=9 ttl=63 time=8.87 ms
+64 bytes from 192.168.137.27: icmp_seq=10 ttl=63 time=3.98 ms
+64 bytes from 192.168.137.27: icmp_seq=11 ttl=63 time=7.43 ms
+64 bytes from 192.168.137.27: icmp_seq=12 ttl=63 time=4.14 ms
+64 bytes from 192.168.137.27: icmp_seq=13 ttl=63 time=3.27 ms
+64 bytes from 192.168.137.27: icmp_seq=14 ttl=63 time=4.45 ms
+64 bytes from 192.168.137.27: icmp_seq=15 ttl=63 time=3.45 ms
+^C
+--- 192.168.137.27 ping statistics ---
+15 packets transmitted, 15 received, 0% packet loss, time 14004ms
+rtt min/avg/max/mdev = 3.274/5.992/17.571/3.465 ms
+asta@Astalia:~$ iperf3 -c 192.168.137.27
+Connecting to host 192.168.137.27, port 5201
+[  5] local 172.25.36.69 port 50680 connected to 192.168.137.27 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  3.38 MBytes  28.3 Mbits/sec    0    131 KBytes
+[  5]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0    131 KBytes
+[  5]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0    131 KBytes
+[  5]   3.00-4.01   sec  0.00 Bytes  0.00 bits/sec    0    131 KBytes
+[  5]   4.01-5.01   sec  0.00 Bytes  0.00 bits/sec    0    131 KBytes
+[  5]   5.01-6.00   sec  0.00 Bytes  0.00 bits/sec    0    131 KBytes
+[  5]   6.00-7.00   sec  0.00 Bytes  0.00 bits/sec    0    131 KBytes
+[  5]   7.00-8.01   sec  0.00 Bytes  0.00 bits/sec    0    131 KBytes
+[  5]   8.01-9.01   sec  0.00 Bytes  0.00 bits/sec    0    131 KBytes
+^C[  5]  10.01-13.74  sec  0.00 Bytes  0.00 bits/sec    0    131 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-13.74  sec  3.38 MBytes  2.06 Mbits/sec    0             sender
+[  5]   0.00-13.74  sec  0.00 Bytes  0.00 bits/sec                  receiver
+iperf3: interrupt - the client has terminated
+asta@Astalia:~$ iperf3 -c 192.168.137.27
+iperf3: error - control socket has closed unexpectedly
+asta@Astalia:~$

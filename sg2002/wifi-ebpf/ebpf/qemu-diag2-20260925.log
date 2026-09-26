@@ -1,0 +1,291 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.46s
+     Running `target/debug/tg-xtask starry app qemu -t ebpf/netmon --arch riscv64`
+[2026-09-25T08:28:21Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-sg2002-wifi-ebpf
+[2026-09-25T08:28:21Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target
+RUN	1/1	ebpf/netmon	arch=riscv64
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-riscv64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/axbuild/rootfs/rootfs-riscv64-alpine.img
+debugfs -w /home/asta/tgoskits/wt-sg2002-wifi-ebpf/tmp/axbuild/starry-app/ebpf/netmon/runs/rootfs-fzZUNs/rootfs-riscv64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+cd /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/netmon && bash /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/netmon/prebuild.sh
+netmon prebuild: building for riscv64gc-unknown-linux-musl (CC=riscv64-linux-musl-gcc)
+warning: netmon v0.1.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/netmon/netmon) ignoring invalid dependency `netmon-ebpf` which is missing a lib target
+warning: netmon@0.1.0:    Compiling proc-macro2 v1.0.107
+warning: netmon@0.1.0:    Compiling quote v1.0.47
+warning: netmon@0.1.0:    Compiling unicode-ident v1.0.24
+warning: netmon@0.1.0:    Compiling serde_core v1.0.229
+warning: netmon@0.1.0:    Compiling zmij v1.0.23
+warning: netmon@0.1.0:    Compiling thiserror v2.0.20
+warning: netmon@0.1.0:    Compiling libc v0.2.189
+warning: netmon@0.1.0:    Compiling serde_json v1.0.151
+warning: netmon@0.1.0:    Compiling serde v1.0.229
+warning: netmon@0.1.0:    Compiling camino v1.2.5
+warning: netmon@0.1.0:    Compiling anyhow v1.0.104
+warning: netmon@0.1.0:    Compiling compiler_builtins v0.1.160 (/opt/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins)
+warning: netmon@0.1.0:    Compiling itoa v1.0.18
+warning: netmon@0.1.0:    Compiling memchr v2.8.3
+warning: netmon@0.1.0:    Compiling rustversion v1.0.23
+warning: netmon@0.1.0:    Compiling core v0.0.0 (/opt/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
+warning: netmon@0.1.0:    Compiling rustix v0.38.44
+warning: netmon@0.1.0:    Compiling linux-raw-sys v0.4.15
+warning: netmon@0.1.0:    Compiling bitflags v2.13.1
+warning: netmon@0.1.0:    Compiling either v1.18.0
+warning: netmon@0.1.0:    Compiling home v0.5.12
+warning: netmon@0.1.0:    Compiling syn v3.0.4
+warning: netmon@0.1.0:    Compiling syn v2.0.119
+warning: netmon@0.1.0:    Compiling which v8.0.6
+warning: netmon@0.1.0:    Compiling which v6.0.3
+warning: netmon@0.1.0:    Compiling netmon-ebpf v0.1.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/netmon/netmon-ebpf)
+warning: netmon@0.1.0:    Compiling semver v1.0.28
+warning: netmon@0.1.0:    Compiling cargo-platform v0.3.3
+warning: netmon@0.1.0:    Compiling rustc_version v0.4.1
+warning: netmon@0.1.0:    Compiling num_enum_derive v0.7.6
+warning: netmon@0.1.0:    Compiling serde_derive v1.0.229
+warning: netmon@0.1.0:    Compiling thiserror-impl v2.0.20
+warning: netmon@0.1.0:    Compiling aya-ebpf-macros v0.2.0 (https://github.com/aya-rs/aya?rev=5c1a79e0bdc36e77b304c1a08ff8b05e6b823108#5c1a79e0)
+warning: netmon@0.1.0:    Compiling num_enum v0.7.6
+warning: netmon@0.1.0:    Compiling aya-log-common v0.2.0 (https://github.com/aya-rs/aya?rev=5c1a79e0bdc36e77b304c1a08ff8b05e6b823108#5c1a79e0)
+warning: netmon@0.1.0:    Compiling aya-log-parser v0.2.0 (https://github.com/aya-rs/aya?rev=5c1a79e0bdc36e77b304c1a08ff8b05e6b823108#5c1a79e0)
+warning: netmon@0.1.0:    Compiling aya-log-ebpf-macros v0.2.0 (https://github.com/aya-rs/aya?rev=5c1a79e0bdc36e77b304c1a08ff8b05e6b823108#5c1a79e0)
+warning: netmon@0.1.0:    Compiling cargo_metadata v0.23.1
+warning: netmon@0.1.0:    Compiling aya-build v0.2.0 (https://github.com/aya-rs/aya?rev=5c1a79e0bdc36e77b304c1a08ff8b05e6b823108#5c1a79e0)
+warning: netmon@0.1.0:    Compiling aya-ebpf-cty v0.3.0 (https://github.com/aya-rs/aya?rev=5c1a79e0bdc36e77b304c1a08ff8b05e6b823108#5c1a79e0)
+warning: netmon@0.1.0:    Compiling aya-ebpf-bindings v0.2.0 (https://github.com/aya-rs/aya?rev=5c1a79e0bdc36e77b304c1a08ff8b05e6b823108#5c1a79e0)
+warning: netmon@0.1.0:    Compiling aya-ebpf v0.2.1 (https://github.com/aya-rs/aya?rev=5c1a79e0bdc36e77b304c1a08ff8b05e6b823108#5c1a79e0)
+warning: netmon@0.1.0:    Compiling netmon-common v0.1.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/netmon/netmon-common)
+warning: netmon@0.1.0:    Compiling aya-log-ebpf v0.2.0 (https://github.com/aya-rs/aya?rev=5c1a79e0bdc36e77b304c1a08ff8b05e6b823108#5c1a79e0)
+warning: netmon@0.1.0:     Finished `release` profile [optimized] target(s) in 12.81s
+warning: unused dependency `aya`
+  --> netmon-common/Cargo.toml:12:1
+   |
+12 | aya = { workspace = true, optional = true }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `aya`
+warning: `netmon-common` (manifest) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 0.04s
+netmon prebuild: installed -> /usr/bin/netmon
+debugfs -w /home/asta/tgoskits/wt-sg2002-wifi-ebpf/tmp/axbuild/starry-app/ebpf/netmon/runs/rootfs-fzZUNs/rootfs-riscv64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+Using build config: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/build-riscv64gc-unknown-none-elf.toml
+[2026-09-25T08:28:31Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/build-riscv64gc-unknown-none-elf.toml
+[2026-09-25T08:28:31Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/netmon/qemu-riscv64.toml
+  prepare assets: 0ns (pipeline=plain, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/netmon/qemu-riscv64.toml (timeout=240s)
+  rootfs: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/tmp/axbuild/starry-app/ebpf/netmon/runs/rootfs-fzZUNs/rootfs-riscv64-alpine.img
+[axbuild] starry build package=starryos target=riscv64gc-unknown-none-elf arch=riscv64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/riscv64gc-unknown-none-elf.json config=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/build-riscv64gc-unknown-none-elf.toml ...
+AX_ARCH=riscv64
+AX_LOG=warn
+AX_TARGET=riscv64gc-unknown-none-elf
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+cargo build -p starryos --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target --features ax-driver/nvme,ax-driver/serial,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,ax-runtime/display,ax-runtime/rtc -Z json-target-spec -Z build-std=core,alloc --config target.riscv64gc-unknown-none-elf.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--no-relax", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/StarryOS/kernel)
+   Compiling starryos v0.5.39 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/StarryOS/starryos)
+    Finished `release` profile [optimized] target(s) in 52.14s
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos
+  bin: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+[axbuild] cargo build package=starryos target=scripts/targets/bare/riscv64gc-unknown-none-elf.json config=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/build-riscv64gc-unknown-none-elf.toml ... done (52.39s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos
+[axbuild] cargo build bin=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release
+[axbuild] starry build package=starryos target=riscv64gc-unknown-none-elf arch=riscv64 ... done (52.39s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos ...
+[axbuild] starry kallsyms symbols=10333
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/.starryos.kallsyms.82197.tmp /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos ... done (356.17ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin ... done (50.46ms)
+[axbuild] validated RISC-V Image header: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+[axbuild] qemu run package=starryos target=scripts/targets/bare/riscv64gc-unknown-none-elf.json ...
+qemu-system-riscv64 -nographic -m 512M -cpu rv64 -device nvme,drive=disk0,serial=tgoskits,max_ioqpairs=64,msix_qsize=65 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/tmp/axbuild/starry-app/ebpf/netmon/runs/rootfs-fzZUNs/rootfs-riscv64-alpine.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -machine virt -kernel /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+
+OpenSBI v1.8.1
+   ____                    _____ ____ _____
+  / __ \                  / ____|  _ \_   _|
+ | |  | |_ __   ___ _ __ | (___ | |_) || |
+ | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
+ | |__| | |_) |  __/ | | |____) | |_) || |_
+  \____/| .__/ \___|_| |_|_____/|____/_____|
+        | |
+        |_|
+
+Platform Name               : riscv-virtio,qemu
+Platform Features           : medeleg
+Platform HART Count         : 1
+Platform HART Protection    : pmp
+Platform IPI Device         : aclint-mswi
+Platform Timer Device       : aclint-mtimer @ 10000000Hz
+Platform Console Device     : uart8250
+Platform HSM Device         : ---
+Platform PMU Device         : ---
+Platform Reboot Device      : syscon-reboot
+Platform Shutdown Device    : syscon-poweroff
+Platform Suspend Device     : ---
+Platform CPPC Device        : ---
+Firmware Base               : 0x80000000
+Firmware Size               : 321 KB
+Firmware RW Offset          : 0x40000
+Firmware RW Size            : 65 KB
+Firmware Heap Offset        : 0x47000
+Firmware Heap Size          : 37 KB (total), 0 KB (reserved), 12 KB (used), 23 KB (free)
+Firmware Scratch Size       : 4096 B (total), 1464 B (used), 2632 B (free)
+Runtime SBI Version         : 3.0
+Standard SBI Extensions     : time,rfnc,ipi,base,hsm,srst,pmu,dbcn,fwft,legacy,dbtr,sse
+Experimental SBI Extensions : none
+
+Domain0 Name                : root
+Domain0 Boot HART           : 0
+Domain0 HARTs               : 0*
+Domain0 Region00            : 0x0000000080040000-0x000000008005ffff M: (F,R,W) S/U: ()
+Domain0 Region01            : 0x0000000080000000-0x000000008003ffff M: (F,R,X) S/U: ()
+Domain0 Region02            : 0x0000000000100000-0x0000000000100fff M: (I,R,W) S/U: (R,W)
+Domain0 Region03            : 0x0000000010000000-0x0000000010000fff M: (I,R,W) S/U: (R,W)
+Domain0 Region04            : 0x0000000002000000-0x000000000200ffff M: (I,R,W) S/U: ()
+Domain0 Region05            : 0x000000000c400000-0x000000000c5fffff M: (I,R,W) S/U: (R,W)
+Domain0 Region06            : 0x000000000c000000-0x000000000c3fffff M: (I,R,W) S/U: (R,W)
+Domain0 Region07            : 0x0000000000000000-0xffffffffffffffff M: () S/U: (R,W,X)
+Domain0 Next Address        : 0x0000000080200000
+Domain0 Next Arg1           : 0x000000009fe00000
+Domain0 Next Mode           : S-mode
+Domain0 SysReset            : yes
+Domain0 SysSuspend          : yes
+
+Boot HART ID                : 0
+Boot HART Domain            : root
+Boot HART Priv Version      : v1.12
+Boot HART Base ISA          : rv64imafdch
+Boot HART ISA Extensions    : sstc,zicntr,zihpm,zicboz,zicbom,sdtrig,svadu
+Boot HART PMP Count         : 16
+Boot HART PMP Granularity   : 2 bits
+Boot HART PMP Address Bits  : 54
+Boot HART MHPM Info         : 16 (0x0007fff8)
+Boot HART Debug Triggers    : 2 triggers
+Boot HART MIDELEG           : 0x0000000000001666
+Boot HART MEDELEG           : 0x0000000000f4b509
+RISC-V64 SBI kernel entry.
+Boot entropy source: FDT /chosen/rng-seed
+VM Load @PA:0x80200000
+VM Load Offset: 0x100200000
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080060000 (384 KiB)
+  Free   0x00000080060000 - 0x00000080200000 (1.63 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Free   0x00000081200000 - 0x000000a0000000 (494 MiB)
+Initialize RAM allocator: 0x81200000..0xa0000000
+Reserving CPU-local areas
+CPU-local area stride: 0x41000 bytes
+Total CPU-local allocation: 0x41000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x81200000..0x81203000, current: 0x81203000
+Flushed RAM used range to memory map: 0x81203000..0x81244000, current: 0x81244000
+CPU-local areas allocated at 0x81203000 - 0x81244000
+Mapping early memory regions...
+Ram                 : [0x0000000080000000, 0x00000000a0000000) -> [0x0000000080000000, 0x00000000a0000000) (512 MiB)
+Ram                 : [0xffffffc080000000, 0xffffffc0a0000000) -> [0x0000000080000000, 0x00000000a0000000) (512 MiB)
+KImage              : [0xffffffff80000000, 0xffffffff81000000) -> [0x0000000080200000, 0x0000000081200000) (16 MiB)
+PerCpu              : [0xffffffe081203000, 0xffffffe081244000) -> [0x0000000081203000, 0x0000000081244000) (260 KiB)
+Boot page table at physical address: 0x81244000
+MMU Entry point at physical address: 0x8020415c
+Enabling MMU...
+MMU enabled, jumping to 0xffffffff8000415c, sp=0xffffffe081244000
+Trap vector at 0xffffffff80003de4
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080060000 (384 KiB)
+  Free   0x00000080060000 - 0x00000080200000 (1.63 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Rsv    0x00000081200000 - 0x00000081203000 (12 KiB)
+  PerCPU 0x00000081203000 - 0x00000081244000 (260 KiB)
+  Rsv    0x00000081244000 - 0x00000081452000 (2.05 MiB)
+  Free   0x00000081452000 - 0x000000a0000000 (491.68 MiB)
+Jumping to main entry point at 0xffffffff80231112 with SP 0xffffffe081244000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = riscv64
+platform = riscv-virtio,qemu
+target = riscv64gc-unknown-none-elf
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 1
+
+Boot at 2026-09-25 08:29:25.047477200 UTC
+
+[37m[  0.260272 0:4294967296 [37max_display:31] [33m  No display device found![m[m
+[37m[  0.283501 0:4294967305 [37max_net::service:868] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  0.284346 0:4294967305 [37max_net::service:870] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  0.285872 0:4294967296 [37max_net:686] [33m  No vsock device found![m[m
+Initialized 7 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (riscv64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+Welcome to Starry OS!
+root@starry:~# [6ngrep -E 'count_tx|schedule_irq|submit_write_dma' /proc/kallsyms
+ffffffff80168dbe t _RNvMs_NtNtCsfywRPgDWoTN_6ax_net13queue_runtime5stateNtB4_14PollGroupState12schedule_irq
+root@starry:~# [6n/usr/bin/netmon --once
+[WARN  netmon] resolved sched_irq -> _RNvMs_NtNtCsfywRPgDWoTN_6ax_net13queue_runtime5stateNtB4_14PollGroupState12schedule_irq
+[WARN  netmon] resolved queue_poll -> _RNvMs3_NtNtCsfywRPgDWoTN_6ax_net13queue_runtime8executorNtB5_18QueueGroupExecutor4poll
+[WARN  netmon] resolved queue_poll_ret -> _RNvMs3_NtNtCsfywRPgDWoTN_6ax_net13queue_runtime8executorNtB5_18QueueGroupExecutor4poll
+[WARN  netmon] resolved port_tx -> _RNvXs1_NtNtCsfywRPgDWoTN_6ax_net13queue_runtime8executorNtB5_14QueueFramePortNtNtNtB9_6device6driver17EthernetFramePort8transmit
+[WARN  netmon] resolved port_tx_ret -> _RNvXs1_NtNtCsfywRPgDWoTN_6ax_net13queue_runtime8executorNtB5_14QueueFramePortNtNtNtB9_6device6driver17EthernetFramePort8transmit
+[WARN  netmon] resolved port_rx -> _RNvXs1_NtNtCsfywRPgDWoTN_6ax_net13queue_runtime8executorNtB5_14QueueFramePortNtNtNtB9_6device6driver17EthernetFramePort7receive
+[WARN  netmon] resolved port_rx_ret -> _RNvXs1_NtNtCsfywRPgDWoTN_6ax_net13queue_runtime8executorNtB5_14QueueFramePortNtNtNtB9_6device6driver17EthernetFramePort7receive
+[WARN  netmon] sdio_read: symbol not present in this image, skipping
+[WARN  netmon] sdio_read_ret: symbol not present in this image, skipping
+[WARN  netmon] sdio_write: symbol not present in this image, skipping
+[WARN  netmon] sdio_write_ret: symbol not present in this image, skipping
+[WARN  netmon] wifi_start: symbol not present in this image, skipping
+[WARN  netmon] wifi_start_ret: symbol not present in this image, skipping
+[WARN  netmon] NLDIAG Ebpf::load begin
+[37m[  9.319897 0:30064771093 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_BTF_LOAD[m[m
+[37m[  9.321105 0:30064771093 [37mstarry_kernel::ebpf::transform:212] [33mKDIAG string_from_user_cstr ptr=0x1ad859[m[m
+[37m[  9.321272 0:30064771093 [37mstarry_kernel::ebpf::transform:215] [33mKDIAG string_from_user_cstr done ok=true len=Some(3)[m[m
+[37m[  9.323200 0:30064771093 [37mstarry_kernel::ebpf::transform:212] [33mKDIAG string_from_user_cstr ptr=0x1ad859[m[m
+[37m[  9.323256 0:30064771093 [37mstarry_kernel::ebpf::transform:215] [33mKDIAG string_from_user_cstr done ok=true len=Some(3)[m[m
+[37m[  9.323870 0:30064771093 [37mstarry_kernel::ebpf::transform:212] [33mKDIAG string_from_user_cstr ptr=0x1ad859[m[m
+[37m[  9.323923 0:30064771093 [37mstarry_kernel::ebpf::transform:215] [33mKDIAG string_from_user_cstr done ok=true len=Some(3)[m[m
+[37m[  9.324568 0:30064771093 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_LINK_CREATE[m[m
+[37m[  9.325496 0:30064771093 [37mstarry_kernel::ebpf::transform:212] [33mKDIAG string_from_user_cstr ptr=0x1ad859[m[m
+[37m[  9.325541 0:30064771093 [37mstarry_kernel::ebpf::transform:215] [33mKDIAG string_from_user_cstr done ok=true len=Some(3)[m[m
+[37m[  9.326378 0:30064771093 [37mstarry_kernel::ebpf::transform:212] [33mKDIAG string_from_user_cstr ptr=0x1ad859[m[m
+[37m[  9.326420 0:30064771093 [37mstarry_kernel::ebpf::transform:215] [33mKDIAG string_from_user_cstr done ok=true len=Some(3)[m[m
+[37m[  9.326913 0:30064771093 [37mkbpf_basic::map:272] [31mbpf map type BPF_MAP_TYPE_CPUMAP not implemented[m[m
+[37m[  9.327202 0:30064771093 [37mkbpf_basic::map:272] [31mbpf map type BPF_MAP_TYPE_DEVMAP not implemented[m[m
+[WARN  netmon] NLDIAG Ebpf::load done
+[WARN  netmon] failed to initialize eBPF logger: AYA_LOGS not found
+[WARN  netmon] NLDIAG sched_irq: BPF_PROG_LOAD begin
+[37m[  9.343900 0:30064771093 [37mstarry_kernel::ebpf::transform:212] [33mKDIAG string_from_user_cstr ptr=0x4603e0[m[m
+[37m[  9.343946 0:30064771093 [37mstarry_kernel::ebpf::transform:215] [33mKDIAG string_from_user_cstr done ok=true len=Some(12)[m[m
+[WARN  netmon] NLDIAG sched_irq: BPF_PROG_LOAD done, perf_event_open begin
+[37m[  9.347370 0:30064771093 [37mstarry_kernel::perf:892] [33mKDIAG sys_perf_event_open enter attr_uptr=0x3ffffea98 pid=-1 cpu=0 flags=8[m[m
+[37m[  9.347668 0:30064771093 [37mstarry_kernel::perf:895] [33mKDIAG sys_perf_event_open attr copied type=6 size=136[m[m
+[37m[  9.347784 0:30064771093 [37mstarry_kernel::perf:970] [33mKDIAG perf: building probe args[m[m
+[37m[  9.347830 0:30064771093 [37mstarry_kernel::ebpf::transform:212] [33mKDIAG string_from_user_cstr ptr=0x254ae0[m[m
+[37m[  9.347848 0:30064771093 [37mstarry_kernel::ebpf::transform:215] [33mKDIAG string_from_user_cstr done ok=true len=Some(88)[m[m
+[37m[  9.347926 0:30064771093 [37mstarry_kernel::perf:979] [33mKDIAG perf: probe args ok name_len=88 config_raw=true[m[m
+[37m[  9.348101 0:30064771093 [37mstarry_kernel::perf::kprobe:239] [33mKDIAG perf_event_open_kprobe enter name=_RNvMs_NtNtCsfywRPgDWoTN_6ax_net13queue_runtime5stateNtB4_14PollGroupState12schedule_irq config=Raw(0)[m[m
+qemu-system-riscv64: terminating on signal 15 from pid 83391 (/bin/bash)
+Error: shell check sequence ended before shell_check_steps[1] completed

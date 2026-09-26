@@ -1,0 +1,9 @@
+[package]
+name = "kallsyms-repro"
+version = "0.0.0"
+edition = "2021"
+
+[dependencies]
+ksym = "0.6.0"
+
+[workspace]

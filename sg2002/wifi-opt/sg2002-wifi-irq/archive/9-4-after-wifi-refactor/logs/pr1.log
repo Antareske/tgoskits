@@ -1,0 +1,34 @@
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root # ip addr
+[ 18.508168 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+[ 18.508597 0:37 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+[ 18.564164 0:37 starry_kernel::task::ops:348] Task(37, "busybox") exit with code: 0
+    inet 127.0.0.1/8 scope host dynamic lo
+[ 18.582252 0:37 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP qlen 1000
+[ 18.583298 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+    link/ether 38:7a:cc:9b:2c:c8 brd ff:ff:ff:ff:ff:ff
+[ 18.583689 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+root@starry:/root # wifi-ctl ap eth0 sg2002 6
+[ 43.043802 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+unknown subcommand 'eth0' (expected 'sta' or 'ap')
+[ 43.044227 0:38 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+root@starry:/root # [ 43.068688 0:38 starry_kernel::task::ops:348] Task(38, "wifi-ctl") exit with code: 512
+[ 43.071449 0:38 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 43.072090 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[ 43.072483 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+root@starry:/root # wifi-ctl eth0 ap sg2002 6
+[ 52.696926 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[ 52.697440 0:39 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+ioctl[ 57.719828 0:39 starry_kernel::task::ops:348] Task(39, "wifi-ctl") exit with code: -256
+:[ 57.722748 0:39 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+ [ 57.723391 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+Bad address[ 57.723785 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+
+root@starry:/root #

@@ -1,0 +1,43 @@
+-----------------------------------------------------------
+Server listening on 5206 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.68, port 35806
+[  6] local 192.168.137.1 port 5206 connected to 192.168.137.68 port 42023
+[ ID] Interval           Transfer     Bitrate         Total Datagrams
+[  6]   0.00-1.00   sec   247 KBytes  2.03 Mbits/sec  176  (omitted)
+[  6]   1.00-2.00   sec   154 KBytes  1.26 Mbits/sec  109  (omitted)
+[  6]   2.00-3.00   sec   119 KBytes   973 Kbits/sec  84  (omitted)
+[  6]   0.01-0.99   sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]   0.99-1.99   sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]   1.99-2.99   sec   130 KBytes  1.07 Mbits/sec  92  
+[  6]   2.99-3.99   sec  60.8 KBytes   498 Kbits/sec  43  
+[  6]   3.99-4.99   sec  43.8 KBytes   359 Kbits/sec  31  
+[  6]   4.99-5.99   sec  77.8 KBytes   637 Kbits/sec  55  
+[  6]   5.99-6.99   sec  14.1 KBytes   116 Kbits/sec  10  
+[  6]   6.99-7.99   sec  4.24 KBytes  34.7 Kbits/sec  3  
+[  6]   7.99-8.99   sec  59.4 KBytes   487 Kbits/sec  42  
+[  6]   8.99-9.99   sec  49.5 KBytes   406 Kbits/sec  35  
+[  6]   9.99-10.99  sec  15.6 KBytes   127 Kbits/sec  11  
+[  6]  10.99-11.99  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  11.99-12.99  sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]  12.99-13.99  sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]  13.99-14.99  sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]  14.99-15.99  sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]  15.99-16.99  sec  65.0 KBytes   532 Kbits/sec  46  
+[  6]  16.99-17.99  sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]  17.99-18.99  sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]  18.99-19.99  sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]  19.99-20.99  sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]  20.99-21.99  sec  84.8 KBytes   695 Kbits/sec  60  
+[  6]  21.99-22.99  sec  45.2 KBytes   371 Kbits/sec  32  
+[  6]  22.99-23.99  sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]  23.99-24.99  sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]  24.99-25.99  sec  65.0 KBytes   532 Kbits/sec  46  
+[  6]  25.99-26.99  sec  65.0 KBytes   533 Kbits/sec  46  
+[  6]  26.99-27.99  sec  69.3 KBytes   567 Kbits/sec  49  
+[  6]  27.99-28.99  sec  60.8 KBytes   498 Kbits/sec  43  
+[  6]  28.99-29.99  sec  1.59 MBytes  13.3 Mbits/sec  1150  
+[  6]  29.99-30.19  sec   520 KBytes  21.0 Mbits/sec  368  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  6]   0.00-30.19  sec  3.75 MBytes  1.04 Mbits/sec  0.000 ms  0/2714 (0%)  sender

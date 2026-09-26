@@ -1,0 +1,17 @@
+0xffffffff80001148 in trap_vector_base ()
+
+=== REGISTERS ===
+pc             0xffffffff80001148	0xffffffff80001148 <trap_vector_base>
+ra             0xffffffff80116ab4	0xffffffff80116ab4 <<page_table_generic::frame::Frame<ax_cpu::paging::ArchPagingMeta, ax_hal::paging::PagingAllocator>>::split_leaf_for_boundary+1102>
+sp             0xffffffc0005c04c0	0xffffffc0005c04c0
+gp             0xffffffff80eeaca8	0xffffffff80eeaca8
+tp             0xffffffc09efb3f00	0xffffffc09efb3f00
+
+=== BACKTRACE ===
+#0  0xffffffff80001148 in trap_vector_base ()
+#1  0xffffffff80116ab4 in <page_table_generic::frame::Frame<ax_cpu::paging::ArchPagingMeta, ax_hal::paging::PagingAllocator>>::split_leaf_for_boundary ()
+
+=== CODE AT PC ===
+=> 0xffffffff80001148 <trap_vector_base>:	www/ebpf/repro/hang.gdb:10: Error in sourced command file:
+Cannot access memory at address 0xffffffff80001148
+[Inferior 1 (process 1) detached]

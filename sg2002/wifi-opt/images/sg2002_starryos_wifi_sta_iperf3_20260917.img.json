@@ -1,0 +1,12 @@
+{
+  "output": "/home/asta/tgoskits/sg2002_starryos_wifi_sta_iperf3_20260917.img",
+  "timestamp": "2026-09-17 06:47:06",
+  "operation": "update-kernel",
+  "base": "sg2002_starryos_wifi_sta_iperf3.img",
+  "subject": "starryos.bin",
+  "repo": "/home/asta/tgoskits/tgoskits",
+  "commit": "de07a9e38",
+  "dtb": "/home/asta/tgoskits/sg2002-wifi-sta/licheerv-nano-sg2002-sta.dtb",
+  "uimg": "synced",
+  "init_assets": 0
+}

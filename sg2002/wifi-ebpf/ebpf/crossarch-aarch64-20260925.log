@@ -1,0 +1,596 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.82s
+     Running `target/debug/tg-xtask starry app qemu -t ebpf/syscall_count --arch aarch64`
+[2026-09-25T09:10:21Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-sg2002-wifi-ebpf
+[2026-09-25T09:10:21Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target
+RUN	1/1	ebpf/syscall_count	arch=aarch64
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+image archive verified at /tmp/tgosimages/rootfs-aarch64-alpine.img.tar.xz
+image extracted to /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/axbuild/rootfs/rootfs-aarch64-alpine.img
+debugfs -w /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/axbuild/rootfs/rootfs-aarch64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+debugfs -w /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/axbuild/rootfs/.tmptODk1k/rootfs.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+debugfs -w /home/asta/tgoskits/wt-sg2002-wifi-ebpf/tmp/axbuild/starry-app/ebpf/syscall_count/runs/rootfs-ZE7i9x/rootfs-aarch64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+cd /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/syscall_count && bash /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/syscall_count/prebuild.sh
+syscall_count prebuild: installing Rust target aarch64-unknown-linux-musl for toolchain nightly-2026-09-04-x86_64-unknown-linux-gnu
+info: downloading component rust-std
+syscall_count prebuild: building eBPF demo for aarch64-unknown-linux-musl (CC=aarch64-linux-musl-gcc)
+warning: unused workspace dependency `aya-log`
+  --> Cargo.toml:18:1
+   |
+18 | aya-log = { git = "https://github.com/aya-rs/aya", default-features = false }
+   | ^^^^^^^
+   |
+   = note: `cargo::unused_workspace_dependencies` is set to `warn` by default
+help: consider removing the workspace dependency `aya-log`
+warning: unused workspace dependency `aya-log-ebpf`
+  --> Cargo.toml:19:1
+   |
+19 | aya-log-ebpf = { git = "https://github.com/aya-rs/aya", default-features = false }
+   | ^^^^^^^^^^^^
+   |
+help: consider removing the workspace dependency `aya-log-ebpf`
+warning: unused workspace dependency `clap`
+  --> Cargo.toml:26:1
+   |
+26 | clap = { version = "4.5.20", default-features = false, features = ["std"] }
+   | ^^^^
+   |
+help: consider removing the workspace dependency `clap`
+warning: workspace (manifest) generated 3 warnings
+warning: binary `syscall_count` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/syscall_count/target/.../syscall_count
+   |                                                                                   ^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `syscall-count`, convert `bin.name`
+  --> syscall_count/Cargo.toml:42:8
+   |
+42 - name = "syscall_count"
+42 + name = "syscall-count"
+   |
+warning: `syscall_count` (manifest) generated 1 warning
+warning: binary `syscall_count` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/syscall_count/target/.../syscall_count
+   |                                                                                   ^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `syscall-count`, convert `bin.name`
+  --> syscall_count-ebpf/Cargo.toml:15:8
+   |
+15 - name = "syscall_count"
+15 + name = "syscall-count"
+   |
+warning: `syscall_count-ebpf` (manifest) generated 1 warning
+ Downloading crates ...
+  Downloaded zmij v1.0.21 (registry `rsproxy-sparse`)
+  Downloaded either v1.16.0 (registry `rsproxy-sparse`)
+  Downloaded tokio-macros v2.7.0 (registry `rsproxy-sparse`)
+  Downloaded bytes v1.11.1 (registry `rsproxy-sparse`)
+  Downloaded env_logger v0.11.10 (registry `rsproxy-sparse`)
+  Downloaded env_filter v1.0.1 (registry `rsproxy-sparse`)
+  Downloaded which v8.0.2 (registry `rsproxy-sparse`)
+  Downloaded serde_json v1.0.150 (registry `rsproxy-sparse`)
+  Downloaded memchr v2.8.0 (registry `rsproxy-sparse`)
+  Downloaded bitflags v2.11.1 (registry `rsproxy-sparse`)
+  Downloaded libc v0.2.186 (registry `rsproxy-sparse`)
+  Downloaded tokio v1.52.3 (registry `rsproxy-sparse`)
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling serde_core v1.0.228
+   Compiling zmij v1.0.21
+   Compiling anyhow v1.0.102
+   Compiling serde v1.0.228
+   Compiling thiserror v2.0.18
+   Compiling serde_json v1.0.150
+   Compiling camino v1.2.2
+   Compiling libc v0.2.186
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.0
+   Compiling rustix v0.38.44
+   Compiling version_check v0.9.5
+   Compiling rustversion v1.0.22
+   Compiling linux-raw-sys v0.4.15
+   Compiling bitflags v2.11.1
+   Compiling crc32fast v1.5.0
+   Compiling home v0.5.12
+   Compiling either v1.16.0
+   Compiling foldhash v0.2.0
+   Compiling equivalent v1.0.2
+   Compiling cfg-if v1.0.4
+   Compiling object v0.39.1
+   Compiling log v0.4.29
+   Compiling bytes v1.11.1
+   Compiling syscall_count-common v0.1.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/syscall_count/syscall_count-common)
+   Compiling assert_matches v1.5.0
+   Compiling scopeguard v1.2.0
+   Compiling once_cell v1.21.4
+   Compiling pin-project-lite v0.2.17
+   Compiling hashbrown v0.17.1
+   Compiling env_filter v1.0.1
+   Compiling proc-macro2-diagnostics v0.10.1
+   Compiling env_logger v0.11.10
+   Compiling syn v2.0.117
+   Compiling indexmap v2.14.0
+   Compiling which v8.0.2
+   Compiling which v6.0.3
+   Compiling syscall_count-ebpf v0.1.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/syscall_count/syscall_count-ebpf)
+   Compiling semver v1.0.28
+   Compiling cargo-platform v0.3.3
+   Compiling rustc_version v0.4.1
+   Compiling thiserror-impl v2.0.18
+   Compiling serde_derive v1.0.228
+   Compiling aya-ebpf-macros v0.1.2 (https://github.com/aya-rs/aya#a0b8d491)
+   Compiling tokio-macros v2.7.0
+   Compiling tokio v1.52.3
+   Compiling cargo_metadata v0.23.1
+   Compiling aya-obj v0.2.2 (https://github.com/aya-rs/aya#a0b8d491)
+   Compiling aya-build v0.1.3 (https://github.com/aya-rs/aya#a0b8d491)
+   Compiling aya-ebpf-cty v0.2.3 (https://github.com/aya-rs/aya#a0b8d491)
+   Compiling aya-ebpf-bindings v0.1.2 (https://github.com/aya-rs/aya#a0b8d491)
+   Compiling aya-ebpf v0.1.2 (https://github.com/aya-rs/aya#a0b8d491)
+   Compiling syscall_count v0.1.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/syscall_count/syscall_count)
+   Compiling aya v0.13.2 (https://github.com/aya-rs/aya#a0b8d491)
+warning: syscall_count@0.1.0: warning: unused workspace dependency `aya-log`
+warning: syscall_count@0.1.0:   --> Cargo.toml:18:1
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0: 18 | aya-log = { git = "https://github.com/aya-rs/aya", default-features = false }
+warning: syscall_count@0.1.0:    | ^^^^^^^
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0:    = note: `cargo::unused_workspace_dependencies` is set to `warn` by default
+warning: syscall_count@0.1.0: help: consider removing the workspace dependency `aya-log`
+warning: syscall_count@0.1.0: warning: unused workspace dependency `aya-log-ebpf`
+warning: syscall_count@0.1.0:   --> Cargo.toml:19:1
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0: 19 | aya-log-ebpf = { git = "https://github.com/aya-rs/aya", default-features = false }
+warning: syscall_count@0.1.0:    | ^^^^^^^^^^^^
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0: help: consider removing the workspace dependency `aya-log-ebpf`
+warning: syscall_count@0.1.0: warning: unused workspace dependency `clap`
+warning: syscall_count@0.1.0:   --> Cargo.toml:26:1
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0: 26 | clap = { version = "4.5.20", default-features = false, features = ["std"] }
+warning: syscall_count@0.1.0:    | ^^^^
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0: help: consider removing the workspace dependency `clap`
+warning: syscall_count@0.1.0: warning: workspace (manifest) generated 3 warnings
+warning: syscall_count@0.1.0: warning: binary `syscall_count` should have a kebab-case name
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0:  1 | ...f7de833de11a6/out/aya-build/target/syscall_count-ebpf/.../syscall_count
+warning: syscall_count@0.1.0:    |                                                              ^^^^^^^^^^^^^
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: syscall_count@0.1.0: help: to change the binary name to `syscall-count`, convert `bin.name`
+warning: syscall_count@0.1.0:   --> syscall_count/Cargo.toml:42:8
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0: 42 - name = "syscall_count"
+warning: syscall_count@0.1.0: 42 + name = "syscall-count"
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0: warning: `syscall_count` (manifest) generated 1 warning
+warning: syscall_count@0.1.0: warning: binary `syscall_count` should have a kebab-case name
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0:  1 | ...f7de833de11a6/out/aya-build/target/syscall_count-ebpf/.../syscall_count
+warning: syscall_count@0.1.0:    |                                                              ^^^^^^^^^^^^^
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: syscall_count@0.1.0: help: to change the binary name to `syscall-count`, convert `bin.name`
+warning: syscall_count@0.1.0:   --> syscall_count-ebpf/Cargo.toml:15:8
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0: 15 - name = "syscall_count"
+warning: syscall_count@0.1.0: 15 + name = "syscall-count"
+warning: syscall_count@0.1.0:    |
+warning: syscall_count@0.1.0: warning: `syscall_count-ebpf` (manifest) generated 1 warning
+warning: syscall_count@0.1.0:    Compiling proc-macro2 v1.0.106
+warning: syscall_count@0.1.0:    Compiling unicode-ident v1.0.24
+warning: syscall_count@0.1.0:    Compiling quote v1.0.45
+warning: syscall_count@0.1.0:    Compiling serde_core v1.0.228
+warning: syscall_count@0.1.0:    Compiling zmij v1.0.21
+warning: syscall_count@0.1.0:    Compiling libc v0.2.186
+warning: syscall_count@0.1.0:    Compiling serde v1.0.228
+warning: syscall_count@0.1.0:    Compiling thiserror v2.0.18
+warning: syscall_count@0.1.0:    Compiling serde_json v1.0.150
+warning: syscall_count@0.1.0:    Compiling camino v1.2.2
+warning: syscall_count@0.1.0:    Compiling itoa v1.0.18
+warning: syscall_count@0.1.0:    Compiling anyhow v1.0.102
+warning: syscall_count@0.1.0:    Compiling memchr v2.8.0
+warning: syscall_count@0.1.0:    Compiling compiler_builtins v0.1.160 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins)
+warning: syscall_count@0.1.0:    Compiling core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
+warning: syscall_count@0.1.0:    Compiling rustversion v1.0.22
+warning: syscall_count@0.1.0:    Compiling rustix v0.38.44
+warning: syscall_count@0.1.0:    Compiling version_check v0.9.5
+warning: syscall_count@0.1.0:    Compiling linux-raw-sys v0.4.15
+warning: syscall_count@0.1.0:    Compiling bitflags v2.11.1
+warning: syscall_count@0.1.0:    Compiling either v1.16.0
+warning: syscall_count@0.1.0:    Compiling home v0.5.12
+warning: syscall_count@0.1.0:    Compiling proc-macro2-diagnostics v0.10.1
+warning: syscall_count@0.1.0:    Compiling syn v2.0.117
+warning: syscall_count@0.1.0:    Compiling which v8.0.2
+warning: syscall_count@0.1.0:    Compiling which v6.0.3
+warning: syscall_count@0.1.0:    Compiling syscall_count-ebpf v0.1.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/syscall_count/syscall_count-ebpf)
+warning: syscall_count@0.1.0:    Compiling semver v1.0.28
+warning: syscall_count@0.1.0:    Compiling cargo-platform v0.3.3
+warning: syscall_count@0.1.0:    Compiling rustc_version v0.4.1
+warning: syscall_count@0.1.0:    Compiling thiserror-impl v2.0.18
+warning: syscall_count@0.1.0:    Compiling serde_derive v1.0.228
+warning: syscall_count@0.1.0:    Compiling aya-ebpf-macros v0.1.2 (https://github.com/aya-rs/aya#a0b8d491)
+warning: syscall_count@0.1.0:    Compiling cargo_metadata v0.23.1
+warning: syscall_count@0.1.0:    Compiling aya-build v0.1.3 (https://github.com/aya-rs/aya#a0b8d491)
+warning: syscall_count@0.1.0:    Compiling aya-ebpf-cty v0.2.3 (https://github.com/aya-rs/aya#a0b8d491)
+warning: syscall_count@0.1.0:    Compiling aya-ebpf-bindings v0.1.2 (https://github.com/aya-rs/aya#a0b8d491)
+warning: syscall_count@0.1.0:    Compiling aya-ebpf v0.1.2 (https://github.com/aya-rs/aya#a0b8d491)
+warning: syscall_count@0.1.0:    Compiling syscall_count-common v0.1.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/syscall_count/syscall_count-common)
+warning: syscall_count@0.1.0:     Finished `release` profile [optimized] target(s) in 8.30s
+warning: unused dependency `syscall_count-common`
+ --> syscall_count/Cargo.toml:9:1
+  |
+9 | syscall_count-common = { path = "../syscall_count-common", features = ["user"] }
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `syscall_count-common`
+warning: unused dependency `syscall_count-ebpf`
+  --> syscall_count/Cargo.toml:39:1
+   |
+39 | syscall_count-ebpf = { path = "../syscall_count-ebpf" }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: consider removing the dependency on `syscall_count-ebpf`
+warning: `syscall_count` (manifest) generated 2 warnings
+    Finished `release` profile [optimized] target(s) in 24.07s
+syscall_count prebuild: installed syscall_count -> /usr/bin/syscall_count
+debugfs -w /home/asta/tgoskits/wt-sg2002-wifi-ebpf/tmp/axbuild/starry-app/ebpf/syscall_count/runs/rootfs-ZE7i9x/rootfs-aarch64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+Using build config: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/build-aarch64-unknown-none-softfloat.toml
+[2026-09-25T09:11:52Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/build-aarch64-unknown-none-softfloat.toml
+[2026-09-25T09:11:52Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/syscall_count/qemu-aarch64.toml
+  prepare assets: 0ns (pipeline=plain, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/syscall_count/qemu-aarch64.toml (timeout=240s)
+  rootfs: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/tmp/axbuild/starry-app/ebpf/syscall_count/runs/rootfs-ZE7i9x/rootfs-aarch64-alpine.img
+[axbuild] starry build package=starryos target=aarch64-unknown-none-softfloat arch=aarch64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/build-aarch64-unknown-none-softfloat.toml ...
+AX_ARCH=aarch64
+AX_LOG=warn
+AX_TARGET=aarch64-unknown-none-softfloat
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+cargo build -p starryos --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,ax-runtime/display -Z json-target-spec -Z build-std=core,alloc --config target.aarch64-unknown-none-softfloat.rustflags=["-Cllvm-args=--max-store-memcpy=16", "-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+   Compiling compiler_builtins v0.1.160 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins)
+   Compiling core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
+   Compiling ax-cpu v0.10.3 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/axcpu)
+   Compiling thiserror v2.0.20
+   Compiling heapless v0.9.3
+   Compiling crossbeam-utils v0.8.23
+   Compiling cpu-local v0.4.3 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/cpu-local)
+   Compiling zerocopy v0.8.57
+   Compiling ax-percpu v0.4.24 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/percpu/percpu)
+   Compiling anyhow v1.0.104
+   Compiling crossbeam-epoch v0.9.21
+   Compiling rust_decimal v1.43.0
+   Compiling ax-alloc v0.9.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/memory/ax-alloc)
+   Compiling rockchip-soc v0.4.8 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/soc/rockchip/rockchip-soc)
+   Compiling crab-usb v0.12.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/usb/usb-host)
+   Compiling somehal v0.11.3 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/platforms/somehal)
+   Compiling num-traits v0.2.19
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/ax-driver)
+   Compiling axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/platforms/axplat-dyn)
+   Compiling memoffset v0.9.1
+   Compiling syscalls v0.8.1
+   Compiling smoltcp v0.13.1
+   Compiling scope-local v0.6.5 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/scope-local)
+   Compiling libc v0.2.189
+   Compiling ax-hal v0.8.4 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axhal)
+   Compiling axerrno v0.2.2
+   Compiling ax-tracepoint v0.6.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/ax-tracepoint)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/StarryOS/signal)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/StarryOS/kernel)
+   Compiling starryos v0.5.39 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/StarryOS/starryos)
+   Compiling ptr_meta_derive v0.3.2
+   Compiling uefi-macros v0.19.0
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axruntime)
+   Compiling ax-errno v0.6.3
+   Compiling someboot v0.7.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/platforms/someboot)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/api/arceos_posix_api)
+   Compiling lwprintf-rs v0.3.3
+   Compiling alloc v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc)
+   Compiling log v0.4.34
+   Compiling bitflags v2.13.2
+   Compiling as-any v0.3.2
+   Compiling cfg-if v1.0.5
+   Compiling tock-registers v0.10.1
+   Compiling byteorder v1.5.0
+   Compiling stable_deref_trait v1.2.1
+   Compiling derive_more v2.1.1
+   Compiling ax-sync v0.6.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axsync)
+   Compiling scopeguard v1.2.0
+   Compiling trait-ffi v0.3.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/trait-ffi/trait-ffi)
+   Compiling bit_field v0.10.3
+   Compiling ax-lazyinit v0.5.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/ax-lazyinit)
+   Compiling ax-memory-addr v0.7.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/memory/memory_addr)
+   Compiling num-align v0.1.0
+   Compiling bytemuck v1.25.2
+   Compiling tock-registers v0.9.0
+   Compiling pin-project-lite v0.2.17
+   Compiling mbarrier v0.1.3
+   Compiling futures-core v0.3.34
+   Compiling slab v0.4.12
+   Compiling strum v0.27.2
+   Compiling futures-sink v0.3.34
+   Compiling futures-task v0.3.34
+   Compiling futures-io v0.3.34
+   Compiling foldhash v0.2.0
+   Compiling allocator-api2 v0.2.21
+   Compiling rdif-def v0.4.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-def)
+   Compiling hash32 v0.3.1
+   Compiling irq-framework v0.5.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/irq-framework)
+   Compiling aarch64-cpu v11.2.0
+   Compiling aarch64-cpu v10.0.0
+   Compiling pci_types v0.10.1
+   Compiling equivalent v1.0.2
+   Compiling arrayvec v0.7.8
+   Compiling rdif-serial v0.10.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-serial)
+   Compiling uguid v2.2.1
+   Compiling const-default v1.0.0
+   Compiling lock_api v0.4.14
+   Compiling futures-channel v0.3.34
+   Compiling const-str v1.1.0
+   Compiling num_enum v0.7.6
+   Compiling buddy-slab-allocator v0.6.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/memory/buddy-slab-allocator)
+   Compiling ucs2 v0.3.3
+   Compiling rdif-base v0.9.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-base)
+   Compiling mmio-api v0.3.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/memory/mmio-api)
+   Compiling accessor v0.3.3
+   Compiling ptr_meta v0.3.2
+   Compiling zeroize v1.9.0
+   Compiling futures-util v0.3.34
+   Compiling rlsf v0.2.3
+   Compiling utf8-width v0.1.9
+   Compiling uefi-raw v0.14.0
+   Compiling smccc v0.2.3
+   Compiling nb v1.1.0
+   Compiling axpanic v0.1.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/axpanic)
+   Compiling linux-raw-sys v0.12.1
+   Compiling memchr v2.8.3
+   Compiling rdif-clk v0.5.7 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-clk)
+   Compiling rdif-power v0.9.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-power)
+   Compiling rdif-reset v0.2.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-reset)
+   Compiling rdif-pwm v0.2.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-pwm)
+   Compiling rdif-input v0.3.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-input)
+   Compiling rdif-pcie v0.3.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-pcie)
+   Compiling rdif-display v0.4.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-display)
+   Compiling rdif-vsock v0.3.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-vsock)
+   Compiling ax-linked-list-r4l v0.5.7 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/linked_list_r4l)
+   Compiling crossbeam-queue v0.3.14
+   Compiling cv181x-clock v0.1.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/soc/cv181x-clock)
+   Compiling rdif-msi v0.3.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-msi)
+   Compiling rdif-intc v0.16.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-intc)
+   Compiling sg200x-pwm v0.1.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/pwm/sg200x-pwm)
+   Compiling rockchip-pwm v0.2.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/pwm/rockchip-pwm)
+   Compiling axbacktrace v0.4.12 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/axbacktrace)
+   Compiling fdt-parser v0.4.19
+   Compiling hashbrown v0.16.1
+   Compiling event-listener v5.4.2
+   Compiling ax-sched v0.5.11 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/axsched)
+   Compiling concurrent-queue v2.5.0
+   Compiling bitflags v1.3.2
+   Compiling spinning_top v0.3.0
+   Compiling smallvec v1.16.1
+   Compiling managed v0.8.0
+   Compiling rand_core v0.6.4
+   Compiling ringbuf v0.4.8
+   Compiling intrusive-collections v0.9.7
+   Compiling rsext4 v0.9.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/fs/rsext4)
+   Compiling ax-memory-set v0.8.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/memory/memory_set)
+   Compiling atomic-waker v1.1.2
+   Compiling pcie v0.7.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/pci/pcie)
+   Compiling ax-log v0.6.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axlog)
+   Compiling acpi v6.1.1
+   Compiling ax-task v0.8.4 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/ax-task)
+   Compiling bitmaps v3.2.1
+   Compiling ax-ctor-bare v0.4.10 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/ctor_bare/ctor_bare)
+   Compiling crossbeam-skiplist v0.1.3
+   Compiling crossbeam v0.8.5
+   Compiling event-listener-strategy v0.5.4
+   Compiling hashbrown v0.17.1
+   Compiling kbindings v0.3.0
+   Compiling either v1.18.0
+   Compiling async-channel v2.5.0
+   Compiling chrono v0.4.45
+   Compiling xhci v0.9.2
+   Compiling plain v0.2.3
+   Compiling zero v0.1.3
+   Compiling scroll v0.13.0
+   Compiling rand_core v0.10.1
+   Compiling itertools v0.14.0
+   Compiling xmas-elf v0.9.1
+   Compiling combine v4.6.8
+   Compiling starry-vm v0.6.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/StarryOS/vm)
+   Compiling static-keys v0.8.2
+   Compiling function_name v0.3.0
+   Compiling static_assertions v1.1.0
+   Compiling aliasable v0.1.3
+   Compiling chacha20 v0.10.2
+   Compiling tp-lexer v0.5.5
+   Compiling goblin v0.10.7
+   Compiling ddebug v0.5.5
+   Compiling ouroboros v0.18.5
+   Compiling kprobe v0.6.0
+   Compiling uluru v3.1.0
+   Compiling ax-cgroup v0.3.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/ax-cgroup)
+   Compiling ax-cpumask v0.4.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/cpumask)
+   Compiling flatten_objects v0.2.4
+   Compiling axhvc v0.5.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/virtualization/axhvc)
+   Compiling rand v0.10.3
+   Compiling strum v0.28.0
+   Compiling page-table-generic v0.9.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/memory/page-table-generic)
+   Compiling fdt-raw v0.3.0
+   Compiling some-serial v0.7.8 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/serial/some-serial)
+   Compiling ranges-ext v0.6.4 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/memory/ranges-ext)
+   Compiling ax-io v0.7.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/axio)
+   Compiling ksym v0.6.0
+   Compiling kernutil v0.3.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/kernutil)
+   Compiling byte-unit v5.2.6
+   Compiling lru v0.16.4
+   Compiling axivc v0.1.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/virtualization/axivc)
+   Compiling downcast-rs v2.0.2
+   Compiling fdt-edit v0.2.3
+   Compiling lru v0.18.4
+   Compiling ax-arm-pl031 v0.4.7 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/rtc/arm_pl031)
+   Compiling axpoll v0.7.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/axpoll)
+   Compiling rdif-pinctrl v0.2.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-pinctrl)
+   Compiling axfs-ng-vfs v0.8.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/fs/axfs-ng-vfs)
+   Compiling axpoll-set v0.1.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/axpoll-set)
+   Compiling rdrive v0.25.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/rdrive)
+   Compiling printf-compat v0.4.0
+   Compiling aarch64-cpu-ext v0.1.4
+   Compiling kbpf-basic v0.6.0
+   Compiling dma-api v0.10.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/memory/dma-api)
+   Compiling futures v0.3.34
+   Compiling usb-if v0.8.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/usb/usb-if)
+   Compiling rdif-block v0.13.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-block)
+   Compiling rdif-eth v0.6.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-eth)
+   Compiling rd-net v0.3.3 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/net/rd-net)
+   Compiling nvme-driver v0.8.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/blk/nvme-driver)
+   Compiling usb-serial v0.1.4 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/usb/usb-serial)
+   Compiling uefi v0.37.0
+   Compiling arm-gic-driver v0.18.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/intc/arm-gic-driver)
+   Compiling kmod-tools v0.3.0
+   Compiling kapi v0.3.0
+   Compiling kmod-loader v0.3.1
+   Compiling ax-plat v0.15.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/platforms/ax-plat)
+   Compiling ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/fs/ax-fs-ng)
+   Compiling safe-mmio v0.3.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling kernel-elf-parser v0.3.4
+   Compiling rand_chacha v0.3.1
+   Compiling axklib v0.9.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/axklib)
+   Compiling virtio-drivers v0.13.0
+   Compiling ax-input v0.7.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axinput)
+   Compiling ax-display v0.7.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axdisplay)
+   Compiling rbpf v0.4.1
+   Compiling virtio-gpu v0.1.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/gpu/virtio-gpu)
+   Compiling ax-ipi v0.6.5 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axipi)
+   Compiling ax-net v0.13.6 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/net/ax-net)
+   Compiling ax-mm v0.8.4 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axmm)
+   Compiling ax-api v0.8.6 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/api/arceos_api)
+   Compiling ax-std v0.7.5 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/ulib/axstd)
+    Finished `release` profile [optimized] target(s) in 1m 21s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos
+  bin: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] cargo build package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/apps/starry/ebpf/build-aarch64-unknown-none-softfloat.toml ... done (81.61s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] cargo build bin=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+[axbuild] starry build package=starryos target=aarch64-unknown-none-softfloat arch=aarch64 ... done (82.21s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos ...
+[axbuild] starry kallsyms symbols=10695
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/.starryos.kallsyms.91663.tmp /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos ... done (203.36ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos.bin ... done (37.50ms)
+[axbuild] qemu run package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json ...
+qemu-system-aarch64 -nographic -m 512M -cpu cortex-a53 -device nvme,drive=disk0,serial=tgoskits,max_ioqpairs=64,msix_qsize=65 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/tmp/axbuild/starry-app/ebpf/syscall_count/runs/rootfs-ZE7i9x/rootfs-aarch64-alpine.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -machine virt -kernel /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/aarch64-unknown-none-softfloat/release/starryos.bin
+Boot entropy source: FDT /chosen/rng-seed
+VM Load @PA:0x40200000
+VM Load Offset: 0xc0200000
+Memory Map:
+  Free   0x00000040000000 - 0x00000040200000 (2 MiB)
+  KImg   0x00000040200000 - 0x00000041400000 (18 MiB)
+  Free   0x00000041400000 - 0x00000060000000 (492 MiB)
+Initialize RAM allocator: 0x41400000..0x60000000
+Reserving CPU-local areas
+CPU-local area stride: 0x4b000 bytes
+Total CPU-local allocation: 0x4b000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x41400000..0x41500000, current: 0x41500000
+Flushed RAM used range to memory map: 0x41500000..0x4154b000, current: 0x4154b000
+CPU-local areas allocated at 0x41500000 - 0x4154b000
+EL: 1
+Mapping early memory regions...
+Ram                 : [0xffff000040000000, 0xffff000060000000) -> [0x0000000040000000, 0x0000000060000000) (512 MiB)
+KImage              : [0xffffffff80000000, 0xffffffff81200000) -> [0x0000000040200000, 0x0000000041400000) (18 MiB)
+PerCpu              : [0xffffff0041500000, 0xffffff004154b000) -> [0x0000000041500000, 0x000000004154b000) (300 KiB)
+Debug serial        : [0xffff000009000000, 0xffff000009001000) -> [0x0000000009000000, 0x0000000009001000) (4 KiB)
+Boot page table at physical address: PA:0x4154b000
+Setting up table registers...
+MMU Entry point at physical address: 0x40546bf0
+Trap vector at 0xffffffff80005000
+Memory Map:
+  MMIO   0x00000009000000 - 0x00000009001000 (4 KiB)
+  Free   0x00000040000000 - 0x00000040200000 (2 MiB)
+  KImg   0x00000040200000 - 0x00000041400000 (18 MiB)
+  Rsv    0x00000041400000 - 0x00000041500000 (1 MiB)
+  PerCPU 0x00000041500000 - 0x0000004154b000 (300 KiB)
+  Rsv    0x0000004154b000 - 0x00000041555000 (40 KiB)
+  Free   0x00000041555000 - 0x00000060000000 (490.67 MiB)
+Jumping to main entry point at 0xffffffff80285b94 with SP 0xffffff004154b000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = aarch64
+platform = linux,dummy-virt
+target = aarch64-unknown-none-softfloat
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 1
+
+Boot at 2026-09-25 09:13:17.023780032 UTC
+
+[37m[  0.200551 0:4294967296 [37max_display:31] [33m  No display device found![m[m
+[37m[  0.222875 0:4294967305 [37max_net::service:868] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  0.223039 0:4294967305 [37max_net::service:870] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  0.224256 0:4294967296 [37max_net:686] [33m  No vsock device found![m[m
+Initialized 7 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (aarch64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+Welcome to Starry OS!
+root@starry:~# [6n/usr/bin/syscall_count
+[37m[  6.184630 0:25769803798 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_BTF_LOAD[m[m
+[37m[  6.188623 0:25769803798 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_LINK_CREATE[m[m
+[37m[  6.195262 0:25769803798 [37mkbpf_basic::map:272] [31mbpf map type BPF_MAP_TYPE_CPUMAP not implemented[m[m
+[37m[  6.195703 0:25769803798 [37mkbpf_basic::map:272] [31mbpf map type BPF_MAP_TYPE_CPUMAP not implemented[m[m
+[37m[  6.195994 0:25769803798 [37mkbpf_basic::map:272] [31mbpf map type BPF_MAP_TYPE_DEVMAP not implemented[m[m
+[37m[  6.196262 0:25769803798 [37mkbpf_basic::map:272] [31mbpf map type BPF_MAP_TYPE_DEVMAP not implemented[m[m
+syscall: 280, count: 2
+syscall: 64, count: 1
+syscall: 98, count: 287
+syscall: 113, count: 385
+syscall: 172, count: 64
+syscall: 222, count: 1
+SYSCALL_COUNT_PASS: 740 records across 6 syscall ids
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json ... done (7.68s)
+AARCH64_EXIT=0

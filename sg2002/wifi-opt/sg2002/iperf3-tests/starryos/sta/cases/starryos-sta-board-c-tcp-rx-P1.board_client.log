@@ -1,0 +1,124 @@
+﻿
+===== [2026-09-17 16:26:46.659] manual starryos-sta-board-c-tcp-rx-P1 :: iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 1 --get-server-output -R
+iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 1 --get-server-ou
+tput -R
+[37m[1195.427414 0:90194313243 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff570[m[m
+[37m[1195.434681 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[1195.551776 0:90194313243 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.17:49160 to 192.168.137.1:5201[m[m
+
+
+===== [2026-09-17 16:28:17.586] manual starryos-sta-board-c-tcp-rx-P1 run :: iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 1 --get-server-output -R
+iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 1 --get-server-ou
+tput -R
+[37m[1271.335403 0:103079215131 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff570[m[m
+[37m[1271.347478 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[1271.460874 0:103079215131 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.17:49161 to 192.168.137.1:5201[m[m
+[37m[1271.461334 0:4294967307 [37max_net::device::ethernet:338] [32mwlan0: requesting ARP for 192.168.137.1[m[m
+[37m[1271.461576 0:4294967307 [37max_net::device::ethernet:338] [32mwlan0: requesting ARP for 192.168.137.1[m[m
+[37m[1272.461556 0:4294967307 [37max_net::device::ethernet:338] [32mwlan0: requesting ARP for 192.168.137.1[m[m
+[37m[1272.461827 0:4294967307 [37max_net::device::ethernet:338] [32mwlan0: requesting ARP for 192.168.137.1[m[m
+[37m[1274.461780 0:4294967307 [37max_net::device::ethernet:338] [32mwlan0: requesting ARP for 192.168.137.1[m[m
+[37m[1274.462048 0:4294967307 [37max_net::device::ethernet:338] [32mwlan0: requesting ARP for 192.168.137.1[m[m
+[37m[1278.462008 0:4294967307 [37max_net::device::ethernet:338] [32mwlan0: requesting ARP for 192.168.137.1[m[m
+[37m[1278.462271 0:4294967307 [37max_net::device::ethernet:338] [32mwlan0: requesting ARP for 192.168.137.1[m[m
+[37m[1286.462232 0:4294967307 [37max_net::device::ethernet:338] [32mwlan0: requesting ARP for 192.168.137.1[m[m
+[37m[1286.462503 0:4294967307 [37max_net::device::ethernet:338] [32mwlan0: requesting ARP for 192.168.137.1[m[m
+
+
+===== [2026-09-17 16:35:11.531] manual starryos-sta-board-c-tcp-rx-P1 :: iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 1 --get-server-output -R
+iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 1 --get-server-ou
+tput -R
+[37m[ 87.467025 0:8589934618 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff570[m[m
+[37m[ 87.471780 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[ 87.979496 0:8589934618 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.76:49152 to 192.168.137.1:5201[m[m
+Connecting to host 192.168.137.1, port 5201
+Reverse mode, remote host 192.168.137.1 is sending
+[37m[ 88.051646 0:8589934618 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.76:49153 to 192.168.137.1:5201[m[m
+[  5] local 192.168.137.76 port 49153 connected to 192.168.137.1 port 5201
+[37m[ 88.279538 0:73014444057 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x601524d0, sp=0x428af0[m[m
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  1.62 MBytes  13.6 Mbits/sec                  (omitted)
+[  5]   1.00-2.00   sec  2.00 MBytes  16.8 Mbits/sec                  (omitted)
+[  5]   2.00-3.00   sec  1.88 MBytes  15.7 Mbits/sec                  (omitted)
+[  5]   0.00-1.00   sec  2.00 MBytes  16.8 Mbits/sec                  
+[  5]   1.00-2.00   sec  2.12 MBytes  17.8 Mbits/sec                  
+[  5]   2.00-3.00   sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]   3.00-4.00   sec  2.00 MBytes  16.8 Mbits/sec                  
+[  5]   4.00-5.00   sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]   5.00-6.00   sec  2.12 MBytes  17.8 Mbits/sec                  
+[  5]   6.00-7.00   sec  1.75 MBytes  14.7 Mbits/sec                  
+[  5]   7.00-8.00   sec  2.00 MBytes  16.8 Mbits/sec                  
+[  5]   8.00-9.00   sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]   9.00-10.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]  10.00-11.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]  11.00-12.00  sec  2.12 MBytes  17.8 Mbits/sec                  
+[  5]  12.00-13.00  sec  2.12 MBytes  17.8 Mbits/sec                  
+[  5]  13.00-14.00  sec  2.25 MBytes  18.9 Mbits/sec                  
+[  5]  14.00-15.00  sec  2.00 MBytes  16.8 Mbits/sec                  
+[  5]  15.00-16.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]  16.00-17.00  sec  1.62 MBytes  13.6 Mbits/sec                  
+[  5]  17.00-18.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]  18.00-19.00  sec  1.88 MBytes  15.8 Mbits/sec                  
+[  5]  19.00-20.00  sec  1.50 MBytes  12.6 Mbits/sec                  
+[  5]  20.00-21.00  sec  2.00 MBytes  16.7 Mbits/sec                  
+[  5]  21.00-22.00  sec  1.62 MBytes  13.7 Mbits/sec                  
+[  5]  22.00-23.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]  23.00-24.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]  24.00-25.00  sec  1.75 MBytes  14.7 Mbits/sec                  
+[  5]  25.00-26.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]  26.00-27.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]  27.00-28.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]  28.00-29.00  sec  2.12 MBytes  17.8 Mbits/sec                  
+[37m[121.315809 0:73014444057 [37mstarry_kernel::task::ops:539] [32mTask(73014444057, "iperf3") exit with code: 0[m[m
+[  5]  29.00-30.00  sec  1.88 MBytes  15.8 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-30.04  sec  57.4 MBytes  16.0 Mbits/sec                  sender
+[  5]   0.00-30.00  sec  57.4 MBytes  16.0 Mbits/sec                  receiver
+[37m[121.396539 0:8589934618 [37mstarry_kernel::task::ops:539] [32mTask(8589934618, "iperf3") exit with code: 0[m[m
+
+Server output:
+[37m[121.397131 0:8589934618 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+Accepted connection from 192.168.137.76, port 49152
+[  6] local 192.168.137.1 port 5201 connected to 192.168.137.76 port 49153
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-1.00   sec  1.88 MBytes  15.7 Mbits/sec                  (omitted)[37m[121.397743 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+
+[  6]   1.00-2.00   sec  2.00 MBytes  16.8 Mbits/sec                  (omitted)
+[  6]   1.00-1.00   sec  2.00 MBytes  8.38 Mbits/sec                  
+[  6]   1.00-2.00   sec  2.12 MBytes  17.8 Mbits/sec                  
+[  6]   2.00-3.00   sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]   3.00-4.00   sec  2.00 MBytes  16.8 Mbits/sec                  
+[  6]   4.00-5.00   sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]   5.00-6.00   sec  2.12 MBytes  17.8 Mbits/sec                  
+[  6]   6.00-7.00   sec  1.62 MBytes  13.6 Mbits/sec                  
+[  6]   7.00-8.00   sec  2.12 MBytes  17.8 Mbits/sec                  
+[  6]   8.00-9.00   sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]   9.00-10.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]  10.00-11.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]  11.00-12.00  sec  2.00 MBytes  16.8 Mbits/sec                  
+[  6]  12.00-13.00  sec  2.25 MBytes  18.9 Mbits/sec                  
+[  6]  13.00-14.00  sec  2.12 MBytes  17.8 Mbits/sec                  
+[  6]  14.00-15.00  sec  2.00 MBytes  16.8 Mbits/sec                  
+[  6]  15.00-16.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]  16.00-17.00  sec  1.62 MBytes  13.6 Mbits/sec                  
+[  6]  17.00-18.00  sec  2.00 MBytes  16.8 Mbits/sec                  
+[  6]  18.00-19.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]  19.00-20.00  sec  1.50 MBytes  12.6 Mbits/sec                  
+[  6]  20.00-21.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]  21.00-22.00  sec  1.75 MBytes  14.7 Mbits/sec                  
+[  6]  22.00-23.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]  23.00-24.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]  24.00-25.00  sec  1.75 MBytes  14.7 Mbits/sec                  
+[  6]  25.00-26.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]  26.00-27.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  6]  27.00-28.00  sec  1.75 MBytes  14.7 Mbits/sec                  
+[  6]  28.00-29.00  sec  2.12 MBytes  17.8 Mbits/sec                  
+[  6]  29.00-30.00  sec  2.00 MBytes  16.8 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-30.04  sec  57.4 MBytes  16.0 Mbits/sec                  sender
+
+
+iperf Done.
+root@starry:/root # [6n

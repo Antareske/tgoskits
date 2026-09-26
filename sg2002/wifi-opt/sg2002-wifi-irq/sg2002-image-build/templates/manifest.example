@@ -1,0 +1,8 @@
+# rootfs 注入清单示例
+# 每行: <host 路径> <rootfs 内绝对路径> [mode(4 位八进制)]
+# host 路径相对本 manifest 文件所在目录; # 开头为注释行
+# 目标已存在时先删后写; 缺失的父目录自动创建
+
+app/act-infer /root/act-infer 0755
+models/act_det.cvimodel /root/act_det.cvimodel
+config/sshd_config /etc/ssh/sshd_config

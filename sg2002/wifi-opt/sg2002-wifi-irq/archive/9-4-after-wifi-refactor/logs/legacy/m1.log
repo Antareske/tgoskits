@@ -1,0 +1,17 @@
+Boot at 1970-01-01 00:00:17.201710920 UTC
+
+[ 17.202208 0:12 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op ResetAll
+[ 17.202447 0:12 ax_fs_ng::block::runtime::hctx:177] block hctx 0 bound to CPU 0 with hardware depth 1
+[ 17.202632 0:12 ax_fs_ng::block::runtime::lifecycle::device:300] block device cvsd IRQ source 0 (IrqId { domain: IrqDomainId(7), hwirq: HwIrq(36) }) fixed to CPU 0 for queue mask 0x1
+[ 17.204113 0:13 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op PowerOn
+[ 17.214406 0:13 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op SwitchVoltage(V330)
+[ 17.216208 0:13 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit1)
+[ 17.216608 0:13 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Identification)
+[ 17.239638 0:13 sdmmc_protocol::sdio::init::state_machine::identify:175] sdio: detected Sd ocr=0xc1ff8000
+[ 17.241577 0:13 sdmmc_protocol::sdio::init::state_machine::identify:340] sdio: CSD capacity_blocks=Some(124735488)
+[ 17.242031 0:13 sdmmc_protocol::sdio::init::state_machine::identify:3panicked at os/arceos/modules/axtask/src/api.rs:599:5:
+sleeping or rescheduling is not allowed in atomic context: caller=drivers/net/aic8800/src/fdrv/net/device.rs:294:44, reasons=[irq_disabled,preempt_disabled], irq_enabled=false, irq_context=false, preempt_count=2, cpu_id=0, task_id=Some(15), task_state=Some(Running)
+BACKTRACE_BEGIN kind=panic arch=riscv64 alloc=false dwarf=false
+BT_ERROR requires_alloc
+BACKTRACE_END
+

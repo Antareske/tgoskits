@@ -1,0 +1,337 @@
+[ 24.779260 0:2 ax_runtime:312] runtime console active: serial0, ttyS0
+Boot at 1970-01-01 00:00:24.779293360 UTC
+
+[ 24.779755 0:9 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op ResetAll
+[ 24.780010 0:9 ax_fs_ng::block::runtime::hctx:177] block hctx 0 bound to CPU 0 with hardware depth 1
+[ 24.780217 0:9 ax_fs_ng::block::runtime::lifecycle::device:333] block device cvsd IRQ source 0 (IrqId { domain: IrqDomainId(7), hwirq: HwIrq(36) }) fixed to CPU 0 for queue mask 0x1
+[ 24.781236 0:10 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op PowerOn
+[ 24.791695 0:10 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op SwitchVoltage(V330)
+[ 24.793029 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit1)
+[ 24.793369 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Identification)
+[ 24.816641 0:10 sdmmc_protocol::sdio::init::state_machine::identify:175] sdio: detected Sd ocr=0xc1ff8000
+[ 24.818360 0:10 sdmmc_protocol::sdio::init::state_machine::identify:340] sdio: CSD capacity_blocks=Some(124735488)
+[ 24.818817 0:10 sdmmc_protocol::sdio::init::state_machine::identify:354] sdio: switch SD bus width to 4-bit
+[ 24.829682 0:2 ax_fs_ng:96]   selected root device: disk0 partition 2 (<unnamed>, fs=ext4, lba 133120..4331520)
+[ 24.959393 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 24.970953 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 24.982488 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 24.993983 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.005554 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.017081 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.028592 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.040242 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.051821 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.063398 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.074935 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.086622 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.098148 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.109743 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.121403 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.135855 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.147402 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.158999 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.170579 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.182124 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.193749 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.205268 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.216702 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.228220 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.239731 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.251306 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.262827 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.277302 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.288853 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.300398 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.311973 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.323557 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.334989 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.346681 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.358190 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.369733 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.381208 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.392815 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.407204 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.418770 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.430285 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.441846 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.453396 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.464919 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.476422 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.488087 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.499609 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.511051 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.522656 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.534207 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.548737 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.560211 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.571693 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.583231 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.594747 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.606352 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.618012 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.629549 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.641004 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.652427 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.666748 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.678277 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.689852 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.701436 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.712911 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.724375 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.735990 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.747501 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.759094 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.770687 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.782235 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.793931 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.805427 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.819865 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.831432 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.843009 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.854378 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.854532 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.857220 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.857373 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.859874 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.860151 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.860307 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.862771 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.863034 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.863188 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.865690 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.865952 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.866105 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.868575 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.868794 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.868949 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.871454 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.871714 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.871869 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.874340 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.874557 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.874712 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.877214 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.877475 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.877629 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.880100 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.880314 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.880469 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.883063 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.883281 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.883436 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.885957 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.886178 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.886333 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.888804 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.889020 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.889175 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.891678 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.891937 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.892091 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.894626 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.894888 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.895042 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.897516 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.897733 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.897889 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.900396 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.900673 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.900827 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.903289 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.903505 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.903660 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.906206 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.906429 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=1536
+[ 25.906585 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.909054 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.909265 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040b expected=0x040c frame_len=512
+[ 25.909419 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.911739 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.911992 0:11 aic8800::device::startup:262] aic: startup stage UploadPatch(0)
+[ 25.912025 0:11 aic8800::device::startup:262] aic: startup stage StartApplication
+[ 25.912059 0:11 aic8800::device::mailbox:323] aic: mailbox begin id=0x040d expected=0x040e frame_len=512
+[ 25.912202 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=4 raw=0x04
+[ 25.930316 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 25.930554 0:11 aic8800::device::startup:262] aic: startup stage Reinitialize(0)
+[ 25.930648 0:11 aic8800::device::startup:262] aic: startup stage Reinitialize(1)
+[ 26.130704 0:11 aic8800::device::startup:262] aic: startup stage Reinitialize(2)
+[ 26.130794 0:11 aic8800::device::startup:262] aic: startup stage Reinitialize(3)
+[ 26.130873 0:11 aic8800::device::startup:262] aic: startup stage Reinitialize(4)
+[ 26.130901 0:11 aic8800::device::startup:262] aic: startup stage StackStart
+[ 26.130938 0:11 aic8800::device::mailbox:348] aic: mailbox begin id=0x007b expected=0x007c frame_len=512
+[ 26.131072 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=127 raw=0x7f
+[ 26.133424 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 26.133685 0:11 aic8800::device::mailbox:348] aic: mailbox begin id=0x0073 expected=0x0074 frame_len=512
+[ 26.133830 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=127 raw=0x7f
+[ 26.136162 0:11 aic8800::device::mailbox:206] aic: mailbox count raw=0x01
+[ 26.136470 0:11 aic8800::device::startup:262] aic: startup stage Complete
+[ 26.137267 0:2 ax_net:248] Initialize network subsystem...
+[ 26.138149 0:2 ax_net:270]   use NIC 0: "wlan0"
+[ 26.139014 0:2 ax_net:309]   Wi-Fi control for eth0 is owned by CPU 0
+[ 26.139052 0:2 ax_net:321] eth0:
+[ 26.139074 0:2 ax_net:322]   id:   2
+[ 26.139093 0:2 ax_net:323]   mac:  38-7a-cc-9b-2c-c8
+[ 26.139128 0:2 ax_net:340]   mode: dhcp
+[ 26.139169 0:2 ax_net:389] Device: lo
+[ 26.139203 0:2 ax_net:389] Device: eth0
+[ 26.139267 0:2 ax_net::service:529] eth0: DHCP enabled
+[ 28.159182 0:2 ax_net:841] DHCP bootstrap timed out
+
+[ 28.159381 0:2 ax_tracepoint:327] tracepoint_data_start: 0xffffffff805c8450, tracepoint_data_end: 0xffffffff805c84e0
+[ 28.159446 0:2 ax_tracepoint:370] tracepoint_data_len: 6
+[ 28.159484 0:2 ax_tracepoint:389] tracepoint registered: sched:sched_process_exit
+[ 28.159536 0:2 ax_tracepoint:389] tracepoint registered: sched:sched_process_fork
+[ 28.159569 0:2 ax_tracepoint:389] tracepoint registered: sched:sched_switch
+[ 28.159600 0:2 ax_tracepoint:389] tracepoint registered: syscalls:sys_clone
+[ 28.159632 0:2 ax_tracepoint:389] tracepoint registered: syscalls:sys_enter_openat
+[ 28.159663 0:2 ax_tracepoint:389] tracepoint registered: syscalls:sys_mkdirat
+Initialized 6 tracepoints
+kmod subsystem initialized
+[ 28.159936 0:2 starry_kernel::pseudofs:88] Initialize pseudofs...
+[ 28.160566 0:2 starry_kernel::pseudofs::dev::tty::serial:244] ttyS0 registered: path=/serial@04140000, alias=Some(0), paddr=0x4140000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [44, 4] })))
+[ 28.160824 0:2 starry_kernel::pseudofs::dev::tty::serial:244] ttyS1 registered: path=/serial@04150000, alias=Some(1), paddr=0x4150000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [45, 4] })))
+[ 28.161065 0:2 starry_kernel::pseudofs::dev::tty::serial:244] ttyS2 registered: path=/serial@04160000, alias=Some(2), paddr=0x4160000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [46, 4] })))
+Welcome to Starry OS!
+[ 28.161302 0:2 starry_kernel::pseudofs::dev::tty::serial:244] ttyS3 registered: path=/serial@04170000, alias=Some(3), paddr=0x4170000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [47, 4] })))
+USER=root
+[ 28.161370 0:2 starry_kernel::pseudofs::dev::tty::serial:188] /dev/console bound to runtime console ttyS0
+HOSTNAME=starry
+[ 28.163266 0:2 sg2002_tpu::tpu::device:181] TPU device initialized
+SHLVL=1
+[ 28.166058 0:2 starry_kernel::pseudofs::usbfs:55] usbfs: initializing manager
+HOME=/root
+[ 28.216464 0:2 starry_kernel::task::timer:394] Initialize alarm...
+TERM=xterm-256color
+[ 28.528876 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+[ 28.840773 0:26 starry_kernel::task::ops:348] Task(26, "busybox") exit with code: 0
+PWD=/
+[ 28.857711 0:26 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+
+[ 28.858343 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+Use apk to install packages.
+[ 28.858721 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+
+[ 28.871580 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+root@starry:/root # [ 28.872445 0:27 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffeb80
+
+[ 28.924349 0:27 starry_kernel::task::ops:348] Task(27, "busybox") exit with code: 0
+root@starry:/root # [ 28.941190 0:27 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 28.941819 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 28.942194 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 28.955374 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 28.956236 0:28 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 29.008608 0:28 starry_kernel::task::ops:348] Task(28, "busybox") exit with code: 0
+[ 29.025460 0:28 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 29.026090 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.026460 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 29.039264 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.040126 0:29 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 29.093954 0:29 starry_kernel::task::ops:348] Task(29, "busybox") exit with code: 0
+[ 29.110838 0:29 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 29.111468 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.111841 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 29.124799 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.125658 0:30 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 29.177719 0:30 starry_kernel::task::ops:348] Task(30, "busybox") exit with code: 0
+[ 29.194701 0:30 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 29.195330 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.195703 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 29.208491 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.209353 0:31 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 29.261349 0:31 starry_kernel::task::ops:348] Task(31, "busybox") exit with code: 0
+[ 29.278197 0:31 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 29.278824 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.279202 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 29.292089 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.293054 0:32 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 29.345036 0:32 starry_kernel::task::ops:348] Task(32, "busybox") exit with code: 0
+[ 29.361871 0:32 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 29.362501 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.362875 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 29.375767 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.376626 0:33 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 29.428296 0:33 starry_kernel::task::ops:348] Task(33, "busybox") exit with code: 0
+[ 29.445068 0:33 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 29.445701 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.446078 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 29.458968 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.459840 0:34 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 29.511738 0:34 starry_kernel::task::ops:348] Task(34, "busybox") exit with code: 0
+[ 29.528536 0:34 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 29.529164 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.529541 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 29.542420 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.543337 0:35 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 29.596484 0:35 starry_kernel::task::ops:348] Task(35, "busybox") exit with code: 0
+[ 29.613268 0:35 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 29.613894 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.614267 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 29.633419 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.633837 0:36 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffed40
+[ 29.676630 0:36 starry_kernel::task::ops:348] Task(36, "busybox") exit with code: 0
+[ 29.693447 0:36 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 29.694073 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 29.694446 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root # ip addr
+[ 57.110130 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+[ 57.110529 0:37 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+[ 57.164243 0:37 starry_kernel::task::ops:348] Task(37, "busybox") exit with code: 0
+    inet 127.0.0.1/8 scope host dynamic lo
+[ 57.181610 0:37 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP qlen 1000
+[ 57.183116 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+    link/ether 38:7a:cc:9b:2c:c8 brd ff:ff:ff:ff:ff:ff
+[ 57.183542 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root # wifi-ctl eth0 sta sg2002
+[ 70.910830 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[ 70.911229 0:38 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+[ 70.934974 0:11 aic8800::device::mailbox:348] aic: mailbox begin id=0x1800 expected=0x1801 frame_len=512
+[ 70.935228 0:11 aic8800::device::mailbox:191] aic: mailbox flow: credits=124 raw=0x7c
+
+
+ioctl[101.043351 0:38 starry_kernel::task::ops:348] Task(38, "wifi-ctl") exit with code: -256
+:[101.095650 0:38 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+ [101.143788 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+Bad address[101.144211 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #

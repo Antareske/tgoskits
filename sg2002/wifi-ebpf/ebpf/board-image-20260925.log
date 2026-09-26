@@ -1,0 +1,74 @@
+/home/asta/tgoskits/wt-sg2002-wifi-ebpf/.sg2002-build
+>> 复制 /mnt/c/Users/Asta/Desktop/build/sg2002_starryos_wifi_sta_iperf3_20260924.img -> /mnt/c/Users/Asta/Desktop/build/sg2002_starryos_wifi_ebpf_netmon_20260925.img
+FIT description: StarryOS for SG2002 LicheeRV Nano
+Created:         Fri Sep 25 08:58:19 2026
+ Image 0 (kernel-1)
+  Description:  StarryOS kernel
+  Created:      Fri Sep 25 08:58:19 2026
+  Type:         Kernel Image
+  Compression:  uncompressed
+  Data Size:    16345440 Bytes = 15962.34 KiB = 15.59 MiB
+  Architecture: RISC-V
+  OS:           Linux
+  Load Address: 0x80200000
+  Entry Point:  0x80200000
+  Hash algo:    crc32
+  Hash value:   2132d079
+ Image 1 (ramdisk-1)
+  Description:  cvitek ramdisk
+  Created:      Fri Sep 25 08:58:19 2026
+  Type:         RAMDisk Image
+  Compression:  uncompressed
+  Data Size:    2527648 Bytes = 2468.41 KiB = 2.41 MiB
+  Architecture: RISC-V
+  OS:           Linux
+  Load Address: unavailable
+  Entry Point:  unavailable
+  Hash algo:    crc32
+  Hash value:   1330f105
+ Image 2 (fdt-sg2002_licheervnano_sd)
+  Description:  cvitek device tree - sg2002_licheervnano_sd
+  Created:      Fri Sep 25 08:58:19 2026
+  Type:         Flat Device Tree
+  Compression:  uncompressed
+  Data Size:    22679 Bytes = 22.15 KiB = 0.02 MiB
+  Architecture: RISC-V
+  Hash algo:    sha256
+  Hash value:   8d71cc1298be070dc0e7c229efe5930243511d099456b21cff87d3a945de0596
+ Default Configuration: 'config-sg2002_licheervnano_sd'
+ Configuration 0 (config-sg2002_licheervnano_sd)
+  Description:  StarryOS boot for sg2002_licheervnano_sd
+  Kernel:       kernel-1
+  Init Ramdisk: ramdisk-1
+  FDT:          fdt-sg2002_licheervnano_sd
+已生成 /home/asta/tgoskits/wt-sg2002-wifi-ebpf/.sg2002-build/assets/boot.sd
+  Data Size:    16345440 Bytes = 15962.34 KiB = 15.59 MiB
+  Load Address: 0x80200000
+  Entry Point:  0x80200000
+  Data Size:    2527648 Bytes = 2468.41 KiB = 2.41 MiB
+  Load Address: unavailable
+  Entry Point:  unavailable
+>> 内核已换. FAT 内容:
+ Volume in drive : is BOOT       
+ Volume Serial Number is 7ABB-BFA9
+Directory for ::/
+
+fip      bin    440832 2026-09-25   8:58 
+boot     sd   18897240 2026-09-25   8:58 
+        2 files          19 338 072 bytes
+                         46 720 512 bytes free
+
+>> p2 完整性:
+  [ok] /bin/sh
+debugfs 1.47.0 (5-Feb-2023)
+debugfs 1.47.0 (5-Feb-2023)
+>> 已同步 /starryos.uimg 到镜像 rootfs
+>> 校验 /mnt/c/Users/Asta/Desktop/build/sg2002_starryos_wifi_ebpf_netmon_20260925.img
+fip      bin    440832 2026-09-25   8:58 
+boot     sd   18897240 2026-09-25   8:58 
+  [ok] boot.sd Load=0x80200000
+  [ok] boot.sd 默认配置 config-sg2002_licheervnano_sd
+  [ok] /bin/sh
+  [ok] /starryos.uimg (手动引导回退)
+>> 镜像: /mnt/c/Users/Asta/Desktop/build/sg2002_starryos_wifi_ebpf_netmon_20260925.img
+UPDATE_EXIT=0

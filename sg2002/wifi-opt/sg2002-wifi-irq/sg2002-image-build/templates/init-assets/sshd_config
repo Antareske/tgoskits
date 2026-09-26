@@ -1,0 +1,22 @@
+# OpenSSH server configuration for StarryOS SG2002
+# Compatible with OpenSSH 10.2+ — no UsePAM, no UsePrivilegeSeparation
+
+Port 22
+ListenAddress 0.0.0.0
+
+# Host keys
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+
+# Authentication
+PermitRootLogin yes
+PasswordAuthentication yes
+PubkeyAuthentication yes
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+
+# Misc
+PrintMotd no
+LogLevel INFO
+X11Forwarding no

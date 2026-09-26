@@ -1,0 +1,784 @@
+=~=~=~=~=~=~=~=~=~=~=~= MobaXterm log 2026.09.25 22:18:52 =~=~=~=~=~=~=~=~=~=~=~=
+zW%1ySD00z0ªiEPSE0zz.PB000a2zz0BJ!T%1zI:gdV*dZ.W1ITN'30s_Yd0j
+fV=C!%0x/0a&r20E0zz.P2QHA/000000000/rDPE
+,1x" y_p[0O85MSr
+t5T_HIM-T)e95
+DWraY6H%TMSCPL
+æ/0/.C9
+ge
+SI0a00Ec0rj
+00Eczx,/rQH/08&rSD82zxzxz.JzxL/feY0&0Q3zx&
+.SD82z380z0D(x0&zx0zN20z1CDxLde%rlo.aUJt.+32kCAtjniKa00r
+USR'tX&0
+gO00
+
+SRA.C! }    _}__}_C!/}\   zz}}_|\z5
+ A|}  } } |B_|5
+  |'_z_:__  |5|_| ||_ |} |U_. \|}__}}__} |C! |5
+
+Plrm*e   'bcYY*r
+Efo2uY.  'jd+5
++fo[BI +  'j
++foJA%ADWk    t!tKAT[."v nC!fooY"c X.0!tKAHS"c -KC!EfReY"iY KHHrmW BX.  :a00CTKaYz  1Z5
+Rue*h
+rs .CHD[ N[Y    otC!nt*IT 0C!nBR.   !+n0Ri   000j000f(IC!+A YV1   '0080j00082fBJ*
++A YVA2  0000-ffffBWj
+inNYAAss '0008&2C!+A Y A  '0080j
++A Y M  'm5
+nsY.  'sHBoBRJ     jP*"mZ  P*JA    .iXx!KHA*2uY. :unWVn[r
+P*5 +  '*
+P*5 ulX.: j
+ H*B5 AVssj
+ HP*j!Mt 'j
+ H*j!M  C!HP*j%EQ  '00002HH P*jD*A  x00
+
+U-Boot 2021.10 (Jan 22 2026 - 14:08:22 +0800) soph
+
+DRAM:  254 MiB
+gd->relocaddr=0x88a33000. offset=0x8833000
+MMC:   cv-sd@4310000: 0, wifi-sd@4320000: 1
+Loading Environment from nowhere... OK
+In:    serial
+Out:   serial
+Err:   serial
+Net:   
+Warning: ethernet@4070000 (eth0) using random MAC address - 26:03:ee:d4:29:21
+eth0: ethernet@4070000
+Hit any key to stop autoboot:  0 
+Device: cv-sd@4310000
+Manufacturer ID: 3
+OEM: 5344
+Name: SK64G
+Bus Speed: 25000000
+Mode: SD High Speed (50MHz)
+Rd Block Len: 512
+SD version 3.0
+High Capacity: Yes
+Capacity: 59.5 GiB
+Bus Width: 4-bit
+Erase Group Size: 512 Bytes
+** Unable to read file uEnv.txt **
+Failed to load 'uEnv.txt'
+cvi_vo_probe: Warning: cannot get power GPIO: ret=-2
+** Unable to read file board **
+Failed to load 'board'
+Failed to load file: board
+Init panel zct2133v1-800x1280
+dm_gpio_set_value(disp_power_ct_gpio, deassert) failed: -2switch to partitions #0, OK
+mmc0 is current device
+** Unable to read file logo.jpeg **
+Failed to load 'logo.jpeg'
+
+start jpeg dec task!, bs_addr 0000000084080000, yuv_addr 0000000088d30000, size 524288
+[ERR] JpegDecodeHeader = 1307, DONE_DEC_HEADER
+[ERR] JpegDecodeHeader = 1439, fail
+[ERR] JPU_DecGetInitialInfo = 209, JpegDecodeHeader
+jpeg_decode_helper = 251, JPU_DecGetInitialInfo failed Error code is 0x1, inst=0
+Boot from SD dev 0 ...
+switch to partitions #0, OK
+mmc0 is current device
+18901380 bytes read in 1696 ms (10.6 MiB/s)
+## Loading kernel from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'kernel-1' kernel subimage
+     Description:  StarryOS kernel
+     Type:         Kernel Image
+     Compression:  uncompressed
+     Data Start:   0x818000d4
+     Data Size:    16349536 Bytes = 15.6 MiB
+     Architecture: RISC-V
+     OS:           Linux
+     Load Address: 0x80200000
+     Entry Point:  0x80200000
+     Hash algo:    crc32
+     Hash value:   36ab9ae5
+   Verifying Hash Integrity ... crc32+ OK
+## Loading ramdisk from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'ramdisk-1' ramdisk subimage
+     Description:  cvitek ramdisk
+     Type:         RAMDisk Image
+     Compression:  uncompressed
+     Data Start:   0x82797b14
+     Data Size:    2527648 Bytes = 2.4 MiB
+     Architecture: RISC-V
+     OS:           Linux
+     Load Address: unavailable
+     Entry Point:  unavailable
+     Hash algo:    crc32
+     Hash value:   1330f105
+   Verifying Hash Integrity ... crc32+ OK
+## Loading fdt from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'fdt-sg2002_licheervnano_sd' fdt subimage
+     Description:  cvitek device tree - sg2002_licheervnano_sd
+     Type:         Flat Device Tree
+     Compression:  uncompressed
+     Data Start:   0x82a00da0
+     Data Size:    22722 Bytes = 22.2 KiB
+     Architecture: RISC-V
+     Hash algo:    sha256
+     Hash value:   d5923a852fca8c65f0a08255323a90daeb6ed262b83e8371d6f59fed3379b127
+   Verifying Hash Integrity ... sha256+ OK
+   Booting using the fdt blob at 0x82a00da0
+   Loading Kernel Image
+   Decompressing 16349536 bytes used 20ms
+   Loading Ramdisk to 87e81000, end 880ea1a0 ... OK
+ERROR: reserving fdt memory region failed (addr=80000000 size=40000 flags=0)
+   Loading Device Tree to 0000000087e78000, end 0000000087e808c1 ... OK
+
+Starting kernel ...
+
+RISC-V64 SBI kernel entry.
+Boot entropy source: FDT /chosen/rng-seed
+root=/dev/mmcblk0p2 rootwait rw console=ttyS0,115200 earlycon=sbi riscv.fwsz=0x80000 release loglevel=0
+VM Load @PA:0x80200000
+VM Load Offset: 0x100200000
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080080000 (512 KiB)
+  Free   0x00000080080000 - 0x00000080200000 (1.5 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Free   0x00000081200000 - 0x00000087e81000 (108.5 MiB)
+  Rsv    0x00000087e81000 - 0x000000880eb000 (2.41 MiB)
+  Free   0x000000880eb000 - 0x0000008fe00000 (125.08 MiB)
+Initialize RAM allocator: 0x81200000..0x87e81000
+Reserving CPU-local areas
+CPU-local area stride: 0x41000 bytes
+Total CPU-local allocation: 0x41000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x81200000..0x81207000, current: 0x81207000
+Flushed RAM used range to memory map: 0x81207000..0x81248000, current: 0x81248000
+CPU-local areas allocated at 0x81207000 - 0x81248000
+Mapping early memory regions...
+Ram                 : [0x0000000080000000, 0x000000008fe00000) -> [0x0000000080000000, 0x000000008fe00000) (254 MiB)
+Ram                 : [0xffffffc080000000, 0xffffffc08fe00000) -> [0x0000000080000000, 0x000000008fe00000) (254 MiB)
+KImage              : [0xffffffff80000000, 0xffffffff81000000) -> [0x0000000080200000, 0x0000000081200000) (16 MiB)
+PerCpu              : [0xffffffe081207000, 0xffffffe081248000) -> [0x0000000081207000, 0x0000000081248000) (260 KiB)
+Boot page table at physical address: 0x81248000
+MMU Entry point at physical address: 0x8020415c
+Enabling MMU...
+MMU enabled, jumping to 0xffffffff8000415c, sp=0xffffffe081248000
+Trap vector at 0xffffffff80003de4
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080080000 (512 KiB)
+  Free   0x00000080080000 - 0x00000080200000 (1.5 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Rsv    0x00000081200000 - 0x00000081207000 (28 KiB)
+  PerCPU 0x00000081207000 - 0x00000081248000 (260 KiB)
+  Rsv    0x00000081248000 - 0x00000081354000 (1.05 MiB)
+  Free   0x00000081354000 - 0x00000087e81000 (107.18 MiB)
+  Rsv    0x00000087e81000 - 0x000000880eb000 (2.41 MiB)
+  Free   0x000000880eb000 - 0x0000008fe00000 (125.08 MiB)
+Jumping to main entry point at 0xffffffff80245460 with SP 0xffffffe081248000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = riscv64
+platform = LicheeRv Nano
+target = riscv64gc-unknown-none-elf
+build_mode = 
+log_level = info
+backtrace = false
+smp = 1
+
+[  5.226997 0 ax_runtime::bootstrap:98] Logging is enabled.
+[  5.234432 0 ax_runtime::bootstrap:99] Primary CPU 0 started, arg = 0x81200000.
+[  5.243750 0 ax_runtime::bootstrap:101] Found physcial memory regions:
+[  5.252290 0 ax_runtime::bootstrap:103]   [PA:0x80000000, PA:0x80080000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.264985 0 ax_runtime::bootstrap:103]   [PA:0x80080000, PA:0x80200000) free memory (READ | WRITE | FREE)
+[  5.276723 0 ax_runtime::bootstrap:103]   [PA:0x80200000, PA:0x81200000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.289446 0 ax_runtime::bootstrap:103]   [PA:0x81200000, PA:0x81207000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.302169 0 ax_runtime::bootstrap:103]   [PA:0x81207000, PA:0x81248000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.314892 0 ax_runtime::bootstrap:103]   [PA:0x81248000, PA:0x81354000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.327616 0 ax_runtime::bootstrap:103]   [PA:0x81354000, PA:0x87e81000) free memory (READ | WRITE | FREE)
+[  5.339353 0 ax_runtime::bootstrap:103]   [PA:0x87e81000, PA:0x880eb000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.352076 0 ax_runtime::bootstrap:103]   [PA:0x880eb000, PA:0x8fe00000) free memory (READ | WRITE | FREE)
+[  5.363814 0 ax_runtime::boot_memory:6] Initialize global memory allocator...
+[  5.372953 0 ax_runtime::boot_memory:7]   use buddy-slab-allocator allocator.
+[  5.382094 0 ax_alloc::buddy_slab:169] Initialize global memory allocator, start_vaddr: 0xffffffc0880eb000, size: 0x7d15000
+[  5.395551 0 ax_alloc::buddy_slab:407] global allocator initialized
+[  5.403629 0 ax_alloc::buddy_slab:179] Add memory region, start_vaddr: 0xffffffc080080000, size: 0x180000
+[  5.415277 0 buddy_slab_allocator::global:151] GlobalAllocator: skip region 0xffffffc080080000+0x180000, no allocator-visible memory after 2097152 alignment
+[  5.431494 0 ax_alloc::buddy_slab:179] Add memory region, start_vaddr: 0xffffffc081354000, size: 0x6b2d000
+[  5.443403 0 ax_runtime::bootstrap:148] kernel aspace: [VA:0xffffffc000000000, VA:0xffffffffffffffff)
+[  5.454521 0 ax_mm:136] Initialize virtual memory management...
+[  5.472023 0:4294967296 ax_runtime::bootstrap:45] Initialize platform devices...
+[  5.489283 0:4294967296 somehal::driver:5] Initializing rdrive with FDT at 0xffffffc081200000
+[  5.541160 0:4294967296 ax_runtime::bootstrap:172] Initialize interrupt handlers...
+[  5.553410 0:4294967296 ax_runtime::devices:2] Probe platform devices...
+[  5.565881 0:4294967296 ax_driver::serial::ns16550:89] Probing NS16550 serial device: serial@04140000
+[  5.577269 0:4294967296 ax_driver::serial::ns16550:132] NS16550 serial@0xffffffc004140000 registered successfully
+[  5.589568 0:4294967296 ax_driver::serial::ns16550:89] Probing NS16550 serial device: serial@04150000
+[  5.600916 0:4294967296 ax_driver::serial::ns16550:132] NS16550 serial@0xffffffc004150000 registered successfully
+[  5.613220 0:4294967296 ax_driver::serial::ns16550:89] Probing NS16550 serial device: serial@04160000
+[  5.624542 0:4294967296 ax_driver::serial::ns16550:132] NS16550 serial@0xffffffc004160000 registered successfully
+[  5.636874 0:4294967296 ax_driver::serial::ns16550:89] Probing NS16550 serial device: serial@04170000
+[  5.648198 0:4294967296 ax_driver::serial::ns16550:132] NS16550 serial@0xffffffc004170000 registered successfully
+[  5.664925 0:4294967296 ax_driver::block::cvsd:67] cvsd probe: node=cv-sd@4310000, src=375000000Hz min=400000Hz max=25000000Hz bus_width=Bit4 no_1v8=true no_mmc=true no_sdio=true cd_gpio=true
+[  5.684415 0:4294967296 ax_driver::block::cvsd:99] cvsd block device registered irq=None
+[  5.736853 0:4294967296 ax_driver::net::aic8800:70] [wifi] SDIO1 resources prepared (node=wifi-sd@4320000, controller=0x4320000, src=375000000Hz, bus=Bit4)
+[  5.752976 0:4294967296 ax_driver::net::aic8800:99] [wifi] wlan0 device registered (probe stage done)
+[  5.765834 0:4294967296 ax_runtime::serial:1040] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [44, 4] }))), polling=false
+[  5.785823 0:4294967296 ax_runtime::serial:1040] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [45, 4] }))), polling=false
+[  5.805805 0:4294967296 ax_runtime::serial:1040] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [46, 4] }))), polling=false
+[  5.825691 0:4294967296 ax_runtime::serial:1040] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [47, 4] }))), polling=false
+[  9.069451 0:4294967296 ax_runtime::bootstrap:202] runtime console active: serial0, ttyS0
+Boot at 1970-01-01 00:00:09.069481280 UTC
+
+[  9.072511 0:4294967305 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op ResetAll
+[  9.074166 0:4294967305 ax_fs_ng::block::runtime::hctx:237] prepared block hctx 0 on CPU 0 with hardware depth 1
+[  9.074320 0:4294967305 ax_fs_ng::block::runtime::lifecycle::device:336] block device cvsd IRQ source 0 (IrqId { domain: IrqDomainId(7), hwirq: HwIrq(36) }) fixed to CPU 0 for queue mask 0x1
+[  9.075700 0:4294967306 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op PowerOn
+[  9.086009 0:4294967306 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op SwitchVoltage(V330)
+[  9.092135 0:4294967306 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit1)
+[  9.092300 0:4294967306 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Identification)
+[  9.117031 0:4294967306 sdmmc_protocol::sdio::init::state_machine::identify:175] sdio: detected Sd ocr=0xc1ff8000
+[  9.118879 0:4294967306 sdmmc_protocol::sdio::init::state_machine::identify:340] sdio: CSD capacity_blocks=Some(124735488)
+[  9.119624 0:4294967306 sdmmc_protocol::sdio::init::state_machine::identify:354] sdio: switch SD bus width to 4-bit
+[  9.120698 0:4294967306 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit4)
+[  9.121691 0:4294967306 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Default)
+[  9.126394 0:4294967306 sdmmc_protocol::sdio::init::state_machine::sd:185] sdio: SD speed selected HighSpeed
+[  9.127344 0:4294967306 sdmmc_protocol::sdio::init::state_machine:237] sdio: init done kind=Sd sd_v2=true high_capacity=true rca=0xaaaa ocr=0xc1ff8000 host_bus_width=Bit4 ext_csd_bus_width=None ext_csd_timing=None
+[  9.127433 0:4294967306 sdmmc_protocol::rdif::queue:173] sdmmc block init complete: kind=Sd high_capacity=true rca=43690 capacity_blocks=124735488 cache_enabled=false
+[  9.129732 0:4294967296 ax_fs_ng::root:353]     partition 1 name=None fs=None lba 2048..133120
+[  9.130673 0:4294967296 ax_fs_ng::root:353]     partition 2 name=None fs=Some(Ext4) lba 133120..5033984
+[  9.130941 0:4294967296 ax_fs_ng::root:369]   block device 0 (cvsd) has Mbr partition table with 2 partitions
+[  9.131545 0:4294967296 ax_fs_ng::root:479]   matched root by device path on disk0 partition 2 (<unnamed>, fs=ext4, lba 133120..5033984)
+[  9.131590 0:4294967296 ax_fs_ng:100] Initialize filesystem subsystem...
+[  9.131607 0:4294967296 ax_fs_ng:101]   selected root device: disk0 partition 2 (<unnamed>, fs=ext4, lba 133120..5033984)
+[  9.258078 0:4294967296 ax_fs_ng:113]   filesystem type: "ext4"
+[  9.258390 0:4294967296 ax_input:25] Initialize input subsystem...
+[  9.260900 0:4294967296 ax_runtime::irq:193] registered wlan0-g0-s0 IRQ IrqId { domain: IrqDomainId(7), hwirq: HwIrq(38) } on fixed CPU 0
+[  9.261130 0:4294967307 aic8800::rdif::device::endpoints::startup:90] [wifi] AIC owner startup timeout armed for 60s
+[  9.261169 0:4294967307 aic8800::rdif::device::endpoints::startup:98] [wifi] AIC owner startup waiting 1ms for SDIO1 reset settle
+[  9.262376 0:4294967307 aic8800::rdif::device::endpoints::startup:157] [wifi] AIC owner reset settle complete; starting SDIO card enumeration
+[  9.262448 0:4294967307 aic8800::rdif::owner::progress:126] [wifi] SDIO completion IRQ enabled; submitting IO-card initialization
+[  9.305038 0:4294967307 aic8800::rdif::owner::progress:431] [wifi] detected supported AIC SDIO variant Aic8800D80
+[ 10.930398 0:4294967296 ax_net::queue_runtime:827] [wifi] secure startup connection entropy prepared
+[ 10.931231 0:4294967307 aic8800::device::mailbox:278] [wifi] stale station association cleared before connect
+[ 11.305045 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=0 dt=2000ms period_avg=0us max=0us hist=0/0/0/0/0 | write n=0 avg=0us min=18446744073709551us max=0us bytes=0 calls=0.0 | size blk 1/2/3/4-6/7-9/10+ n=0/0/0/0/0/0 avg=0/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=0 avg=0us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=0 avg=0us | steps=26565 per_pkt=26565.0 owner_calls=26565
+[ 11.305152 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=374 avg=210us min=74us max=512us bytes=191488 frames=374 | size <=512 n=374 avg=210us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=748 avg=38us min=0us max=376us | credit n=0 avg=0us | other n=737 avg=236us | rdif_at_write 0/1/2-3/4+=0/0/0/0 | queue_at_arrival=0/0/0/0
+[ 11.818405 0:4294967307 aic8800::device::data_plane:317] [wifi] association complete; learned firmware vif=0 station=0
+[ 11.831557 0:4294967307 aic8800::device::control:171] [wifi] WPA2 EAPOL frame consumed by handshake state machine
+[ 11.842524 0:4294967307 aic8800::device::control:171] [wifi] WPA2 EAPOL frame consumed by handshake state machine
+[ 11.846269 0:4294967307 aic8800::device::mailbox:305] [wifi] WPA2 keys installed and control port enabled
+[ 11.846311 0:4294967307 aic8800::rdif::owner::output:264] [wifi] control result queued for network runtime
+[ 11.846484 0:4294967307 aic8800::rdif::device::endpoints::control:95] [wifi] control result consumed by network runtime
+[ 11.846777 0:4294967296 ax_net:386] Initialize network subsystem...
+[ 11.847794 0:4294967296 ax_net:408]   use NIC 0: "wlan0"
+[ 11.848644 0:4294967296 ax_net:443]   Wi-Fi control for wlan0 is owned by CPU 0
+[ 11.848671 0:4294967296 ax_net:455] wlan0:
+[ 11.848689 0:4294967296 ax_net:456]   id:   2
+[ 11.848706 0:4294967296 ax_net:457]   mac:  38-7a-cc-9b-2c-c8
+[ 11.848732 0:4294967296 ax_net:474]   mode: dhcp
+[ 11.848755 0:4294967296 ax_net:523] Device: lo
+[ 11.848776 0:4294967296 ax_net:523] Device: wlan0
+[ 11.848806 0:4294967296 ax_net::service:554] wlan0: DHCP enabled
+[ 12.938861 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2008ms iters=58528 polls=58521 poll_us=2 waits=13 wait_us=83972 yields=0 | wait_kind notify=13@83972us deadline=0@0us hist=7/0/1/1/4 | wake n=58521 avg=62270us hist=18/81/172/389/57861 | owner_calls=58521 skipped=0 owner_us=2 max=313us slow=7 | tx_submit=2 tx_done=2 rx_done=0 | ready 0/1/2-3/4+=58521/0/0/0 | irq=196
+
+[ 12.939572 0:4294967308 ax_net::service:436] wlan0: DHCP offered address 192.168.137.249 from 192.168.137.1
+[ 12.959476 0:4294967308 ax_net::service:868] wlan0: DHCP acquired address 192.168.137.249/24
+[ 12.959551 0:4294967308 ax_net::service:870] wlan0: DHCP router 192.168.137.1
+[ 12.959721 0:4294967308 ax_net::device::ethernet:338] wlan0: requesting ARP for 192.168.137.1
+[ 12.960307 0:4294967296 ax_net:684] Initialize vsock subsystem...
+[ 12.960381 0:4294967296 ax_net:686]   No vsock device found!
+[ 12.960411 0:4294967296 ax_runtime::bootstrap:236] Primary CPU 0 init OK.
+[ 12.960884 0:4294967296 ax_fs_ng::block::runtime::lifecycle::device:431] block device cvsd online with 1 hctxs across 1 CPUs
+[ 12.962687 0:4294967296 ax_tracepoint:327] tracepoint_data_start: 0xffffffff80734c68, tracepoint_data_end: 0xffffffff80734d10
+[ 12.962816 0:4294967296 ax_tracepoint:370] tracepoint_data_len: 7
+[ 12.962845 0:4294967296 ax_tracepoint:389] tracepoint registered: sched:sched_process_exit
+[ 12.962876 0:4294967296 ax_tracepoint:389] tracepoint registered: sched:sched_process_fork
+[ 12.962897 0:4294967296 ax_tracepoint:389] tracepoint registered: sched:sched_switch
+[ 12.962917 0:4294967296 ax_tracepoint:389] tracepoint registered: syscalls:sys_clone
+[ 12.962936 0:4294967296 ax_tracepoint:389] tracepoint registered: raw_syscalls:sys_enter
+[ 12.962956 0:4294967296 ax_tracepoint:389] tracepoint registered: syscalls:sys_enter_openat
+[ 12.962975 0:4294967296 ax_tracepoint:389] tracepoint registered: syscalls:sys_mkdirat
+Welcome to Starry OS!
+Initialized 7 tracepoints
+STARRY_LEGACY_BOARD_INIT
+kmod subsystem initialized
+[ 12.967539 0:4294967296 starry_kernel::pseudofs:88] Initialize pseudofs...
+[ 12.969978 0:4294967296 starry_kernel::pseudofs::dev::tty::serial:238] ttyS0 registered: path=/serial@04140000, alias=Some(0), paddr=0x4140000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [44, 4] })))
+USER=root
+[ 12.971398 0:4294967308 ax_net::device::ethernet:409] wlan0: ARP 192.168.137.1 -> 66-d6-9a-fb-71-56
+HOSTNAME=starry
+[ 12.971497 0:4294967308 ax_net::device::ethernet:479] wlan0: sending pending IPv4 packet to 192.168.137.1 via 66-d6-9a-fb-71-56
+SHLVL=1
+[ 12.973193 0:4294967296 starry_kernel::pseudofs::dev::tty::serial:238] ttyS1 registered: path=/serial@04150000, alias=Some(1), paddr=0x4150000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [45, 4] })))
+HOME=/root
+[ 12.974906 0:4294967296 starry_kernel::pseudofs::dev::tty::serial:238] ttyS2 registered: path=/serial@04160000, alias=Some(2), paddr=0x4160000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [46, 4] })))
+TERM=xterm-256color
+[ 12.977016 0:4294967296 starry_kernel::pseudofs::dev::tty::serial:238] ttyS3 registered: path=/serial@04170000, alias=Some(3), paddr=0x4170000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [47, 4] })))
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+[ 12.977121 0:4294967296 starry_kernel::pseudofs::dev::tty::serial:182] /dev/console bound to runtime console ttyS0
+PWD=/
+[ 12.979240 0:4294967296 sg2002_tpu::tpu::device:181] TPU device initialized
+
+[ 12.979323 0:4294967296 starry_kernel::pseudofs::dev::tpu::device:249] [TPU] TDMA IRQ IrqId { domain: IrqDomainId(7), hwirq: HwIrq(76) } registered and enabled
+[ 12.979355 0:4294967296 starry_kernel::pseudofs::dev::tpu::device:361] [TPU] resource tdma=[0xc100000, +0x1000) tiu=[0xc101000, +0x1000) irq=Some(IrqId { domain: IrqDomainId(7), hwirq: HwIrq(76) }) irq_wait=true source=fdt
+[ 12.980816 0:4294967317 starry_kernel::pseudofs::dev::tpu::device:307] [TPU] worker thread started
+[ 12.982643 0:4294967296 starry_kernel::pseudofs:82] Mounted devfs at /dev
+[ 12.982719 0:4294967296 starry_kernel::pseudofs::usbfs:57] usbfs: initializing manager
+[ 12.982753 0:4294967296 starry_kernel::pseudofs::usbfs::manager:1773] usbfs: discovered 0 USB host(s)
+[ 12.982773 0:4294967296 starry_kernel::pseudofs::usbfs:60] usbfs: no USB host found, skip mounting usbfs
+[ 12.982913 0:4294967296 starry_kernel::pseudofs:82] Mounted tmpfs at /dev/shm
+[ 12.983166 0:4294967296 starry_kernel::pseudofs:82] Mounted tmpfs at /tmp
+[ 12.983626 0:4294967296 starry_kernel::pseudofs:82] Mounted mqueue at /dev/mqueue
+[ 12.984045 0:4294967296 starry_kernel::dyn_debug:63] debug_init: initializing dynamic debug sites
+[ 12.985536 0:4294967296 starry_kernel::dyn_debug:66] debug_init: found 218 dynamic debug sites
+[ 13.018281 0:4294967296 starry_kernel::pseudofs:82] Mounted proc at /proc
+[ 13.018542 0:4294967296 starry_kernel::pseudofs:82] Mounted sysfs at /sys
+[ 13.019107 0:4294967296 starry_kernel::pseudofs:82] Mounted debug at /sys/kernel/debug
+[ 13.022437 0:4294967296 starry_kernel::task::timer::alarm:75] Initialize alarm...
+[ 13.276024 0:4294967323 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffef80
+[ 13.321566 0:4294967323 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 13.344662 0:8589934619 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffef80
+[ 13.352087 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 13.405837 0:12884901915 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffef80
+[ 13.431928 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 13.465635 0:12884901915 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+/bin/sh: [ 13.466105 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+can't access tty; job control turned off[ 13.474413 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=6 dt=2169ms period_avg=189979us max=1007203us hist=0/0/0/0/5 | write n=6 avg=197us min=119us max=459us bytes=3584 calls=2.0 | size blk 1/2/3/4-6/7-9/10+ n=5/1/0/0/0/0 avg=144/459/0/0/0/0us | credit n=3 min=127 max=127 avgx10=1270 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=5 avg=227763us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=5 avg=227763us | steps=34601 per_pkt=5766.8 owner_calls=34598
+
+[ 13.474522 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=23 avg=135us min=117us max=177us bytes=12288 frames=24 | size <=512 n=22 avg=134us | <=2k n=1 avg=162us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=46 avg=56us min=0us max=396us | credit n=3 avg=83us | other n=6 avg=101us | rdif_at_write 0/1/2-3/4+=6/0/0/0 | queue_at_arrival=4/1/0/0
+root@starry:~# [ 13.484607 0:17179869211 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffef80
+
+[ 13.500441 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+root@starry:~# [ 13.535405 0:17179869211 starry_kernel::task::ops:539] Task(17179869211, "busybox") exit with code: 0
+[ 13.535981 0:17179869211 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 13.536485 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 13.555735 0:21474836507 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffedc0
+[ 13.571771 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 13.607225 0:21474836507 starry_kernel::task::ops:539] Task(21474836507, "busybox") exit with code: 0
+[ 13.607880 0:21474836507 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 13.608349 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 13.626696 0:25769803803 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffedc0
+[ 13.641725 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 13.678466 0:25769803803 starry_kernel::task::ops:539] Task(25769803803, "busybox") exit with code: 0
+[ 13.679057 0:25769803803 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 13.679591 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 13.698812 0:30064771099 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 13.705965 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 13.751298 0:30064771099 starry_kernel::task::ops:539] Task(30064771099, "busybox") exit with code: 0
+[ 13.751941 0:30064771099 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 13.752974 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 13.771890 0:34359738395 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 13.781695 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 13.823329 0:34359738395 starry_kernel::task::ops:539] Task(34359738395, "busybox") exit with code: 0
+[ 13.824150 0:34359738395 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 13.824755 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 13.844102 0:38654705691 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 13.850822 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 13.895929 0:38654705691 starry_kernel::task::ops:539] Task(38654705691, "busybox") exit with code: 0
+[ 13.896593 0:38654705691 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 13.897663 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 13.916214 0:42949672987 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 13.941695 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 13.966352 0:42949672987 starry_kernel::task::ops:539] Task(42949672987, "busybox") exit with code: 0
+[ 13.967015 0:42949672987 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 13.967524 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 13.986866 0:47244640283 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 14.011694 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.038052 0:47244640283 starry_kernel::task::ops:539] Task(47244640283, "busybox") exit with code: 0
+[ 14.038712 0:47244640283 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 14.039237 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.058931 0:51539607579 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 14.061088 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.111833 0:51539607579 starry_kernel::task::ops:539] Task(51539607579, "busybox") exit with code: 0
+[ 14.112430 0:51539607579 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 14.113364 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.132948 0:55834574875 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 14.151728 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.182761 0:55834574875 starry_kernel::task::ops:539] Task(55834574875, "busybox") exit with code: 0
+[ 14.183454 0:55834574875 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 14.184044 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.203672 0:60129542171 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 14.211910 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.256018 0:60129542171 starry_kernel::task::ops:539] Task(60129542171, "busybox") exit with code: 0
+[ 14.256703 0:60129542171 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 14.257280 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 14.281274 0:64424509467 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffef80
+[ 14.283751 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 14.324501 0:64424509467 starry_kernel::task::ops:539] Task(64424509467, "busybox") exit with code: 0
+[ 14.325123 0:64424509467 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 14.326159 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+
+root@starry:~# 
+root@starry:~# 
+root@starry:~# 
+root@starry:~# ip addr
+[ 18.501232 0:68719476763 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+[ 18.502843 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+[ 18.555796 0:68719476763 starry_kernel::task::ops:539] Task(68719476763, "busybox") exit with code: 0
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+[ 18.556435 0:68719476763 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+    inet 127.0.0.1/8 scope host dynamic lo
+[ 18.557513 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+2: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP qlen 1000
+    link/ether 38:7a:cc:9b:2c:c8 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.137.249/24 brd 192.168.137.255 scope global dynamic wlan0
+root@starry:~# 
+root@starry:~# 
+root@starry:~# [ 31.981083 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=19042ms iters=50 polls=40 poll_us=12 waits=21 wait_us=906623 yields=0 | wait_kind notify=21@906623us deadline=0@0us hist=11/0/0/1/9 | wake n=40 avg=190us hist=0/18/12/4/6 | owner_calls=40 skipped=0 owner_us=54 max=264us slow=1 | tx_submit=3 tx_done=3 rx_done=3 | ready 0/1/2-3/4+=40/0/0/0 | irq=41
+[ 31.981211 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=0 dt=18506ms period_avg=0us max=0us hist=0/0/0/0/0 | write n=0 avg=0us min=18446744073709551us max=0us bytes=0 calls=0.0 | size blk 1/2/3/4-6/7-9/10+ n=0/0/0/0/0/0 avg=0/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=0 avg=0us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=0 avg=0us | steps=4 per_pkt=4.0 owner_calls=4
+[ 31.981272 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=1 avg=310us min=310us max=310us bytes=512 frames=1 | size <=512 n=1 avg=310us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=2 avg=39us min=0us max=79us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=0/0/0/0 | queue_at_arrival=0/0/0/0
+[ 34.038296 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2057ms iters=63 polls=50 poll_us=11 waits=32 wait_us=64169 yields=0 | wait_kind notify=32@64169us deadline=0@0us hist=19/0/2/4/7 | wake n=50 avg=130us hist=0/21/16/8/5 | owner_calls=50 skipped=0 owner_us=52 max=209us slow=1 | tx_submit=4 tx_done=4 rx_done=4 | ready 0/1/2-3/4+=50/0/0/0 | irq=53
+[ 34.038414 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=4 dt=2057ms period_avg=5137868us max=19010368us hist=0/0/0/0/4 | write n=4 avg=145us min=133us max=165us bytes=2048 calls=1.50 | size blk 1/2/3/4-6/7-9/10+ n=4/0/0/0/0/0 avg=145/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=4 avg=5137722us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=4 avg=5137722us | steps=54 per_pkt=13.5 owner_calls=50
+[ 34.038475 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=9 avg=156us min=135us max=253us bytes=4608 frames=9 | size <=512 n=9 avg=156us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=18 avg=57us min=0us max=165us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=4/0/0/0 | queue_at_arrival=4/0/0/0
+[ 36.121128 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2082ms iters=76 polls=60 poll_us=12 waits=40 wait_us=51957 yields=0 | wait_kind notify=40@51957us deadline=0@0us hist=24/0/2/8/6 | wake n=60 avg=150us hist=0/27/17/9/7 | owner_calls=60 skipped=0 owner_us=53 max=216us slow=1 | tx_submit=5 tx_done=5 rx_done=5 | ready 0/1/2-3/4+=60/0/0/0 | irq=60
+[ 36.121248 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=5 dt=2082ms period_avg=416698us max=520746us hist=0/0/0/0/5 | write n=5 avg=172us min=134us max=263us bytes=2560 calls=1.80 | size blk 1/2/3/4-6/7-9/10+ n=5/0/0/0/0/0 avg=172/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=5 avg=416525us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=5 avg=416525us | steps=65 per_pkt=13.0 owner_calls=60
+[ 36.121309 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=10 avg=159us min=140us max=242us bytes=5120 frames=10 | size <=512 n=10 avg=159us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=20 avg=58us min=0us max=164us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=5/0/0/0 | queue_at_arrival=5/0/0/0
+
+root@starry:~# 
+root@starry:~# 
+root@starry:~# 
+root@starry:~# 
+root@starry:~# iperf3 -s 1
+[ 43.791941 0:73014444059 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+[ 43.795118 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+[ 47.393267 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=11272ms iters=44 polls=36 poll_us=11 waits=20 wait_us=563443 yields=0 | wait_kind notify=20@563443us deadline=0@0us hist=12/0/1/4/3 | wake n=36 avg=147us hist=0/15/12/5/4 | owner_calls=36 skipped=0 owner_us=67 max=366us slow=3 | tx_submit=3 tx_done=3 rx_done=3 | ready 0/1/2-3/4+=36/0/0/0 | irq=36
+[ 47.393904 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=3 dt=11272ms period_avg=361726us max=515635us hist=0/0/0/0/3 | write n=3 avg=241us min=144us max=413us bytes=1536 calls=2.0 | size blk 1/2/3/4-6/7-9/10+ n=3/0/0/0/0/0 avg=241/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=3 avg=361485us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=3 avg=361485us | steps=39 per_pkt=13.0 owner_calls=36
+Accepted connection from 192.168.137.1, port 54801
+[ 47.394014 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=6 avg=160us min=128us max=244us bytes=3072 frames=6 | size <=512 n=6 avg=160us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=12 avg=58us min=0us max=161us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=3/0/0/0 | queue_at_arrival=3/0/0/0
+[  5] local 192.168.137.249 port 5201 connected to 192.168.137.1 port 54802
+[ 47.506453 0:4294967324 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  1.38 MBytes  11.5 Mbits/sec                  
+[ 49.393692 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4260 polls=3257 poll_us=19 waits=2085 wait_us=762 yields=0 | wait_kind notify=2085@762us deadline=0@0us hist=1095/5/95/216/674 | wake n=3244 avg=333us hist=0/1069/470/790/915 | owner_calls=3244 skipped=13 owner_us=94 max=1691us slow=361 | tx_submit=482 tx_done=478 rx_done=2581 | ready 0/1/2-3/4+=3226/18/0/0 | irq=2983
+[ 49.393823 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=201 dt=2000ms period_avg=63108us max=10705206us hist=14/39/9/10/129 | write n=201 avg=656us min=119us max=2017us bytes=244736 calls=1.93 | size blk 1/2/3/4-6/7-9/10+ n=82/24/32/63/0/0 avg=186/747/1088/1015/0/0us | credit n=3 min=127 max=127 avgx10=1270 backoff=0 avg=0us | gap rx0 n=68 avg=914us | rx1 n=0 avg=0us | rx2+ n=134 avg=93330us | supply core n=43 avg=1144us | ring n=62 avg=4425us | none n=97 avg=126236us | steps=5364 per_pkt=26.6 owner_calls=3120
+[ 49.393883 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=670 avg=929us min=100us max=3371us bytes=4350976 frames=2781 | size <=512 n=129 avg=148us | <=2k n=113 avg=598us | <=8k n=224 avg=969us | >8k n=204 avg=1561us | control n=892 avg=223us min=0us max=1782us | credit n=3 avg=59us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=114/86/0/1 | queue_at_arrival=159/97/134/92
+[  5]   1.00-2.00   sec  2.38 MBytes  19.9 Mbits/sec                  
+[  5]   2.00-3.00   sec  2.88 MBytes  24.1 Mbits/sec                  
+[ 51.393764 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=5118 polls=3853 poll_us=21 waits=2594 wait_us=566 yields=0 | wait_kind notify=2594@566us deadline=0@0us hist=1347/7/104/240/896 | wake n=3843 avg=361us hist=0/1150/438/977/1278 | owner_calls=3843 skipped=10 owner_us=106 max=1791us slow=543 | tx_submit=608 tx_done=612 rx_done=4204 | ready 0/1/2-3/4+=3815/27/1/0 | irq=3298
+[ 51.393949 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=215 dt=2000ms period_avg=9373us max=52367us hist=10/38/30/13/124 | write n=215 avg=764us min=116us max=1917us bytes=313344 calls=1.97 | size blk 1/2/3/4-6/7-9/10+ n=61/22/21/111/0/0 avg=176/755/1023/1039/0/0us | credit n=5 min=127 max=132 avgx10=1280 backoff=0 avg=0us | gap rx0 n=85 avg=453us | rx1 n=0 avg=0us | rx2+ n=129 avg=13927us | supply core n=85 avg=1874us | ring n=43 avg=2743us | none n=86 avg=18115us | steps=7431 per_pkt=34.5 owner_calls=3696
+[ 51.394008 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=782 avg=1137us min=101us max=3042us bytes=6906880 frames=4424 | size <=512 n=108 avg=147us | <=2k n=101 avg=548us | <=8k n=211 avg=949us | >8k n=362 avg=1707us | control n=967 avg=287us min=0us max=1812us | credit n=5 avg=64us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=108/106/0/1 | queue_at_arrival=129/95/172/212
+[  5]   3.00-4.00   sec  2.75 MBytes  23.1 Mbits/sec                  
+[  5]   4.00-5.00   sec  2.75 MBytes  23.0 Mbits/sec                  
+[ 53.393824 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4786 polls=3593 poll_us=21 waits=2435 wait_us=613 yields=0 | wait_kind notify=2435@613us deadline=0@0us hist=1262/14/96/219/844 | wake n=3579 avg=378us hist=0/1012/390/907/1270 | owner_calls=3579 skipped=14 owner_us=110 max=2010us slow=515 | tx_submit=559 tx_done=559 rx_done=3944 | ready 0/1/2-3/4+=3541/38/0/0 | irq=3042
+[ 53.394677 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=201 dt=2000ms period_avg=9865us max=45591us hist=10/39/13/24/115 | write n=201 avg=807us min=118us max=2321us bytes=286208 calls=1.93 | size blk 1/2/3/4-6/7-9/10+ n=54/25/33/89/0/0 avg=164/862/1039/1096/0/0us | credit n=5 min=127 max=127 avgx10=1270 backoff=0 avg=0us | gap rx0 n=87 avg=509us | rx1 n=0 avg=0us | rx2+ n=114 avg=15581us | supply core n=73 avg=1472us | ring n=38 avg=1677us | none n=90 avg=18325us | steps=6971 per_pkt=34.6 owner_calls=3487
+[ 53.394809 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=732 avg=1146us min=101us max=3611us bytes=6473728 frames=4145 | size <=512 n=89 avg=142us | <=2k n=97 avg=510us | <=8k n=219 avg=929us | >8k n=327 avg=1754us | control n=906 avg=283us min=0us max=1764us | credit n=5 avg=67us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=110/91/0/0 | queue_at_arrival=128/95/163/173
+[  5]   5.00-6.00   sec  2.75 MBytes  23.1 Mbits/sec                  
+[  5]   6.00-7.00   sec  2.50 MBytes  21.0 Mbits/sec                  
+[ 55.415388 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2021ms iters=5775 polls=4473 poll_us=18 waits=2704 wait_us=556 yields=0 | wait_kind notify=2704@556us deadline=0@0us hist=1430/13/152/377/732 | wake n=4461 avg=311us hist=0/1426/638/1239/1158 | owner_calls=4461 skipped=12 owner_us=86 max=1967us slow=368 | tx_submit=903 tx_done=900 rx_done=2764 | ready 0/1/2-3/4+=4438/22/1/0 | irq=3982
+[ 55.415515 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=313 dt=2020ms period_avg=6442us max=55079us hist=8/52/44/36/173 | write n=313 avg=726us min=119us max=2292us bytes=460800 calls=1.95 | size blk 1/2/3/4-6/7-9/10+ n=77/50/21/165/0/0 avg=192/923/880/896/0/0us | credit n=7 min=127 max=130 avgx10=1274 backoff=0 avg=0us | gap rx0 n=127 avg=336us | rx1 n=0 avg=0us | rx2+ n=186 avg=9388us | supply core n=137 avg=1303us | ring n=58 avg=1754us | none n=118 avg=12785us | steps=6605 per_pkt=21.1 owner_calls=4228
+[  5]   7.00-8.00   sec  1.00 MBytes  8.39 Mbits/sec                  
+[ 55.415577 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=846 avg=833us min=99us max=4115us bytes=4677632 frames=3074 | size <=512 n=168 avg=150us | <=2k n=211 avg=577us | <=8k n=281 avg=879us | >8k n=186 avg=1670us | control n=1136 avg=204us min=0us max=1627us | credit n=7 avg=75us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=176/86/23/28 | queue_at_arrival=176/120/188/416
+[  5]   8.00-9.00   sec  1.00 MBytes  8.38 Mbits/sec                  
+[ 57.415735 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=5916 polls=4580 poll_us=18 waits=2773 wait_us=538 yields=0 | wait_kind notify=2773@538us deadline=0@0us hist=1471/8/137/403/754 | wake n=4566 avg=287us hist=0/1556/750/1167/1093 | owner_calls=4566 skipped=14 owner_us=82 max=1347us slow=331 | tx_submit=769 tx_done=771 rx_done=2283 | ready 0/1/2-3/4+=4547/17/1/1 | irq=4377
+[ 57.416600 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=310 dt=2001ms period_avg=6505us max=42445us hist=12/37/25/27/209 | write n=310 avg=723us min=121us max=1999us bytes=394752 calls=1.95 | size blk 1/2/3/4-6/7-9/10+ n=102/54/55/99/0/0 avg=182/874/960/1066/0/0us | credit n=6 min=127 max=127 avgx10=1270 backoff=0 avg=0us | gap rx0 n=84 avg=592us | rx1 n=0 avg=0us | rx2+ n=226 avg=7710us | supply core n=73 avg=889us | ring n=90 avg=3073us | none n=147 avg=9869us | steps=6250 per_pkt=20.1 owner_calls=4329
+[  5]   9.00-10.00  sec  2.25 MBytes  18.9 Mbits/sec                  
+[ 57.416737 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=929 avg=731us min=100us max=2510us bytes=4018176 frames=2592 | size <=512 n=188 avg=141us | <=2k n=290 avg=597us | <=8k n=322 avg=891us | >8k n=129 avg=1495us | control n=1292 avg=178us min=0us max=2103us | credit n=6 avg=63us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=163/111/29/7 | queue_at_arrival=238/166/229/139
+[  5]  10.00-11.00  sec  2.88 MBytes  24.1 Mbits/sec                  
+[ 59.415900 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4801 polls=3605 poll_us=22 waits=2458 wait_us=610 yields=0 | wait_kind notify=2458@610us deadline=0@0us hist=1283/12/100/222/841 | wake n=3590 avg=371us hist=0/1047/413/909/1221 | owner_calls=3590 skipped=15 owner_us=106 max=1608us slow=502 | tx_submit=550 tx_done=551 rx_done=3871 | ready 0/1/2-3/4+=3563/27/0/0 | irq=3089
+[ 59.417986 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=195 dt=2001ms period_avg=10147us max=43342us hist=8/40/18/13/116 | write n=195 avg=780us min=117us max=1942us bytes=282112 calls=1.95 | size blk 1/2/3/4-6/7-9/10+ n=55/19/26/95/0/0 avg=166/720/1011/1085/0/0us | credit n=5 min=127 max=127 avgx10=1270 backoff=0 avg=0us | gap rx0 n=79 avg=672us | rx1 n=0 avg=0us | rx2+ n=116 avg=15287us | supply core n=74 avg=1321us | ring n=34 avg=3602us | none n=87 avg=18462us | steps=6906 per_pkt=35.4 owner_calls=3481
+[  5]  11.00-12.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[ 59.418117 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=740 avg=1117us min=100us max=3702us bytes=6383104 frames=4070 | size <=512 n=105 avg=142us | <=2k n=99 avg=541us | <=8k n=215 avg=942us | >8k n=321 avg=1731us | control n=922 avg=280us min=0us max=1767us | credit n=5 avg=74us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=110/85/0/0 | queue_at_arrival=121/92/168/170
+[  5]  12.00-13.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[ 61.415964 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4868 polls=3684 poll_us=20 waits=2428 wait_us=616 yields=0 | wait_kind notify=2428@616us deadline=0@0us hist=1266/13/100/244/805 | wake n=3675 avg=359us hist=0/1077/426/977/1195 | owner_calls=3675 skipped=9 owner_us=105 max=1980us slow=486 | tx_submit=627 tx_done=627 rx_done=3807 | ready 0/1/2-3/4+=3645/30/0/0 | irq=3115
+[ 61.418534 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=219 dt=2000ms period_avg=9225us max=58493us hist=7/38/37/21/116 | write n=219 avg=721us min=115us max=1898us bytes=321024 calls=1.97 | size blk 1/2/3/4-6/7-9/10+ n=57/29/20/113/0/0 avg=157/779/1004/940/0/0us | credit n=5 min=120 max=130 avgx10=1264 backoff=0 avg=0us | gap rx0 n=101 avg=519us | rx1 n=0 avg=0us | rx2+ n=118 avg=15337us | supply core n=99 avg=1170us | ring n=33 avg=3615us | none n=87 avg=18703us | steps=6914 per_pkt=31.5 owner_calls=3560
+[  5]  13.00-14.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[ 61.418659 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=731 avg=1114us min=101us max=3609us bytes=6253056 frames=4028 | size <=512 n=106 avg=137us | <=2k n=98 avg=538us | <=8k n=212 avg=945us | >8k n=315 avg=1736us | control n=914 avg=271us min=0us max=1311us | credit n=5 avg=71us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=120/89/0/10 | queue_at_arrival=120/86/144/277
+[  5]  14.00-15.00  sec  2.75 MBytes  23.1 Mbits/sec                  
+[ 63.416844 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4808 polls=3615 poll_us=20 waits=2446 wait_us=618 yields=0 | wait_kind notify=2446@618us deadline=0@0us hist=1264/10/115/217/840 | wake n=3606 avg=355us hist=0/1032/405/954/1215 | owner_calls=3606 skipped=9 owner_us=103 max=1580us slow=485 | tx_submit=595 tx_done=590 rx_done=3799 | ready 0/1/2-3/4+=3586/20/0/0 | irq=3062
+[ 63.419275 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=205 dt=2000ms period_avg=9632us max=43030us hist=9/51/25/14/106 | write n=205 avg=729us min=118us max=2095us bytes=302080 calls=1.96 | size blk 1/2/3/4-6/7-9/10+ n=51/29/19/106/0/0 avg=156/718/999/959/0/0us | credit n=4 min=127 max=129 avgx10=1277 backoff=0 avg=0us | gap rx0 n=92 avg=281us | rx1 n=0 avg=0us | rx2+ n=113 avg=15921us | supply core n=88 avg=1357us | ring n=38 avg=1575us | none n=79 avg=20832us | steps=6855 per_pkt=33.4 owner_calls=3495
+[  5]  15.00-16.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[ 63.419340 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=723 avg=1118us min=100us max=3093us bytes=6261760 frames=4012 | size <=512 n=100 avg=153us | <=2k n=95 avg=479us | <=8k n=206 avg=966us | >8k n=322 avg=1704us | control n=907 avg=274us min=0us max=1936us | credit n=4 avg=65us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=113/87/4/1 | queue_at_arrival=117/90/147/240
+[  5]  16.00-17.00  sec  2.75 MBytes  23.1 Mbits/sec                  
+[ 65.417353 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4607 polls=3448 poll_us=23 waits=2374 wait_us=631 yields=0 | wait_kind notify=2374@631us deadline=0@0us hist=1221/10/99/190/854 | wake n=3430 avg=375us hist=0/1027/345/844/1214 | owner_calls=3430 skipped=18 owner_us=111 max=2164us slow=508 | tx_submit=537 tx_done=535 rx_done=4045 | ready 0/1/2-3/4+=3400/30/0/0 | irq=2920
+[ 65.419797 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=194 dt=2000ms period_avg=10374us max=52353us hist=5/37/21/21/110 | write n=194 avg=756us min=115us max=2253us bytes=273920 calls=1.96 | size blk 1/2/3/4-6/7-9/10+ n=57/26/18/93/0/0 avg=148/820/840/1095/0/0us | credit n=5 min=127 max=132 avgx10=1280 backoff=0 avg=0us | gap rx0 n=82 avg=675us | rx1 n=0 avg=0us | rx2+ n=112 avg=16165us | supply core n=79 avg=1511us | ring n=34 avg=4235us | none n=81 avg=19784us | steps=6912 per_pkt=35.6 owner_calls=3310
+[  5]  17.00-18.00  sec  2.75 MBytes  23.0 Mbits/sec                  
+[ 65.419864 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=694 avg=1220us min=101us max=4009us bytes=6581248 frames=4239 | size <=512 n=80 avg=146us | <=2k n=89 avg=495us | <=8k n=188 avg=994us | >8k n=337 avg=1791us | control n=857 avg=303us min=0us max=2199us | credit n=5 avg=74us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=104/88/2/0 | queue_at_arrival=115/85/142/195
+[  5]  18.00-19.00  sec  3.00 MBytes  25.2 Mbits/sec                  
+[ 67.420427 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2003ms iters=4769 polls=3559 poll_us=22 waits=2463 wait_us=597 yields=0 | wait_kind notify=2463@597us deadline=0@0us hist=1269/7/88/203/896 | wake n=3552 avg=382us hist=0/984/330/957/1281 | owner_calls=3552 skipped=7 owner_us=115 max=1899us slow=557 | tx_submit=599 tx_done=606 rx_done=4422 | ready 0/1/2-3/4+=3514/37/0/1 | irq=2943
+[ 67.420547 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=190 dt=2000ms period_avg=10638us max=53099us hist=4/36/31/15/104 | write n=190 avg=822us min=120us max=2043us bytes=310272 calls=1.99 | size blk 1/2/3/4-6/7-9/10+ n=29/22/23/116/0/0 avg=187/593/833/1023/0/0us | credit n=4 min=126 max=128 avgx10=1270 backoff=0 avg=0us | gap rx0 n=88 avg=404us | rx1 n=0 avg=0us | rx2+ n=102 avg=17935us | supply core n=103 avg=1946us | ring n=19 avg=6513us | none n=68 avg=22657us | steps=7328 per_pkt=38.5 owner_calls=3418
+[  5]  19.00-20.00  sec  3.12 MBytes  26.3 Mbits/sec                  
+[ 67.420608 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=710 avg=1289us min=99us max=4004us bytes=7250432 frames=4597 | size <=512 n=72 avg=146us | <=2k n=70 avg=520us | <=8k n=190 avg=1017us | >8k n=378 avg=1785us | control n=858 avg=314us min=0us max=1428us | credit n=4 avg=61us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=104/85/0/1 | queue_at_arrival=86/72/143/298
+[  5]  20.00-21.01  sec  3.12 MBytes  26.1 Mbits/sec                  
+[ 69.420495 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4567 polls=3398 poll_us=22 waits=2386 wait_us=627 yields=0 | wait_kind notify=2386@627us deadline=0@0us hist=1232/10/102/210/832 | wake n=3387 avg=395us hist=0/919/312/911/1245 | owner_calls=3387 skipped=11 owner_us=115 max=1932us slow=522 | tx_submit=558 tx_done=547 rx_done=4295 | ready 0/1/2-3/4+=3352/34/1/0 | irq=2768
+[ 69.420696 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=184 dt=2000ms period_avg=10723us max=71484us hist=6/38/23/20/97 | write n=184 avg=761us min=116us max=2638us bytes=280064 calls=1.95 | size blk 1/2/3/4-6/7-9/10+ n=42/19/25/98/0/0 avg=193/595/765/1036/0/0us | credit n=5 min=127 max=131 avgx10=1282 backoff=0 avg=0us | gap rx0 n=88 avg=434us | rx1 n=0 avg=0us | rx2+ n=96 avg=18694us | supply core n=87 avg=1887us | ring n=21 avg=4576us | none n=76 avg=20692us | steps=7154 per_pkt=38.8 owner_calls=3306
+[  5]  21.01-22.00  sec  2.75 MBytes  23.2 Mbits/sec                  
+[ 69.420811 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=675 avg=1291us min=102us max=3671us bytes=7095808 frames=4504 | size <=512 n=77 avg=154us | <=2k n=80 avg=537us | <=8k n=155 avg=963us | >8k n=363 avg=1837us | control n=819 avg=306us min=0us max=1440us | credit n=5 avg=73us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=112/70/2/0 | queue_at_arrival=98/68/126/266
+[  5]  22.00-23.00  sec  3.12 MBytes  26.2 Mbits/sec                  
+[ 71.421422 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4790 polls=3567 poll_us=23 waits=2495 wait_us=587 yields=0 | wait_kind notify=2495@587us deadline=0@0us hist=1275/12/93/198/917 | wake n=3553 avg=393us hist=0/958/334/940/1321 | owner_calls=3553 skipped=14 owner_us=116 max=2244us slow=573 | tx_submit=578 tx_done=586 rx_done=4626 | ready 0/1/2-3/4+=3516/37/0/0 | irq=2907
+[ 71.421546 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=191 dt=2000ms period_avg=10617us max=51046us hist=6/39/29/17/100 | write n=191 avg=788us min=117us max=2279us bytes=300032 calls=1.95 | size blk 1/2/3/4-6/7-9/10+ n=42/18/16/115/0/0 avg=174/762/891/1001/0/0us | credit n=4 min=127 max=129 avgx10=1275 backoff=0 avg=0us | gap rx0 n=90 avg=274us | rx1 n=0 avg=0us | rx2+ n=101 avg=18343us | supply core n=98 avg=1791us | ring n=24 avg=3586us | none n=69 avg=23416us | steps=7576 per_pkt=39.6 owner_calls=3447
+[  5]  23.00-24.00  sec  3.38 MBytes  28.3 Mbits/sec                  
+[ 71.421607 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=707 avg=1317us min=101us max=4157us bytes=7585280 frames=4797 | size <=512 n=73 avg=154us | <=2k n=89 avg=560us | <=8k n=143 avg=988us | >8k n=402 avg=1813us | control n=854 avg=324us min=0us max=2162us | credit n=4 avg=62us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=115/74/1/1 | queue_at_arrival=92/70/126/289
+[  5]  24.00-25.00  sec  3.12 MBytes  26.2 Mbits/sec                  
+[ 73.443094 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2021ms iters=4558 polls=3411 poll_us=22 waits=2347 wait_us=643 yields=0 | wait_kind notify=2347@643us deadline=0@0us hist=1213/6/83/187/858 | wake n=3402 avg=385us hist=0/953/337/882/1230 | owner_calls=3402 skipped=9 owner_us=114 max=1892us slow=533 | tx_submit=559 tx_done=562 rx_done=4225 | ready 0/1/2-3/4+=3371/31/0/0 | irq=2841
+[ 73.443218 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=183 dt=2021ms period_avg=10927us max=62116us hist=7/39/23/14/100 | write n=183 avg=794us min=121us max=2008us bytes=287744 calls=1.96 | size blk 1/2/3/4-6/7-9/10+ n=39/18/17/109/0/0 avg=173/709/835/1024/0/0us | credit n=5 min=127 max=129 avgx10=1282 backoff=0 avg=0us | gap rx0 n=85 avg=482us | rx1 n=0 avg=0us | rx2+ n=98 avg=18503us | supply core n=96 avg=1904us | ring n=23 avg=2438us | none n=64 avg=25241us | steps=7044 per_pkt=38.4 owner_calls=3289
+[  5]  25.00-26.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[ 73.443281 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=684 avg=1253us min=100us max=4536us bytes=6981632 frames=4406 | size <=512 n=79 avg=149us | <=2k n=78 avg=523us | <=8k n=174 avg=985us | >8k n=353 avg=1794us | control n=837 avg=312us min=0us max=2063us | credit n=5 avg=61us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=102/81/0/0 | queue_at_arrival=87/66/123/284
+[  5]  26.00-27.00  sec  3.12 MBytes  26.2 Mbits/sec                  
+[ 75.443259 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4926 polls=3676 poll_us=23 waits=2541 wait_us=576 yields=0 | wait_kind notify=2541@576us deadline=0@0us hist=1307/4/95/203/932 | wake n=3660 avg=376us hist=0/1002/351/962/1345 | owner_calls=3660 skipped=16 owner_us=111 max=1949us slow=567 | tx_submit=622 tx_done=619 rx_done=4584 | ready 0/1/2-3/4+=3632/28/0/0 | irq=2989
+[ 75.443402 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=197 dt=2000ms period_avg=10279us max=55479us hist=5/40/42/20/90 | write n=197 avg=730us min=115us max=1966us bytes=316928 calls=1.94 | size blk 1/2/3/4-6/7-9/10+ n=38/19/17/123/0/0 avg=156/629/759/919/0/0us | credit n=5 min=124 max=129 avgx10=1272 backoff=0 avg=0us | gap rx0 n=103 avg=285us | rx1 n=0 avg=0us | rx2+ n=94 avg=19699us | supply core n=111 avg=1836us | ring n=18 avg=3392us | none n=68 avg=23767us | steps=7638 per_pkt=38.7 owner_calls=3560
+[  5]  27.00-28.00  sec  3.25 MBytes  27.2 Mbits/sec                  
+[ 75.443463 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=730 avg=1278us min=101us max=3868us bytes=7555584 frames=4780 | size <=512 n=77 avg=153us | <=2k n=79 avg=511us | <=8k n=185 avg=959us | >8k n=389 avg=1808us | control n=880 avg=322us min=0us max=2086us | credit n=5 avg=62us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=116/74/1/6 | queue_at_arrival=86/66/130/340
+[  5]  28.00-29.00  sec  3.00 MBytes  25.2 Mbits/sec                  
+[ 77.445118 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2001ms iters=4852 polls=3636 poll_us=23 waits=2474 wait_us=594 yields=0 | wait_kind notify=2474@594us deadline=0@0us hist=1272/11/102/199/890 | wake n=3624 avg=396us hist=0/980/351/969/1324 | owner_calls=3624 skipped=12 owner_us=110 max=1977us slow=542 | tx_submit=633 tx_done=635 rx_done=4536 | ready 0/1/2-3/4+=3595/28/0/1 | irq=2928
+[ 77.445248 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=204 dt=2001ms period_avg=9807us max=56088us hist=4/52/32/16/100 | write n=204 avg=737us min=115us max=2547us bytes=325120 calls=1.97 | size blk 1/2/3/4-6/7-9/10+ n=43/21/10/130/0/0 avg=157/696/623/944/0/0us | credit n=5 min=127 max=130 avgx10=1282 backoff=0 avg=0us | gap rx0 n=110 avg=702us | rx1 n=0 avg=0us | rx2+ n=94 avg=18862us | supply core n=117 avg=1737us | ring n=18 avg=4252us | none n=69 avg=22761us | steps=7558 per_pkt=37.0 owner_calls=3525
+[  5]  29.00-30.00  sec  3.38 MBytes  28.3 Mbits/sec                  
+[ 77.445310 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=714 avg=1306us min=99us max=3725us bytes=7449600 frames=4743 | size <=512 n=68 avg=137us | <=2k n=90 avg=579us | <=8k n=183 avg=1031us | >8k n=373 avg=1830us | control n=851 avg=308us min=0us max=1753us | credit n=5 avg=60us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=130/69/0/5 | queue_at_arrival=87/65/125/355
+[  5]  30.00-30.05  sec   128 KBytes  22.1 Mbits/sec                  
+[ 77.562912 0:4294967324 starry_kernel::task::ops:539] Task(4294967324, "iperf3") exit with code: 0
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-30.05  sec  80.0 MBytes  22.3 Mbits/sec                  receiver
+-----------------------------------------------------------
+Server listening on 5201 (test #2)
+-----------------------------------------------------------
+[ 82.588489 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=5143ms iters=541 polls=409 poll_us=26 waits=273 wait_us=18615 yields=0 | wait_kind notify=273@18615us deadline=0@0us hist=145/0/13/33/82 | wake n=408 avg=1498us hist=0/113/56/111/128 | owner_calls=408 skipped=1 owner_us=114 max=2093us slow=57 | tx_submit=64 tx_done=65 rx_done=466 | ready 0/1/2-3/4+=405/3/0/0 | irq=332
+[ 82.588610 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=25 dt=5143ms period_avg=49419us max=1002449us hist=1/2/8/2/12 | write n=25 avg=596us min=116us max=2806us bytes=33280 calls=1.92 | size blk 1/2/3/4-6/7-9/10+ n=10/1/3/11/0/0 avg=157/530/717/968/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=14 avg=456us | rx1 n=0 avg=0us | rx2+ n=11 avg=110381us | supply core n=8 avg=155us | ring n=4 avg=7465us | none n=13 avg=91498us | steps=821 per_pkt=32.8 owner_calls=405
+[ 82.588671 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=77 avg=1181us min=103us max=4172us bytes=750080 frames=493 | size <=512 n=18 avg=139us | <=2k n=5 avg=375us | <=8k n=19 avg=843us | >8k n=35 avg=2015us | control n=101 avg=289us min=0us max=2304us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=18/6/1/0 | queue_at_arrival=17/8/12/28
+[ 84.944751 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2356ms iters=57 polls=44 poll_us=20 waits=30 wait_us=78413 yields=0 | wait_kind notify=30@78413us deadline=0@0us hist=17/0/2/3/8 | wake n=43 avg=392us hist=0/17/11/9/6 | owner_calls=43 skipped=1 owner_us=57 max=209us slow=2 | tx_submit=3 tx_done=3 rx_done=5 | ready 0/1/2-3/4+=43/0/0/0 | irq=46
+Accepted connection from 192.168.137.1, port 60277
+[ 84.944872 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=3 dt=2356ms period_avg=1809298us max=3922190us hist=0/0/0/0/3 | write n=3 avg=145us min=137us max=160us bytes=1536 calls=1.66 | size blk 1/2/3/4-6/7-9/10+ n=3/0/0/0/0/0 avg=145/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=3 avg=1809153us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=3 avg=1809153us | steps=48 per_pkt=16.0 owner_calls=43
+[ 84.944932 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=8 avg=198us min=146us max=470us bytes=4608 frames=8 | size <=512 n=7 avg=160us | <=2k n=1 avg=470us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=16 avg=89us min=0us max=508us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=3/0/0/0 | queue_at_arrival=3/0/0/0
+[  5] local 192.168.137.249 port 5201 connected to 192.168.137.1 port 60278
+[ 85.053353 0:8589934620 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       
+[  5]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 87.070171 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2125ms iters=402 polls=336 poll_us=22 waits=159 wait_us=13170 yields=0 | wait_kind notify=159@13170us deadline=0@0us hist=97/1/8/23/30 | wake n=333 avg=292us hist=0/116/96/75/46 | owner_calls=333 skipped=3 owner_us=63 max=645us slow=20 | tx_submit=97 tx_done=97 rx_done=32 | ready 0/1/2-3/4+=331/0/0/2 | irq=298
+[ 87.070360 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=31 dt=2125ms period_avg=39642us max=842638us hist=0/0/3/10/18 | write n=31 avg=850us min=136us max=2405us bytes=140800 calls=2.29 | size blk 1/2/3/4-6/7-9/10+ n=8/0/0/1/1/21 avg=165/0/0/1202/677/1102us | credit n=1 min=127 max=127 avgx10=1270 backoff=0 avg=0us | gap rx0 n=9 avg=214us | rx1 n=0 avg=0us | rx2+ n=22 avg=54573us | supply core n=21 avg=532us | ring n=1 avg=343us | none n=9 avg=132337us | steps=330 per_pkt=10.6 owner_calls=298
+[ 87.070423 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=44 avg=142us min=99us max=276us bytes=23552 frames=63 | size <=512 n=42 avg=138us | <=2k n=2 avg=228us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=78 avg=119us min=0us max=2945us | credit n=1 avg=138us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=17/0/0/14 | queue_at_arrival=10/2/4/81
+[  5]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   4.00-5.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   5.00-6.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   6.00-7.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 92.551351 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=5481ms iters=281 polls=241 poll_us=17 waits=91 wait_us=59990 yields=0 | wait_kind notify=91@59990us deadline=0@0us hist=53/0/5/16/17 | wake n=240 avg=7453us hist=0/70/73/63/34 | owner_calls=240 skipped=1 owner_us=66 max=794us slow=23 | tx_submit=91 tx_done=91 rx_done=25 | ready 0/1/2-3/4+=238/1/0/1 | irq=201
+[ 92.551478 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=25 dt=5481ms period_avg=96094us max=1736970us hist=0/1/1/11/12 | write n=25 avg=929us min=161us max=2545us bytes=138752 calls=2.32 | size blk 1/2/3/4-6/7-9/10+ n=1/0/2/0/0/22 avg=161/0/412/0/0/1011us | credit n=1 min=127 max=127 avgx10=1270 backoff=0 avg=0us | gap rx0 n=12 avg=305us | rx1 n=0 avg=0us | rx2+ n=13 avg=182727us | supply core n=22 avg=582us | ring n=1 avg=258us | none n=2 avg=1183021us | steps=228 per_pkt=9.1 owner_calls=206
+[ 92.551541 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=28 avg=175us min=99us max=554us bytes=15872 frames=50 | size <=512 n=25 avg=154us | <=2k n=3 avg=357us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=44 avg=83us min=0us max=301us | credit n=1 avg=816us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=8/1/0/16 | queue_at_arrival=3/2/4/82
+[  5]   7.00-8.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   8.00-9.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   9.00-10.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 95.079512 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2528ms iters=15 polls=12 poll_us=10 waits=7 wait_us=361002 yields=0 | wait_kind notify=7@361002us deadline=0@0us hist=4/0/0/2/1 | wake n=12 avg=160us hist=0/6/3/1/2 | owner_calls=12 skipped=0 owner_us=67 max=217us slow=2 | tx_submit=1 tx_done=1 rx_done=1 | ready 0/1/2-3/4+=12/0/0/0 | irq=11
+[ 95.079657 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=1 dt=2528ms period_avg=4815627us max=4815627us hist=0/0/0/0/1 | write n=1 avg=261us min=261us max=261us bytes=512 calls=2.0 | size blk 1/2/3/4-6/7-9/10+ n=1/0/0/0/0/0 avg=261/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=1 avg=4815365us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=1 avg=4815365us | steps=14 per_pkt=14.0 owner_calls=13
+[ 95.079718 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=2 avg=199us min=142us max=255us bytes=1024 frames=2 | size <=512 n=2 avg=199us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=4 avg=58us min=0us max=161us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=1/0/0/0 | queue_at_arrival=1/0/0/0
+[  5]  10.00-11.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]  11.00-12.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]  12.00-13.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]  13.00-14.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]  14.00-15.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[100.080550 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=5001ms iters=300 polls=257 poll_us=11 waits=99 wait_us=50288 yields=0 | wait_kind notify=99@50288us deadline=0@0us hist=60/0/4/18/17 | wake n=257 avg=10059us hist=0/81/77/55/44 | owner_calls=257 skipped=0 owner_us=66 max=875us slow=17 | tx_submit=92 tx_done=92 rx_done=25 | ready 0/1/2-3/4+=256/0/0/1 | irq=220
+[100.080671 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=25 dt=5001ms period_avg=102696us max=2528258us hist=0/0/3/10/12 | write n=25 avg=1043us min=529us max=2594us bytes=141312 calls=2.36 | size blk 1/2/3/4-6/7-9/10+ n=0/0/2/1/0/22 avg=0/0/932/529/0/1076us | credit n=1 min=127 max=127 avgx10=1270 backoff=0 avg=0us | gap rx0 n=12 avg=198us | rx1 n=0 avg=0us | rx2+ n=13 avg=195303us | supply core n=20 avg=583us | ring n=4 avg=653us | none n=1 avg=2527029us | steps=246 per_pkt=9.8 owner_calls=223
+[100.080734 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=33 avg=157us min=100us max=640us bytes=17408 frames=50 | size <=512 n=32 avg=141us | <=2k n=1 avg=640us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=51 avg=100us min=0us max=896us | credit n=1 avg=78us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=9/0/0/16 | queue_at_arrival=5/4/8/75
+[  5]  15.00-16.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]  16.00-17.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[102.162192 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2081ms iters=15 polls=12 poll_us=10 waits=6 wait_us=346753 yields=0 | wait_kind notify=6@346753us deadline=0@0us hist=3/0/0/1/2 | wake n=12 avg=161us hist=0/6/3/1/2 | owner_calls=12 skipped=0 owner_us=65 max=295us slow=1 | tx_submit=1 tx_done=1 rx_done=1 | ready 0/1/2-3/4+=12/0/0/0 | irq=12
+[102.162318 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=1 dt=2081ms period_avg=4961739us max=4961739us hist=0/0/0/0/1 | write n=1 avg=140us min=140us max=140us bytes=512 calls=2.0 | size blk 1/2/3/4-6/7-9/10+ n=1/0/0/0/0/0 avg=140/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=1 avg=4961598us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=1 avg=4961598us | steps=13 per_pkt=13.0 owner_calls=12
+[102.162378 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=2 avg=245us min=151us max=338us bytes=1024 frames=2 | size <=512 n=2 avg=245us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=4 avg=58us min=0us max=159us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=1/0/0/0 | queue_at_arrival=1/0/0/0
+[  5]  17.00-18.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]  18.00-19.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]  19.00-20.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]  20.00-21.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[106.347240 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=4185ms iters=15 polls=12 poll_us=14 waits=7 wait_us=597658 yields=0 | wait_kind notify=7@597658us deadline=0@0us hist=4/0/0/2/1 | wake n=12 avg=186us hist=0/5/3/2/2 | owner_calls=12 skipped=0 owner_us=88 max=384us slow=2 | tx_submit=1 tx_done=1 rx_done=1 | ready 0/1/2-3/4+=12/0/0/0 | irq=12
+[  5]  20.00-21.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[106.347365 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=1 dt=4185ms period_avg=2081855us max=2081855us hist=0/0/0/0/1 | write n=1 avg=430us min=430us max=430us bytes=512 calls=2.0 | size blk 1/2/3/4-6/7-9/10+ n=1/0/0/0/0/0 avg=430/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=1 avg=2081425us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=1 avg=2081425us | steps=13 per_pkt=13.0 owner_calls=12
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[106.347425 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=2 avg=197us min=140us max=254us bytes=1024 frames=2 | size <=512 n=2 avg=197us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=4 avg=78us min=0us max=159us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=1/0/0/0 | queue_at_arrival=1/0/0/0
+[ ID] Interval           Transfer     Bitrate         Retr
+[106.353440 0:73014444059 starry_kernel::task::signal:716] Send signal SIGRT1 to thread 20
+[  5]   0.00-21.00  sec   256 KBytes  99.9 Kbits/sec    0            sender
+[106.354669 0:8589934620 starry_kernel::task::ops:539] Task(8589934620, "iperf3") exit with code: 0
+iperf3: the client has terminated
+-----------------------------------------------------------
+Server listening on 5201 (test #3)
+-----------------------------------------------------------
+[112.736096 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=6388ms iters=36 polls=27 poll_us=16 waits=20 wait_us=319325 yields=0 | wait_kind notify=20@319325us deadline=0@0us hist=12/0/0/3/5 | wake n=26 avg=666us hist=0/6/9/6/5 | owner_calls=26 skipped=1 owner_us=59 max=211us slow=1 | tx_submit=2 tx_done=2 rx_done=5 | ready 0/1/2-3/4+=26/0/0/0 | irq=24
+[112.736221 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=2 dt=6388ms period_avg=2097556us max=4186384us hist=0/0/0/0/2 | write n=2 avg=328us min=153us max=503us bytes=2048 calls=1.50 | size blk 1/2/3/4-6/7-9/10+ n=1/0/1/0/0/0 avg=153/0/503/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=2 avg=2097228us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=2 avg=2097228us | steps=31 per_pkt=15.5 owner_calls=26
+Accepted connection from 192.168.137.1, port 55939
+[112.736283 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=5 avg=152us min=103us max=255us bytes=2560 frames=7 | size <=512 n=5 avg=152us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=8 avg=96us min=0us max=224us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=2/0/0/0 | queue_at_arrival=2/0/0/0
+[  5] local 192.168.137.249 port 5201 connected to 192.168.137.1 port 55940
+[112.842533 0:12884901916 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       
+[  5]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[114.903753 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2167ms iters=346 polls=281 poll_us=13 waits=149 wait_us=14377 yields=0 | wait_kind notify=149@14377us deadline=0@0us hist=85/0/6/16/42 | wake n=279 avg=390us hist=0/78/61/81/59 | owner_calls=279 skipped=2 owner_us=63 max=1861us slow=13 | tx_submit=96 tx_done=96 rx_done=31 | ready 0/1/2-3/4+=279/0/0/0 | irq=199
+[114.903967 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=30 dt=2167ms period_avg=218631us max=6380896us hist=0/1/6/11/12 | write n=30 avg=765us min=144us max=1806us bytes=140288 calls=2.3 | size blk 1/2/3/4-6/7-9/10+ n=7/0/1/0/0/22 avg=151/0/438/0/0/976us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=18 avg=193us | rx1 n=0 avg=0us | rx2+ n=12 avg=544374us | supply core n=19 avg=242us | ring n=2 avg=241us | none n=9 avg=725652us | steps=304 per_pkt=10.1 owner_calls=273
+[114.904029 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=28 avg=161us min=107us max=369us bytes=16896 frames=61 | size <=512 n=26 avg=146us | <=2k n=2 avg=351us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=53 avg=102us min=0us max=1932us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=20/1/1/8 | queue_at_arrival=11/4/8/73
+[  5]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[117.182274 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2278ms iters=411 polls=342 poll_us=22 waits=155 wait_us=14497 yields=0 | wait_kind notify=155@14497us deadline=0@0us hist=90/3/8/24/30 | wake n=338 avg=6107us hist=0/93/73/116/56 | owner_calls=338 skipped=4 owner_us=61 max=844us slow=25 | tx_submit=134 tx_done=134 rx_done=36 | ready 0/1/2-3/4+=338/0/0/0 | irq=250
+[  5]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[117.182401 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=36 dt=2278ms period_avg=57917us max=1987234us hist=0/0/8/15/13 | write n=36 avg=1015us min=444us max=2478us bytes=205824 calls=2.33 | size blk 1/2/3/4-6/7-9/10+ n=0/0/3/0/1/32 avg=0/0/902/0/644/1037us | credit n=1 min=128 max=128 avgx10=1280 backoff=0 avg=0us | gap rx0 n=22 avg=232us | rx1 n=0 avg=0us | rx2+ n=14 avg=145956us | supply core n=31 avg=327us | ring n=2 avg=829us | none n=3 avg=678899us | steps=348 per_pkt=9.6 owner_calls=313
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[117.182463 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=34 avg=168us min=101us max=480us bytes=20480 frames=72 | size <=512 n=30 avg=137us | <=2k n=4 avg=398us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=59 avg=98us min=0us max=915us | credit n=1 avg=72us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=15/1/1/19 | queue_at_arrival=5/4/8/117
+[ ID] Interval           Transfer     Bitrate         Retr
+[117.201528 0:73014444059 starry_kernel::task::signal:716] Send signal SIGRT1 to thread 21
+[  5]   0.00-4.00   sec   256 KBytes   524 Kbits/sec    0            sender
+[117.202605 0:12884901916 starry_kernel::task::ops:539] Task(12884901916, "iperf3") exit with code: 0
+iperf3: the client has terminated
+-----------------------------------------------------------
+Server listening on 5201 (test #4)
+-----------------------------------------------------------
+[121.380913 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=4198ms iters=52 polls=40 poll_us=10 waits=28 wait_us=149831 yields=0 | wait_kind notify=28@149831us deadline=0@0us hist=17/0/0/5/6 | wake n=40 avg=369us hist=0/16/13/3/8 | owner_calls=40 skipped=0 owner_us=62 max=390us slow=2 | tx_submit=3 tx_done=3 rx_done=6 | ready 0/1/2-3/4+=40/0/0/0 | irq=39
+[121.381040 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=3 dt=4198ms period_avg=733996us max=2180993us hist=0/0/0/0/3 | write n=3 avg=420us min=164us max=662us bytes=2560 calls=2.0 | size blk 1/2/3/4-6/7-9/10+ n=2/0/1/0/0/0 avg=300/0/662/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=3 avg=733576us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=3 avg=733576us | steps=46 per_pkt=15.3 owner_calls=40
+[121.381102 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=7 avg=155us min=103us max=254us bytes=3584 frames=9 | size <=512 n=7 avg=155us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=13 avg=65us min=0us max=192us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=3/0/0/0 | queue_at_arrival=3/0/0/0
+[123.736251 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2355ms iters=14 polls=11 poll_us=10 waits=6 wait_us=392353 yields=0 | wait_kind notify=6@392353us deadline=0@0us hist=3/0/0/1/2 | wake n=11 avg=174us hist=0/5/3/1/2 | owner_calls=11 skipped=0 owner_us=74 max=217us slow=2 | tx_submit=1 tx_done=1 rx_done=1 | ready 0/1/2-3/4+=11/0/0/0 | irq=12
+[123.736373 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=1 dt=2355ms period_avg=4177466us max=4177466us hist=0/0/0/0/1 | write n=1 avg=261us min=261us max=261us bytes=512 calls=2.0 | size blk 1/2/3/4-6/7-9/10+ n=1/0/0/0/0/0 avg=261/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=1 avg=4177205us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=1 avg=4177205us | steps=12 per_pkt=12.0 owner_calls=11
+Accepted connection from 192.168.137.1, port 53756
+[123.736434 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=2 avg=224us min=192us max=257us bytes=1024 frames=2 | size <=512 n=2 avg=224us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=4 avg=60us min=0us max=158us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=1/0/0/0 | queue_at_arrival=1/0/0/0
+[  5] local 192.168.137.249 port 5201 connected to 192.168.137.1 port 53757
+[  8] local 192.168.137.249 port 5201 connected to 192.168.137.1 port 53758
+[124.807880 0:17179869212 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x448af0
+[124.818561 0:4294967325 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x46baf0
+[125.737664 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2001ms iters=2294 polls=1738 poll_us=19 waits=1150 wait_us=1533 yields=0 | wait_kind notify=1150@1533us deadline=0@0us hist=601/8/34/107/400 | wake n=1733 avg=929us hist=0/506/237/411/579 | owner_calls=1733 skipped=5 owner_us=107 max=2706us slow=221 | tx_submit=325 tx_done=317 rx_done=1769 | ready 0/1/2-3/4+=1718/15/0/0 | irq=1450
+[125.738292 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=106 dt=2001ms period_avg=40836us max=2357601us hist=2/7/18/21/58 | write n=106 avg=743us min=121us max=2013us bytes=253440 calls=2.3 | size blk 1/2/3/4-6/7-9/10+ n=27/8/10/38/1/22 avg=154/583/1094/962/592/992us | credit n=3 min=126 max=127 avgx10=1266 backoff=0 avg=0us | gap rx0 n=46 avg=803us | rx1 n=0 avg=0us | rx2+ n=60 avg=70215us | supply core n=50 avg=932us | ring n=11 avg=6983us | none n=45 avg=91698us | steps=3232 per_pkt=30.4 owner_calls=1665
+[ ID][Role] Interval           Transfer     Bitrate         Retr  Cwnd
+[125.738401 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=324 avg=1166us min=99us max=4510us bytes=2887168 frames=1874 | size <=512 n=69 avg=158us | <=2k n=39 avg=574us | <=8k n=82 avg=1023us | >8k n=134 avg=1945us | control n=421 avg=262us min=0us max=1372us | credit n=3 avg=77us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=71/28/2/5 | queue_at_arrival=57/34/62/172
+[  5][RX-S]   0.00-1.00   sec  2.38 MBytes  19.9 Mbits/sec                  
+[  8][TX-S]   0.00-1.00   sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]   1.00-2.00   sec  2.38 MBytes  19.9 Mbits/sec                  
+[  8][TX-S]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[127.738733 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2001ms iters=5174 polls=3988 poll_us=19 waits=2456 wait_us=624 yields=0 | wait_kind notify=2456@624us deadline=0@0us hist=1314/19/146/420/557 | wake n=3978 avg=287us hist=0/1193/533/1336/916 | owner_calls=3978 skipped=10 owner_us=88 max=1789us slow=350 | tx_submit=834 tx_done=842 rx_done=2641 | ready 0/1/2-3/4+=3953/22/1/2 | irq=3386
+[127.738854 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=256 dt=2000ms period_avg=7911us max=317667us hist=6/52/50/32/116 | write n=256 avg=683us min=121us max=1937us bytes=568320 calls=2.5 | size blk 1/2/3/4-6/7-9/10+ n=38/21/24/139/1/33 avg=191/617/754/760/610/921us | credit n=7 min=118 max=130 avgx10=1264 backoff=0 avg=0us | gap rx0 n=131 avg=343us | rx1 n=0 avg=0us | rx2+ n=125 avg=14441us | supply core n=159 avg=885us | ring n=27 avg=16708us | none n=70 avg=17975us | steps=6127 per_pkt=23.9 owner_calls=3805
+[  5][RX-S]   2.00-3.00   sec   768 KBytes  6.29 Mbits/sec                  
+[127.738914 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=737 avg=841us min=100us max=3836us bytes=4458496 frames=2898 | size <=512 n=158 avg=138us | <=2k n=181 avg=496us | <=8k n=223 avg=829us | >8k n=175 avg=1846us | control n=979 avg=206us min=0us max=1437us | credit n=7 avg=68us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=159/51/19/27 | queue_at_arrival=96/78/129/531
+[  8][TX-S]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5][RX-S]   3.00-4.00   sec  1.62 MBytes  13.6 Mbits/sec                  
+[  8][TX-S]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[129.739295 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4952 polls=3778 poll_us=19 waits=2434 wait_us=626 yields=0 | wait_kind notify=2434@626us deadline=0@0us hist=1275/11/103/225/820 | wake n=3768 avg=311us hist=0/1270/531/924/1043 | owner_calls=3768 skipped=10 owner_us=96 max=1789us slow=429 | tx_submit=559 tx_done=556 rx_done=2998 | ready 0/1/2-3/4+=3742/26/0/0 | irq=3512
+[129.739425 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=230 dt=2000ms period_avg=8692us max=82031us hist=13/36/14/15/152 | write n=230 avg=732us min=120us max=2016us bytes=284672 calls=1.97 | size blk 1/2/3/4-6/7-9/10+ n=80/42/40/68/0/0 avg=177/867/1099/1085/0/0us | credit n=4 min=127 max=128 avgx10=1272 backoff=0 avg=0us | gap rx0 n=68 avg=392us | rx1 n=0 avg=0us | rx2+ n=163 avg=11083us | supply core n=46 avg=1142us | ring n=81 avg=6387us | none n=104 avg=12148us | steps=6191 per_pkt=26.9 owner_calls=3593
+[  5][RX-S]   4.00-5.00   sec  2.62 MBytes  22.0 Mbits/sec                  
+[129.739486 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=780 avg=952us min=102us max=2775us bytes=5073920 frames=3232 | size <=512 n=146 avg=170us | <=2k n=128 avg=581us | <=8k n=272 avg=955us | >8k n=234 avg=1639us | control n=1046 avg=214us min=0us max=1351us | credit n=4 avg=63us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=114/111/4/1 | queue_at_arrival=185/125/157/92
+[  8][TX-S]   4.00-5.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5][RX-S]   5.00-6.00   sec  2.88 MBytes  24.1 Mbits/sec                  
+[  8][TX-S]   5.00-6.01   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[131.743860 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2004ms iters=5226 polls=3944 poll_us=19 waits=2618 wait_us=568 yields=0 | wait_kind notify=2618@568us deadline=0@0us hist=1357/10/96/202/953 | wake n=3936 avg=377us hist=0/1163/451/1017/1305 | owner_calls=3936 skipped=8 owner_us=101 max=1933us slow=534 | tx_submit=674 tx_done=677 rx_done=4074 | ready 0/1/2-3/4+=3919/16/1/0 | irq=3367
+[131.743989 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=230 dt=2004ms period_avg=8674us max=47401us hist=8/37/29/23/133 | write n=230 avg=810us min=117us max=2229us bytes=407040 calls=1.96 | size blk 1/2/3/4-6/7-9/10+ n=57/21/29/107/3/13 avg=161/859/873/1093/1049/1047us | credit n=6 min=121 max=127 avgx10=1258 backoff=0 avg=0us | gap rx0 n=96 avg=1038us | rx1 n=0 avg=0us | rx2+ n=133 avg=12831us | supply core n=92 avg=1543us | ring n=43 avg=3643us | none n=94 avg=16038us | steps=7375 per_pkt=32.0 owner_calls=3783
+[  5][RX-S]   6.00-7.00   sec  2.75 MBytes  23.1 Mbits/sec                  
+[131.744052 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=785 avg=1138us min=99us max=3064us bytes=6764544 frames=4300 | size <=512 n=108 avg=135us | <=2k n=110 avg=571us | <=8k n=215 avg=993us | >8k n=352 avg=1711us | control n=983 avg=270us min=0us max=1379us | credit n=6 avg=73us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=123/101/1/5 | queue_at_arrival=137/107/191/239
+[  8][TX-S]   6.01-7.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5][RX-S]   7.00-8.00   sec  3.00 MBytes  25.1 Mbits/sec                  
+[  8][TX-S]   7.00-8.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[133.756469 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2012ms iters=4913 polls=3694 poll_us=21 waits=2493 wait_us=600 yields=0 | wait_kind notify=2493@600us deadline=0@0us hist=1291/13/86/211/892 | wake n=3686 avg=368us hist=0/1108/402/933/1243 | owner_calls=3686 skipped=8 owner_us=107 max=2040us slow=535 | tx_submit=570 tx_done=570 rx_done=4078 | ready 0/1/2-3/4+=3659/27/0/0 | irq=3192
+[133.756594 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=207 dt=2012ms period_avg=9656us max=48309us hist=13/36/18/17/123 | write n=207 avg=774us min=118us max=3059us bytes=291840 calls=1.97 | size blk 1/2/3/4-6/7-9/10+ n=59/29/23/96/0/0 avg=141/892/1040/1062/0/0us | credit n=4 min=127 max=128 avgx10=1272 backoff=0 avg=0us | gap rx0 n=80 avg=572us | rx1 n=0 avg=0us | rx2+ n=127 avg=14116us | supply core n=67 avg=1337us | ring n=50 avg=2949us | none n=90 avg=17794us | steps=7161 per_pkt=34.5 owner_calls=3552
+[  5][RX-S]   8.00-9.00   sec  2.75 MBytes  23.1 Mbits/sec                  
+[133.756655 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=756 avg=1171us min=101us max=3557us bytes=6779392 frames=4289 | size <=512 n=99 avg=154us | <=2k n=95 avg=501us | <=8k n=209 avg=1018us | >8k n=353 avg=1727us | control n=942 avg=280us min=0us max=1435us | credit n=4 avg=142us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=106/97/4/0 | queue_at_arrival=140/101/169/160
+[  8][TX-S]   8.00-9.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5][RX-S]   9.00-10.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[  8][TX-S]   9.00-10.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[135.756529 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=5361 polls=4092 poll_us=19 waits=2616 wait_us=565 yields=0 | wait_kind notify=2616@565us deadline=0@0us hist=1365/13/90/258/890 | wake n=4085 avg=353us hist=0/1242/472/1129/1242 | owner_calls=4085 skipped=7 owner_us=97 max=1835us slow=505 | tx_submit=806 tx_done=804 rx_done=3619 | ready 0/1/2-3/4+=4059/25/1/0 | irq=3457
+[135.756661 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=264 dt=2000ms period_avg=7654us max=61975us hist=10/45/45/35/129 | write n=264 avg=799us min=118us max=3398us bytes=592896 calls=2.0 | size blk 1/2/3/4-6/7-9/10+ n=54/22/39/105/2/42 avg=144/735/977/1031/778/929us | credit n=7 min=127 max=130 avgx10=1277 backoff=0 avg=0us | gap rx0 n=122 avg=519us | rx1 n=0 avg=0us | rx2+ n=143 avg=12256us | supply core n=119 avg=849us | ring n=53 avg=3659us | none n=93 avg=16354us | steps=7069 per_pkt=26.7 owner_calls=3913
+[  5][RX-S]  10.00-11.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+[135.756719 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=772 avg=1065us min=100us max=3497us bytes=5985792 frames=3885 | size <=512 n=130 avg=138us | <=2k n=104 avg=526us | <=8k n=241 avg=992us | >8k n=297 avg=1719us | control n=989 avg=255us min=0us max=1791us | credit n=7 avg=213us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=136/100/8/20 | queue_at_arrival=146/111/195/353
+[  8][TX-S]  10.00-11.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5][RX-S]  11.00-12.00  sec  2.88 MBytes  24.1 Mbits/sec                  
+[  8][TX-S]  11.00-12.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[137.563708 0:4294967308 ax_net::orphan:156] Reaped expired orphan socket #2
+[137.758290 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2001ms iters=5032 polls=3777 poll_us=20 waits=2569 wait_us=575 yields=0 | wait_kind notify=2569@575us deadline=0@0us hist=1323/9/81/239/917 | wake n=3770 avg=374us hist=0/1091/382/984/1313 | owner_calls=3770 skipped=7 owner_us=107 max=1922us slow=545 | tx_submit=619 tx_done=618 rx_done=4198 | ready 0/1/2-3/4+=3743/27/0/0 | irq=3193
+[  5][RX-S]  12.00-13.00  sec  3.00 MBytes  25.2 Mbits/sec                  
+[137.758423 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=212 dt=2001ms period_avg=9334us max=47144us hist=7/38/24/24/119 | write n=212 avg=798us min=119us max=1835us bytes=316416 calls=1.96 | size blk 1/2/3/4-6/7-9/10+ n=51/22/33/106/0/0 avg=188/786/944/1048/0/0us | credit n=5 min=126 max=131 avgx10=1278 backoff=0 avg=0us | gap rx0 n=92 avg=421us | rx1 n=0 avg=0us | rx2+ n=119 avg=14828us | supply core n=97 avg=1375us | ring n=31 avg=4024us | none n=83 avg=18617us | steps=7345 per_pkt=34.6 owner_calls=3651
+[  8][TX-S]  12.00-13.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[137.758485 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=765 avg=1182us min=99us max=3609us bytes=6974464 frames=4409 | size <=512 n=93 avg=160us | <=2k n=95 avg=521us | <=8k n=223 avg=955us | >8k n=354 avg=1771us | control n=940 avg=290us min=0us max=1721us | credit n=5 avg=75us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=115/95/2/0 | queue_at_arrival=115/90/164/251
+[  5][RX-S]  13.00-14.00  sec  3.12 MBytes  26.2 Mbits/sec                  
+[  8][TX-S]  13.00-14.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[139.758405 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4864 polls=3646 poll_us=23 waits=2483 wait_us=586 yields=0 | wait_kind notify=2483@586us deadline=0@0us hist=1277/5/91/196/914 | wake n=3634 avg=392us hist=0/996/359/943/1336 | owner_calls=3634 skipped=12 owner_us=115 max=1965us slow=556 | tx_submit=590 tx_done=588 rx_done=4401 | ready 0/1/2-3/4+=3587/47/0/0 | irq=3013
+[139.758554 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=195 dt=2000ms period_avg=10331us max=47320us hist=4/36/31/20/104 | write n=195 avg=826us min=124us max=2219us bytes=301056 calls=1.98 | size blk 1/2/3/4-6/7-9/10+ n=38/29/20/108/0/0 avg=211/609/1024/1065/0/0us | credit n=4 min=127 max=128 avgx10=1272 backoff=0 avg=0us | gap rx0 n=90 avg=395us | rx1 n=0 avg=0us | rx2+ n=105 avg=17311us | supply core n=87 avg=1561us | ring n=29 avg=4476us | none n=79 avg=20097us | steps=7454 per_pkt=38.2 owner_calls=3543
+[  5][RX-S]  14.00-15.00  sec  3.00 MBytes  25.2 Mbits/sec                  
+[139.758615 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=746 avg=1249us min=100us max=3061us bytes=7302144 frames=4603 | size <=512 n=79 avg=135us | <=2k n=90 avg=493us | <=8k n=203 avg=1037us | >8k n=374 avg=1781us | control n=891 avg=312us min=0us max=1907us | credit n=4 avg=67us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=108/87/0/0 | queue_at_arrival=108/89/158/235
+[  8][TX-S]  14.00-15.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5][RX-S]  15.00-16.00  sec  3.12 MBytes  26.2 Mbits/sec                  
+[  8][TX-S]  15.00-16.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[141.758919 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=4781 polls=3567 poll_us=22 waits=2467 wait_us=593 yields=0 | wait_kind notify=2467@593us deadline=0@0us hist=1268/8/79/201/911 | wake n=3556 avg=404us hist=0/973/333/936/1314 | owner_calls=3556 skipped=11 owner_us=116 max=2095us slow=555 | tx_submit=599 tx_done=597 rx_done=4498 | ready 0/1/2-3/4+=3523/33/0/0 | irq=2898
+[  5][RX-S]  16.00-17.00  sec  3.12 MBytes  26.2 Mbits/sec                  
+[141.759050 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=196 dt=2000ms period_avg=10095us max=55791us hist=9/35/27/19/106 | write n=196 avg=783us min=121us max=2136us bytes=305664 calls=1.95 | size blk 1/2/3/4-6/7-9/10+ n=38/28/17/113/0/0 avg=169/608/1061/991/0/0us | credit n=5 min=127 max=130 avgx10=1280 backoff=0 avg=0us | gap rx0 n=98 avg=619us | rx1 n=0 avg=0us | rx2+ n=98 avg=18005us | supply core n=100 avg=1863us | ring n=21 avg=4265us | none n=75 avg=20657us | steps=7454 per_pkt=38.0 owner_calls=3459
+[  8][TX-S]  16.00-17.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[141.759112 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=709 avg=1321us min=101us max=4017us bytes=7416320 frames=4683 | size <=512 n=63 avg=152us | <=2k n=87 avg=550us | <=8k n=185 avg=986us | >8k n=374 avg=1864us | control n=848 avg=323us min=0us max=1981us | credit n=5 avg=75us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=116/78/1/1 | queue_at_arrival=96/78/140/284
+[  5][RX-S]  17.00-18.00  sec  3.00 MBytes  25.2 Mbits/sec                  
+[  8][TX-S]  17.00-18.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[143.759304 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=6159 polls=4750 poll_us=18 waits=2921 wait_us=488 yields=0 | wait_kind notify=2921@488us deadline=0@0us hist=1568/25/131/367/830 | wake n=4743 avg=330us hist=0/1390/581/1401/1371 | owner_calls=4743 skipped=7 owner_us=91 max=1943us slow=525 | tx_submit=1051 tx_done=1055 rx_done=3895 | ready 0/1/2-3/4+=4719/19/2/3 | irq=3870
+[143.759427 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=322 dt=2000ms period_avg=6307us max=58299us hist=8/78/84/30/122 | write n=322 avg=672us min=121us max=2144us bytes=540160 calls=1.98 | size blk 1/2/3/4-6/7-9/10+ n=51/27/26/218/0/0 avg=150/668/884/769/0/0us | credit n=9 min=110 max=129 avgx10=1248 backoff=0 avg=0us | gap rx0 n=191 avg=287us | rx1 n=0 avg=0us | rx2+ n=132 avg=13365us | supply core n=205 avg=747us | ring n=32 avg=3504us | none n=86 avg=18066us | steps=7968 per_pkt=24.7 owner_calls=4567
+[  5][RX-S]  18.00-19.00  sec  2.00 MBytes  16.8 Mbits/sec                  
+[143.759486 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=852 avg=1006us min=99us max=3214us bytes=6524928 frames=4222 | size <=512 n=186 avg=138us | <=2k n=109 avg=528us | <=8k n=247 avg=948us | >8k n=310 avg=1742us | control n=1095 avg=242us min=0us max=1944us | credit n=9 avg=129us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=206/73/12/31 | queue_at_arrival=117/89/152/694
+[  8][TX-S]  18.00-19.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5][RX-S]  19.00-20.00  sec  1.62 MBytes  13.6 Mbits/sec                  
+[  8][TX-S]  19.00-20.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[145.759887 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=5825 polls=4520 poll_us=17 waits=2726 wait_us=544 yields=0 | wait_kind notify=2726@544us deadline=0@0us hist=1444/11/131/357/783 | wake n=4507 avg=305us hist=0/1539/658/1172/1138 | owner_calls=4507 skipped=13 owner_us=86 max=1641us slow=392 | tx_submit=799 tx_done=802 rx_done=2451 | ready 0/1/2-3/4+=4483/20/2/2 | irq=4193
+[145.760015 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=313 dt=2000ms period_avg=6405us max=36705us hist=13/53/24/29/194 | write n=313 avg=709us min=120us max=1896us bytes=410624 calls=1.97 | size blk 1/2/3/4-6/7-9/10+ n=97/55/49/112/0/0 avg=163/874/985/980/0/0us | credit n=6 min=127 max=127 avgx10=1270 backoff=0 avg=0us | gap rx0 n=107 avg=469us | rx1 n=0 avg=0us | rx2+ n=205 avg=8431us | supply core n=82 avg=983us | ring n=89 avg=2089us | none n=141 avg=10723us | steps=6331 per_pkt=20.2 owner_calls=4295
+[  5][RX-S]  20.00-21.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[145.760077 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=888 avg=783us min=102us max=2501us bytes=4248576 frames=2762 | size <=512 n=181 avg=157us | <=2k n=197 avg=548us | <=8k n=363 avg=942us | >8k n=147 avg=1476us | control n=1231 avg=190us min=0us max=1715us | credit n=6 avg=63us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=182/108/13/10 | queue_at_arrival=230/146/165/258
+[  8][TX-S]  20.00-21.01  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5][RX-S]  21.00-22.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[  8][TX-S]  21.01-22.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[147.760181 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=5002 polls=3784 poll_us=20 waits=2500 wait_us=592 yields=0 | wait_kind notify=2500@592us deadline=0@0us hist=1300/14/86/215/885 | wake n=3774 avg=368us hist=0/1186/438/931/1219 | owner_calls=3774 skipped=10 owner_us=105 max=1750us slow=510 | tx_submit=594 tx_done=588 rx_done=3759 | ready 0/1/2-3/4+=3742/32/0/0 | irq=3375
+[  5][RX-S]  22.00-23.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[147.760309 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=216 dt=2000ms period_avg=9256us max=67117us hist=15/30/12/10/149 | write n=216 avg=826us min=108us max=3342us bytes=301056 calls=1.95 | size blk 1/2/3/4-6/7-9/10+ n=60/26/44/86/0/0 avg=141/947/1099/1128/0/0us | credit n=5 min=127 max=127 avgx10=1270 backoff=0 avg=0us | gap rx0 n=72 avg=896us | rx1 n=0 avg=0us | rx2+ n=144 avg=12197us | supply core n=58 avg=1892us | ring n=69 avg=3693us | none n=89 avg=16363us | steps=6877 per_pkt=31.8 owner_calls=3602
+[  8][TX-S]  22.00-23.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[147.760369 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=785 avg=1100us min=100us max=3113us bytes=6280192 frames=3977 | size <=512 n=105 avg=150us | <=2k n=108 avg=544us | <=8k n=259 avg=989us | >8k n=313 avg=1703us | control n=991 avg=268us min=0us max=2284us | credit n=5 avg=64us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=100/116/0/0 | queue_at_arrival=158/126/196/114
+[  5][RX-S]  23.00-24.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[  8][TX-S]  23.00-24.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[149.760220 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2000ms iters=5502 polls=4229 poll_us=19 waits=2631 wait_us=566 yields=0 | wait_kind notify=2631@566us deadline=0@0us hist=1386/12/119/318/796 | wake n=4222 avg=329us hist=0/1280/558/1195/1189 | owner_calls=4222 skipped=7 owner_us=91 max=1837us slow=448 | tx_submit=852 tx_done=856 rx_done=3149 | ready 0/1/2-3/4+=4199/22/0/1 | irq=3667
+[149.760349 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=284 dt=2000ms period_avg=7016us max=67980us hist=7/48/47/32/150 | write n=284 avg=735us min=117us max=1964us bytes=438272 calls=1.97 | size blk 1/2/3/4-6/7-9/10+ n=54/41/36/153/0/0 avg=194/752/934/874/0/0us | credit n=7 min=122 max=129 avgx10=1262 backoff=0 avg=0us | gap rx0 n=122 avg=466us | rx1 n=0 avg=0us | rx2+ n=163 avg=10648us | supply core n=137 avg=1221us | ring n=54 avg=2609us | none n=94 avg=15790us | steps=6760 per_pkt=23.8 owner_calls=4015
+[  5][RX-S]  24.00-25.00  sec  1.50 MBytes  12.6 Mbits/sec                  
+[149.760409 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=800 avg=943us min=101us max=3361us bytes=5325312 frames=3433 | size <=512 n=146 avg=164us | <=2k n=159 avg=604us | <=8k n=258 avg=892us | >8k n=237 avg=1705us | control n=1044 avg=227us min=0us max=1649us | credit n=7 avg=65us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=145/89/17/33 | queue_at_arrival=148/110/162/432
+[  8][TX-S]  24.00-25.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5][RX-S]  25.00-26.00  sec  1.38 MBytes  11.5 Mbits/sec                  
+[  8][TX-S]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5][RX-S]  25.00-26.00  sec  1.38 MBytes  11.5 Mbits/sec                  
+[  8][TX-S]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[151.303573 0:73014444059 starry_kernel::task::signal:716] Send signal SIGRT1 to thread 22
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[151.306597 0:17179869212 starry_kernel::task::ops:539] Task(17179869212, "iperf3") exit with code: 0
+[ ID][Role] Interval           Transfer     Bitrate         Retr
+[151.310367 0:73014444059 starry_kernel::task::signal:716] Send signal SIGRT1 to thread 23
+[  5][RX-S]   0.00-26.00  sec  64.0 MBytes  20.6 Mbits/sec                  receiver
+[151.312710 0:4294967325 starry_kernel::task::ops:539] Task(4294967325, "iperf3") exit with code: 0
+[  8][TX-S]   0.00-26.00  sec   256 KBytes  80.7 Kbits/sec    0            sender
+iperf3: the client has terminated
+-----------------------------------------------------------
+Server listening on 5201 (test #5)
+-----------------------------------------------------------
+[151.927866 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2167ms iters=5576 polls=4382 poll_us=16 waits=2497 wait_us=686 yields=0 | wait_kind notify=2497@686us deadline=0@0us hist=1325/4/146/408/614 | wake n=4373 avg=268us hist=0/1535/746/1150/942 | owner_calls=4373 skipped=9 owner_us=78 max=1983us slow=280 | tx_submit=858 tx_done=860 rx_done=1617 | ready 0/1/2-3/4+=4352/18/2/1 | irq=4152
+[151.927992 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=328 dt=2167ms period_avg=5322us max=35072us hist=9/44/39/30/206 | write n=328 avg=677us min=108us max=2609us bytes=441344 calls=1.97 | size blk 1/2/3/4-6/7-9/10+ n=96/61/40/131/0/0 avg=173/836/919/897/0/0us | credit n=6 min=127 max=129 avgx10=1275 backoff=0 avg=0us | gap rx0 n=104 avg=300us | rx1 n=0 avg=0us | rx2+ n=223 avg=6652us | supply core n=100 avg=909us | ring n=85 avg=2134us | none n=142 avg=8749us | steps=5403 per_pkt=16.4 owner_calls=4101
+[151.928053 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=839 avg=664us min=99us max=2600us bytes=2904064 frames=1945 | size <=512 n=195 avg=145us | <=2k n=255 avg=616us | <=8k n=340 avg=897us | >8k n=49 avg=1364us | control n=1190 avg=158us min=0us max=1523us | credit n=6 avg=66us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=188/83/40/17 | queue_at_arrival=227/151/200/280
+[155.685023 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=3757ms iters=10 polls=8 poll_us=4 waits=4 wait_us=939103 yields=0 | wait_kind notify=4@939103us deadline=0@0us hist=2/0/0/0/2 | wake n=8 avg=116us hist=0/4/2/1/1 | owner_calls=8 skipped=0 owner_us=63 max=201us slow=1 | tx_submit=0 tx_done=0 rx_done=0 | ready 0/1/2-3/4+=8/0/0/0 | irq=10
+Accepted connection from 192.168.137.1, port 59987
+[155.685143 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=0 dt=3757ms period_avg=0us max=0us hist=0/0/0/0/0 | write n=0 avg=0us min=18446744073709551us max=0us bytes=0 calls=0.0 | size blk 1/2/3/4-6/7-9/10+ n=0/0/0/0/0/0 avg=0/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=0 avg=0us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=0 avg=0us | steps=8 per_pkt=8.0 owner_calls=8
+[  5] local 192.168.137.249 port 5201 connected to 192.168.137.1 port 59988
+[155.685201 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=2 avg=198us min=150us max=245us bytes=1024 frames=2 | size <=512 n=2 avg=198us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=4 avg=39us min=0us max=79us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=0/0/0/0 | queue_at_arrival=0/0/0/0
+[155.734252 0:8589934621 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       
+[  5]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[158.281024 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2596ms iters=539 polls=446 poll_us=12 waits=218 wait_us=11742 yields=0 | wait_kind notify=218@11742us deadline=0@0us hist=126/1/12/27/52 | wake n=446 avg=334us hist=0/135/113/124/74 | owner_calls=446 skipped=0 owner_us=59 max=587us slow=20 | tx_submit=143 tx_done=143 rx_done=47 | ready 0/1/2-3/4+=445/0/0/1 | irq=355
+[158.281149 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=44 dt=2596ms period_avg=121035us max=4192084us hist=0/0/4/23/17 | write n=44 avg=855us min=149us max=2581us bytes=211456 calls=2.25 | size blk 1/2/3/4-6/7-9/10+ n=8/0/3/0/0/33 avg=156/0/645/0/0/1044us | credit n=2 min=126 max=127 avgx10=1265 backoff=0 avg=0us | gap rx0 n=22 avg=187us | rx1 n=0 avg=0us | rx2+ n=22 avg=240171us | supply core n=34 avg=416us | ring n=0 avg=0us | none n=10 avg=527372us | steps=453 per_pkt=10.2 owner_calls=412
+[158.281211 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=53 avg=207us min=101us max=1819us bytes=31232 frames=91 | size <=512 n=47 avg=142us | <=2k n=6 avg=716us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=89 avg=86us min=0us max=610us | credit n=2 avg=95us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=23/0/2/19 | queue_at_arrival=10/2/7/124
+[  5]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   4.00-5.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[160.734818 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2453ms iters=706 polls=591 poll_us=13 waits=266 wait_us=9043 yields=0 | wait_kind notify=266@9043us deadline=0@0us hist=156/4/21/43/42 | wake n=590 avg=725us hist=0/185/152/168/85 | owner_calls=590 skipped=1 owner_us=59 max=860us slow=28 | tx_submit=225 tx_done=225 rx_done=60 | ready 0/1/2-3/4+=589/0/0/1 | irq=483
+[160.734944 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=61 dt=2453ms period_avg=51272us max=1460415us hist=0/2/12/20/27 | write n=61 avg=986us min=141us max=2253us bytes=343552 calls=2.36 | size blk 1/2/3/4-6/7-9/10+ n=2/0/3/2/0/54 avg=290/0/424/560/0/1059us | credit n=1 min=126 max=126 avgx10=1260 backoff=0 avg=0us | gap rx0 n=30 avg=231us | rx1 n=0 avg=0us | rx2+ n=31 avg=98725us | supply core n=49 avg=437us | ring n=6 avg=582us | none n=6 avg=507087us | steps=567 per_pkt=9.2 owner_calls=515
+[160.735025 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=65 avg=156us min=100us max=431us bytes=37376 frames=121 | size <=512 n=59 avg=132us | <=2k n=6 avg=383us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=110 avg=79us min=0us max=897us | credit n=1 avg=70us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=26/1/2/32 | queue_at_arrival=12/9/18/186
+[  5]   5.00-6.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   6.00-7.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[163.013296 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=2278ms iters=35 polls=28 poll_us=10 waits=16 wait_us=142265 yields=0 | wait_kind notify=16@142265us deadline=0@0us hist=9/0/0/3/4 | wake n=28 avg=130us hist=0/14/7/4/3 | owner_calls=28 skipped=0 owner_us=57 max=225us slow=1 | tx_submit=2 tx_done=2 rx_done=2 | ready 0/1/2-3/4+=28/0/0/0 | irq=28
+[163.013509 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=2 dt=2278ms period_avg=993543us max=1120670us hist=0/0/0/0/2 | write n=2 avg=165us min=163us max=166us bytes=1024 calls=2.0 | size blk 1/2/3/4-6/7-9/10+ n=2/0/0/0/0/0 avg=165/0/0/0/0/0us | credit n=0 min=0 max=0 avgx10=0 backoff=0 avg=0us | gap rx0 n=0 avg=0us | rx1 n=0 avg=0us | rx2+ n=2 avg=993378us | supply core n=0 avg=0us | ring n=0 avg=0us | none n=2 avg=993378us | steps=31 per_pkt=15.5 owner_calls=29
+[163.013570 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=5 avg=179us min=139us max=268us bytes=2560 frames=5 | size <=512 n=5 avg=179us | <=2k n=0 avg=0us | <=8k n=0 avg=0us | >8k n=0 avg=0us | control n=10 avg=56us min=0us max=169us | credit n=0 avg=0us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=2/0/0/0 | queue_at_arrival=2/0/0/0
+[  5]   7.00-8.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   8.00-9.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  5]   9.00-10.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[166.249075 0:4294967307 ax_net::queue_runtime::executor::probe:175] [netprobe] dt=3235ms iters=411 polls=343 poll_us=14 waits=150 wait_us=21384 yields=0 | wait_kind notify=150@21384us deadline=0@0us hist=89/1/13/21/26 | wake n=341 avg=5834us hist=0/92/75/120/54 | owner_calls=341 skipped=2 owner_us=59 max=672us slow=16 | tx_submit=142 tx_done=142 rx_done=27 | ready 0/1/2-3/4+=339/1/0/1 | irq=241
+[  5]   9.00-10.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[166.249201 0:4294967307 aic8800::device::probe:349] [wifi-probe] pkts=37 dt=3235ms period_avg=54552us max=1077677us hist=0/0/7/22/8 | write n=37 avg=907us min=509us max=2236us bytes=218112 calls=2.35 | size blk 1/2/3/4-6/7-9/10+ n=0/0/0/2/2/33 avg=0/0/0/575/673/941us | credit n=2 min=121 max=127 avgx10=1240 backoff=0 avg=0us | gap rx0 n=24 avg=188us | rx1 n=0 avg=0us | rx2+ n=13 avg=152334us | supply core n=33 avg=371us | ring n=2 avg=270us | none n=2 avg=986042us | steps=339 per_pkt=9.1 owner_calls=316
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[166.249263 0:4294967307 aic8800::device::probe:416] [wifi-probe-rx] data n=32 avg=167us min=99us max=753us bytes=18432 frames=64 | size <=512 n=31 avg=152us | <=2k n=0 avg=0us | <=8k n=1 avg=640us | >8k n=0 avg=0us | control n=54 avg=69us min=0us max=328us | credit n=2 avg=73us | other n=0 avg=0us | rdif_at_write 0/1/2-3/4+=14/0/2/21 | queue_at_arrival=4/4/8/126
+[ ID] Interval           Transfer     Bitrate         Retr
+[166.254662 0:73014444059 starry_kernel::task::signal:716] Send signal SIGRT1 to thread 24
+[  5]   0.00-10.00  sec   256 KBytes   210 Kbits/sec    0            sender
+[166.257247 0:8589934621 starry_kernel::task::ops:539] Task(8589934621, "iperf3") exit with code: 0
+iperf3: the client has terminated
+-----------------------------------------------------------
+Server listening on 5201 (test #6)
+-----------------------------------------------------------

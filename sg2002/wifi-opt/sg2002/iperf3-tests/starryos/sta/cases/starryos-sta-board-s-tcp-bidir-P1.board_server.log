@@ -1,0 +1,86 @@
+﻿cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[686.324175 0:30064771099 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[686.334813 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 64088
+[  6] local 192.168.137.17 port 5201 connected[37m[686.335259 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+ to 192.168.137.1 port 64089
+[  9] local 192.168.137.17 port 5201 connected to 192.168.137.1 port 64090
+[ ID][Role] Interval           Transfer     Bitrate         Retr  Cwnd
+[  6][RX-S]   0.00-1.00   sec   128 KBytes  1.05 Mbits/sec                  (omitted)
+[  9][TX-S]   0.00-1.01   sec  1.00 MBytes  8.33 Mbits/sec    0   0.00 Bytes       (omitted)
+[  6][RX-S]   1.00-2.00   sec   512 KBytes  4.20 Mbits/sec                  (omitted)
+[  9][TX-S]   1.01-2.00   sec   896 KBytes  7.38 Mbits/sec    0   0.00 Bytes       (omitted)
+[  6][RX-S]   2.00-3.00   sec   512 KBytes  4.20 Mbits/sec                  (omitted)
+[  9][TX-S]   2.00-3.00   sec   640 KBytes  5.25 Mbits/sec    0   0.00 Bytes       (omitted)
+[  6][RX-S]   0.00-1.00   sec   640 KBytes  5.23 Mbits/sec                  
+[  9][TX-S]   0.00-1.00   sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   1.00-2.00   sec   384 KBytes  3.15 Mbits/sec                  
+[  9][TX-S]   1.00-2.00   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   2.00-3.00   sec   384 KBytes  3.15 Mbits/sec                  
+[  9][TX-S]   2.00-3.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   3.00-4.00   sec   384 KBytes  3.14 Mbits/sec                  
+[  9][TX-S]   3.00-4.00   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   4.00-5.00   sec   384 KBytes  3.15 Mbits/sec                  
+[  9][TX-S]   4.00-5.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   5.00-6.00   sec   256 KBytes  2.09 Mbits/sec                  
+[  9][TX-S]   5.00-6.00   sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   6.00-7.00   sec   512 KBytes  4.20 Mbits/sec                  
+[  9][TX-S]   6.00-7.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   7.00-8.00   sec   384 KBytes  3.15 Mbits/sec                  
+[  9][TX-S]   7.00-8.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   8.00-9.00   sec   384 KBytes  3.14 [37m[686.585233 0:30064771099 [37mstarry_kernel::task::ops:539] [32mTask(30064771099, "busybox") exit with code: 0[m[m
+Mbits/sec                  
+[  9][TX-S]   8.00-9.00   sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   9.00-10.00  sec   384 KBytes  3.14 Mbits/sec                  
+[  9][TX-S]   9.00-10.00  sec   768 KBytes  6.29 Mbits/sec    0 [37m[686.585844 0:30064771099 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+  0.00 Bytes       
+[  6][RX-S]  10.00-11.00  sec   640 KBytes  5.24 Mbits/sec                  
+[  9][TX-S]  10.00-11.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]  11.00-12.00  sec   640 KBytes  5.25 Mbits/sec              [37m[686.586530 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+    
+[  9][TX-S]  11.00-12.00  sec   896 KBytes  7.35 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]  12.00-13.00  sec   640 KBytes  5.24 Mbits/sec                  
+[  9][TX-S]  12.00-13.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]  13.00-14.00  sec   768 KBytes  6.26 Mbits/sec                  
+[  9][TX-S]  13.00-14.00  sec   896 KBytes  7.31 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]  14.00-15.00  sec   256 KBytes  2.10 Mbits/sec                  
+[  9][TX-S]  14.00-15.00  sec   640 KBytes  5.26 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]  15.00-16.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  15.00-16.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  16.00-17.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  16.00-17.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  17.00-18.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  17.00-18.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  18.00-19.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  18.00-19.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  19.00-20.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  19.00-20.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  20.00-21.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  20.00-21.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  21.00-22.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  21.00-22.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  22.00-23.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  22.00-23.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  23.00-24.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  23.00-24.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  24.00-25.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  24.00-25.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  26.00-27.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  26.00-27.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  27.00-28.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  27.00-28.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  28.00-29.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  28.00-29.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  29.00-30.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  29.00-30.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID][Role] Interval           Transfer     Bitrate         Retr
+[  6][RX-S]   0.00-30.00  sec  6.88 MBytes  1.92 Mbits/sec                  receiver
+[  9][TX-S]   0.00-30.00  sec  11.9 MBytes  3.32 Mbits/sec    0            sender
+SRVLOG_DONE
+root@starry:/root # [6n

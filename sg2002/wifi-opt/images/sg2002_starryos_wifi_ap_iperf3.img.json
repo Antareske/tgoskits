@@ -1,0 +1,11 @@
+{
+  "output": "/home/asta/tgoskits/sg2002_starryos_wifi_ap_iperf3.img",
+  "timestamp": "2026-09-12 10:06:31",
+  "repo": "/home/asta/tgoskits/tgoskits",
+  "commit": "59de8ccb380beb8e3a2a9113c813f9267d996cfa",
+  "config": "/home/asta/tgoskits/tgoskits/os/StarryOS/configs/board/licheerv-nano-sg2002-wifi.toml",
+  "kernel": "starryos.bin",
+  "rootfs": "rootfs-riscv64-alpine.img",
+  "injects": ["/tmp/iperf3-inject/iperf3:/usr/bin/iperf3:0755", "/tmp/iperf3-inject/libiperf.so.0:/usr/lib/libiperf.so.0:0755"],
+  "init_assets": 0
+}

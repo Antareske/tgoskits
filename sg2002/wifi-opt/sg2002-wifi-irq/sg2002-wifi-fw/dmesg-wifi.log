@@ -1,0 +1,449 @@
+[    7.498217] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.498231] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.498695] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.498743] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.500898] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.500918] aic_btsdio: skb type 4
+[    7.500987] aic_btsdio: hci0,btsdio_send_frame
+[    7.501024] aic_btsdio: hci0,btsdio_work
+[    7.501031] aic_btsdio: hci0
+[    7.501051] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.501066] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.501549] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.501597] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.503689] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.503708] aic_btsdio: skb type 4
+[    7.503777] aic_btsdio: hci0,btsdio_send_frame
+[    7.503811] aic_btsdio: hci0,btsdio_work
+[    7.503818] aic_btsdio: hci0
+[    7.503838] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.503852] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.504308] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.504353] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.506464] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.506485] aic_btsdio: skb type 4
+[    7.506551] aic_btsdio: hci0,btsdio_send_frame
+[    7.506587] aic_btsdio: hci0,btsdio_work
+[    7.506594] aic_btsdio: hci0
+[    7.506614] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.506628] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.507101] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.507147] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.509274] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.509294] aic_btsdio: skb type 4
+[    7.509363] aic_btsdio: hci0,btsdio_send_frame
+[    7.509398] aic_btsdio: hci0,btsdio_work
+[    7.509406] aic_btsdio: hci0
+[    7.509426] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.509440] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.509916] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.509963] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.512072] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.512094] aic_btsdio: skb type 4
+[    7.512162] aic_btsdio: hci0,btsdio_send_frame
+[    7.512198] aic_btsdio: hci0,btsdio_work
+[    7.512205] aic_btsdio: hci0
+[    7.512227] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.512241] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.512710] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.512757] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.515007] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.515026] aic_btsdio: skb type 4
+[    7.515091] aic_btsdio: hci0,btsdio_send_frame
+[    7.515126] aic_btsdio: hci0,btsdio_work
+[    7.515132] aic_btsdio: hci0
+[    7.515153] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.515167] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.515637] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.515681] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.516233] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.516251] aic_btsdio: skb type 4
+[    7.516316] aic_btsdio: hci0,btsdio_send_frame
+[    7.516350] aic_btsdio: hci0,btsdio_work
+[    7.516357] aic_btsdio: hci0
+[    7.516377] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.516391] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.516845] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.516890] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.519026] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.519048] aic_btsdio: skb type 4
+[    7.519115] aic_btsdio: hci0,btsdio_send_frame
+[    7.519149] aic_btsdio: hci0,btsdio_work
+[    7.519156] aic_btsdio: hci0
+[    7.519176] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.519190] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.519661] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.519705] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.520349] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.520368] aic_btsdio: skb type 4
+[    7.520505] aic_btsdio: hci0,btsdio_send_frame
+[    7.520533] aic_btsdio: hci0,btsdio_work
+[    7.520539] aic_btsdio: hci0
+[    7.520560] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.520574] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.521044] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.521090] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.523156] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.523176] aic_btsdio: skb type 4
+[    7.523245] aic_btsdio: hci0,btsdio_send_frame
+[    7.523279] aic_btsdio: hci0,btsdio_work
+[    7.523286] aic_btsdio: hci0
+[    7.523306] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.523320] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.523788] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.523834] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.525982] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.526001] aic_btsdio: skb type 4
+[    7.526070] aic_btsdio: hci0,btsdio_send_frame
+[    7.526105] aic_btsdio: hci0,btsdio_work
+[    7.526111] aic_btsdio: hci0
+[    7.526132] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.526146] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.526610] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.526656] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.528752] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.528771] aic_btsdio: skb type 4
+[    7.528840] aic_btsdio: hci0,btsdio_send_frame
+[    7.528875] aic_btsdio: hci0,btsdio_work
+[    7.528883] aic_btsdio: hci0
+[    7.528903] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.528918] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.529391] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.529437] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.531540] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.531559] aic_btsdio: skb type 4
+[    7.531628] aic_btsdio: hci0,btsdio_send_frame
+[    7.531663] aic_btsdio: hci0,btsdio_work
+[    7.531671] aic_btsdio: hci0
+[    7.531692] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.531707] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.532180] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.532229] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.532826] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.532845] aic_btsdio: skb type 4
+[    7.532910] aic_btsdio: hci0,btsdio_send_frame
+[    7.532945] aic_btsdio: hci0,btsdio_work
+[    7.532952] aic_btsdio: hci0
+[    7.532973] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.532987] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.533462] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.533509] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.535665] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.535684] aic_btsdio: skb type 4
+[    7.535753] aic_btsdio: hci0,btsdio_send_frame
+[    7.535788] aic_btsdio: hci0,btsdio_work
+[    7.535795] aic_btsdio: hci0
+[    7.535816] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.535831] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.536309] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.536358] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.538509] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.538529] aic_btsdio: skb type 4
+[    7.538598] aic_btsdio: hci0,btsdio_send_frame
+[    7.538634] aic_btsdio: hci0,btsdio_work
+[    7.538641] aic_btsdio: hci0
+[    7.538662] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.538677] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.539219] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.539266] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.539763] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.539781] aic_btsdio: skb type 4
+[    7.539847] aic_btsdio: hci0,btsdio_send_frame
+[    7.539882] aic_btsdio: hci0,btsdio_work
+[    7.539889] aic_btsdio: hci0
+[    7.539911] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.539925] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.540412] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.540457] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.541046] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.541065] aic_btsdio: skb type 4
+[    7.541131] aic_btsdio: hci0,btsdio_send_frame
+[    7.541166] aic_btsdio: hci0,btsdio_work
+[    7.541173] aic_btsdio: hci0
+[    7.541194] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.541207] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.541684] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.541730] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.543822] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.543841] aic_btsdio: skb type 4
+[    7.543913] aic_btsdio: hci0,btsdio_send_frame
+[    7.543948] aic_btsdio: hci0,btsdio_work
+[    7.543955] aic_btsdio: hci0
+[    7.543977] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.543991] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.544463] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.544498] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.546633] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.546652] aic_btsdio: skb type 4
+[    7.546720] aic_btsdio: hci0,btsdio_send_frame
+[    7.546854] aic_btsdio: hci0,btsdio_work
+[    7.546863] aic_btsdio: hci0
+[    7.546885] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.546900] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.547370] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.547416] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.547924] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.547943] aic_btsdio: skb type 4
+[    7.548011] aic_btsdio: hci0,btsdio_send_frame
+[    7.548046] aic_btsdio: hci0,btsdio_work
+[    7.548053] aic_btsdio: hci0
+[    7.548074] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.548089] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.548562] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.548609] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.550717] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.550810] aic_btsdio: skb type 4
+[    7.550900] aic_btsdio: hci0,btsdio_send_frame
+[    7.550937] aic_btsdio: hci0,btsdio_work
+[    7.550944] aic_btsdio: hci0
+[    7.550966] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.550981] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.551459] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.551506] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.553518] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.553538] aic_btsdio: skb type 4
+[    7.553606] aic_btsdio: hci0,btsdio_send_frame
+[    7.553642] aic_btsdio: hci0,btsdio_work
+[    7.553649] aic_btsdio: hci0
+[    7.553670] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.553685] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.554154] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.554198] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.554854] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.554876] aic_btsdio: skb type 4
+[    7.555034] aic_btsdio: hci0,btsdio_send_frame
+[    7.555074] aic_btsdio: hci0,btsdio_work
+[    7.555082] aic_btsdio: hci0
+[    7.555103] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.555118] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.555592] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.555639] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.559447] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.559468] aic_btsdio: skb type 4
+[    7.559536] aic_btsdio: hci0,btsdio_send_frame
+[    7.559573] aic_btsdio: hci0,btsdio_work
+[    7.559580] aic_btsdio: hci0
+[    7.559601] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.559617] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.560079] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.560172] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.560327] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.560345] aic_btsdio: skb type 4
+[    7.560405] aic_btsdio: hci0,btsdio_send_frame
+[    7.560440] aic_btsdio: hci0,btsdio_work
+[    7.560447] aic_btsdio: hci0
+[    7.560466] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.560481] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.560944] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.560981] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.561484] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.561502] aic_btsdio: skb type 4
+[    7.561565] aic_btsdio: hci0,btsdio_send_frame
+[    7.561601] aic_btsdio: hci0,btsdio_work
+[    7.561608] aic_btsdio: hci0
+[    7.561629] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.561644] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.562120] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.562167] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.564317] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.564337] aic_btsdio: skb type 4
+[    7.564404] aic_btsdio: hci0,btsdio_send_frame
+[    7.564440] aic_btsdio: hci0,btsdio_work
+[    7.564447] aic_btsdio: hci0
+[    7.564469] AICWFDBG(LOGTRACE)	rwnx_send_msg (3089)unknown reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    7.564484] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    7.564948] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc11 
+[    7.564994] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    7.567614] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0xc12 
+[    7.567634] aic_btsdio: skb type 4
+[    8.457980] AICWFDBG(LOGTRACE)	>>> rwnx_open()
+[    8.457995] AICWFDBG(LOGTRACE)	>>> rwnx_send_start()
+[    8.458014] AICWFDBG(LOGTRACE)	rwnx_send_msg (3)MM_START_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    8.458028] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    8.459481] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x3 
+[    8.459533] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    8.459546] AICWFDBG(LOGTRACE)	>>> rwnx_send_coex_req()
+[    8.459562] AICWFDBG(LOGTRACE)	rwnx_send_msg (102)MM_SET_COEX_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    8.459574] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    8.459906] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x66 
+[    8.459948] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    8.459960] AICWFDBG(LOGDEBUG)	rwnx_open rwnx_vif->drv_flags:4
+[    8.459969] AICWFDBG(LOGTRACE)	>>> rwnx_send_add_if()
+[    8.459985] AICWFDBG(LOGTRACE)	rwnx_send_msg (7)MM_ADD_IF_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    8.459996] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    8.460346] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x7 
+[    8.460388] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    8.460400] AICWFDBG(LOGDEBUG)	rwnx_open sta create vif in rwnx_hw->vif_table[0] 
+[    8.647341] get_txpwr_max:txpwr_max:18 
+[    8.647758] get_txpwr_max:txpwr_max:18 
+[    8.649762] get_txpwr_max:txpwr_max:18 
+[    8.650178] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_change_iface()
+[    8.650194] change_if: 2 to 3, 8, 2
+[    8.650203] AICWFDBG(LOGTRACE)	>>> rwnx_send_remove_if()
+[    8.650220] AICWFDBG(LOGTRACE)	rwnx_send_msg (9)MM_REMOVE_IF_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    8.650235] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    8.650623] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x9 
+[    8.650666] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    8.650676] change_if from 0 
+[    8.650684] AICWFDBG(LOGTRACE)	>>> rwnx_send_add_if()
+[    8.650699] AICWFDBG(LOGTRACE)	rwnx_send_msg (7)MM_ADD_IF_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    8.650711] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    8.652515] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x7 
+[    8.652563] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    8.652574] change_if to 1 
+[    8.652604] get_txpwr_max:txpwr_max:18 
+[    8.658928] get_txpwr_max:txpwr_max:18 
+[    8.680185] rwnx_cfg80211_del_station_compat: (null)
+[    9.025359] get_txpwr_max:txpwr_max:18 
+[    9.026162] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_start_ap()
+[    9.026334] AICWFDBG(LOGTRACE)	>>> rwnx_send_apm_start_req()
+[    9.026367] AICWFDBG(LOGTRACE)	rwnx_send_msg (7177)APM_SET_BEACON_IE_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    9.026382] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    9.027553] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1c09 
+[    9.027605] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    9.027616] chan.flags 0 
+[    9.027631] AICWFDBG(LOGTRACE)	rwnx_send_msg (7169)APM_START_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    9.027644] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    9.356591] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x44 
+[    9.356803] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1c01 
+[    9.356851] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    9.356958] aicwf_sdio mmc1:390b:1 wlan0: AP started: ch=0, bcmc_idx=33 channel=2412 bw=1
+[    9.357844] AICWFDBG(LOGDEBUG)	mgmt xmit c0 0 
+[    9.358213] IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
+[    9.360400] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_add_key()
+[    9.360415] AICWFDBG(LOGTRACE)	>>> rwnx_send_key_add()
+[    9.360432] AICWFDBG(LOGTRACE)	rwnx_send_key_add: sta_idx:255 key_idx:1 inst_nbr:1 cipher:1 key_len:32
+[    9.360447] AICWFDBG(LOGTRACE)	rwnx_send_msg (37)MM_KEY_ADD_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    9.360462] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    9.360829] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x25 
+[    9.360872] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    9.361215] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_set_default_key()
+[    9.361553] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_set_txq_params()
+[    9.361567] AICWFDBG(LOGTRACE)	>>> rwnx_send_set_edca()
+[    9.361585] AICWFDBG(LOGTRACE)	rwnx_send_msg (27)MM_SET_EDCA_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    9.361599] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    9.361957] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1b 
+[    9.361999] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    9.362317] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_set_txq_params()
+[    9.362331] AICWFDBG(LOGTRACE)	>>> rwnx_send_set_edca()
+[    9.362347] AICWFDBG(LOGTRACE)	rwnx_send_msg (27)MM_SET_EDCA_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    9.362361] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    9.362712] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1b 
+[    9.364658] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    9.364996] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_set_txq_params()
+[    9.365010] AICWFDBG(LOGTRACE)	>>> rwnx_send_set_edca()
+[    9.365028] AICWFDBG(LOGTRACE)	rwnx_send_msg (27)MM_SET_EDCA_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    9.365042] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    9.365404] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1b 
+[    9.365449] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    9.365765] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_set_txq_params()
+[    9.365778] AICWFDBG(LOGTRACE)	>>> rwnx_send_set_edca()
+[    9.365795] AICWFDBG(LOGTRACE)	rwnx_send_msg (27)MM_SET_EDCA_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    9.365808] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    9.366159] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1b 
+[    9.366202] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    9.504802] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_change_beacon()
+[    9.504837] AICWFDBG(LOGTRACE)	rwnx_send_msg (7177)APM_SET_BEACON_IE_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    9.504853] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    9.505265] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1c09 
+[    9.505308] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    9.505320] AICWFDBG(LOGTRACE)	>>> rwnx_send_bcn_change()
+[    9.505336] AICWFDBG(LOGTRACE)	rwnx_send_msg (64)MM_BCN_CHANGE_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[    9.505349] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[    9.505673] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x40 
+[    9.505714] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[    9.570827] aic_btsdio: hci0,btsdio_flush
+[    9.570849] aic_btsdio: hci0,btsdio_close
+[   16.518631] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_change_beacon()
+[   16.518667] AICWFDBG(LOGTRACE)	rwnx_send_msg (7177)APM_SET_BEACON_IE_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   16.518682] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   16.519632] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1c09 
+[   16.519680] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   16.519692] AICWFDBG(LOGTRACE)	>>> rwnx_send_bcn_change()
+[   16.519708] AICWFDBG(LOGTRACE)	rwnx_send_msg (64)MM_BCN_CHANGE_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   16.519721] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   16.520047] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x40 
+[   16.520088] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   39.950878] AICWFDBG(LOGDEBUG)	mgmt xmit b0 0 
+[   39.954414] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_change_beacon()
+[   39.954448] AICWFDBG(LOGTRACE)	rwnx_send_msg (7177)APM_SET_BEACON_IE_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   39.954464] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   39.955568] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1c09 
+[   39.955620] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   39.955631] AICWFDBG(LOGTRACE)	>>> rwnx_send_bcn_change()
+[   39.955649] AICWFDBG(LOGTRACE)	rwnx_send_msg (64)MM_BCN_CHANGE_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   39.955661] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   39.955990] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x40 
+[   39.956032] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   39.956805] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_change_beacon()
+[   39.956838] AICWFDBG(LOGTRACE)	rwnx_send_msg (7177)APM_SET_BEACON_IE_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   39.956852] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   39.957258] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1c09 
+[   39.957303] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   39.957315] AICWFDBG(LOGTRACE)	>>> rwnx_send_bcn_change()
+[   39.957330] AICWFDBG(LOGTRACE)	rwnx_send_msg (64)MM_BCN_CHANGE_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   39.957343] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   39.957668] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x40 
+[   39.957709] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   39.958403] rwnx_cfg80211_del_station_compat: 90:de:80:92:bc:cd
+[   39.958717] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_add_station()
+[   39.958739] AICWFDBG(LOGDEBUG)	rx map 0  rx high 0 tx map 0 tx high 0 
+[   39.960765] AICWFDBG(LOGDEBUG)	rwnx sta add he mcs/nss rx mcs 80 0x0000 
+[   39.960774] AICWFDBG(LOGDEBUG)	rwnx sta add he mcs/nss tx mcs 80 0x0000 
+[   39.960790] AICWFDBG(LOGTRACE)	rwnx_send_msg (5128)ME_STA_ADD_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   39.960805] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   39.962080] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1408 
+[   39.962125] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   39.962290] aicwf_sdio mmc1:390b:1 wlan0: Add sta 0 (90:de:80:92:bc:cd) flags=[WME][AUTHENTICATED][ASSOCIATED]
+[   39.962612] AICWFDBG(LOGDEBUG)	mgmt xmit 10 0 
+[   39.962640] AICWFDBG(LOGINFO)	need cfm mgmt:10,user_idx=1, skb=00000000164a6a77
+[   39.964322] AICWFDBG(LOGINFO)	sdio_host_tx_cfm_handler:used_idx=0, 0x0000000068a3f90c, status=9
+[   39.964339] done=1 retry_required=0 sw_retry_required=0 acknowledged=1
+[   39.965114] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_del_key()
+[   39.965128] AICWFDBG(LOGTRACE)	>>> rwnx_send_key_del()
+[   39.965146] AICWFDBG(LOGTRACE)	rwnx_send_msg (39)MM_KEY_DEL_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   39.965161] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   39.965523] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x27 
+[   39.965566] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   39.966274] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_del_key()
+[   39.966288] AICWFDBG(LOGTRACE)	>>> rwnx_send_key_del()
+[   39.966305] AICWFDBG(LOGTRACE)	rwnx_send_msg (39)MM_KEY_DEL_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   39.966320] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   39.966678] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x27 
+[   39.966720] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   39.968695] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_del_key()
+[   39.968710] AICWFDBG(LOGTRACE)	>>> rwnx_send_key_del()
+[   39.968728] AICWFDBG(LOGTRACE)	rwnx_send_msg (39)MM_KEY_DEL_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   39.968743] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   39.969107] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x27 
+[   39.969150] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   39.969449] AICWFDBG(LOGTRACE)	>>> rwnx_send_me_set_control_port_req()
+[   39.969472] AICWFDBG(LOGTRACE)	rwnx_send_msg (5125)ME_SET_CONTROL_PORT_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   39.969487] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   39.969840] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1405 
+[   39.969884] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   39.974700] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_add_key()
+[   39.974715] AICWFDBG(LOGTRACE)	>>> rwnx_send_key_add()
+[   39.974735] AICWFDBG(LOGTRACE)	rwnx_send_key_add: sta_idx:255 key_idx:1 inst_nbr:1 cipher:1 key_len:32
+[   39.975244] AICWFDBG(LOGTRACE)	rwnx_send_msg (37)MM_KEY_ADD_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   39.975260] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   39.975625] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x25 
+[   39.975668] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   39.976011] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_set_default_key()
+[   39.977033] AICWFDBG(LOGINFO)	need cfm ethertype:    8e88,user_idx=2, skb=00000000329cea32
+[   39.980224] AICWFDBG(LOGINFO)	sdio_host_tx_cfm_handler:used_idx=1, 0x0000000068a3f90c, status=9
+[   39.981742] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_get_key()
+[   40.025955] AICWFDBG(LOGINFO)	need cfm ethertype:    8e88,user_idx=3, skb=00000000329cea32
+[   40.030515] AICWFDBG(LOGINFO)	sdio_host_tx_cfm_handler:used_idx=2, 0x0000000068a3f90c, status=9
+[   40.031799] AICWFDBG(LOGTRACE)	>>> rwnx_cfg80211_add_key()
+[   40.031815] AICWFDBG(LOGTRACE)	>>> rwnx_send_key_add()
+[   40.031831] AICWFDBG(LOGTRACE)	rwnx_send_key_add: sta_idx:0 key_idx:0 inst_nbr:1 cipher:1 key_len:32
+[   40.031845] AICWFDBG(LOGTRACE)	rwnx_send_msg (37)MM_KEY_ADD_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   40.031861] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   40.032225] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x25 
+[   40.032267] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 
+[   40.032593] AICWFDBG(LOGTRACE)	>>> rwnx_send_me_set_control_port_req()
+[   40.032616] AICWFDBG(LOGTRACE)	rwnx_send_msg (5125)ME_SET_CONTROL_PORT_CFM reqcfm:1 in_irq:0 in_softirq:0 in_atomic:0
+[   40.032630] AICWFDBG(LOGTRACE)	rwnx_cmd_malloc get cmd_array[0]:000000008950e4e3 
+[   40.032987] AICWFDBG(LOGDEBUG)	rwnx_rx_handle_msg msg->id:0x1405 
+[   40.033030] AICWFDBG(LOGTRACE)	rwnx_cmd_free cmd_array[0]:000000008950e4e3 

@@ -122,6 +122,13 @@ pub(super) struct DataPlaneState {
     pub internal_tx: VecDeque<InternalTx>,
     pub internal_tx_bytes: usize,
     pub link: LinkState,
+    /// When the first card-interrupt fact of a held-back receive scan arrived.
+    /// While this is set the scan is deferred, so that small frames collect in
+    /// the firmware and one read returns several of them.
+    pub rx_deferred_since: Option<MonotonicTime>,
+    /// Consecutive receive reads that returned at most one block, which is how
+    /// a trickle of small frames looks on this link.
+    pub rx_small_reads: u32,
     /// Transmit completions that did not fit the event queue.
     pub pending_completions: VecDeque<TxToken>,
     /// Board-measurement counters; diagnostic only.
@@ -316,6 +323,8 @@ impl AicDevice {
                 internal_tx: VecDeque::new(),
                 internal_tx_bytes: 0,
                 link: LinkState::new(),
+                rx_deferred_since: None,
+                rx_small_reads: 0,
                 pending_completions: VecDeque::new(),
                 probe: TxProbe::default(),
             },

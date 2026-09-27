@@ -30,6 +30,12 @@ impl TxState {
         self.queue.is_empty()
     }
 
+    /// Ethernet length of the frame at the front of the queue, which tells a
+    /// data frame from a bare acknowledgement.
+    pub(crate) fn head_frame_len(&self) -> Option<usize> {
+        self.queue.front().map(|pending| pending.frame.len())
+    }
+
     pub(crate) fn enqueue(&mut self, token: TxToken, frame: Vec<u8>) -> Result<(), Vec<u8>> {
         if self.queue.len() >= TX_CAPACITY {
             return Err(frame);

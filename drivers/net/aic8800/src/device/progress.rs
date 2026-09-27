@@ -78,7 +78,7 @@ impl AicDevice {
                 if snapshot.sequence > self.io.last_irq_sequence {
                     self.io.last_irq_sequence = snapshot.sequence;
                     if snapshot.card_interrupt {
-                        self.request_receive_scan();
+                        self.request_receive_scan(now);
                     }
                 }
                 Ok(())

@@ -546,7 +546,7 @@ mod tests {
             revision: None,
             dc: None,
         });
-        device.request_receive_scan();
+        device.request_receive_scan(MonotonicTime::default());
 
         let action = device.drive_startup(MonotonicTime::from_nanos(0));
         assert!(matches!(

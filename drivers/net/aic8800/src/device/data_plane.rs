@@ -18,6 +18,21 @@ const IO_RETRY: Duration = Duration::from_micros(200);
 // The firmware reports packet buffers, not SDIO blocks. Keep two buffers
 // available for commands, as in the vendor DATA_FLOW_CTRL_THRESH contract.
 const DATA_TX_RESERVED_CREDITS: u8 = 2;
+/// How long a card-interrupt receive fact may be held back so that small
+/// frames collect in the firmware.  One scan then reads several frames in one
+/// transaction instead of paying a full round trip per frame, which is what a
+/// trickle of acknowledgements otherwise costs.  The window bounds when the
+/// scan is armed, and the fact then reaches the bus with the current write
+/// already in flight, so the frames wait no longer than one write; the
+/// firmware holds that many small frames well inside its receive capacity.
+const RX_DEFER_WINDOW: Duration = Duration::from_millis(1);
+/// Ethernet bytes above which the queued frame marks this side as the bulk
+/// sender: a data frame is at least several hundred bytes, an acknowledgement
+/// is fourteen.
+const RX_DEFER_BULK_FRAME_BYTES: usize = 128;
+/// Consecutive one-block receive reads that mark the receive stream as a
+/// trickle of small frames.
+const RX_TRICKLE_READS: u32 = 4;
 const INTERNAL_TX_CAPACITY: usize = 2;
 const INTERNAL_TX_BYTE_CAPACITY: usize = 8 * 1024;
 const ETHERTYPE_EAPOL: [u8; 2] = [0x88, 0x8e];
@@ -58,6 +73,7 @@ impl AicDevice {
         if let Some(event) = self.take_priority_event() {
             return AicAction::Event(event);
         }
+        self.expire_receive_deferral(now);
         if let Some(action) = self.drive_receive_scan() {
             return action;
         }
@@ -98,7 +114,7 @@ impl AicDevice {
         self.data.remove_event(index)
     }
 
-    pub(super) fn request_receive_scan(&mut self) {
+    pub(super) fn request_receive_scan(&mut self, now: MonotonicTime) {
         // Firmware startup owns both SDIO functions until a mailbox
         // confirmation is waiting.  The controller reports CARD_INT as a
         // level source, so treating that status as a data-plane receive event
@@ -115,8 +131,61 @@ impl AicDevice {
             // completes, so a second scan must never be queued here.
             return;
         }
+        if self.defer_receive_scan(now) {
+            if self.data.rx_deferred_since.is_none() {
+                self.data.rx_deferred_since = Some(now);
+                self.data.probe.scan_deferred();
+            }
+            return;
+        }
+        self.arm_receive_scan();
+    }
+
+    /// Whether the receive fact may be held back so that more small frames
+    /// collect before the scan reads them.
+    ///
+    /// Holding only pays off, and is only safe, when the traffic says this side
+    /// is the bulk sender: a data frame is already queued to transmit, and the
+    /// receive stream has been a trickle of single-block reads, which is what a
+    /// stream of acknowledgements looks like.  While the peer is the bulk
+    /// sender the reads are multi-block and the scan runs at once, because
+    /// holding it back would only add latency to the traffic that matters and
+    /// risk the firmware's receive capacity.
+    fn defer_receive_scan(&self, now: MonotonicTime) -> bool {
+        let Some(since) = self.data.rx_deferred_since else {
+            return self.bulk_frame_queued() && self.data.rx_small_reads >= RX_TRICKLE_READS;
+        };
+        now < since.after(RX_DEFER_WINDOW) && self.bulk_frame_queued()
+    }
+
+    /// Arms a held-back scan whose window has run out, or whose reason to wait
+    /// is gone.  Called before the receive step of the ready-state drive, so a
+    /// deferred fact is never lost while the owner is busy transmitting.
+    fn expire_receive_deferral(&mut self, now: MonotonicTime) {
+        let Some(since) = self.data.rx_deferred_since else {
+            return;
+        };
+        let expired = now >= since.after(RX_DEFER_WINDOW);
+        if expired || !self.bulk_frame_queued() {
+            self.arm_receive_scan();
+        }
+    }
+
+    fn arm_receive_scan(&mut self) {
+        self.data.rx_deferred_since = None;
         self.io.receive.active = true;
         self.io.receive.next_path = 0;
+        let tx_ready = !self.data.tx.is_empty();
+        self.data.probe.scan_armed(tx_ready);
+    }
+
+    /// Whether a frame that can only be payload, not an acknowledgement, is
+    /// waiting to be written.
+    fn bulk_frame_queued(&self) -> bool {
+        self.data
+            .tx
+            .head_frame_len()
+            .is_some_and(|length| length >= RX_DEFER_BULK_FRAME_BYTES)
     }
 
     pub(super) fn drive_receive_scan(&mut self) -> Option<AicAction> {
@@ -269,6 +338,13 @@ impl AicDevice {
                 }
             })?;
         self.data.probe.rx_parsed(frames.len());
+        // A read that returned one block is the shape a trickle of small frames
+        // takes; anything larger means the peer is filling the receive path.
+        if receive_data.len() <= BLOCK_SIZE {
+            self.data.rx_small_reads = self.data.rx_small_reads.saturating_add(1);
+        } else {
+            self.data.rx_small_reads = 0;
+        }
         for frame in frames {
             match frame {
                 ParsedFrame::Data {
@@ -1162,7 +1238,7 @@ mod tests {
     #[test]
     fn single_function_profile_is_probed_once_per_card_interrupt() {
         let mut device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
-        device.request_receive_scan();
+        device.request_receive_scan(MonotonicTime::default());
 
         let Some(AicAction::SubmitSdio(count)) = device.drive_receive_scan() else {
             panic!("expected the shared command/data function count")
@@ -1768,11 +1844,123 @@ mod tests {
         }
     }
 
+    /// A device whose receive stream has been a trickle of single-block reads,
+    /// with one frame of `frame_len` bytes queued to transmit.
+    fn trickling_transmitter(frame_len: usize) -> AicDevice {
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, frame_len);
+        device.data.rx_small_reads = RX_TRICKLE_READS;
+        device
+    }
+
+    /// Whether the next action reads the receive count register, the first
+    /// transaction of a receive scan.
+    fn starts_receive_scan(action: &AicAction, device: &AicDevice) -> bool {
+        let AicAction::SubmitSdio(request) = action else {
+            return false;
+        };
+        matches!(
+            request.kind,
+            SdioRequestKind::ReadByte { address, .. } if address.get() == device.registers().block_count
+        )
+    }
+
+    /// The transaction one action submits.
+    fn submit(action: &AicAction) -> SdioRequest {
+        match action {
+            AicAction::SubmitSdio(request) => request.clone(),
+            other => panic!("expected a submitted transaction, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn a_bulk_sender_holds_the_receive_scan_until_its_window_expires() {
+        // Two data frames are queued, so the reason to wait outlives the first
+        // write: the held fact is armed only when the window runs out, which
+        // bounds how long receive work can be postponed.
+        let now = MonotonicTime::default();
+        let mut device = trickling_transmitter(500);
+        device
+            .data
+            .tx
+            .enqueue(TxToken::new(2), vec![0; 500])
+            .unwrap();
+        device.request_receive_scan(now);
+
+        assert!(
+            !device.io.receive.active,
+            "a queued data frame defers the receive fact"
+        );
+        assert_eq!(device.data.rx_deferred_since, Some(now));
+
+        // The transmit goes first: the held fact never preempts the write it
+        // is waiting for.
+        let flow = submit(&device.advance(AicInput::tick(now)));
+        assert!(!starts_receive_scan(
+            &AicAction::SubmitSdio(flow.clone()),
+            &device
+        ));
+        let write = submit(&device.advance(complete(&flow, SdioResponse::Byte(16), now)));
+        assert!(
+            matches!(write.kind, SdioRequestKind::Write { .. }),
+            "the cached credit admits the queued frame"
+        );
+
+        // Inside the window the fact stays held while the write is out.
+        let inside = device.advance(AicInput::tick(now.after(RX_DEFER_WINDOW / 2)));
+        assert!(matches!(inside, AicAction::WaitForInterrupt));
+        assert!(device.data.rx_deferred_since.is_some());
+
+        // Completing the write publishes its completion first; the drive after
+        // that finds the window expired and arms the scan.
+        let completed = device.advance(complete(
+            &write,
+            SdioResponse::Unit,
+            now.after(RX_DEFER_WINDOW),
+        ));
+        assert!(matches!(completed, AicAction::Event(_)));
+        let scan = device.advance(AicInput::tick(now.after(RX_DEFER_WINDOW)));
+        assert!(
+            starts_receive_scan(&scan, &device),
+            "the window ends the deferral and the scan drains what collected: {scan:?}"
+        );
+        assert_eq!(device.data.rx_deferred_since, None);
+    }
+
+    #[test]
+    fn a_small_frame_or_a_bulk_receive_stream_never_defers_the_scan() {
+        // The hold only applies while this side is the bulk sender.  A queued
+        // acknowledgement means the peer is sending, and multi-block reads mean
+        // the peer is filling the receive path; both arm the scan at once.
+        let now = MonotonicTime::default();
+
+        let mut acknowledging = trickling_transmitter(60);
+        acknowledging.request_receive_scan(now);
+        assert!(
+            acknowledging.io.receive.active,
+            "a queued acknowledgement is not a reason to wait"
+        );
+
+        let mut receiving = ready_transmitter(ChipVariant::Aic8800D80, 500);
+        receiving.request_receive_scan(now);
+        assert!(
+            receiving.io.receive.active,
+            "a receive stream that is not a trickle is served at once"
+        );
+
+        let mut empty = trickling_transmitter(500);
+        empty.data.tx.drain_tokens().for_each(drop);
+        empty.request_receive_scan(now);
+        assert!(
+            empty.io.receive.active,
+            "with nothing to send the peer may be the sender"
+        );
+    }
+
     #[test]
     fn v3_other_interrupt_acknowledges_the_dev_to_host_soft_irq() {
         let mut device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
         device.lifecycle.state = AicState::Ready;
-        device.request_receive_scan();
+        device.request_receive_scan(MonotonicTime::default());
 
         let AicAction::SubmitSdio(count) =
             device.advance(AicInput::tick(MonotonicTime::from_nanos(0)))
@@ -1827,7 +2015,7 @@ mod tests {
     fn v1_receive_counts_never_trigger_the_v3_other_interrupt_ack() {
         let mut device = AicDevice::new(ChipVariant::Aic8800DC).unwrap();
         device.lifecycle.state = AicState::Ready;
-        device.request_receive_scan();
+        device.request_receive_scan(MonotonicTime::default());
 
         let AicAction::SubmitSdio(count) =
             device.advance(AicInput::tick(MonotonicTime::from_nanos(0)))
@@ -1851,7 +2039,7 @@ mod tests {
     fn v3_other_ack_re_reads_the_same_path_count_until_empty() {
         let mut device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
         device.lifecycle.state = AicState::Ready;
-        device.request_receive_scan();
+        device.request_receive_scan(MonotonicTime::default());
 
         let AicAction::SubmitSdio(count) =
             device.advance(AicInput::tick(MonotonicTime::from_nanos(0)))

@@ -637,7 +637,7 @@ mod tests {
         let mut device = AicDevice::new(ChipVariant::Aic8800DC).unwrap();
         device.lifecycle.state = AicState::Starting;
 
-        device.request_receive_scan();
+        device.request_receive_scan(MonotonicTime::default());
 
         assert!(!device.io.receive.active);
     }
@@ -647,7 +647,7 @@ mod tests {
         let now = MonotonicTime::from_nanos(0);
         let mut device = AicDevice::new(ChipVariant::Aic8800DC).unwrap();
         device.lifecycle.state = AicState::Ready;
-        device.request_receive_scan();
+        device.request_receive_scan(MonotonicTime::default());
         device.begin_debug_mailbox(DBG_MEM_READ_REQ, &[0; 4], now);
 
         let AicAction::SubmitSdio(request) = device.advance(AicInput::tick(now)) else {

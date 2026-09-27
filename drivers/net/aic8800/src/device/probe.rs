@@ -138,6 +138,14 @@ pub(super) struct TxProbe {
     period_count: [u64; PERIOD_BUCKETS],
     /// Frames parsed out of receive reads.
     rx_frames: u64,
+    /// Receive scans armed by a card interrupt, and how many of them were
+    /// armed while a frame was already queued for transmit.  The second number
+    /// is the share a bounded deferral of the receive scan would have held
+    /// back; both are read against the receive transaction counts above.
+    scans: u64,
+    scans_with_tx_ready: u64,
+    /// Card-interrupt facts held back to let small frames collect.
+    scans_deferred: u64,
     /// Receive transactions consumed since the previous write completed.
     rx_since_write: u64,
     gap_count: [u64; GAP_BUCKETS],
@@ -225,6 +233,21 @@ impl TxProbe {
             RX_CONTROL => self.rx_since_write += 1,
             _ => {}
         }
+    }
+
+    /// Books a receive scan as it is armed, with whether a frame was already
+    /// queued for transmit at that moment.
+    pub(super) fn scan_armed(&mut self, tx_ready: bool) {
+        self.scans += 1;
+        if tx_ready {
+            self.scans_with_tx_ready += 1;
+        }
+    }
+
+    /// Books a card-interrupt receive fact that was held back instead of
+    /// scanned at once.
+    pub(super) fn scan_deferred(&mut self) {
+        self.scans_deferred += 1;
     }
 
     /// Drops the in-flight record when an operation is abandoned instead of
@@ -334,6 +357,9 @@ impl TxProbe {
         self.period_max = 0;
         self.period_count = [0; PERIOD_BUCKETS];
         self.rx_frames = 0;
+        self.scans = 0;
+        self.scans_with_tx_ready = 0;
+        self.scans_deferred = 0;
         self.gap_count = [0; GAP_BUCKETS];
         self.gap_nanos = [0; GAP_BUCKETS];
         self.supply_count = [0; SUPPLY_BUCKETS];
@@ -351,8 +377,8 @@ impl TxProbe {
              n={} avg={}us min={}us max={}us bytes={} calls={}.{} | size blk 1/2/3/4-6/7-9/10+ \
              n={}/{}/{}/{}/{}/{} avg={}/{}/{}/{}/{}/{}us | credit n={} min={} max={} avgx10={} \
              backoff={} avg={}us | gap rx0 n={} avg={}us | rx1 n={} avg={}us | rx2+ n={} avg={}us \
-             | supply core n={} avg={}us | ring n={} avg={}us | none n={} avg={}us | steps={} \
-             per_pkt={}.{} owner_calls={}",
+             | supply core n={} avg={}us | ring n={} avg={}us | none n={} avg={}us | scans={} \
+             deferred={} tx_ready={} | steps={} per_pkt={}.{} owner_calls={}",
             self.packets,
             dt_ms,
             average_us(self.period_nanos, self.packets),
@@ -408,6 +434,9 @@ impl TxProbe {
                 self.supply_nanos[SUPPLY_NONE],
                 self.supply_count[SUPPLY_NONE]
             ),
+            self.scans,
+            self.scans_deferred,
+            self.scans_with_tx_ready,
             steps,
             steps / self.packets.max(1),
             steps % self.packets.max(1) * 10 / self.packets.max(1),

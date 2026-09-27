@@ -76,6 +76,13 @@ masked window 内已经 latch 的状态，并把状态发布到 hard IRQ 使用�
 拥有型 `PreparedDma`，完成或 abort 后才恢复 `CompletedDma`。RDIF
 `DmaBuffer` 只通过有界 SPSC 转移，提交失败原样归还 token。
 
+发送方向一笔 CMD53 可以携带多帧。固件把写内容当作帧流遍历：逐帧按
+`4 + align4(声明长度)` 步进，读到长度为 0 即结束，因此每帧只按发送对齐补齐、
+整笔末尾才补到块大小，接收方向的解析器按同一布局工作。一笔写携带多少帧由适配层
+给出的聚合策略与最近一次流控读数共同决定，字节上界决定它在总线上占用的时长，
+因为接收事务与它共用同一条总线；写一旦成形就按此刻已排队的帧提交，不为人造延迟
+等待更多帧。
+
 协议侧 `QueueFramePort` 拥有设备级 `TxQueueDiscipline`。当前 `axruntime` 为 AIC 和
 其它生产网卡显式选择 `Fifo { max_frames: 64 }`：短暂耗尽 TX token 时按顺序保留帧，
 queue completion 触发下一轮 protocol poll 后继续 flush，达到设备自己的上限才返回
@@ -330,7 +337,10 @@ probe 显式失败，不回退到写死物理地址。
 通用 SD/MMC 属性 `bus-width`、`min-frequency`、`max-frequency`、`no-1-8-v`、
 `cd-gpios` 与 clock/reset/power-domain 由 rdrive 统一解析。AIC 附加策略使用
 `dma-address-bits`、`post-power-on-delay-ms`、`aic,startup-timeout-ms`、
-`aic,control-timeout-ms`、`aic,queue-size` 和 `aic,max-frame-size`。可选启动 AP
+`aic,control-timeout-ms`、`aic,queue-size`、`aic,max-frame-size`、
+`aic,tx-aggregation` 和 `aic,tx-aggregate-bytes`。后两者界定一笔发送写最多携带的
+帧数与字节数，取值非法（帧数小于 1，或字节数超过发送环一次能交出的总量）时
+probe 显式失败。可选启动 AP
 必须显式配置 `aic,startup-mode = "access-point"` 及 `aic,ap-ssid`、
 `aic,ap-channel`、`aic,ap-ipv4`、`aic,ap-prefix-length`；未配置时只注册
 `wlan0`。AKA 的 station 产品策略来自上述编译期环境变量；若同时配置 FDT 启动

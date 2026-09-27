@@ -215,25 +215,65 @@ fn event_payload_bytes(event: &AicEvent) -> usize {
     }
 }
 
+/// Frames one transmit write may carry and the bytes it may hold.
+///
+/// The firmware walks a write as a stream of frames, so one CMD53 can deliver
+/// several packets: `packets` bounds how many frames that is, and `bytes`
+/// bounds how long the write occupies the bus, which receive work shares.  The
+/// firmware buffers the last flow-control reading reported bound the burst
+/// again, so a write never carries more packets than that reading allows.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct TxAggregation {
+    /// Frames one write may carry.
+    pub packets: usize,
+    /// Bytes one write may hold before it stops growing.  The bound is read
+    /// before a frame is appended, so it is a soft bound: a write may end up
+    /// one frame longer.  Size a write with `packets`; this bound only keeps
+    /// one write from holding the bus for too long.
+    pub bytes: usize,
+}
+
+impl TxAggregation {
+    /// Round size of one maximum-length wire frame, the unit these bounds are
+    /// stated in: a 1500-byte payload behind the host descriptor and the SDIO
+    /// header, rounded up to the transmit alignment.
+    pub const MAX_FRAME_BYTES: usize = 1536;
+    /// Default byte bound: four maximum-length frames, the aggregate size the
+    /// vendor's SDIO transport allocates its write buffer for.
+    pub const DEFAULT_BYTES: usize = 4 * Self::MAX_FRAME_BYTES;
+
+    /// Creates the bound of one transmit write.
+    pub const fn new(packets: usize, bytes: usize) -> Self {
+        Self { packets, bytes }
+    }
+}
+
+impl Default for TxAggregation {
+    fn default() -> Self {
+        Self::new(1, Self::DEFAULT_BYTES)
+    }
+}
+
 /// Sole owner of all AIC protocol and data-plane state.
 pub struct AicDevice {
     pub(super) profile: &'static ChipProfile,
     pub(super) lifecycle: LifecycleState,
     pub(super) io: IoState,
     pub(super) data: DataPlaneState,
-    /// Packets one transmit write may carry.  One unless the layer that hands
-    /// frames over asks for batching.
-    pub(super) tx_aggregation: usize,
+    /// What one transmit write may carry.  A single frame unless the layer
+    /// that hands frames over asks for batching.
+    pub(super) tx_aggregation: TxAggregation,
 }
 
 impl AicDevice {
-    /// Sets how many packets one transmit write may carry.
-    pub fn set_tx_aggregation(&mut self, packets: usize) {
-        self.tx_aggregation = packets.max(1);
+    /// Sets what one transmit write may carry.
+    pub fn set_tx_aggregation(&mut self, aggregation: TxAggregation) {
+        self.tx_aggregation =
+            TxAggregation::new(aggregation.packets.max(1), aggregation.bytes.max(1));
     }
 
-    /// Packets one transmit write may carry.
-    pub const fn tx_aggregation(&self) -> usize {
+    /// What one transmit write may carry.
+    pub const fn tx_aggregation(&self) -> TxAggregation {
         self.tx_aggregation
     }
 
@@ -247,7 +287,7 @@ impl AicDevice {
         let profile = ChipProfile::for_variant(chip).ok_or(AicError::UnsupportedChip)?;
         Ok(Self {
             profile,
-            tx_aggregation: 1,
+            tx_aggregation: TxAggregation::default(),
             lifecycle: LifecycleState {
                 state: AicState::Stopped,
                 startup: None,

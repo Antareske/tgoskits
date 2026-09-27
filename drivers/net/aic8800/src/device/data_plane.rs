@@ -18,9 +18,6 @@ const IO_RETRY: Duration = Duration::from_micros(200);
 // The firmware reports packet buffers, not SDIO blocks. Keep two buffers
 // available for commands, as in the vendor DATA_FLOW_CTRL_THRESH contract.
 const DATA_TX_RESERVED_CREDITS: u8 = 2;
-// The vendor BSP caps one aggregated write at four 1536-byte packets
-// (`MAX_AGGR_TXPKT_LEN`), so a burst never exceeds that budget.
-const MAX_AGGREGATE_BYTES: usize = 1536 * 4;
 const INTERNAL_TX_CAPACITY: usize = 2;
 const INTERNAL_TX_BYTE_CAPACITY: usize = 8 * 1024;
 const ETHERTYPE_EAPOL: [u8; 2] = [0x88, 0x8e];
@@ -581,21 +578,24 @@ impl AicDevice {
         }
     }
 
-    /// Packets the next write may carry: bounded by the layer that hands frames
-    /// over and by the cached credit, which is what the firmware still has for
-    /// data.  Without a reading the write carries one packet, because the
-    /// number of firmware buffers has to be known before a burst is committed.
+    /// Packets the next write may carry: bounded by the aggregate policy the
+    /// layer that hands frames over selected, and by the cached credit, which
+    /// is what the firmware still has for data.  Without a reading the write
+    /// carries one packet, because the number of firmware buffers has to be
+    /// known before a burst is committed.
     fn aggregate_limit(&self) -> usize {
         match self.data.tx_credits {
             Some(credits) => usize::from(credits.saturating_sub(DATA_TX_RESERVED_CREDITS))
-                .min(self.tx_aggregation),
+                .min(self.tx_aggregation.packets),
             None => 1,
         }
     }
 
     /// Grows the pending write up to `limit` packets by appending frames that
     /// are already queued.  Each frame keeps its own header inside the write,
-    /// so the firmware walks them as a stream.
+    /// so the firmware walks them as a stream.  Growth is opportunistic: it
+    /// takes what is queued at this moment and flushes it, rather than holding
+    /// a formed write back for frames that have not arrived.
     fn extend_active_write(&mut self, limit: usize) {
         let Some((interface_index, station_index)) = self.data.link.tx_indices() else {
             return;
@@ -612,7 +612,7 @@ impl AicDevice {
                 .active_tx
                 .as_ref()
                 .map_or(0, |active| active.stream_len);
-            if packets == 0 || packets >= limit || bytes >= MAX_AGGREGATE_BYTES {
+            if packets == 0 || packets >= limit || bytes >= self.tx_aggregation.bytes {
                 return;
             }
             let Some(next) = self
@@ -1401,7 +1401,7 @@ mod tests {
         );
 
         let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
-        device.set_tx_aggregation(4);
+        device.set_tx_aggregation(aggregate(4));
         device.data.tx_credits = Some(16);
         let batched = device.advance(AicInput {
             now,
@@ -1451,13 +1451,44 @@ mod tests {
     }
 
     #[test]
+    fn the_byte_bound_ends_a_write_and_leaves_the_rest_queued() {
+        // The frame bound and the byte bound both end the growth of a write;
+        // whichever is reached first wins.  A frame that does not fit is not
+        // dropped and not reordered: it goes out with the next write.
+        let now = MonotonicTime::default();
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        device.set_tx_aggregation(TxAggregation::new(32, 200));
+        device.data.tx_credits = Some(32);
+
+        let write = device.advance(AicInput {
+            now,
+            event: Some(AicInputEvent::TxBatch(vec![
+                (TxToken::new(2), vec![0; 64]),
+                (TxToken::new(3), vec![0; 68]),
+                (TxToken::new(4), vec![0; 72]),
+            ])),
+        });
+
+        assert_eq!(
+            written_frames(&write),
+            vec![74, 78, 82],
+            "the write stops before the frame that would pass the byte bound"
+        );
+        assert_eq!(
+            device.data.tx.len(),
+            1,
+            "the frame that did not fit waits for the next write"
+        );
+    }
+
+    #[test]
     fn a_full_event_queue_defers_batch_completions_without_displacing_receive_frames() {
         // Completions share the event queue with received frames.  A burst must
         // wait for room instead of evicting a frame, and must be published once
         // the queue drains, without any further stimulus.
         let now = MonotonicTime::default();
         let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
-        device.set_tx_aggregation(4);
+        device.set_tx_aggregation(aggregate(4));
         device.data.tx_credits = Some(16);
         let AicAction::SubmitSdio(write) = device.advance(AicInput {
             now,
@@ -1537,7 +1568,7 @@ mod tests {
         // never return its buffer.
         let now = MonotonicTime::default();
         let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
-        device.set_tx_aggregation(4);
+        device.set_tx_aggregation(aggregate(4));
         device
             .queue_internal_eapol(super::super::owner::InternalTxKind::M2, vec![0; 95])
             .unwrap();
@@ -1658,6 +1689,11 @@ mod tests {
         );
         assert!(device.data.active_tx.is_none());
         assert!(device.data.tx.is_empty());
+    }
+
+    /// Aggregate policy carrying `packets` frames under the default byte bound.
+    fn aggregate(packets: usize) -> TxAggregation {
+        TxAggregation::new(packets, TxAggregation::DEFAULT_BYTES)
     }
 
     /// Walks the frames inside a transmit write the way the firmware does: over

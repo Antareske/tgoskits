@@ -14,7 +14,7 @@ use sdmmc_protocol::{
 use super::{ActiveOperation, OperationCompletion, output::OwnerOutputs};
 use crate::{
     AicAction, AicDevice, AicError, AicEvent, AicInput, AicInputEvent, AicState, ChipVariant,
-    MonotonicTime, SdioCompletion, SdioFailure,
+    MonotonicTime, SdioCompletion, SdioFailure, TxAggregation,
     profile::ChipProfile,
     rdif::{
         device::{IrqLatch, MacAddressState, QueueOwnerPorts, WifiChannels},
@@ -23,11 +23,6 @@ use crate::{
 };
 
 const OWNER_STEP_BUDGET: usize = 16;
-/// Board-measurement knob: packets one transmit write may carry.  A write is
-/// one CMD53, and the firmware treats it as a stream of frames, so batching
-/// trades per-transaction cost against the delay a burst adds to receive work
-/// sharing the same bus.
-const TX_AGGREGATION_PACKETS: usize = 4;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum OwnerWait {
@@ -83,6 +78,7 @@ pub(crate) struct AicOwner<H: CompletionIrqRearmHost + 'static> {
     mac: Arc<MacAddressState>,
     started: bool,
     card_irq_wait: CardIrqWait,
+    tx_aggregation: TxAggregation,
 }
 
 impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
@@ -93,6 +89,7 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         wifi: WifiChannels,
         irq_latch: Arc<IrqLatch>,
         mac: Arc<MacAddressState>,
+        tx_aggregation: TxAggregation,
     ) -> (
         Self,
         crate::rdif::device::WifiRequestSender,
@@ -114,6 +111,7 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
             mac,
             started: false,
             card_irq_wait: CardIrqWait::Masked,
+            tx_aggregation,
         };
         (owner, wifi.requests_tx, wifi.progress_rx)
     }
@@ -433,7 +431,7 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         let variant = detect_sdio_card_variant(info, function)?;
         log::info!("[wifi] detected supported AIC SDIO variant {variant:?}");
         let mut device = AicDevice::new(variant)?;
-        device.set_tx_aggregation(TX_AGGREGATION_PACKETS);
+        device.set_tx_aggregation(self.tx_aggregation);
         device.start(MonotonicTime::from_nanos(now_nanos))?;
         self.device = Some(device);
         self.started = true;
@@ -446,7 +444,7 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         }
         // Hand over a burst of frames so one CMD53 can carry several packets.
         // The core bounds the burst again by the cached credit.
-        let limit = self.device()?.tx_aggregation();
+        let limit = self.device()?.tx_aggregation().packets;
         let mut batch = Vec::new();
         while batch.len() < limit {
             let Some(frame) = self.outputs.take_tx_frame() else {

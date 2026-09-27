@@ -70,6 +70,26 @@ impl AicFdtProfile {
         if let Some(frame_size) = fdt_usize(info, "aic,max-frame-size")? {
             options.frame_size = frame_size;
         }
+        if let Some(packets) = fdt_usize(info, "aic,tx-aggregation")? {
+            options.tx_aggregation.packets = packets;
+        }
+        if let Some(bytes) = fdt_usize(info, "aic,tx-aggregate-bytes")? {
+            options.tx_aggregation.bytes = bytes;
+        }
+        if options.tx_aggregation.packets == 0 {
+            return Err(OnProbeError::other(format!(
+                "[{}] aic,tx-aggregation must be at least 1",
+                info.node.name()
+            )));
+        }
+        let ring_bytes = options.queue_size.saturating_mul(options.frame_size);
+        if options.tx_aggregation.bytes == 0 || options.tx_aggregation.bytes > ring_bytes {
+            return Err(OnProbeError::other(format!(
+                "[{}] aic,tx-aggregate-bytes must be in 1..={ring_bytes}, the bytes the transmit \
+                 ring holds",
+                info.node.name()
+            )));
+        }
         if let Some(transaction) = startup_transaction(info)? {
             options = options.with_startup_transaction(transaction);
         }

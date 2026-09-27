@@ -5,7 +5,7 @@
 
 use alloc::{vec, vec::Vec};
 
-use crate::device::AicError;
+use crate::{common::ChipVariant, device::AicError};
 
 pub(crate) const TASK_MM: u16 = 0;
 pub(crate) const TASK_ME: u16 = 5;
@@ -286,22 +286,146 @@ pub(crate) const fn get_mac_payload() -> [u8; 4] {
     1u32.to_le_bytes()
 }
 
-pub(crate) fn me_config_payload() -> [u8; 112] {
-    let mut payload = [0; 112];
-    // struct mac_htcapability starts at offset 0. Enable LDPC, advertise the
-    // vendor AMPDU limits, and use the first MCS byte for MCS 0 through 7.
-    payload[0..2].copy_from_slice(&1u16.to_le_bytes());
-    payload[2] = 3 | (7 << 2);
-    payload[3] = 0xff;
-    payload[13..15].copy_from_slice(&65u16.to_le_bytes());
-    payload[15] = 1;
+const ME_CONFIG_PAYLOAD_LEN: usize = 112;
+const ME_CONFIG_HT_OFFSET: usize = 0;
+const ME_CONFIG_VHT_OFFSET: usize = 32;
+const ME_CONFIG_HE_OFFSET: usize = 44;
+const ME_CONFIG_TX_LIFETIME_OFFSET: usize = 100;
+const ME_CONFIG_PHY_BW_OFFSET: usize = 102;
+const ME_CONFIG_HT_SUPPORTED_OFFSET: usize = 103;
+const ME_CONFIG_VHT_SUPPORTED_OFFSET: usize = 104;
+const ME_CONFIG_HE_SUPPORTED_OFFSET: usize = 105;
+const ME_CONFIG_HE_UL_ON_OFFSET: usize = 106;
+const ME_CONFIG_PS_ON_OFFSET: usize = 107;
+const ME_CONFIG_ANT_DIV_ON_OFFSET: usize = 108;
+const ME_CONFIG_DPSM_OFFSET: usize = 109;
 
-    // struct me_config_req places these scalar fields after HT/VHT/HE
-    // capability structures, including the C ABI padding between them.
-    payload[100..102].copy_from_slice(&1000u16.to_le_bytes());
-    payload[102] = 2; // PHY_CHNL_BW_80
-    payload[103] = 1; // HT supported
-    payload[107] = 1; // power-save enabled
+const HT_CAPABILITY_INFO_OFFSET: usize = ME_CONFIG_HT_OFFSET;
+const HT_AMPDU_PARAM_OFFSET: usize = ME_CONFIG_HT_OFFSET + 2;
+const HT_MCS_OFFSET: usize = ME_CONFIG_HT_OFFSET + 3;
+const HT_MCS_RX_MASK_LEN: usize = 10;
+const HT_MCS_RX_HIGHEST_OFFSET: usize = HT_MCS_OFFSET + HT_MCS_RX_MASK_LEN;
+const HT_MCS_TX_PARAMS_OFFSET: usize = HT_MCS_RX_HIGHEST_OFFSET + 2;
+const HT_MCS_RESERVED_OFFSET: usize = HT_MCS_TX_PARAMS_OFFSET + 1;
+const HT_CAP_LDPC: u16 = 0x0001;
+const HT_CAP_WIDTH_20_40: u16 = 0x0002;
+const HT_CAP_SGI_20: u16 = 0x0020;
+const HT_CAP_SGI_40: u16 = 0x0040;
+const HT_MCS_TX_DEFINED: u8 = 0x01;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum MeConfigProfile {
+    Conservative,
+    D80Ht40Sgi,
+}
+
+impl MeConfigProfile {
+    pub(crate) const fn for_chip(chip: ChipVariant) -> Option<Self> {
+        match chip {
+            ChipVariant::Aic8800DC => Some(Self::Conservative),
+            ChipVariant::Aic8800D80 => Some(Self::D80Ht40Sgi),
+            ChipVariant::Aic8801
+            | ChipVariant::Aic8800DW
+            | ChipVariant::Aic8800D80X2
+            | ChipVariant::Unknown => None,
+        }
+    }
+
+    pub(crate) const fn name(self) -> &'static str {
+        match self {
+            Self::Conservative => "conservative",
+            Self::D80Ht40Sgi => "d80-ht40-sgi",
+        }
+    }
+
+    const fn phy_bw_max(self) -> u8 {
+        match self {
+            Self::Conservative => 2, // PHY_CHNL_BW_80
+            Self::D80Ht40Sgi => 1,   // PHY_CHNL_BW_40
+        }
+    }
+
+    const fn ht_capabilities(self) -> HtCapabilities {
+        match self {
+            Self::Conservative => HtCapabilities::CONSERVATIVE,
+            Self::D80Ht40Sgi => HtCapabilities::D80_HT40_SGI,
+        }
+    }
+}
+
+#[derive(Clone, Copy)]
+struct AmpduParameters {
+    max_length_factor: u8,
+    minimum_spacing: u8,
+}
+
+impl AmpduParameters {
+    const VENDOR_DEFAULT: Self = Self {
+        max_length_factor: 3,
+        minimum_spacing: 7,
+    };
+
+    const fn encode(self) -> u8 {
+        self.max_length_factor | (self.minimum_spacing << 2)
+    }
+}
+
+#[derive(Clone, Copy)]
+struct HtCapabilities {
+    capability_info: u16,
+    ampdu: AmpduParameters,
+    rx_mask: [u8; HT_MCS_RX_MASK_LEN],
+    rx_highest: u16,
+    tx_params: u8,
+}
+
+impl HtCapabilities {
+    const CONSERVATIVE: Self = Self {
+        capability_info: HT_CAP_LDPC,
+        ampdu: AmpduParameters::VENDOR_DEFAULT,
+        rx_mask: [0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        rx_highest: 65,
+        tx_params: HT_MCS_TX_DEFINED,
+    };
+
+    const D80_HT40_SGI: Self = Self {
+        capability_info: HT_CAP_LDPC | HT_CAP_WIDTH_20_40 | HT_CAP_SGI_20 | HT_CAP_SGI_40,
+        ampdu: AmpduParameters::VENDOR_DEFAULT,
+        rx_mask: [0xff, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+        rx_highest: 150,
+        tx_params: HT_MCS_TX_DEFINED,
+    };
+
+    fn encode_into(self, payload: &mut [u8; ME_CONFIG_PAYLOAD_LEN]) {
+        payload[HT_CAPABILITY_INFO_OFFSET..HT_CAPABILITY_INFO_OFFSET + 2]
+            .copy_from_slice(&self.capability_info.to_le_bytes());
+        payload[HT_AMPDU_PARAM_OFFSET] = self.ampdu.encode();
+        payload[HT_MCS_OFFSET..HT_MCS_OFFSET + self.rx_mask.len()].copy_from_slice(&self.rx_mask);
+        payload[HT_MCS_RX_HIGHEST_OFFSET..HT_MCS_RX_HIGHEST_OFFSET + 2]
+            .copy_from_slice(&self.rx_highest.to_le_bytes());
+        payload[HT_MCS_TX_PARAMS_OFFSET] = self.tx_params;
+        payload[HT_MCS_RESERVED_OFFSET..HT_MCS_OFFSET + 16].fill(0);
+    }
+}
+
+pub(crate) fn me_config_payload(profile: MeConfigProfile) -> [u8; ME_CONFIG_PAYLOAD_LEN] {
+    let mut payload = [0; ME_CONFIG_PAYLOAD_LEN];
+    profile.ht_capabilities().encode_into(&mut payload);
+
+    // These capability structures are naturally aligned in the vendor C ABI:
+    // HT occupies 32 bytes, VHT 12 bytes, and HE 56 bytes before tx_lft.
+    payload[ME_CONFIG_VHT_OFFSET..ME_CONFIG_HE_OFFSET].fill(0);
+    payload[ME_CONFIG_HE_OFFSET..ME_CONFIG_TX_LIFETIME_OFFSET].fill(0);
+    payload[ME_CONFIG_TX_LIFETIME_OFFSET..ME_CONFIG_TX_LIFETIME_OFFSET + 2]
+        .copy_from_slice(&1000u16.to_le_bytes());
+    payload[ME_CONFIG_PHY_BW_OFFSET] = profile.phy_bw_max();
+    payload[ME_CONFIG_HT_SUPPORTED_OFFSET] = 1;
+    payload[ME_CONFIG_VHT_SUPPORTED_OFFSET] = 0;
+    payload[ME_CONFIG_HE_SUPPORTED_OFFSET] = 0;
+    payload[ME_CONFIG_HE_UL_ON_OFFSET] = 0;
+    payload[ME_CONFIG_PS_ON_OFFSET] = 1;
+    payload[ME_CONFIG_ANT_DIV_ON_OFFSET] = 0;
+    payload[ME_CONFIG_DPSM_OFFSET] = 0;
     payload
 }
 
@@ -554,20 +678,113 @@ mod tests {
     }
 
     #[test]
-    fn mac_capability_config_uses_the_vendor_c_layout() {
-        let payload = me_config_payload();
+    fn me_config_profiles_encode_the_vendor_ht_and_scalar_fields() {
+        let conservative = me_config_payload(MeConfigProfile::Conservative);
+        let d80 = me_config_payload(MeConfigProfile::D80Ht40Sgi);
+        let expected_ampdu = [3 | (7 << 2)];
+        let mut p0a_reference = [0; 112];
+        p0a_reference[0..2].copy_from_slice(&1u16.to_le_bytes());
+        p0a_reference[2] = 31;
+        p0a_reference[3] = 0xff;
+        p0a_reference[13..15].copy_from_slice(&65u16.to_le_bytes());
+        p0a_reference[15] = 1;
+        p0a_reference[100..102].copy_from_slice(&1000u16.to_le_bytes());
+        p0a_reference[102] = 2;
+        p0a_reference[103] = 1;
+        p0a_reference[107] = 1;
+        assert_eq!(conservative, p0a_reference);
 
-        assert_eq!(payload.len(), 112);
-        assert_eq!(&payload[0..2], &1u16.to_le_bytes());
-        assert_eq!(payload[2], 31);
-        assert_eq!(payload[3], 0xff);
-        assert_eq!(&payload[13..15], &65u16.to_le_bytes());
-        assert_eq!(payload[15], 1);
-        assert_eq!(&payload[100..102], &1000u16.to_le_bytes());
-        assert_eq!(payload[102], 2);
-        assert_eq!(payload[103], 1);
-        assert_eq!(payload[107], 1);
-        assert_eq!(&payload[110..112], &[0; 2]);
+        let mut d80_reference = p0a_reference;
+        d80_reference[0..2].copy_from_slice(&0x0063u16.to_le_bytes());
+        d80_reference[7] = 1; // MCS32 in rx_mask[4].
+        d80_reference[13..15].copy_from_slice(&150u16.to_le_bytes());
+        d80_reference[102] = 1; // PHY_CHNL_BW_40.
+        assert_eq!(d80, d80_reference);
+
+        assert_eq!(conservative.len(), ME_CONFIG_PAYLOAD_LEN);
+        assert_eq!(d80.len(), ME_CONFIG_PAYLOAD_LEN);
+        assert_eq!(
+            &conservative[HT_CAPABILITY_INFO_OFFSET..HT_CAPABILITY_INFO_OFFSET + 2],
+            &HT_CAP_LDPC.to_le_bytes()
+        );
+        assert_eq!(
+            &d80[HT_CAPABILITY_INFO_OFFSET..HT_CAPABILITY_INFO_OFFSET + 2],
+            &(HT_CAP_LDPC | HT_CAP_WIDTH_20_40 | HT_CAP_SGI_20 | HT_CAP_SGI_40).to_le_bytes()
+        );
+        assert_eq!(
+            conservative[HT_AMPDU_PARAM_OFFSET..HT_AMPDU_PARAM_OFFSET + 1],
+            expected_ampdu
+        );
+        assert_eq!(
+            d80[HT_AMPDU_PARAM_OFFSET..HT_AMPDU_PARAM_OFFSET + 1],
+            expected_ampdu
+        );
+        assert_eq!(
+            &conservative[HT_MCS_OFFSET..HT_MCS_OFFSET + HT_MCS_RX_MASK_LEN],
+            &[0xff, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        );
+        assert_eq!(
+            &d80[HT_MCS_OFFSET..HT_MCS_OFFSET + HT_MCS_RX_MASK_LEN],
+            &[0xff, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+        );
+        assert_eq!(
+            &conservative[HT_MCS_RX_HIGHEST_OFFSET..HT_MCS_RX_HIGHEST_OFFSET + 2],
+            &65u16.to_le_bytes()
+        );
+        assert_eq!(
+            &d80[HT_MCS_RX_HIGHEST_OFFSET..HT_MCS_RX_HIGHEST_OFFSET + 2],
+            &150u16.to_le_bytes()
+        );
+        assert_eq!(conservative[HT_MCS_TX_PARAMS_OFFSET], HT_MCS_TX_DEFINED);
+        assert_eq!(d80[HT_MCS_TX_PARAMS_OFFSET], HT_MCS_TX_DEFINED);
+        assert_eq!(
+            &d80[HT_MCS_RESERVED_OFFSET..ME_CONFIG_VHT_OFFSET],
+            &[0; 32 - HT_MCS_RESERVED_OFFSET]
+        );
+        assert_eq!(&d80[ME_CONFIG_VHT_OFFSET..ME_CONFIG_HE_OFFSET], &[0; 12]);
+        assert_eq!(
+            &d80[ME_CONFIG_HE_OFFSET..ME_CONFIG_TX_LIFETIME_OFFSET],
+            &[0; 56]
+        );
+        assert_eq!(
+            &conservative[ME_CONFIG_TX_LIFETIME_OFFSET..ME_CONFIG_TX_LIFETIME_OFFSET + 2],
+            &1000u16.to_le_bytes()
+        );
+        assert_eq!(
+            &d80[ME_CONFIG_TX_LIFETIME_OFFSET..ME_CONFIG_TX_LIFETIME_OFFSET + 2],
+            &1000u16.to_le_bytes()
+        );
+        assert_eq!(conservative[ME_CONFIG_PHY_BW_OFFSET], 2);
+        assert_eq!(d80[ME_CONFIG_PHY_BW_OFFSET], 1);
+        assert_eq!(d80[ME_CONFIG_HT_SUPPORTED_OFFSET], 1);
+        assert_eq!(
+            &d80[ME_CONFIG_VHT_SUPPORTED_OFFSET..ME_CONFIG_HE_UL_ON_OFFSET + 1],
+            &[0; 3]
+        );
+        assert_eq!(d80[ME_CONFIG_PS_ON_OFFSET], 1);
+        assert_eq!(d80[ME_CONFIG_ANT_DIV_ON_OFFSET], 0);
+        assert_eq!(d80[ME_CONFIG_DPSM_OFFSET], 0);
+        assert_eq!(&d80[110..ME_CONFIG_PAYLOAD_LEN], &[0; 2]);
+    }
+
+    #[test]
+    fn me_config_profile_selection_is_limited_to_validated_chip_variants() {
+        assert_eq!(
+            MeConfigProfile::for_chip(ChipVariant::Aic8800DC),
+            Some(MeConfigProfile::Conservative)
+        );
+        assert_eq!(
+            MeConfigProfile::for_chip(ChipVariant::Aic8800D80),
+            Some(MeConfigProfile::D80Ht40Sgi)
+        );
+        for chip in [
+            ChipVariant::Aic8801,
+            ChipVariant::Aic8800DW,
+            ChipVariant::Aic8800D80X2,
+            ChipVariant::Unknown,
+        ] {
+            assert_eq!(MeConfigProfile::for_chip(chip), None);
+        }
     }
 
     #[test]

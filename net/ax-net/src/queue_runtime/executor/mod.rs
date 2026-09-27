@@ -972,6 +972,21 @@ pub(super) fn queue_executor_main(
             // A timed wait that reached its deadline was not notified first.
             let by_deadline = timed && deadline_nanos.is_some_and(|deadline| wait_end >= deadline);
             probe.wait(wait_start, wait_end, by_deadline);
+            // Split the park at the device interrupt that ended it: what is
+            // left of the transfer when the owner parked, and the software
+            // handoff from that interrupt back to the owner running.
+            let irq = wifi
+                .iter()
+                .filter_map(|slot| groups.get(slot.group_index))
+                .map(|group| group.shared.last_irq_nanos.load(Ordering::Relaxed))
+                .chain(
+                    groups
+                        .iter()
+                        .map(|group| group.shared.last_irq_nanos.load(Ordering::Relaxed)),
+                )
+                .filter(|nanos| *nanos > wait_start && *nanos <= wait_end)
+                .max();
+            probe.park_split(wait_start, wait_end, irq);
         }
     }
 }

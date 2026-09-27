@@ -35,6 +35,10 @@ pub(super) struct ExecutorProbe {
     wait_nanos: u64,
     wait_notified: u64,
     wait_notified_nanos: u64,
+    /// Park time before and after the interrupt that ended it.
+    park_hw_nanos: u64,
+    park_sw_nanos: u64,
+    park_splits: u64,
     wait_deadline: u64,
     wait_deadline_nanos: u64,
     wait_hist: [u64; WAIT_BUCKETS],
@@ -96,6 +100,18 @@ impl ExecutorProbe {
         self.wait_hist[wait_bucket(nanos)] += 1;
     }
 
+    /// Books a park that a device interrupt ended, split into the transfer
+    /// that was still running when the owner parked and the software handoff
+    /// from that interrupt back to the owner.
+    pub(super) fn park_split(&mut self, wait_start: u64, wait_end: u64, irq_nanos: Option<u64>) {
+        let Some(irq) = irq_nanos else {
+            return;
+        };
+        self.park_hw_nanos += irq.saturating_sub(wait_start);
+        self.park_sw_nanos += wait_end.saturating_sub(irq);
+        self.park_splits += 1;
+    }
+
     /// Books how long after the last device interrupt the owner was advanced.
     /// `last_irq_nanos` is `None` when no interrupt has arrived yet.
     pub(super) fn wake(&mut self, now_nanos: u64, last_irq_nanos: Option<u64>) {
@@ -152,6 +168,9 @@ impl ExecutorProbe {
         self.wait_nanos = 0;
         self.wait_notified = 0;
         self.wait_notified_nanos = 0;
+        self.park_hw_nanos = 0;
+        self.park_sw_nanos = 0;
+        self.park_splits = 0;
         self.wait_deadline = 0;
         self.wait_deadline_nanos = 0;
         self.wait_hist = [0; WAIT_BUCKETS];
@@ -176,7 +195,8 @@ impl ExecutorProbe {
             "[netprobe] dt={}ms iters={} polls={} poll_us={} waits={} wait_us={} yields={} | \
              wait_kind notify={}@{}us deadline={}@{}us hist={}/{}/{}/{}/{} | wake n={} avg={}us \
              hist={}/{}/{}/{}/{} | owner_calls={} skipped={} owner_us={} max={}us slow={} | \
-             tx_submit={} tx_done={} rx_done={} | ready 0/1/2-3/4+={}/{}/{}/{} | irq={}",
+             tx_submit={} tx_done={} rx_done={} | ready 0/1/2-3/4+={}/{}/{}/{} | irq={} | park \
+             xfer={}us handoff={}us n={}",
             dt_ms,
             self.iters,
             self.polls,
@@ -213,6 +233,9 @@ impl ExecutorProbe {
             self.ready_depth[2],
             self.ready_depth[3],
             self.irq.saturating_sub(self.irq_at_open),
+            average_us(self.park_hw_nanos, self.park_splits),
+            average_us(self.park_sw_nanos, self.park_splits),
+            self.park_splits,
         );
         self.open_window(now_nanos);
     }

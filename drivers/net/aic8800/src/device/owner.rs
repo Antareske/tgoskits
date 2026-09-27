@@ -1,8 +1,11 @@
 use alloc::{collections::VecDeque, vec::Vec};
+use core::time::Duration;
 
 use super::{
     AicError, AicEvent, AicState, ControlState, IoPurpose, LinkState, MailboxState, MonotonicTime,
-    PendingIo, SdioRequestKind, StartupState, TxToken, probe::TxProbe,
+    PendingIo, SdioRequestKind, StartupState, TxToken,
+    data_plane::{DEFAULT_RX_DEFER, RX_DEFER_BULK_FRAME_BYTES},
+    probe::TxProbe,
 };
 use crate::{
     common::ChipVariant,
@@ -22,6 +25,10 @@ pub(super) struct ActiveTx {
     /// padding the write form ends with, which the firmware reads as the end
     /// of the stream and which a further frame replaces.
     pub stream_len: usize,
+    /// Whether the first frame of this write is payload rather than a bare
+    /// acknowledgement, which is what tells a receive scan that this side is
+    /// the bulk sender for as long as the write is on the bus.
+    pub bulk: bool,
     pub retry_at: Option<MonotonicTime>,
     /// Tokens of the packets this write carries beyond the first.
     pub extra_tokens: Vec<TxToken>,
@@ -31,10 +38,12 @@ impl ActiveTx {
     /// Starts a write that carries one complete wire frame.
     pub(super) fn new(completion: TxCompletion, wire_frame: Vec<u8>) -> Self {
         let stream_len = stream_frame_len(&wire_frame).unwrap_or(wire_frame.len());
+        let bulk = stream_len >= RX_DEFER_BULK_FRAME_BYTES;
         Self {
             completion,
             wire_frame,
             stream_len,
+            bulk,
             retry_at: None,
             extra_tokens: Vec::new(),
         }
@@ -270,9 +279,24 @@ pub struct AicDevice {
     /// What one transmit write may carry.  A single frame unless the layer
     /// that hands frames over asks for batching.
     pub(super) tx_aggregation: TxAggregation,
+    /// How long a card-interrupt receive fact may be held back so that small
+    /// frames collect before one read fetches them.  A zero window serves
+    /// every fact at once, which is the behaviour without the hold.
+    pub(super) rx_defer: Duration,
 }
 
 impl AicDevice {
+    /// Sets how long a receive fact may be held back to let small frames
+    /// collect; zero serves every fact at once.
+    pub fn set_rx_defer(&mut self, window: Duration) {
+        self.rx_defer = window;
+    }
+
+    /// How long a receive fact may be held back.
+    pub const fn rx_defer(&self) -> Duration {
+        self.rx_defer
+    }
+
     /// Sets what one transmit write may carry.
     pub fn set_tx_aggregation(&mut self, aggregation: TxAggregation) {
         self.tx_aggregation =
@@ -295,6 +319,7 @@ impl AicDevice {
         Ok(Self {
             profile,
             tx_aggregation: TxAggregation::default(),
+            rx_defer: DEFAULT_RX_DEFER,
             lifecycle: LifecycleState {
                 state: AicState::Stopped,
                 startup: None,

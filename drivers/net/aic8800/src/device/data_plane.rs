@@ -18,18 +18,18 @@ const IO_RETRY: Duration = Duration::from_micros(200);
 // The firmware reports packet buffers, not SDIO blocks. Keep two buffers
 // available for commands, as in the vendor DATA_FLOW_CTRL_THRESH contract.
 const DATA_TX_RESERVED_CREDITS: u8 = 2;
-/// How long a card-interrupt receive fact may be held back so that small
+/// Default window for holding a card-interrupt receive fact back so that small
 /// frames collect in the firmware.  One scan then reads several frames in one
 /// transaction instead of paying a full round trip per frame, which is what a
 /// trickle of acknowledgements otherwise costs.  The window bounds when the
 /// scan is armed, and the fact then reaches the bus with the current write
 /// already in flight, so the frames wait no longer than one write; the
 /// firmware holds that many small frames well inside its receive capacity.
-const RX_DEFER_WINDOW: Duration = Duration::from_millis(1);
-/// Ethernet bytes above which the queued frame marks this side as the bulk
-/// sender: a data frame is at least several hundred bytes, an acknowledgement
-/// is fourteen.
-const RX_DEFER_BULK_FRAME_BYTES: usize = 128;
+pub(crate) const DEFAULT_RX_DEFER: Duration = Duration::from_millis(1);
+/// Ethernet bytes above which a frame marks this side as the bulk sender: a
+/// data frame is at least several hundred bytes, an acknowledgement is
+/// fourteen.
+pub(super) const RX_DEFER_BULK_FRAME_BYTES: usize = 128;
 /// Consecutive one-block receive reads that mark the receive stream as a
 /// trickle of small frames.
 const RX_TRICKLE_READS: u32 = 4;
@@ -152,10 +152,13 @@ impl AicDevice {
     /// holding it back would only add latency to the traffic that matters and
     /// risk the firmware's receive capacity.
     fn defer_receive_scan(&self, now: MonotonicTime) -> bool {
+        if self.rx_defer.is_zero() {
+            return false;
+        }
         let Some(since) = self.data.rx_deferred_since else {
-            return self.bulk_frame_queued() && self.data.rx_small_reads >= RX_TRICKLE_READS;
+            return self.bulk_sender() && self.data.rx_small_reads >= RX_TRICKLE_READS;
         };
-        now < since.after(RX_DEFER_WINDOW) && self.bulk_frame_queued()
+        now < since.after(self.rx_defer) && self.bulk_sender()
     }
 
     /// Arms a held-back scan whose window has run out, or whose reason to wait
@@ -165,8 +168,8 @@ impl AicDevice {
         let Some(since) = self.data.rx_deferred_since else {
             return;
         };
-        let expired = now >= since.after(RX_DEFER_WINDOW);
-        if expired || !self.bulk_frame_queued() {
+        let expired = now >= since.after(self.rx_defer);
+        if expired || !self.bulk_sender() {
             self.arm_receive_scan();
         }
     }
@@ -179,13 +182,22 @@ impl AicDevice {
         self.data.probe.scan_armed(tx_ready);
     }
 
-    /// Whether a frame that can only be payload, not an acknowledgement, is
-    /// waiting to be written.
-    fn bulk_frame_queued(&self) -> bool {
+    /// Whether this side is sending payload rather than acknowledgements: a
+    /// frame that can only be payload is queued, or the write on the bus
+    /// carries one.  The write matters because a formed write takes its frames
+    /// out of the queue, so a card interrupt that arrives while a data write is
+    /// in flight would otherwise look like a link this side is only receiving
+    /// on.
+    fn bulk_sender(&self) -> bool {
         self.data
             .tx
             .head_frame_len()
             .is_some_and(|length| length >= RX_DEFER_BULK_FRAME_BYTES)
+            || self
+                .data
+                .active_tx
+                .as_ref()
+                .is_some_and(|active| active.bulk)
     }
 
     pub(super) fn drive_receive_scan(&mut self) -> Option<AicAction> {
@@ -1906,7 +1918,7 @@ mod tests {
         );
 
         // Inside the window the fact stays held while the write is out.
-        let inside = device.advance(AicInput::tick(now.after(RX_DEFER_WINDOW / 2)));
+        let inside = device.advance(AicInput::tick(now.after(DEFAULT_RX_DEFER / 2)));
         assert!(matches!(inside, AicAction::WaitForInterrupt));
         assert!(device.data.rx_deferred_since.is_some());
 
@@ -1915,14 +1927,58 @@ mod tests {
         let completed = device.advance(complete(
             &write,
             SdioResponse::Unit,
-            now.after(RX_DEFER_WINDOW),
+            now.after(DEFAULT_RX_DEFER),
         ));
         assert!(matches!(completed, AicAction::Event(_)));
-        let scan = device.advance(AicInput::tick(now.after(RX_DEFER_WINDOW)));
+        let scan = device.advance(AicInput::tick(now.after(DEFAULT_RX_DEFER)));
         assert!(
             starts_receive_scan(&scan, &device),
             "the window ends the deferral and the scan drains what collected: {scan:?}"
         );
+        assert_eq!(device.data.rx_deferred_since, None);
+    }
+
+    #[test]
+    fn the_write_on_the_bus_keeps_the_scan_held_after_the_queue_empties() {
+        // A formed write takes its frames out of the queue, so a card
+        // interrupt that arrives while that write is on the bus sees an empty
+        // queue.  The write itself still says this side is sending payload,
+        // and the fact stays held for it.
+        let now = MonotonicTime::default();
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 500);
+        device.data.tx_credits = Some(16);
+        let submitted = device.advance(AicInput::tick(now));
+        assert!(
+            matches!(submitted, AicAction::SubmitSdio(_)),
+            "the queued data frame is written"
+        );
+        assert_eq!(
+            device.data.tx.head_frame_len(),
+            None,
+            "the write took the frame out of the queue"
+        );
+        device.data.rx_small_reads = RX_TRICKLE_READS;
+
+        device.request_receive_scan(now);
+
+        assert!(
+            !device.io.receive.active,
+            "a data write in flight is reason enough to let frames collect"
+        );
+        assert_eq!(device.data.rx_deferred_since, Some(now));
+    }
+
+    #[test]
+    fn a_zero_window_serves_every_receive_fact_at_once() {
+        // The window is a board knob: zero turns the hold off, which is how
+        // the two arms of the measurement are switched.
+        let now = MonotonicTime::default();
+        let mut device = trickling_transmitter(500);
+        device.set_rx_defer(Duration::ZERO);
+
+        device.request_receive_scan(now);
+
+        assert!(device.io.receive.active);
         assert_eq!(device.data.rx_deferred_since, None);
     }
 

@@ -15,12 +15,13 @@ use super::{
 };
 use crate::{
     TxAggregation,
+    device::DEFAULT_RX_DEFER,
     rdif::{
         device::{
             MacAddressState, OwnerChannels, WifiChannels, queues::queue_parts, shared_irq_latch,
         },
         error::AicRdifError,
-        owner::AicOwner,
+        owner::{AicOwner, OwnerPolicy},
     },
 };
 
@@ -47,6 +48,10 @@ pub struct AicRdifOptions {
     /// per-transaction cost against the delay a burst adds to receive work
     /// sharing the same bus.
     pub tx_aggregation: TxAggregation,
+    /// How long a card-interrupt receive fact may be held back so that a read
+    /// fetches several small frames at once.  Zero serves every fact at once.
+    /// Diagnostic: the window is being chosen on the board.
+    pub rx_defer: Duration,
     /// SoC reset-settle interval observed before the first card command.
     pub startup_delay: Duration,
     /// End-to-end deadline covering card enumeration, firmware, and FDRV startup.
@@ -67,6 +72,7 @@ impl AicRdifOptions {
                 DEFAULT_TX_AGGREGATION_PACKETS,
                 TxAggregation::DEFAULT_BYTES,
             ),
+            rx_defer: DEFAULT_RX_DEFER,
             startup_delay: Duration::ZERO,
             startup_timeout: DEFAULT_STARTUP_TIMEOUT,
             control_timeout: DEFAULT_CONTROL_TIMEOUT,
@@ -165,7 +171,10 @@ impl<H: CompletionIrqRearmHost + Send + 'static> NetDevice for AicRdifDevice<H> 
             wifi_channels,
             Arc::clone(&irq_latch),
             Arc::clone(&mac),
-            options.tx_aggregation,
+            OwnerPolicy {
+                tx_aggregation: options.tx_aggregation,
+                rx_defer: options.rx_defer,
+            },
         );
         let OwnerChannels {
             sender: owner_sender,

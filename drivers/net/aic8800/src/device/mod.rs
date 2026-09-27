@@ -12,6 +12,8 @@ mod request;
 mod startup;
 
 use control::ControlState;
+#[cfg(feature = "rdif")]
+pub(crate) use data_plane::DEFAULT_RX_DEFER;
 use link::LinkState;
 use mailbox::MailboxState;
 pub use model::*;

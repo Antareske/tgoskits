@@ -90,6 +90,18 @@ impl AicFdtProfile {
                 info.node.name()
             )));
         }
+        // Diagnostic: the receive hold window is being chosen on the board, so
+        // it is bounded to what the firmware can hold without dropping frames.
+        const RX_DEFER_MAX_MS: u32 = 10;
+        if let Some(window) = fdt_u32(info, "aic,rx-defer-ms") {
+            if window > RX_DEFER_MAX_MS {
+                return Err(OnProbeError::other(format!(
+                    "[{}] aic,rx-defer-ms must be in 0..={RX_DEFER_MAX_MS}",
+                    info.node.name()
+                )));
+            }
+            options.rx_defer = Duration::from_millis(u64::from(window));
+        }
         if let Some(transaction) = startup_transaction(info)? {
             options = options.with_startup_transaction(transaction);
         }

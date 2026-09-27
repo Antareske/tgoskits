@@ -1,4 +1,5 @@
 use alloc::{sync::Arc, vec::Vec};
+use core::time::Duration;
 
 use rdif_eth::WifiControlProgress;
 use ringbuf::traits::Consumer;
@@ -78,7 +79,17 @@ pub(crate) struct AicOwner<H: CompletionIrqRearmHost + 'static> {
     mac: Arc<MacAddressState>,
     started: bool,
     card_irq_wait: CardIrqWait,
-    tx_aggregation: TxAggregation,
+    policy: OwnerPolicy,
+}
+
+/// Data-plane policy the adapter selects when it constructs the owner.
+#[derive(Clone, Copy, Debug)]
+pub(crate) struct OwnerPolicy {
+    /// Frames and bytes one transmit write may carry.
+    pub tx_aggregation: TxAggregation,
+    /// How long a receive fact may be held back so that small frames collect
+    /// before one read fetches them; zero serves every fact at once.
+    pub rx_defer: Duration,
 }
 
 impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
@@ -89,7 +100,7 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         wifi: WifiChannels,
         irq_latch: Arc<IrqLatch>,
         mac: Arc<MacAddressState>,
-        tx_aggregation: TxAggregation,
+        policy: OwnerPolicy,
     ) -> (
         Self,
         crate::rdif::device::WifiRequestSender,
@@ -111,7 +122,7 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
             mac,
             started: false,
             card_irq_wait: CardIrqWait::Masked,
-            tx_aggregation,
+            policy,
         };
         (owner, wifi.requests_tx, wifi.progress_rx)
     }
@@ -431,7 +442,8 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         let variant = detect_sdio_card_variant(info, function)?;
         log::info!("[wifi] detected supported AIC SDIO variant {variant:?}");
         let mut device = AicDevice::new(variant)?;
-        device.set_tx_aggregation(self.tx_aggregation);
+        device.set_tx_aggregation(self.policy.tx_aggregation);
+        device.set_rx_defer(self.policy.rx_defer);
         device.start(MonotonicTime::from_nanos(now_nanos))?;
         self.device = Some(device);
         self.started = true;

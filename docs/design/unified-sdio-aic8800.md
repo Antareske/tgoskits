@@ -220,9 +220,11 @@ FIFO drain”语义；固件 settle 的 timer 不能冒充这个 consumer-ready 
   24 GHz TX gain、20/40 MHz RX gain 和 RF calibration，再进入与 D80 共用且经
   wire-equivalence 测试证明的 MAC/reset/channel/interface/start/filter 流程。
 - ME capability 载荷不属于共用流程：它由已验证芯片身份选择的私有 profile 编码，DC
-  保持只报 LDPC 的保守能力，D80 额外声明 20/40 MHz、SGI20/40、MCS32 与对应的单流
-  MCS/最高速率。两个 profile 都不开启 VHT、HE、STBC 或天线分集；`phy_bw_max` 也随
-  profile 取值。厂商在同一位置按 `use_2040`/`use_80` 与 `sgi` 生成这些字段。
+  保持只报 LDPC 的保守能力，D80 额外声明 20/40 MHz、SGI20/40、MCS32、单流
+  MCS 0–9 的 VHT 能力与单流 MCS 0–11 的 HE 能力，以及各自对应的最高速率字段。
+  VHT 与 HE 的取值按厂商在 2.4 GHz、单流下的声明编码；D80 的 `phy_bw_max` 取厂商对
+  该芯片强制使用的 80 MHz 值。两个 profile 都不声明 STBC、A-MSDU 接收或天线分集能力。
+  厂商在同一位置按 `use_2040`/`use_80` 与 `sgi` 生成这些字段。
 
 成功的 add-interface confirmation 返回的 `inst_nbr` 是唯一 firmware VIF 来源。
 AP 控制也复用 `parse_add_interface()`，要求完整两字节响应并拒绝 `0xff`；

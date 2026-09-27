@@ -470,9 +470,9 @@ mod tests {
 
     #[test]
     fn startup_me_config_request_uses_chip_specific_capability_profile() {
-        for (chip, expected_capability_info, expected_bandwidth) in [
-            (ChipVariant::Aic8800DC, 1u16, 2u8),
-            (ChipVariant::Aic8800D80, 0x0063, 1u8),
+        for (chip, expected_capability_info, expected_bandwidth, expected_vht_he) in [
+            (ChipVariant::Aic8800DC, 1u16, 2u8, (0u8, 0u8)),
+            (ChipVariant::Aic8800D80, 0x0063, 2u8, (1u8, 1u8)),
         ] {
             let mut device = AicDevice::new(chip).unwrap();
             device.lifecycle.state = AicState::Starting;
@@ -513,6 +513,8 @@ mod tests {
                 &expected_capability_info.to_le_bytes()
             );
             assert_eq!(bytes[payload_offset + 102], expected_bandwidth);
+            assert_eq!(bytes[payload_offset + 104], expected_vht_he.0);
+            assert_eq!(bytes[payload_offset + 105], expected_vht_he.1);
         }
     }
 

@@ -131,13 +131,18 @@ pub(super) struct TxProbe {
     backoff_since: Option<MonotonicTime>,
     backoff_wait_nanos: u64,
     /// Packet periods.
-    packets: u64,
+    tx_writes: u64,
     last_write_done: Option<MonotonicTime>,
     period_nanos: u64,
     period_max: u64,
     period_count: [u64; PERIOD_BUCKETS],
-    /// Frames parsed out of receive reads.
-    rx_frames: u64,
+    /// Parsed FIFO items by protocol role.
+    rx_items: u64,
+    rx_data_frames: u64,
+    tx_data_confirmations: u64,
+    control_confirmations: u64,
+    control_indications: u64,
+    firmware_prints: u64,
     /// Receive scans armed by a card interrupt, and how many of them were
     /// armed while a frame was already queued for transmit.  The second number
     /// is the share a bounded deferral of the receive scan would have held
@@ -179,7 +184,7 @@ impl TxProbe {
             return;
         }
         // An idle window would only print zeros, so it is closed silently.
-        if self.packets == 0 && self.class_count.iter().all(|count| *count == 0) {
+        if self.tx_writes == 0 && self.class_count.iter().all(|count| *count == 0) {
             self.open_window(self.now);
             return;
         }
@@ -271,7 +276,7 @@ impl TxProbe {
             self.period_count[period_bucket(period)] += 1;
         }
         self.last_write_done = Some(self.now);
-        self.packets += 1;
+        self.tx_writes += 1;
     }
 
     pub(super) fn credit(&mut self, credits: u8) {
@@ -297,9 +302,18 @@ impl TxProbe {
         }
     }
 
-    /// Records how many frames a receive read parsed.
-    pub(super) fn rx_parsed(&mut self, frames: usize) {
-        self.rx_frames += frames as u64;
+    /// Records the protocol roles found in one receive FIFO read.
+    pub(super) fn rx_items(&mut self, items: &[crate::rx::ParsedFrame]) {
+        self.rx_items += items.len() as u64;
+        for item in items {
+            match item {
+                crate::rx::ParsedFrame::Data { .. } => self.rx_data_frames += 1,
+                crate::rx::ParsedFrame::DataConfirmation => self.tx_data_confirmations += 1,
+                crate::rx::ParsedFrame::Confirmation { .. } => self.control_confirmations += 1,
+                crate::rx::ParsedFrame::Indication { .. } => self.control_indications += 1,
+                crate::rx::ParsedFrame::FirmwarePrint { .. } => self.firmware_prints += 1,
+            }
+        }
     }
 
     /// Records the core queue depth a frame arrived at.
@@ -352,11 +366,16 @@ impl TxProbe {
         self.credit_max = 0;
         self.backoffs = 0;
         self.backoff_wait_nanos = 0;
-        self.packets = 0;
+        self.tx_writes = 0;
         self.period_nanos = 0;
         self.period_max = 0;
         self.period_count = [0; PERIOD_BUCKETS];
-        self.rx_frames = 0;
+        self.rx_items = 0;
+        self.rx_data_frames = 0;
+        self.tx_data_confirmations = 0;
+        self.control_confirmations = 0;
+        self.control_indications = 0;
+        self.firmware_prints = 0;
         self.scans = 0;
         self.scans_with_tx_ready = 0;
         self.scans_deferred = 0;
@@ -373,15 +392,16 @@ impl TxProbe {
         let steps = OWNER_STEPS.load(Ordering::Relaxed) - self.owner_steps_at_open;
         let calls = OWNER_CALLS.load(Ordering::Relaxed) - self.owner_calls_at_open;
         log::info!(
-            "[wifi-probe] pkts={} dt={}ms period_avg={}us max={}us hist={}/{}/{}/{}/{} | write \
-             n={} avg={}us min={}us max={}us bytes={} calls={}.{} | size blk 1/2/3/4-6/7-9/10+ \
-             n={}/{}/{}/{}/{}/{} avg={}/{}/{}/{}/{}/{}us | credit n={} min={} max={} avgx10={} \
-             backoff={} avg={}us | gap rx0 n={} avg={}us | rx1 n={} avg={}us | rx2+ n={} avg={}us \
-             | supply core n={} avg={}us | ring n={} avg={}us | none n={} avg={}us | scans={} \
-             deferred={} tx_ready={} | steps={} per_pkt={}.{} owner_calls={}",
-            self.packets,
+            "[wifi-probe] tx_writes={} dt={}ms period_avg={}us max={}us hist={}/{}/{}/{}/{} | \
+             write n={} avg={}us min={}us max={}us bytes={} calls={}.{} | size blk \
+             1/2/3/4-6/7-9/10+ n={}/{}/{}/{}/{}/{} avg={}/{}/{}/{}/{}/{}us | credit n={} min={} \
+             max={} avgx10={} backoff={} avg={}us | gap rx0 n={} avg={}us | rx1 n={} avg={}us | \
+             rx2+ n={} avg={}us | supply core n={} avg={}us | ring n={} avg={}us | none n={} \
+             avg={}us | scans={} deferred={} tx_ready={} | steps={} per_tx_write={}.{} \
+             owner_calls={}",
+            self.tx_writes,
             dt_ms,
-            average_us(self.period_nanos, self.packets),
+            average_us(self.period_nanos, self.tx_writes),
             self.period_max / 1_000,
             self.period_count[0],
             self.period_count[1],
@@ -438,21 +458,29 @@ impl TxProbe {
             self.scans_deferred,
             self.scans_with_tx_ready,
             steps,
-            steps / self.packets.max(1),
-            steps % self.packets.max(1) * 10 / self.packets.max(1),
+            steps / self.tx_writes.max(1),
+            steps % self.tx_writes.max(1) * 10 / self.tx_writes.max(1),
             calls,
         );
         log::info!(
-            "[wifi-probe-rx] data n={} avg={}us min={}us max={}us bytes={} frames={} | size <=512 \
-             n={} avg={}us | <=2k n={} avg={}us | <=8k n={} avg={}us | >8k n={} avg={}us | \
-             control n={} avg={}us min={}us max={}us | credit n={} avg={}us | other n={} avg={}us \
-             | rdif_at_write 0/1/2-3/4+={}/{}/{}/{} | queue_at_arrival={}/{}/{}/{}",
+            "[wifi-probe-rx] reads={} data_reads={} avg={}us min={}us max={}us bytes={} items={} \
+             data_frames={} data_confirmations={} control_confirmations={} control_indications={} \
+             prints={} | size <=512 n={} avg={}us | <=2k n={} avg={}us | <=8k n={} avg={}us | >8k \
+             n={} avg={}us | control n={} avg={}us min={}us max={}us | credit n={} avg={}us | \
+             other n={} avg={}us | rdif_at_write 0/1/2-3/4+={}/{}/{}/{} | \
+             queue_at_arrival={}/{}/{}/{}",
+            self.class_count[RX_DATA] + self.class_count[RX_CONTROL],
             self.class_count[RX_DATA],
             average_us(self.class_nanos[RX_DATA], self.class_count[RX_DATA]),
             self.class_min[RX_DATA] / 1_000,
             self.class_max[RX_DATA] / 1_000,
             self.class_bytes[RX_DATA],
-            self.rx_frames,
+            self.rx_items,
+            self.rx_data_frames,
+            self.tx_data_confirmations,
+            self.control_confirmations,
+            self.control_indications,
+            self.firmware_prints,
             self.rx_size_count[0],
             average_us(self.rx_size_nanos[0], self.rx_size_count[0]),
             self.rx_size_count[1],

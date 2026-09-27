@@ -245,7 +245,7 @@ STA 连接由同一 owner 状态机串行推进：
    frame。host-to-device packet type 使用 vendor TX 值 `0x01`，不能复用 RX
    aggregate 的 `0x00`；D80 CRC header
    声明 descriptor+payload 的未对齐长度，DC/V1 则按 vendor 路径声明 word-aligned
-   aggregate 长度。
+   aggregate 长度。普通 Ethernet data 不请求 firmware data confirmation：其 host descriptor 使用 `hostid = 0`，SDIO 写完成后由主机 token 完成发送回收。当前内部 EAPOL 发送仍保留 vendor confirmation 标记，但其唯一 ID、结果消费者和超时尚未实现；该标记不构成已完成的结果确认契约。后续任何依赖 firmware 结果的特殊帧都必须补齐唯一关联 ID、消费者及超时/取消语义。普通 data 的 RX confirmation 不作为发送完成依据。
 3. Linux WEXT 边界按 UAPI 的 `iwreq -> iw_point -> struct iw_encode_ext + key[]`
    原生布局接收 `IW_ENCODE_ALG_PMK` 的 32 字节 PMK。这与 Linux
    `wpa_supplicant` `driver_wext` 的 PMK-offload 调用相同，但不声称通用 mainline
@@ -338,9 +338,11 @@ probe 显式失败，不回退到写死物理地址。
 `cd-gpios` 与 clock/reset/power-domain 由 rdrive 统一解析。AIC 附加策略使用
 `dma-address-bits`、`post-power-on-delay-ms`、`aic,startup-timeout-ms`、
 `aic,control-timeout-ms`、`aic,queue-size`、`aic,max-frame-size`、
-`aic,tx-aggregation` 和 `aic,tx-aggregate-bytes`。后两者界定一笔发送写最多携带的
+`aic,tx-aggregation`、`aic,tx-aggregate-bytes` 和 `aic,rx-defer-ms`。前两者界定一笔发送写最多携带的
 帧数与字节数，取值非法（帧数小于 1，或字节数超过发送环一次能交出的总量）时
-probe 显式失败。可选启动 AP
+probe 显式失败。`aic,rx-defer-ms` 的默认值为零，即 CARD_INT 事实立即进入接收扫描；
+只有显式配置非零值时才保持小帧接收事实，且平台适配将其限制在 `0..=10` ms。
+非零值是板级实验策略，不改变核心的 level-IRQ 和 RX drain 所有权。可选启动 AP
 必须显式配置 `aic,startup-mode = "access-point"` 及 `aic,ap-ssid`、
 `aic,ap-channel`、`aic,ap-ipv4`、`aic,ap-prefix-length`；未配置时只注册
 `wlan0`。AKA 的 station 产品策略来自上述编译期环境变量；若同时配置 FDT 启动

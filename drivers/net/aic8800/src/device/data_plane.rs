@@ -6,7 +6,7 @@ use crate::{
     lmac::{
         SM_CONNECT_IND, SM_DISCONNECT_IND, parse_connect_indication, parse_disconnect_indication,
     },
-    protocol::{BLOCK_SIZE, ethernet_tx_frame, stream_frame_len},
+    protocol::{BLOCK_SIZE, TxConfirmation, ethernet_tx_frame, stream_frame_len},
     registers::ReceiveLength,
     rx::{ParsedFrame, parse_fifo},
 };
@@ -18,14 +18,12 @@ const IO_RETRY: Duration = Duration::from_micros(200);
 // The firmware reports packet buffers, not SDIO blocks. Keep two buffers
 // available for commands, as in the vendor DATA_FLOW_CTRL_THRESH contract.
 const DATA_TX_RESERVED_CREDITS: u8 = 2;
-/// Default window for holding a card-interrupt receive fact back so that small
-/// frames collect in the firmware.  One scan then reads several frames in one
-/// transaction instead of paying a full round trip per frame, which is what a
-/// trickle of acknowledgements otherwise costs.  The window bounds when the
-/// scan is armed, and the fact then reaches the bus with the current write
-/// already in flight, so the frames wait no longer than one write; the
-/// firmware holds that many small frames well inside its receive capacity.
-pub(crate) const DEFAULT_RX_DEFER: Duration = Duration::from_millis(1);
+/// Default to serving card-interrupt receive facts immediately.
+pub(crate) const DEFAULT_RX_DEFER: Duration = Duration::ZERO;
+
+// A non-zero hold window remains available as an explicit board experiment,
+// but board measurements showed that delaying the scan can backpressure the
+// firmware instead of improving receive aggregation.
 /// Ethernet bytes above which a frame marks this side as the bulk sender: a
 /// data frame is at least several hundred bytes, an acknowledgement is
 /// fourteen.
@@ -349,7 +347,7 @@ impl AicDevice {
                     header_words,
                 }
             })?;
-        self.data.probe.rx_parsed(frames.len());
+        self.data.probe.rx_items(&frames);
         // A read that returned one block is the shape a trickle of small frames
         // takes; anything larger means the peer is filling the receive path.
         if receive_data.len() <= BLOCK_SIZE {
@@ -637,6 +635,7 @@ impl AicDevice {
                 interface_index,
                 station_index,
                 self.transport_uses_header_crc(),
+                TxConfirmation::Firmware,
             ) else {
                 return;
             };
@@ -1885,12 +1884,13 @@ mod tests {
     }
 
     #[test]
-    fn a_bulk_sender_holds_the_receive_scan_until_its_window_expires() {
-        // Two data frames are queued, so the reason to wait outlives the first
-        // write: the held fact is armed only when the window runs out, which
-        // bounds how long receive work can be postponed.
+    fn an_explicit_window_holds_the_receive_scan_until_it_expires() {
+        // The default is zero; only an explicit board-selected window holds
+        // the fact long enough for another small frame to arrive.
         let now = MonotonicTime::default();
+        let window = Duration::from_millis(1);
         let mut device = trickling_transmitter(500);
+        device.set_rx_defer(window);
         device
             .data
             .tx
@@ -1918,19 +1918,15 @@ mod tests {
         );
 
         // Inside the window the fact stays held while the write is out.
-        let inside = device.advance(AicInput::tick(now.after(DEFAULT_RX_DEFER / 2)));
+        let inside = device.advance(AicInput::tick(now.after(window / 2)));
         assert!(matches!(inside, AicAction::WaitForInterrupt));
         assert!(device.data.rx_deferred_since.is_some());
 
         // Completing the write publishes its completion first; the drive after
         // that finds the window expired and arms the scan.
-        let completed = device.advance(complete(
-            &write,
-            SdioResponse::Unit,
-            now.after(DEFAULT_RX_DEFER),
-        ));
+        let completed = device.advance(complete(&write, SdioResponse::Unit, now.after(window)));
         assert!(matches!(completed, AicAction::Event(_)));
-        let scan = device.advance(AicInput::tick(now.after(DEFAULT_RX_DEFER)));
+        let scan = device.advance(AicInput::tick(now.after(window)));
         assert!(
             starts_receive_scan(&scan, &device),
             "the window ends the deferral and the scan drains what collected: {scan:?}"
@@ -1946,6 +1942,7 @@ mod tests {
         // and the fact stays held for it.
         let now = MonotonicTime::default();
         let mut device = ready_transmitter(ChipVariant::Aic8800D80, 500);
+        device.set_rx_defer(Duration::from_millis(1));
         device.data.tx_credits = Some(16);
         let submitted = device.advance(AicInput::tick(now));
         assert!(
@@ -1969,13 +1966,12 @@ mod tests {
     }
 
     #[test]
-    fn a_zero_window_serves_every_receive_fact_at_once() {
-        // The window is a board knob: zero turns the hold off, which is how
-        // the two arms of the measurement are switched.
+    fn the_default_zero_window_serves_every_receive_fact_at_once() {
+        // The default disables the experimental receive hold.
         let now = MonotonicTime::default();
         let mut device = trickling_transmitter(500);
-        device.set_rx_defer(Duration::ZERO);
 
+        assert!(device.rx_defer().is_zero());
         device.request_receive_scan(now);
 
         assert!(device.io.receive.active);

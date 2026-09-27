@@ -2,7 +2,10 @@
 
 use alloc::{collections::VecDeque, vec::Vec};
 
-use crate::{TxToken, protocol::ethernet_tx_frame};
+use crate::{
+    TxToken,
+    protocol::{TxConfirmation, ethernet_tx_frame},
+};
 
 pub(crate) const TX_CAPACITY: usize = 128;
 
@@ -52,9 +55,15 @@ impl TxState {
     ) -> Option<Result<(TxToken, Vec<u8>), TxToken>> {
         let pending = self.queue.pop_front()?;
         Some(
-            ethernet_tx_frame(&pending.frame, interface_index, station_index, v3)
-                .map(|frame| (pending.token, frame))
-                .map_err(|_| pending.token),
+            ethernet_tx_frame(
+                &pending.frame,
+                interface_index,
+                station_index,
+                v3,
+                TxConfirmation::None,
+            )
+            .map(|frame| (pending.token, frame))
+            .map_err(|_| pending.token),
         )
     }
 

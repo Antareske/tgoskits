@@ -1,411 +1,150 @@
-# AIC8800 数据面异步化（流水线化）方案
+# AIC8800 第二阶段性能优化方案
 
-分析对象：`drivers/net/aic8800`（SDIO WiFi，SG2002/CV181x）
-分析基线：dev `9a7b868ba`（2026-09-23）。工作分支 `sg2002/wifi-opt`：AIC8800 的全部工作（含调试与探针）都在此分支上迭代，2026-09-25 dev 更新到 `714accd8f` 后工作已变基其上；开 PR 时另建去掉探针的整理分支。
+## 1. 阶段边界
 
-本文是执行方案，依据来自同目录三篇分析（结论已逐条对当前 HEAD 复核，见附录 A）：
-`throughput-bottleneck-analysis.md`（主依据）、`aic8800-tx-throughput-analysis.md`、
-`aic8800-data-plane-optimization.md`。
+本方案维护 2026-09-27 OCR 审查之后的工作。OCR 审查全文保存在 `ocr-review-20260927.md`，它把此前已经完成的传输形态探索与后续协议、观测和无线能力工作分开。第一阶段的过程、提交和板测证据保留在 `aic8800-optimization-tracker.md`，本文件只把其结论作为第二阶段的输入。
 
----
+### 1.1 第一阶段输入
 
-## 1. 目标与判据
+第一阶段已完成并提交的工作包括 credit 本地记账、credit 回退粒度调整、事务和 owner 探针、TX 四帧聚合及帧流布局修复、可配置聚合上限、RX 扫描保持实验和 owner park 分段观测。主要可复用结论如下：
 
-### 1.1 目标
-
-把 TX 从「每包一次 CMD52 换一个布尔值 + 停等式」改成「一次读 credit 连发多包 +
-下一帧在总线上跑的时候已经备好」，即让 SDIO 总线在还有包要发时保持忙碌。
-
-「异步」在本驱动的既有含义是**不阻塞 CPU**（已达成）；本方案要补的是第二层含义：
-**不让硬件闲着**。
-
-### 1.2 判据
-
-| 指标 | 现状（2026-09-16/17 实测） | 厂商 Linux 同链路 | 目标 |
-| --- | --- | --- | --- |
-| TX TCP 板→PC | 6.6 ~ 7.3 Mbps | 58.5 Mbps | ≥ 40 Mbps（先跨过空口上限，见 §3） |
-| TX 总线利用率 | 7 ~ 8 % | 66 % | ≥ 50 % |
-| 每包周期 | 1.6 ~ 1.8 ms | 0.20 ms | ≤ 0.25 ms |
-| SDIO 事务/包 | 2（CMD52 + CMD53） | ≈ 1/32 CMD53（聚合） | 1（CMD53） |
-
-判据以**板端 iperf3 实测**为准，不以代码形态或单测通过为准。
-
-**用例口径（2026-09-25 修正）**：驱动侧判据取**双向用例的板端 TX 方向**，并以
-「每包周期与 SDIO 事务数」作为与代码改动直接对应的指标。纯上行用例同样可用作判据：
-周期 P3 在写完成时刻同时采样核心队列与 RDIF 环，实测上行用例里 **88% 的样本「核心队列空、RDIF 环有帧」**、
-两层皆空的样本仅 0.03%，即帧早已由协议交给驱动、在环里等待 owner 拉取，限速方在驱动自身
-（此前「纯上行受上游供帧限制」的判断基于只采样核心队列，已更正）。
-
----
-
-## 2. 现状（已对 HEAD 复核）
-
-### 2.1 一帧 TX 的完整往返
-
-```
-[协议层提交] → take_tx_frame：DmaBuffer → Vec（读+拷贝）        rdif/owner/output.rs:61
-  → 构造 wire frame：vec![0;1536] + 写 hostdesc/头 + 搬 payload   protocol.rs:154-199
-  → 读 flow credit（CMD52）                                      data_plane.rs:71-74   事务 1
-  → park/wake 1
-  → credit ≤ 2 → retry_at = now + 1ms（IO_RETRY）                data_plane.rs:384-387
-  → wire_frame.clone() → 写 FIFO（CMD53）                        data_plane.rs:388-392 事务 2
-  → park/wake 2
-  → TransmitComplete 事件 → 退回 rearm 边界                       rdif/owner/progress.rs:47-65
-```
-
-每包 **2 次总线事务 + 2 次 park/wake + 1 次 CMD52 只为一个布尔值**。
-
-### 2.2 三个已核实的结构性浪费
-
-1. **credit 被当成布尔值**：`flow_credits()` 返回的是固件空闲包缓冲数
-   （V3 读全字节，最多 128；`registers.rs:135-148`），但 `consume_transmit_flow`
-   只用它判断「发不发」，配额值本身从不使用（`data_plane.rs:384`）。
-2. **`active_tx` 单槽位**：`prepare_next_transmit` 第一行 `if active_tx.is_some() { return }`
-   （`data_plane.rs:420-423`），上一包写完之前下一包的 wire frame 根本不开始构造。
-   上游给了 32 深 rdif 环 + 128 深核心队列，驱动只用 1。
-3. **等待窗口零准备**：等 CMD52 / CMD53 期间 `advance()` 在 `io.pending` 处短路
-   （`progress.rs:40-42`），`drive_ready()` 不被调用，纯 CPU 工作也一起被挡住。
-
-### 2.3 每包的固定开销清单（代码可证）
-
-| 项 | 每包次数 | 位置 |
+| 结论 | 证据 | 对第二阶段的影响 |
 | --- | --- | --- |
-| 堆分配 + 拷贝（DmaBuffer → Vec） | 1 | `rdif/owner/output.rs:65`（`to_vec()`） |
-| `vec![0;1536]` 分配 + 清零 + 两次拷贝 | 1 | `protocol.rs:174-198` |
-| `wire_frame.clone()` | 1 | `data_plane.rs:388` |
-| `CpuDmaBuffer::new_zero` 分配 + 清零 + 拷贝 | 1 | `rdif/owner/operation.rs:114-121` |
-| ADMA2 表重建 + 地址重写 | 1 | `drivers/blk/sdhci-host/src/dma/request.rs:349-364` |
-| `log_status` 无条件诊断读（9 次 MMIO） | 2 | `drivers/blk/sdhci-host/src/command.rs:338-352,442` |
+| credit 本地记账有效 | 周期 1：CMD52/包由约 1 降到约 0.01 | 保持现有记账与失效条件，不重复设计 |
+| TX 聚合有效 | 周期 P6：K=1 约 8.42 Mbps，K=4 约 18.7~19.5 Mbps | 保留现有帧流布局，后续只做选值实验 |
+| RX defer 不适合作为默认优化 | 周期 P8/P8b：非零窗口未带来收益，3 ms 使固件传输显著变慢 | 默认值改为 0，非零值只作显式实验配置 |
+| owner 与 SDIO 总线不可直接视为并行 | 周期 P3/P4/P6 及 OCR 复核 | 不先增加线程或并发提交，先修正协议流量和无线能力证据 |
+| 普通 data confirmation 是无消费者的额外流量 | OCR 对照厂商 `rwnx_tx.c:647-671` 与当前 `protocol.rs` | 第二阶段首轮先关闭普通 data confirmation，并重新计数 |
 
-其中两次「全缓冲清零」是纯浪费（随后整块被覆写）。
+这些结果不构成“已经达到 40 Mbps 或 58 Mbps”的证明。上行在不同会话之间存在显著波动，后续收益必须以实际协商速率、重传、事务计数和同一测试会话中的观测为依据。
 
----
+### 1.2 第二阶段成功标准
 
-## 3. 天花板（重要，决定目标值）
+第二阶段首轮的代码目标是恢复普通 Ethernet data 的厂商一致 confirmation 语义，建立可区分 FIFO 项类型的性能观测，并使默认 RX 扫描不被已否定的延迟策略阻塞。可观察验收条件如下：
 
-25 MHz / 4-bit 的 SDIO 原始上限 ≈ 11.72 MB/s ≈ 85 Mbps；1500 B 帧的数据相 131 µs，
-加命令/响应每包约 140 µs。**总线本身足以支撑厂商的 58.5 Mbps**（利用率 66%）。
+1. 普通 data descriptor 的 `hostid` 为 0，普通 data 不产生 firmware data confirmation；
+2. EAPOL 和需要 firmware 结果的内部控制帧仍沿专用 confirmation 路径；
+3. probe 能分别报告普通 data、data confirmation、control confirmation、indication 和 firmware print；
+4. 未配置 FDT 属性时 `rx-defer-ms` 为 0，显式非零配置仍可用；
+5. 连接、WPA2 四次握手、TCP TX、TCP RX 和双向路径没有新增错误、重传或停滞；
+6. 实体板卡结果记录完整，但在没有同会话对照时只报告观察，不宣称精确吞吐收益。
 
-但**空口速率才是终点**，而它当前没有被确定：
+## 2. 第二阶段首轮实现
 
-- 驱动的 `me_config_payload`（`lmac.rs:289-306`）只写 HT capability：`payload[3] = 0xff`
-  即 MCS 0–7、单空间流；VHT/HE capability 区间（16..100）**全为零**，`payload[103] = 1`
-  仅置 HT 标志。
-- 厂商 Linux 在同一链路实测 TCP 58.5 Mbps、UDP 73.8 Mbps。HT-MCS7/20 MHz SGI 的
-  PHY 上限是 72.2 Mbps，UDP 73.8 已超过它 —— **厂商用了更高的 PHY 速率
-  （HE-MCS9 或 40 MHz），本驱动目前不是**。
+首轮只修改已经有明确代码证据支持的行为，不把 capability、DMA 所有权和多事务在飞同时加入。这样一份镜像即可回答协议流量是否被清理以及默认 RX 策略是否安全。
 
-因此存在两个数量级不同的上限：
+### 2.1 Confirmation 与 typed telemetry
 
-| 情形 | TX TCP 可达上限（估） | 本方案能否达到 |
+`drivers/net/aic8800/src/protocol.rs` 的 `TxConfirmation` 表达普通 data 与 firmware confirmation 的区别。`drivers/net/aic8800/src/tx.rs` 的普通 Ethernet TX 选择 `TxConfirmation::None`，因此 host descriptor 的 `hostid` 为 0；`drivers/net/aic8800/src/device/data_plane.rs` 的内部 EAPOL/控制发送继续选择 `TxConfirmation::Firmware`。普通 data 的 SDIO 写完成已经是 token 完成依据，不能再依赖一个没有消费者的 data confirmation。
+
+`drivers/net/aic8800/src/device/probe.rs` 将接收 FIFO 项按协议角色计数。计数只作为观测，不改变完成、credit、取消、RX 优先级或 IRQ 顺序。特殊帧的 confirmation 仍需后续补唯一 correlation ID、消费者、超时和取消回收；首轮不把这个独立问题与普通 data 处理混合。
+
+### 2.2 RX defer 默认值
+
+`drivers/net/aic8800/src/device/data_plane.rs` 的 `DEFAULT_RX_DEFER` 改为 `Duration::ZERO`。`drivers/net/aic8800/src/rdif/device/endpoints/device.rs` 继续从该默认值构造适配策略，`drivers/ax-driver/src/net/aic8800/fdt.rs` 继续允许 `aic,rx-defer-ms` 在 `0..=10` ms 内显式覆盖。
+
+零窗口意味着 CARD_INT 事实立即进入扫描路径；非零窗口仍保留用于后续同会话实验，但不再作为产品默认。对应单测必须区分“默认立即服务”和“显式窗口保持”，避免测试把实验配置误当默认契约。
+
+## 3. 后续优化顺序
+
+首轮板测完成后，按观测结果推进后续工作。每一步都先保留当前可启动的镜像和代码路径，再增加一个主要变量。
+
+### 3.1 D80 HT40/SGI 能力实验
+
+P0a 实板已完成：COM6 活跃数据窗口中 `data_confirmations=0`，确认普通 Ethernet data 的 `hostid=0` 语义在板上可见。Windows cmd 直接运行 iperf3 后测试端波动减小。
+
+HT40/SGI 已上板两轮（板端启动日志打印 `d80-ht40-sgi`）：正向 25.3/28.8/26.7/29.9 Mbps、反向 18.8/15.6/19.4/19.0/20.6 Mbps、双向 13.6/12.5 Mbps，均高于 P0a 轮同向读数，但两轮不是同一会话，按观察记录。上一轮"`-b 100M` 明显偏慢"没有复现（正向三个用例中它居中，反向四个用例中它与不带 `-b` 持平），该测试端变量可以关闭。板端发送窗口的 `credit` 长期见底（`min=2`、回退 500~1300 次/2 s），说明 TX 仍受固件/空口排空速度限制。
+
+D80 的 `MeConfigProfile`（`drivers/net/aic8800/src/lmac.rs`）按显式偏移安全编码 112 字节 `ME_CONFIG_REQ`，DC 使用保守字节。HT40/SGI 段的取值为 LDPC、20/40 MHz、SGI20/40、MCS32 与单流 MCS0–7 mask、HT highest-rate 150；`device/startup/mod.rs` 只按已验证的芯片身份选 profile 并记录 profile 名。payload 测试固定关键字段与字节；不以 C struct 指针转换或 `repr(C)` 作为线格式编码方式。
+
+速率遥测轮的复测读数（`com6-board-20260928-042935.log`）把这一段的结论定死了：259 条样本全部 `width=20MHz format=ht-mf nss=1 sgi=1`，MCS 以 7 与 6 为主、并有少量 5~1，`txfailed=0`，ack 失败约为成功的 15%。即 **HT 侧能力已生效并工作在 HT20 顶档（PHY 65~72 Mbps），带宽仍是 20 MHz**；20 MHz 上已无 MCS/GI 余量，能动的只剩调制格式。
+
+由此更正一处判读：HT40/SGI 轮曾据厂商 Linux 基线的 UDP 76.5 Mbps 推断该热点支持 40 MHz（依据是它超过 20 MHz 单流 HT 的 72.2 Mbps 上限）。厂商 D80 在 2.4 GHz 同时宣告 VHT 与 HE，20 MHz 的 PHY 上限因此是 86.7 Mbps（VHT MCS9）到 129~143 Mbps（HE MCS11），厂商基线完全可以发生在 20 MHz。**AP 的 BSS 宽度重新成为未知量**，差距的确定部分是调制格式：厂商是 HT+VHT+HE 客户端，本驱动此前是 HT-only。
+
+厂商源码的自然 ABI 对照已固定：标准构建 `CONFIG_RWNX_TL4=n`，`mac_htcapability` 为 32 字节、VHT 为 12 字节、HE 为 56 字节，`me_config_req` 的尾部 scalar 从 offset 100 开始；D80 的 `rwnx_set_ht_capa()` 在 HT40/SGI 路径将单流 MCS32、`rx_highest=135/150` 与 capability bits 一起设置。Rust encoder 只复现这些已核实的字段，不依赖 C ABI cast。
+
+厂商参考是 `lmac_mac.h` 的 `mac_htcapability`、`lmac_msg.h` 的 `me_config_req`、`rwnx_mod_params.c:rwnx_set_ht_capa()` 与 `rwnx_msg_tx.c:rwnx_send_me_config_req()`。HT40 路径设置 MCS32 mask 和 `rx_highest=135`，随后 SGI40 将 highest rate 更新为 150；D80 在厂商启动中为单流。固件和厂商 `lmac_types.h` 的标准构建使用 8-bit `u8_l`，配置结构按自然 ABI 对齐得到现有 112-byte 布局。实际协商 bandwidth/MCS/retry 尚未从 Starry 侧读取，板测结果只报告连接、稳定性与吞吐观察，不将性能变化归因于协商档位。
+
+**本轮（VHT/HE 能力，提交 `1fb1bc91c`）**：`lmac.rs` 新增类型化 `VhtCapabilities` / `HeCapabilities`，D80 profile 更名为 `D80Ht40SgiVhtHe`（启动日志打印 `d80-ht40-sgi-vht-he`），取值照厂商 `rwnx_set_vht_capa()` / `rwnx_set_he_capa()` 在 2.4 GHz、单流下的结果：VHT `vht_capa_info=0x03987111`、单流 MCS 0–9（map `0xfffe`、highest 390）；HE `mac_cap_info[2]=0x02`、`phy_cap_info=[0x06,0xe0,0x2b,0x58,0x0d,0xc0,0xcf,0,0x02,0x30,0]`、单流 MCS 0–11（`mcs_80=0xfffe`）、160/80+80 不支持、PPE 阈值 `[0x38,0x1c,0xc7,0x01,…]`；标量 `vht_supp=1`、`he_supp=1`、`he_ul_on=0`。同一改动把 D80 的 `phy_bw_max` 由 40 MHz 改为厂商对 D80 强制使用的 80 MHz（`PHY_CHNL_BW_80`）；厂商 HT 块的 RX_STBC 与 MAX_AMSDU 位属接收侧能力，本轮不跟。DC 保守 profile 字节不变。
+
+厂商 `me_config_req` 的逐字节对照结论（先排除消息布局错位、A-MPDU 与 `tx_params` 取值、关联请求 IE、信道表 flags 四类假设）与 `phy_bw_max` 的偏差记录见瓶颈文档 §2.16。
+
+本地验证：`cargo fmt --all`、`cargo xtask clippy --package aic8800`（base / `rdif` / `host-test` 三组）、`cargo xtask test --since dev` 通过；新增 VHT/HE 金样本单测（固定每个能力字节、MCS map、PPE 阈值与 HE 结构的对齐填充）并扩展 startup 路径的两芯片断言。镜像 `sg2002_starryos_wifi_sta_vhthe_20260928.img` 基于 P0a 镜像只换内核与 `lcn-sta-defer0.dtb`，构建不执行板卡写入。
+
+上板判据是单一的格式判别：读数出现 `format=vht` 或 `format=he-su` 且 MCS 进入 8–11 → 差距可归因到调制格式；仍是 `format=ht-mf mcs=7` → 该 AP 不与本客户端协商 VHT/HE，方向转向 AP 侧与带宽问题，而不是继续加客户端能力位。只要 `width=20MHz` 保持，任何吞吐变化都不得解释为带宽收益。回滚点为 `sg2002_starryos_wifi_sta_stainfo_20260928.img`（等价 `8a350076a`）与 P0a 镜像。
+
+另有一个板载网络栈的独立项：`net/ax-net` 的 `NEIGHBOR_TTL = 300 s` 到期会重发 ARP 并在 `ETHERNET_MAX_PENDING_PACKETS = 128` 装满时丢包，两轮板测各出现一次、都伴随该用例内的 TX 吞吐下滑（详见瓶颈文档 §2.14）。它不是 AIC 驱动问题，是否处理由上层决定。
+
+### 3.2 TX 聚合选值
+
+现有 `aic,tx-aggregation` 和 `aic,tx-aggregate-bytes` 已能在 FDT 中选择一笔 CMD53 的帧数和字节上限。普通 data confirmation 清理并完成新基线后，再分别针对大数据帧和小 ACK 流测试：
+
+| 负载 | 首选变量 | 候选值 |
 | --- | --- | --- |
-| 空口维持 HT-MCS7 | 约 40 Mbps | **能**（流水线化即可） |
-| 空口提到 HE-MCS9 | 约 58 Mbps | 不能，需同时修 HE 能力块 |
+| 板端 TX 大帧 | 字节上限，帧数作安全上限 | 6/12/24/48 KiB |
+| 板端 RX 时产生的小 ACK | 帧数上限，字节上限同步放宽 | 4/8/16/32 |
 
-**结论：流水线化是第一步且必然要做（7 → 约 40 Mbps），但到达厂商水平还需要空口速率侧的工作。**
-空口速率本身列为待测项（§4 M4），不在本方案的改动范围内，作为并行议题记录。
+写成形仍采用机会式冲刷，不为等待更多帧增加固定延迟；credit 仍是 firmware buffer 数量约束。每个候选值至少观察 TX、RX、双向、写事务长尾、RX 事务数量、credit 和是否停滞，选择达到平台峰值且不破坏双向公平性的最小值作为默认。
 
-SDIO 时钟（25 → 50 MHz）**不作为本方案项**：厂商在同一 25 MHz DTB 下跑到 58.5 Mbps，
-说明它不是当前瓶颈；且 `drivers/blk/cv181x-sdhci/src/clock.rs:36-44` 有明确注释说明
-25 MHz 以上大块 CMD53 固件写入不可靠。
+### 3.3 数据面流水线与 DMA
 
----
+只有在 confirmation、协商速率和聚合形态稳定后，才根据阶段计时决定是否引入 `staged_tx`、可复用 batch buffer、move-only completion 或 exact-size DMA pool。当前单 owner、单 SDIO transaction in flight、`CardIrqWait` 和 `completion-before-card` 顺序都是安全不变量；任何改变都必须重新说明完成匹配、取消、资源回收和 RX 防饥饿。
 
-## 4. 阶段 M：先测量（必做，一次上板）
+复制和 DMA 优化不能以“可能更快”作为立项依据。应先把 owner 推进拆成 RDIF 收割、核心状态机、构帧/聚合、DMA/ADMA 准备和 rearm，再用阶段计时确认 CPU 准备是否占据显著比例。没有该证据时保持现有跨内核边界。
 
-**动机**：实测每包 1.6–1.8 ms，而已知项（1 ms 回退 + 140 µs 总线 + 数百 µs 准备）
-只能解释约 1.1–1.2 ms，**还有约 0.5–0.8 ms 没有归属**。在归属明确之前决定实现顺序是猜测。
+## 4. 验证与板测
 
-测量探针做成**临时改动**（不提交，测完即回退），读数走串口日志（限速打印，
-每 500–1000 包一行），与既有板测流程一致。
+代码验证使用仓库任务入口，确保普通 crate、RDIF 和标准库测试组合都能发现真实实现。每轮先完成格式化与静态检查，再构建镜像；探针输出中的计数必须来自 owner 权威状态，不能把历史混合计数继续用于新的吞吐折算。
 
-### 4.1 待测量项
+### 4.1 本地验证
 
-| 编号 | 问题 | 探针位置 | 判读 |
-| --- | --- | --- | --- |
-| **M1** | credit 实际取值分布（min/mean/max）与 `≤2` 触发次数 | `data_plane.rs:378` 处累加 | 常态几十上百 → 批量化收益立刻可见；常态 3–5 → 瓶颈在固件，改走「短重试 + 立即续发」 |
-| **M2** | 每包时间分解：enqueue→CMD53 发出、CMD53 发出→完成、完成→下一包 enqueue | `data_plane.rs` 各处已有 `now`，直接累加差值 | 定位那 0.5–0.8 ms |
-| **M3** | 上游是否饱和：每次取帧时核心 TX 队列剩余长度 | `tx.rs:33` 处采样 | 恒为 0 → 瓶颈在 TCP 侧，本方案收益被上游限制 |
-| **M4** | 空口实际速率档位 | 需外部对照：同一板卡启动厂商 Linux 镜像读 `iw dev wlan0 link` | 判断 §3 的哪一种上限成立 |
-| **M5** | credit 回退时的实际等待时长分布 | `data_plane.rs:385` 记 deadline，完成时记实际差 | 区分「1 ms 就是 1 ms」与「定时器/唤醒把它拉长」 |
-| **M6** | SDIO 单事务耗时（CMD52 / CMD53）与相邻事务间隔 | `rdif/owner/operation.rs` 提交处 + `consume_*` 完成处 | 直接给出总线忙/闲比例，替代 §2.3 的估算 |
-
-### 4.2 增益预期（不测也成立的部分）
-
-即使没有 M 阶段结论，以下两条不依赖测量结果、可先做（收益上界受 M1 约束）：
-
-- 每包两次清零 → 一次（纯浪费，见 §2.3）；
-- `log_status` 的 9 次无条件 MMIO 读按日志级别约束（`drivers/blk/sdhci-host`，与 SD 卡共用但与 AIC 无关的行为等价）。
-
----
-
-## 5. 阶段 1：credit 路径（预期单点收益最大）
-
-对应 `throughput-bottleneck-analysis.md` §14.5 的 P0 两项。
-
-### 5.1 credit 本地记账
-
-**改法**：`DataPlaneState` 增加 `tx_credits: Option<u8>`（`None` = 未知，必须重读）。
-
-- `consume_transmit_flow` 读到 credit 后记入，并判断 `credits <= DATA_TX_RESERVED_CREDITS`；
-- `drive_ready` 的 TX 分支：`tx_credits` 有值且 > 保留值时**跳过 `TransmitFlow` 直接发数据**；
-- 每成功写完一包（`consume_transmit_data`）本地减 1，减到阈值置回 `None`；
-- 失效条件：mailbox 命令写入（D80 命令与数据共用同一信用池，
-  `profile.rs` 的 `MailboxFlowPolicy::CreditGated`）、cancel/reset、启动/连接状态变化、
-  任何错误路径。
-
-**正确性依据**：`#2305` 收紧的语义是「固件空闲包缓冲不足以容纳本包时不得写」。
-本改动是精确记账而非近似——寄存器报的就是空闲缓冲数，写一包消耗一个；
-厂商驱动用的是同一套（`aicwf_sdio_flow_ctrl` + 本地递减，见分析文档 §13.2）。
-本地计数只会比「每包重读」更保守，不会更激进。
-
-**保留的既有语义**：完成一包后仍退回 rearm 边界（`progress.rs:47-65`，
-`#2299` 的 RX 防饿死设计）不动。
-
-**M1 结论**（`probe-round1-20260924.md` §4.1）：credit 常态 75–119，最大 132、最小 2，
-远高于门限，本项成立；不存在「常态 ≤ 3」的退化分支。
-
-### 5.2 缩短 credit 重试粒度
-
-`IO_RETRY` 1 ms → 100~200 µs（`data_plane.rs:14`）。
-
-- 依据：厂商同位置从 200 µs 起递进（分析文档 §7、§13.2），1 ms 不是硬件要求；
-  固件排空一包的时间量级（空口 1500 B ≈ 150–200 µs）与 200 µs 同量级。
-- 风险：重试本身要付一次 CMD52 往返。若 M1 显示 credit 长期为 0，
-  更短的重试会变成「用总线换等待」，收益可能为负 —— **由 M1/M5 决定是否采用**。
-- 钉死该行为的单测 `transmit_backoff_services_card_irq_without_retrying_credits_early`
-  （`data_plane.rs:1043`）需同步更新。
-- **M1/M5 结论**（`probe-round1-20260924.md` §4.1、§4.3）：纯上行回退触发率约 8.7%，
-  每次实测 1.36–1.40 ms，比设定的 1 ms 多约 0.33 ms 的到期唤醒开销；credit 不是长期为 0。
-  采用区间上界 **200 µs**。
-
-### 5.3 实现状态
-
-阶段 1 已按本节实现（`perf/aic8800-tx-credit-accounting`，
-见 `aic8800-optimization-tracker.md` 周期 1）：
-
-- `DataPlaneState::tx_credits` 记录读数，`consume_transmit_data` 每完成一包扣 1，
-  降到 `DATA_TX_RESERVED_CREDITS` 丢弃，`drive_ready` 命中缓存即跳过 `TransmitFlow`；
-- 失效条件：`MailboxFlow` / `MailboxWrite`（V3 命令与数据共用数据 FIFO）、`Startup` / `Shutdown`、
-  `finish_cancel()`；
-- `IO_RETRY` = 200 µs。
-
-单测补充两条：一次读取连发多包（缓存逐包递减）、命令转发清空缓存；
-`docs/design/unified-sdio-aic8800.md` 的 credit 与退避描述已在同一提交内同步。
-
-板测结论见 `aic8800-optimization-tracker.md` 周期 1：CMD52/包 1.0 → 0.01、回退均值 1.4 ms → 0.53 ms、
-上行 TX 包速率 +17%、同口径上行 TCP 6.09 → 9.09 Mbps，无重传；
-CMD53 边际往返反而上升约 200 µs，作为阶段 2 的定形依据。
-
----
-
-## 6. 阶段 2：流水线（把准备移出关键路径）
-
-对应分析文档的 P2/P3 与 `aic8800-data-plane-optimization.md` 阶段 2。
-
-**实测依据（2026-09-25 重测）**：周期 P3 把「完成 → 下一笔发出」的 gap 按**窗口内是否有 RX 事务**分桶后，
-发现它是双峰分布：无 RX 事务时 74~81 µs（占 72~78% 的包），有 RX 扫描时 2.1~2.4 ms（占 22~28%）。
-周期 P2 记录的 540 µs 是这两者的加权平均，其「由 owner 往返构成」的归因只对空闲那一半成立。
-因此**本阶段能消掉的空闲开销上限约 6%**（见跟踪文档周期 P3 结论 1），
-不作为下一步主线；§6.1~§6.3 的机制保留为后续小项，等聚合与每笔事务成本两项做完再评估。
-
-### 6.1 机制：允许核心在事务挂起时做纯 CPU 准备
-
-现状 `advance()` 在 `io.pending.is_some()` 处短路（`progress.rs:40-42`），
-`drive_ready()` 不被调用，因此等待窗口内没有任何 TX 准备。
-
-**改法**（两处，都在既有契约内）：
-
-1. 核心：在 `advance()` 的 `io.pending` 短路**之前**插入纯 CPU 准备步骤
-   （不碰 `io`、不碰 `irq_latch`、不返回动作、幂等）。其准入必须复刻
-   `drive_ready` 的优先级（mailbox > 优先事件 > RX scan > TX），否则破坏 RX 优先语义。
-2. 适配层：`AicOwner::consume_action` 在 `SubmitSdio` 返回 `Pending` 时，
-   不要立即 `return Wait`，而是先用 `AicInput::tick(now)` 再推进核心一次
-   （核心此时被 `io.pending` 挡住不会提交新事务，只会先做纯 CPU 准备），
-   然后再返回等待。
-
-### 6.2 双帧暂存：完成即续发
-
-`active_tx` 之外增加一个深 1 的 `staged_tx`：
-
-- 一轮里的顺序变成：收割完成 → `staged` 转 `active` 并立刻发 CMD53 →（此时总线忙）
-  准备下一帧进 `staged`；
-- 消除「帧 N 完成 → 帧 N+1 才开始构造」的关键路径依赖（分析文档 §14.4 的 L）。
-
-### 6.3 适配层的固定暂存
-
-`rdif/owner/operation.rs:114-121` 每包 `new_zero` 分配 + 清零 + 拷贝，
-且地址每次都变，迫使 `sdhci-host` 每包重建 ADMA2 表。改为**复用的固定暂存缓冲**
-（单事务模型保证上一笔已完成），去掉分配、清零与地址重算。
-
-### 6.4 不改的
-
-`ActiveTx` 的单槽语义、`CardIrqWait`、`rearm_and_check` 的 completion-before-card 顺序、
-`rdif_eth` 的 `NetDeviceParts` / `NetPollGroupParts` 契约，
-以及「Driver Core 不依赖 RDIF / `DmaBuffer`」的分层（`docs/design/unified-sdio-aic8800.md`）。
-
----
-
-## 7. 阶段 3：关键路径清理
-
-1. **去掉两次全缓冲清零**：`protocol.rs:174` 的 `vec![0; final_len]` 改为按需构造
-   （头/描述符/payload 三段写满，尾部 padding 仍需清零时只清尾部）；
-   `CpuDmaBuffer::new_zero` 改为 `new` 后整块覆写。
-2. **`log_status` 的诊断读按日志级别约束**：
-   `drivers/blk/sdhci-host/src/command.rs:338-352` 先读 9 个寄存器再 `log::debug!`，
-   读操作不受级别保护。改为先判级别再读。该项每包约 18 次无用 MMIO。
-   （与 SD 卡共用，但只是把「无条件读」改成「按级别读」，行为等价。）
-3. **`take_tx_frame` 的 `to_vec()`**：`rdif/owner/output.rs:65` 每包一次分配 + 拷贝。
-   评估是否可让 `DmaBuffer` 直接进入核心（会破坏分层，倾向不做）或复用缓冲。
-
----
-
-## 8. 阶段 4：聚合（2026-09-25 优先级上调）
-
-周期 P3 的实测把这一项从「二阶项」推到了主线上：写方向的成本随帧长剧增
-（512 B 约 148 µs，1456~1532 B 约 679~700 µs），而读方向已经是「一次事务带多帧」的形态
-（下行用例每次读平均 10 KB，成绩 26.7 Mbps）。也就是说 TX 目前是**一包一笔 CMD53**，
-每字节成本是读方向的 3~6 倍；厂商同硬件跑出 58.5 Mbps 靠的正是 32 包/次 CMD53。
-
-周期 P4 的读数（写成本由帧长决定）与周期 P5 的最小实现已把立项形式定下来：
-一笔 CMD53 携带 K 个完整线上帧，K 由适配层给出并被缓存 credit 二次约束（`aggregate_limit()`）；
-周期 P6 修复了该实现首轮审查的结论。
-
-**硬约束（周期 P6 审查确证）**：固件把一笔写当作帧流遍历，步长为 `4 + align4(声明长度)`，
-读到 `packet_len == 0` 终止。厂商驱动逐帧只做 4 字节对齐、仅在整笔末尾补齐到 512
-（`aicwf_sdio.c:2214-2247`、`aicwf_sdio_aggr_send`），本驱动的接收解析器（`rx.rs`）同构。
-聚合写必须遵守同一布局：逐帧补齐会让遍历在第 1 帧后终止，**第 2..K 帧被静默丢弃**，
-而 CMD53 正常完成、token 与 credit 照常扣减、日志无任何错误。
-
-仍未定：credit 的单位（厂商命令路径按字节检查，本驱动按包扣减）与冲刷策略
-（延迟与 RX 优先 `#2299` 的平衡需要论证）；`docs/design/unified-sdio-aic8800.md` 的保证需同步。
-
----
-
-## 9. 明确不做
-
-1. **不引入线程、不自旋、不睡在驱动里**。厂商的 200 µs 级 `udelay` 退避依赖内核线程上下文，
-   与 `docs/design/unified-sdio-aic8800.md` 的契约（核心不创建线程、不持 OS 锁、不调用
-   sleep/yield）冲突。要的是它的**策略**（本地记账 + 短周期恢复），不是它的实现。
-2. **不改与 SD 卡共用的 `drivers/blk` 契约**，除 §7.2 的等价日志级别约束。
-3. **不改 SDIO 时钟与 DTB**（理由见 §3）。
-4. **不改 `active_tx` 的单槽语义去换取吞吐**，除非聚合项（§8）按同一份数据论证过
-   RX 优先（`#2299`）仍成立。
-5. **不改 `rdif_eth` 对外接口与 IRQ 时序。**
-
----
-
-## 10. 验证与提交
-
-### 10.1 每阶段的检查
-
-```
-cargo fmt
+```text
+cargo fmt --all
 cargo xtask clippy --package aic8800
+cargo xtask test --since dev
+git diff --check
 ```
 
-受影响单测需同步更新，至少覆盖：credit 记账的失效条件、`staged_tx` 与取消/失败路径的交互、
-完成事件与 RX scan 的优先级顺序。既有相关测试位置见分析文档 §8 与 §14.5。
+首轮重点检查 `protocol.rs` 的 hostid 布局、`tx.rs` 的 confirmation 选择、聚合/credit/取消/RX 状态机，以及默认和显式 RX defer 单测。修改平台适配时再运行相应的 `ax-driver` 定向检查。
 
-### 10.2 板测
+### 4.2 镜像构建
 
-每阶段一次：同一块板、同一条链路、同一台 PC 对端，跑 iperf3 三方向
-（TCP tx / TCP rx / UDP tx），与 §1.2 的基线对照。
-TX 提升是各阶段的验收指标；RX 若同步劣化则回退。
-（UDP 用例因上层会卡死板子，暂以 TCP tx / rx / bidir 代替，见跟踪文档。）
-其中**驱动侧验收以双向用例的板端 TX 方向为主**，理由见 §1.2 的用例口径；
-纯上行用例同样反映驱动自身的每包周期，可作为辅助判据（实测在 3.56 ~ 9.50 Mbps 之间波动，
-波动来自用例期间的上层行为，判读时看同一轮内的相对变化）。
+首轮复用已有第一阶段 SG2002 镜像的 rootfs 和 boot 资产，只替换当前工作树编译的内核与 `www/sg2002/wifi-sta/lcn-sta-defer0.dtb`。构建来源和输出由 `sg2002-image-build` 技能维护的 `sg2002-image-build.sh update-kernel` 记录，不把镜像或中间产物放进仓库。
 
-### 10.2.1 收益拆解（A/B 对照）
+```text
+STARRY_WIFI_SSID=aasta STARRY_WIFI_PASSWORD=12345678 \
+  cargo xtask starry build \
+  -c os/StarryOS/configs/board/licheerv-nano-sg2002-wifi.toml
 
-阶段内多项改动叠加时，另建一版只回退**单项**的对照镜像测同一套用例，
-把该阶段的收益拆开记，并给出与主线 dev 相比的净收益。对照版本走临时分支，不进正式提交。
-首轮对照项：`IO_RETRY` 回到 1 ms（只改一个常量），用于分离「credit 记账」与「回退粒度」。
+sg2002-image-build.sh update-kernel <phase1-base.img> \
+  --kernel target/riscv64gc-unknown-none-elf/release/starryos.bin \
+  --dtb www/sg2002/wifi-sta/lcn-sta-defer0.dtb \
+  -o <phase2-output.img>
+```
 
-### 10.3 提交
+构建完成后检查 FIT 默认配置 `config-sg2002_licheervnano_sd`、kernel load/entry `0x80200000`、DTB 内容和 rootfs 分区完整性。D80 HT40/SGI 实验镜像已输出到本地构建产物目录，文件名为 `sg2002_starryos_wifi_sta_ht40sgi_20260927.img`，SHA-256 为 `9f17b53862d33e82cf1e68c3213b82f622fa07d7fc9a6f85633228cfae554cc7`；它基于 P0a 镜像且未覆盖 P0a（P0a SHA-256 为 `7a3baac1de11214e9bb529985768542722c7cbcd41759a1b21d8ea4dd238feb8`）。本轮不执行 `dd`、`ostool` 或其他板卡写入操作。
 
-每个阶段一个 PR，`type(scope): content` 英文标题、中文正文，正文含背景、改动点、
-本地验证与板测结果。设计文档 `docs/design/unified-sdio-aic8800.md` 中
-「运行期的数据包退避由 `ActiveTx::retry_at` 持有」「不会提前反复读取 credit」
-等描述在阶段 1、2 后需同步更新。
+### 4.3 板测协议（2026-09-28 起）
 
----
+**两个敏感操作：重启 PC 热点、重启板卡。** 会话间波动目前归到这两者（2026-09-28 的两遍之间同时发生，未分离到其中某一个）。
+测量期间两者都必须受控：要么全程不动，要么在测量前统一执行并记录，禁止把其中一个当作"修好了"的手段而不记录。
 
-## 11. 风险
+**每轮测量前重启 PC 热点并等待约 1 分钟**，使所有轮次都落在"热点刚开"的同一状态；记录本轮开始时间、热点在线时长
+与板卡自本次上电起的运行时长。每轮先跑一遍标准三向（60 s 各方向）作为**参考臂**，参考臂不在历史正常区间就丢弃该轮的对比数据。
+测试期间 PC 端保持代理关闭。测量时记录 PC 侧热点信道与 station 接口状态（信道、是否有自身流量）：
+单射频分时与热点侧状态是当前最大的会话间变量（见瓶颈文档 §2.17）。
 
-| # | 风险 | 影响 | 缓解 |
-| --- | --- | --- | --- |
-| R1 | credit 常态极小，阶段 1 收益落空 | 单点最大预期失效 | M1 先测；退化为 5.2 + 阶段 2 |
-| R2 | 每包空转属调度/唤醒而非驱动事务本身 | 阶段 1、2 收益有限 | 已由 P2 实测：驱动受限用例里 gap ≈540 µs 由 owner 往返构成；纯上行还需 P3 区分「栈没产帧」与「帧在上一层等 owner 拉」。必要时转入 `net/ax-net` 的供给/唤醒侧 |
-| R3 | 本地记账与固件实际扣减不同步 | 超发被固件丢包（静默丢包） | 阈值保守 + mailbox 写入即失效 + 板测看丢包/重传 |
-| R4 | 纯 CPU 准备破坏 RX 优先语义 | RX 饥饿（`#2299` 回归） | 准入条件复刻 `drive_ready` 优先级 + 定向单测 |
-| R5 | 上游（TCP）本就供不上帧 | 全方案收益被上游封顶 | M3 先测 |
-| R6 | 空口上限低于厂商（§3） | 达不到 58.5 Mbps 判据 | M4 先测；作为并行议题，不混入本方案 |
+每次烧录只在同一次启动内完成连接与握手 smoke test，再跑 Windows cmd 直接执行、无 `-b` 的完整 TCP 板端 TX、
+板端 RX 和一次双向；记录 capability profile、`tx_data_confirmations`、`rx_data_frames`、control
+confirmation/indication、firmware print、TX/RX transaction、IRQ、scan、credit、重传和停滞，
+并把遥测的 `format`/`mcs` 分布与 ack 计数作为该轮的**会话健康记录**归档：出现 legacy 档或 MCS 大面积塌陷时
+标注该轮数据不用于归因。
 
----
+回滚镜像与历史日志只作回退参考：**跨会话的吞吐差异不再被当作收益证据**，只有同一热点会话内、参考臂正常的样本
+才用于轮间比较。若新镜像启动或关联失败则回滚到已保留的镜像；不预先安排额外的烧录次数。
 
-## 12. 后续方向（超出本方案，未立项）
+## 5. 回滚与交付边界
 
-本方案在现有驱动设计边界内调整流程与补充操作。若阶段 2 之后实测显示
-「每包准备时间」仍占周期主导，即在边界内已到顶，届时考虑突破边界本身，
-以更直接地服务硬件异步（数据相准备、多笔在途、预置暂存等）：
+代码回滚通过保留第一阶段提交和 P0a 镜像完成；FDT 的非零 `aic,rx-defer-ms` 仍可作为实验回退值，但默认值不再恢复为已被板测否定的 1 ms。HT40/SGI 实验镜像默认输出新文件，不覆盖 P0a 镜像。
 
-- 单 owner、核心不建线程不阻塞 → 提交与收割分离；
-- `active_tx` 单槽、完成即回退 rearm 边界 → 连续提交多笔 CMD53；
-- 核心不持有 DMA 缓冲（适配层每包准备）→ 预置多帧暂存 / 描述符链。
-
-代价是完成匹配、credit 记账、取消与 RX 优先语义都要重新论证，
-`docs/design/unified-sdio-aic8800.md` 的保证需重述；因此以阶段 2 的实测为立项门槛，
-不在本方案内预做。
-
----
-
-## 附录 A：www 文档核对结论
-
-对当前 HEAD `9a7b868ba` 逐条复核。分析基线 `18ca1d2d4`（09-18）与 `2f5347b14`（09-20）
-到 HEAD 之间，`drivers/net/aic8800` 与 `drivers/blk` **没有任何改动**，`net/ax-net` 只有
-版本号与 CHANGELOG 变化，因此三篇分析文档的代码结论与行号仍然有效：
-
-| 文档 | 结论 |
-| --- | --- |
-| `throughput-bottleneck-analysis.md` / `-pub.md` | **现行，本方案主依据**。§12 实测、§13 厂商对照、§14.5 优先级均已复核成立 |
-| `aic8800-tx-throughput-analysis.md` | **现行**。方向 A/B/C/D 与 M1–M3 是本方案 §4–§8 的直接来源；「取代前一篇优化优先级」的声明正确 |
-| `aic8800-data-plane-optimization.md` | **部分现行**：逐跳路径、17 个短路条件、分层对比仍准确；§6 优化方案与优先级已被前两篇取代（该文档自身已标注） |
-| `aic8800-driver-principles.md` | 现行（分层原理） |
-| `licheervnano-bus-topology.md`、`sg2002-ap-investigation.md`、`draft.md` | 与数据面优化无关，保持现状 |
-| `sg2002/iperf3-tests/` | **基线数据来源**，§1.2 的数字出自此 |
-| `before-refactor/*`、`before-refactor/teaching/*` | **过时**：全部基于重构前实现（5 线程 / PollSet / kicker / PIO / 单把 SDIO 锁 / `components/aic8800` 路径），这些机制在当前代码中已不存在。可借鉴项见下方「仍有价值」 |
-| `sg2002-wifi-irq/newdev/*` | **已合入 dev**：`#2276` / `4713bfc98`（2026-09-11），其 d80 修复均在当前基线。`www/README.md:27` 的「不在当前 dev」表述与此不符，需更正 |
-| `sg2002-wifi-irq/archive/*` | **过时**（代码路径已删除或改名）；`9-4-after-wifi-refactor/aic8800-async-pipeline-design-20260822.md` 的「信用事件必须有生产者」分析仍有概念价值 |
-
-### 仍有借鉴意义的过时结论
-
-1. **空口速率**：`before-refactor/sg2002-wifi-performance-analysis.md` 把 HE 数据通路列为
-   最大单一变量，该结论在当前 HEAD 仍然成立（`lmac.rs:289-306` 从不写 HE 能力块），
-   是 §3 天花板问题的最早来源。
-2. **eBPF / tracepoint 监测**：`before-refactor/wifi-analysis.md` §3 的埋点方案至今未实现；
-   `components/ax-tracepoint` 现已在树内，是 §4 测量在后续迭代中的正规化路径（本轮先用日志）。
-3. **厂商信用语义**：`sg2002-wifi-irq/archive/9-4-after-wifi-refactor/aic8800-async-pipeline-design-20260822.md`
-   §3.7 的厂商对照（命令与数据共用信用池、信用值即聚合预算、D80 信用读 Q1）已复核成立，
-   直接支撑 §5.1 的失效条件设计。
-4. **固件异常恢复**：多篇旧文档提到 `fail()` 后设备停在 `Failed` → `Idle`，只能重启。
-   当前仍然如此（`device/progress.rs:217`），与本方案独立，可在数据面稳定后单独立项。
-
----
-
-## 附录 B：关键代码位置（相对仓库根）
-
-| 主题 | 位置 |
-| --- | --- |
-| 核心推进（单动作契约） | `drivers/net/aic8800/src/device/progress.rs:21-58` |
-| ready 态优先级（mailbox > 事件 > RX scan > TX） | `drivers/net/aic8800/src/device/data_plane.rs:22-77` |
-| credit 检查与 CMD53 写 | `drivers/net/aic8800/src/device/data_plane.rs:373-402` |
-| 单包准备（当前单槽位） | `drivers/net/aic8800/src/device/data_plane.rs:420-463` |
-| wire frame 构造 | `drivers/net/aic8800/src/tx.rs:33-45`、`protocol.rs:154-199` |
-| credit 寄存器语义与取值 | `drivers/net/aic8800/src/registers.rs:135-148`、`profile.rs:100-125` |
-| owner 步进循环与 rearm 边界 | `drivers/net/aic8800/src/rdif/owner/progress.rs:41-65,236-310` |
-| CMD53 提交与暂存缓冲 | `drivers/net/aic8800/src/rdif/owner/operation.rs:106-136` |
-| ADMA2 重建 | `drivers/blk/sdhci-host/src/dma/request.rs:349-364` |
-| 队列线程轮询与 finish_idle | `net/ax-net/src/queue_runtime/executor/mod.rs:879-941` |
-| 架构契约（不变量） | `docs/design/unified-sdio-aic8800.md` |
+HT40/SGI 轮在代码验证和镜像自检完成后，交付实验镜像路径及 buildinfo；实体板卡烧录和测试结果另行记录。未取得协商速率、同会话对照或稳定的 typed telemetry 前，不把 40 Mbps、58 Mbps 或固定百分比提升写成验收结论。

@@ -1,0 +1,321 @@
+C:\Users\Asta>iperf3 -c 192.168.137.229 -t 30
+Connecting to host 192.168.137.229, port 5201
+[  5] local 192.168.137.1 port 57386 connected to 192.168.137.229 port 5201
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.01   sec  2.75 MBytes  22.9 Mbits/sec
+[  5]   1.01-2.01   sec  2.88 MBytes  24.1 Mbits/sec
+[  5]   2.01-3.01   sec  2.62 MBytes  21.9 Mbits/sec
+[  5]   3.01-4.00   sec  2.38 MBytes  20.2 Mbits/sec
+[  5]   4.00-5.01   sec  2.75 MBytes  22.9 Mbits/sec
+[  5]   5.01-6.01   sec  2.50 MBytes  20.9 Mbits/sec
+[  5]   6.01-7.00   sec  2.00 MBytes  17.0 Mbits/sec
+[  5]   7.00-8.00   sec  2.38 MBytes  19.9 Mbits/sec
+[  5]   8.00-9.00   sec  2.75 MBytes  23.1 Mbits/sec
+[  5]   9.00-10.00  sec  2.88 MBytes  24.1 Mbits/sec
+[  5]  10.00-11.01  sec  2.88 MBytes  24.1 Mbits/sec
+[  5]  11.01-12.01  sec  3.50 MBytes  29.3 Mbits/sec
+[  5]  12.01-13.01  sec  3.25 MBytes  27.2 Mbits/sec
+[  5]  13.01-14.02  sec  3.62 MBytes  30.3 Mbits/sec
+[  5]  14.02-15.01  sec  2.62 MBytes  22.2 Mbits/sec
+[  5]  15.01-16.01  sec  3.38 MBytes  28.3 Mbits/sec
+[  5]  16.01-17.00  sec  2.88 MBytes  24.2 Mbits/sec
+[  5]  17.00-18.01  sec  1.12 MBytes  9.38 Mbits/sec
+[  5]  18.01-19.01  sec  1.12 MBytes  9.42 Mbits/sec
+[  5]  19.01-20.00  sec   512 KBytes  4.24 Mbits/sec
+[  5]  20.00-21.00  sec   768 KBytes  6.28 Mbits/sec
+[  5]  21.00-22.01  sec   896 KBytes  7.32 Mbits/sec
+[  5]  22.01-23.01  sec   896 KBytes  7.33 Mbits/sec
+[  5]  23.01-24.01  sec  1.12 MBytes  9.46 Mbits/sec
+[  5]  24.01-25.01  sec   640 KBytes  5.24 Mbits/sec
+[  5]  25.01-26.00  sec   768 KBytes  6.30 Mbits/sec
+[  5]  26.00-27.00  sec   768 KBytes  6.31 Mbits/sec
+[  5]  27.00-28.01  sec   768 KBytes  6.21 Mbits/sec
+[  5]  28.01-29.00  sec  1.00 MBytes  8.47 Mbits/sec
+[  5]  29.00-30.00  sec   640 KBytes  5.26 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-30.00  sec  58.9 MBytes  16.5 Mbits/sec                  sender
+[  5]   0.00-30.07  sec  58.8 MBytes  16.4 Mbits/sec                  receiver
+
+iperf Done.
+
+C:\Users\Asta>iperf3 -c 192.168.137.229 -t 30
+Connecting to host 192.168.137.229, port 5201
+[  5] local 192.168.137.1 port 56778 connected to 192.168.137.229 port 5201
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   1.00-2.01   sec  2.25 MBytes  18.6 Mbits/sec
+[  5]   2.01-3.00   sec  2.88 MBytes  24.4 Mbits/sec
+[  5]   3.00-4.00   sec  1.88 MBytes  15.7 Mbits/sec
+[  5]   4.00-5.00   sec  2.12 MBytes  17.8 Mbits/sec
+[  5]   5.00-6.00   sec  2.38 MBytes  19.9 Mbits/sec
+[  5]   6.00-7.00   sec  2.62 MBytes  22.0 Mbits/sec
+[  5]   7.00-8.00   sec  2.88 MBytes  24.1 Mbits/sec
+[  5]   8.00-9.00   sec  2.00 MBytes  16.7 Mbits/sec
+[  5]   9.00-10.01  sec  2.38 MBytes  19.9 Mbits/sec
+[  5]  10.01-11.01  sec  2.50 MBytes  21.0 Mbits/sec
+[  5]  11.01-12.00  sec  3.38 MBytes  28.4 Mbits/sec
+[  5]  12.00-13.01  sec  3.25 MBytes  27.2 Mbits/sec
+[  5]  13.01-14.01  sec  3.25 MBytes  27.1 Mbits/sec
+[  5]  14.01-15.01  sec  2.25 MBytes  18.8 Mbits/sec
+[  5]  15.01-16.00  sec  2.75 MBytes  23.4 Mbits/sec
+[  5]  16.00-17.00  sec  2.62 MBytes  22.0 Mbits/sec
+[  5]  17.00-18.01  sec  2.88 MBytes  23.8 Mbits/sec
+[  5]  18.01-19.01  sec  2.62 MBytes  22.0 Mbits/sec
+[  5]  19.01-20.00  sec  2.75 MBytes  23.4 Mbits/sec
+[  5]  20.00-21.01  sec  1.50 MBytes  12.4 Mbits/sec
+[  5]  21.01-22.02  sec  2.38 MBytes  19.9 Mbits/sec
+[  5]  22.02-23.01  sec  1.88 MBytes  15.7 Mbits/sec
+[  5]  23.01-24.01  sec  2.00 MBytes  16.8 Mbits/sec
+[  5]  24.01-25.00  sec  2.62 MBytes  22.3 Mbits/sec
+[  5]  25.00-26.00  sec  3.00 MBytes  25.1 Mbits/sec
+[  5]  26.00-27.00  sec  2.62 MBytes  22.1 Mbits/sec
+[  5]  27.00-28.00  sec  2.25 MBytes  18.9 Mbits/sec
+[  5]  28.00-29.01  sec  2.38 MBytes  19.9 Mbits/sec
+[  5]  29.01-30.01  sec  2.50 MBytes  21.0 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-30.01  sec  74.2 MBytes  20.8 Mbits/sec                  sender
+[  5]   0.00-30.10  sec  74.1 MBytes  20.7 Mbits/sec                  receiver
+
+iperf Done.
+
+C:\Users\Asta>iperf3 -c 192.168.137.229 -t -R 30
+Connecting to host 192.168.137.229, port 5201
+[  5] local 192.168.137.1 port 53620 connected to 192.168.137.229 port 5201
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  2.50 MBytes  20.9 Mbits/sec
+[  5]   1.00-2.00   sec  3.12 MBytes  26.3 Mbits/sec
+[  5]   2.00-3.00   sec  2.88 MBytes  24.1 Mbits/sec
+[  5]   3.00-4.00   sec  3.12 MBytes  26.2 Mbits/sec
+[  5]   4.00-5.01   sec  2.88 MBytes  23.9 Mbits/sec
+[  5]   5.01-6.01   sec  3.00 MBytes  25.2 Mbits/sec
+[  5]   6.01-7.01   sec  3.25 MBytes  27.3 Mbits/sec
+[  5]   7.01-8.01   sec  2.88 MBytes  24.2 Mbits/sec
+[  5]   8.01-9.00   sec  3.50 MBytes  29.4 Mbits/sec
+[  5]   9.00-10.00  sec  3.12 MBytes  26.2 Mbits/sec
+[  5]  10.00-11.01  sec  3.50 MBytes  29.0 Mbits/sec
+[  5]  11.01-12.01  sec  2.50 MBytes  21.0 Mbits/sec
+[  5]  12.01-13.01  sec  3.00 MBytes  25.2 Mbits/sec
+[  5]  13.01-14.01  sec  2.38 MBytes  19.9 Mbits/sec
+[  5]  14.01-15.01  sec  3.00 MBytes  25.2 Mbits/sec
+[  5]  15.01-16.01  sec  3.00 MBytes  25.2 Mbits/sec
+[  5]  16.01-17.01  sec  2.62 MBytes  22.1 Mbits/sec
+[  5]  17.01-18.01  sec  3.12 MBytes  26.2 Mbits/sec
+[  5]  18.01-19.00  sec  2.88 MBytes  24.2 Mbits/sec
+[  5]  19.00-20.00  sec  3.12 MBytes  26.3 Mbits/sec
+[  5]  20.00-21.01  sec  3.00 MBytes  24.8 Mbits/sec
+[  5]  21.01-22.01  sec  2.38 MBytes  20.0 Mbits/sec
+[  5]  22.01-23.01  sec  2.88 MBytes  24.1 Mbits/sec
+[  5]  23.01-24.01  sec  2.88 MBytes  24.2 Mbits/sec
+[  5]  24.01-25.01  sec  2.88 MBytes  24.1 Mbits/sec
+[  5]  25.01-26.01  sec  2.00 MBytes  16.8 Mbits/sec
+[  5]  26.01-27.01  sec  2.75 MBytes  23.1 Mbits/sec
+[  5]  27.01-28.00  sec  3.00 MBytes  25.2 Mbits/sec
+[  5]  28.00-29.01  sec  3.38 MBytes  28.3 Mbits/sec
+[  5]  29.01-30.00  sec  2.25 MBytes  18.9 Mbits/sec
+[  5]  30.00-31.00  sec  2.25 MBytes  18.9 Mbits/sec
+[  5]  31.00-32.01  sec  2.38 MBytes  19.7 Mbits/sec
+[  5]  32.01-33.00  sec  2.12 MBytes  18.1 Mbits/sec
+[  5]  33.00-34.01  sec  2.50 MBytes  20.7 Mbits/sec
+[  5]  34.01-35.01  sec  2.38 MBytes  19.9 Mbits/sec
+[  5]  35.01-36.01  sec  3.25 MBytes  27.3 Mbits/sec
+[  5]  36.01-37.01  sec  3.00 MBytes  25.2 Mbits/sec
+[  5]  37.01-38.01  sec  3.38 MBytes  28.3 Mbits/sec
+[  5]  38.01-39.01  sec  3.00 MBytes  25.2 Mbits/sec
+[  5]  39.01-40.01  sec  2.50 MBytes  20.9 Mbits/sec
+[  5]  40.01-41.00  sec  2.50 MBytes  21.3 Mbits/sec
+[  5]  41.00-42.00  sec  2.12 MBytes  17.8 Mbits/sec
+[  5]  42.00-43.00  sec  2.12 MBytes  17.8 Mbits/sec
+[  5]  43.00-44.01  sec  3.00 MBytes  25.1 Mbits/sec
+[  5]  44.01-45.01  sec  3.25 MBytes  27.2 Mbits/sec
+[  5]  45.01-46.01  sec  2.75 MBytes  23.1 Mbits/sec
+[  5]  46.01-47.01  sec  2.88 MBytes  24.0 Mbits/sec
+[  5]  47.01-48.01  sec  2.12 MBytes  17.8 Mbits/sec
+[  5]  48.01-49.01  sec  1.88 MBytes  15.7 Mbits/sec
+[  5]  49.01-50.01  sec  2.75 MBytes  23.1 Mbits/sec
+[  5]  50.01-50.54  sec  1.62 MBytes  25.7 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-50.54  sec   140 MBytes  23.3 Mbits/sec                  sender
+[  5]   0.00-50.54  sec  0.00 Bytes  0.00 bits/sec                  receiver
+iperf3: interrupt - the client has terminated by signal Interrupt(2)
+
+C:\Users\Asta>iperf3 -c 192.168.137.229 --bidir -R 30
+iperf3: parameter error - cannot be both reverse and bidirectional
+
+Usage: iperf3 [-s|-c host] [options]
+Try `iperf3 --help' for more information.
+
+C:\Users\Asta>iperf3 -c 192.168.137.229 --bidir -t 30
+Connecting to host 192.168.137.229, port 5201
+[  5] local 192.168.137.1 port 58687 connected to 192.168.137.229 port 5201
+[  7] local 192.168.137.1 port 58688 connected to 192.168.137.229 port 5201
+[ ID][Role] Interval           Transfer     Bitrate
+[  5][TX-C]   0.00-1.00   sec   768 KBytes  6.28 Mbits/sec
+[  7][RX-C]   0.00-1.00   sec  1.25 MBytes  10.5 Mbits/sec
+[  5][TX-C]   1.00-2.01   sec  1.25 MBytes  10.4 Mbits/sec
+[  7][RX-C]   1.00-2.01   sec  1.50 MBytes  12.4 Mbits/sec
+[  5][TX-C]   2.01-3.01   sec  1.25 MBytes  10.5 Mbits/sec
+[  7][RX-C]   2.01-3.01   sec  1.25 MBytes  10.5 Mbits/sec
+[  5][TX-C]   3.01-4.01   sec  1.38 MBytes  11.5 Mbits/sec
+[  7][RX-C]   3.01-4.01   sec  1.62 MBytes  13.6 Mbits/sec
+[  5][TX-C]   4.01-5.01   sec  1.25 MBytes  10.5 Mbits/sec
+[  7][RX-C]   4.01-5.01   sec  1.62 MBytes  13.6 Mbits/sec
+[  5][TX-C]   5.01-6.01   sec  1.38 MBytes  11.5 Mbits/sec
+[  7][RX-C]   5.01-6.01   sec  1.62 MBytes  13.6 Mbits/sec
+[  5][TX-C]   6.01-7.01   sec  1.38 MBytes  11.6 Mbits/sec
+[  7][RX-C]   6.01-7.01   sec  1.50 MBytes  12.6 Mbits/sec
+[  5][TX-C]   7.01-8.01   sec  1.62 MBytes  13.6 Mbits/sec
+[  7][RX-C]   7.01-8.01   sec  1.75 MBytes  14.6 Mbits/sec
+[  5][TX-C]   8.01-9.01   sec  1.38 MBytes  11.5 Mbits/sec
+[  7][RX-C]   8.01-9.01   sec  1.50 MBytes  12.6 Mbits/sec
+[  5][TX-C]   9.01-10.01  sec  1.62 MBytes  13.7 Mbits/sec
+[  7][RX-C]   9.01-10.01  sec  1.62 MBytes  13.7 Mbits/sec
+[  5][TX-C]  10.01-11.01  sec  1.50 MBytes  12.6 Mbits/sec
+[  7][RX-C]  10.01-11.01  sec  1.62 MBytes  13.7 Mbits/sec
+[  5][TX-C]  11.01-12.00  sec  1.50 MBytes  12.6 Mbits/sec
+[  7][RX-C]  11.01-12.00  sec  1.50 MBytes  12.6 Mbits/sec
+[  5][TX-C]  12.00-13.01  sec  1.25 MBytes  10.5 Mbits/sec
+[  7][RX-C]  12.00-13.01  sec  1.25 MBytes  10.5 Mbits/sec
+[  5][TX-C]  13.01-14.01  sec  1.12 MBytes  9.44 Mbits/sec
+[  7][RX-C]  13.01-14.01  sec  1.25 MBytes  10.5 Mbits/sec
+[  5][TX-C]  14.01-15.00  sec   640 KBytes  5.26 Mbits/sec
+[  7][RX-C]  14.01-15.00  sec  1.00 MBytes  8.42 Mbits/sec
+[  5][TX-C]  15.00-16.00  sec   384 KBytes  3.15 Mbits/sec
+[  7][RX-C]  15.00-16.00  sec  1.00 MBytes  8.41 Mbits/sec
+[  5][TX-C]  16.00-17.00  sec   512 KBytes  4.20 Mbits/sec
+[  7][RX-C]  16.00-17.00  sec   896 KBytes  7.34 Mbits/sec
+[  5][TX-C]  17.00-18.00  sec   384 KBytes  3.14 Mbits/sec
+[  7][RX-C]  17.00-18.00  sec   896 KBytes  7.33 Mbits/sec
+[  5][TX-C]  18.00-19.00  sec   256 KBytes  2.10 Mbits/sec
+[  7][RX-C]  18.00-19.00  sec   768 KBytes  6.29 Mbits/sec
+[  5][TX-C]  19.00-20.00  sec   256 KBytes  2.10 Mbits/sec
+[  7][RX-C]  19.00-20.00  sec  1.00 MBytes  8.38 Mbits/sec
+[  5][TX-C]  20.00-21.01  sec   256 KBytes  2.09 Mbits/sec
+[  7][RX-C]  20.00-21.01  sec   896 KBytes  7.33 Mbits/sec
+[  5][TX-C]  21.01-22.00  sec   256 KBytes  2.10 Mbits/sec
+[  7][RX-C]  21.01-22.00  sec  1.00 MBytes  8.40 Mbits/sec
+[  5][TX-C]  22.00-23.00  sec   128 KBytes  1.05 Mbits/sec
+[  7][RX-C]  22.00-23.00  sec   640 KBytes  5.24 Mbits/sec
+[  5][TX-C]  23.00-24.00  sec   128 KBytes  1.05 Mbits/sec
+[  7][RX-C]  23.00-24.00  sec   896 KBytes  7.35 Mbits/sec
+[  5][TX-C]  24.00-25.00  sec   256 KBytes  2.10 Mbits/sec
+[  7][RX-C]  24.00-25.00  sec   640 KBytes  5.24 Mbits/sec
+[  5][TX-C]  25.00-26.01  sec   128 KBytes  1.04 Mbits/sec
+[  7][RX-C]  25.00-26.01  sec   896 KBytes  7.30 Mbits/sec
+[  5][TX-C]  26.01-27.01  sec  0.00 Bytes  0.00 bits/sec
+[  7][RX-C]  26.01-27.01  sec   640 KBytes  5.24 Mbits/sec
+[  5][TX-C]  27.01-28.01  sec   128 KBytes  1.05 Mbits/sec
+[  7][RX-C]  27.01-28.01  sec  1.00 MBytes  8.37 Mbits/sec
+[  5][TX-C]  28.01-29.01  sec   128 KBytes  1.05 Mbits/sec
+[  7][RX-C]  28.01-29.01  sec   768 KBytes  6.31 Mbits/sec
+[  5][TX-C]  29.01-30.01  sec  0.00 Bytes  0.00 bits/sec
+[  7][RX-C]  29.01-30.01  sec   896 KBytes  7.34 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID][Role] Interval           Transfer     Bitrate         Retr
+[  5][TX-C]   0.00-30.01  sec  22.4 MBytes  6.25 Mbits/sec                  sender
+[  5][TX-C]   0.00-30.08  sec  22.0 MBytes  6.14 Mbits/sec                  receiver
+[  7][RX-C]   0.00-30.01  sec  34.8 MBytes  9.71 Mbits/sec    0            sender
+[  7][RX-C]   0.00-30.08  sec  34.5 MBytes  9.62 Mbits/sec                  receiver
+
+iperf Done.
+
+C:\Users\Asta>
+C:\Users\Asta>
+C:\Users\Asta>iperf3 -c 192.168.137.229 -t 30 -b 100M
+Connecting to host 192.168.137.229, port 5201
+[  5] local 192.168.137.1 port 64502 connected to 192.168.137.229 port 5201
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.01   sec  2.75 MBytes  22.7 Mbits/sec
+[  5]   1.01-2.01   sec  2.75 MBytes  23.1 Mbits/sec
+[  5]   2.01-3.01   sec  2.38 MBytes  19.9 Mbits/sec
+[  5]   3.01-4.01   sec  1.75 MBytes  14.7 Mbits/sec
+[  5]   4.01-5.01   sec  2.62 MBytes  22.1 Mbits/sec
+[  5]   5.01-6.01   sec  2.62 MBytes  22.0 Mbits/sec
+[  5]   6.01-7.01   sec  2.75 MBytes  23.1 Mbits/sec
+[  5]   7.01-8.01   sec  3.12 MBytes  26.2 Mbits/sec
+[  5]   8.01-9.01   sec  2.38 MBytes  19.9 Mbits/sec
+[  5]   9.01-10.01  sec  2.88 MBytes  24.2 Mbits/sec
+[  5]  10.01-11.01  sec  2.50 MBytes  21.0 Mbits/sec
+[  5]  11.01-12.01  sec  3.00 MBytes  25.2 Mbits/sec
+[  5]  12.01-13.01  sec  2.75 MBytes  23.1 Mbits/sec
+[  5]  13.01-14.01  sec  2.75 MBytes  23.1 Mbits/sec
+[  5]  14.01-15.01  sec  2.88 MBytes  24.1 Mbits/sec
+[  5]  15.01-16.01  sec  3.00 MBytes  25.2 Mbits/sec
+[  5]  16.01-17.01  sec  3.38 MBytes  28.3 Mbits/sec
+[  5]  17.01-18.01  sec  3.38 MBytes  28.3 Mbits/sec
+[  5]  18.01-19.01  sec  3.50 MBytes  29.4 Mbits/sec
+[  5]  19.01-20.01  sec  3.38 MBytes  28.3 Mbits/sec
+[  5]  20.01-21.01  sec  3.50 MBytes  29.3 Mbits/sec
+[  5]  21.01-21.45  sec  1.50 MBytes  28.6 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-21.45  sec  61.5 MBytes  24.1 Mbits/sec                  sender
+[  5]   0.00-21.45  sec  0.00 Bytes  0.00 bits/sec                  receiver
+iperf3: interrupt - the client has terminated by signal Interrupt(2)
+
+C:\Users\Asta>iperf3 -c 192.168.137.229 -b 100M
+Connecting to host 192.168.137.229, port 5201
+[  5] local 192.168.137.1 port 57873 connected to 192.168.137.229 port 5201
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.01   sec  2.00 MBytes  16.5 Mbits/sec
+[  5]   1.01-2.01   sec  3.38 MBytes  28.3 Mbits/sec
+[  5]   2.01-3.01   sec  3.12 MBytes  26.3 Mbits/sec
+[  5]   3.01-4.01   sec  2.38 MBytes  20.0 Mbits/sec
+[  5]   4.01-5.01   sec  2.38 MBytes  19.9 Mbits/sec
+[  5]   5.01-6.01   sec  2.50 MBytes  21.0 Mbits/sec
+[  5]   6.01-7.01   sec  2.50 MBytes  21.0 Mbits/sec
+[  5]   7.01-8.01   sec  3.25 MBytes  27.3 Mbits/sec
+[  5]   8.01-8.67   sec  2.25 MBytes  28.4 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-8.67   sec  23.8 MBytes  23.0 Mbits/sec                  sender
+[  5]   0.00-8.67   sec  0.00 Bytes  0.00 bits/sec                  receiver
+iperf3: interrupt - the client has terminated by signal Interrupt(2)
+
+C:\Users\Asta>iperf3 -c 192.168.137.229 -R -b 100M
+Connecting to host 192.168.137.229, port 5201
+Reverse mode, remote host 192.168.137.229 is sending
+[  5] local 192.168.137.1 port 61301 connected to 192.168.137.229 port 5201
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  1.62 MBytes  13.6 Mbits/sec
+[  5]   1.00-2.00   sec   128 KBytes  1.05 Mbits/sec
+[  5]   2.00-3.00   sec   384 KBytes  3.15 Mbits/sec
+[  5]   3.00-4.00   sec   896 KBytes  7.32 Mbits/sec
+[  5]   4.00-5.00   sec   640 KBytes  5.24 Mbits/sec
+[  5]   5.00-6.00   sec  1.00 MBytes  8.40 Mbits/sec
+[  5]   6.00-7.00   sec   896 KBytes  7.34 Mbits/sec
+[  5]   7.00-8.00   sec   896 KBytes  7.36 Mbits/sec
+[  5]   8.00-9.00   sec   768 KBytes  6.28 Mbits/sec
+[  5]   9.00-10.00  sec   640 KBytes  5.25 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.01  sec  8.00 MBytes  6.71 Mbits/sec    0            sender
+[  5]   0.00-10.00  sec  7.75 MBytes  6.50 Mbits/sec                  receiver
+
+iperf Done.
+
+C:\Users\Asta>iperf3 -c 192.168.137.229 -R
+Connecting to host 192.168.137.229, port 5201
+Reverse mode, remote host 192.168.137.229 is sending
+[  5] local 192.168.137.1 port 61305 connected to 192.168.137.229 port 5201
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  1.75 MBytes  14.6 Mbits/sec
+[  5]   1.00-2.00   sec  1.62 MBytes  13.7 Mbits/sec
+[  5]   2.00-3.00   sec  1.88 MBytes  15.7 Mbits/sec
+[  5]   3.00-4.01   sec  2.00 MBytes  16.5 Mbits/sec
+[  5]   4.01-5.01   sec  1.75 MBytes  14.7 Mbits/sec
+[  5]   5.01-6.01   sec  1.88 MBytes  15.7 Mbits/sec
+[  5]   6.01-7.01   sec  1.88 MBytes  15.8 Mbits/sec
+[  5]   7.01-8.01   sec  2.12 MBytes  17.8 Mbits/sec
+[  5]   8.01-9.01   sec  1.75 MBytes  14.7 Mbits/sec
+[  5]   9.01-10.01  sec  2.12 MBytes  17.8 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.02  sec  19.1 MBytes  16.0 Mbits/sec    0            sender
+[  5]   0.00-10.01  sec  18.8 MBytes  15.7 Mbits/sec                  receiver
+
+iperf Done.
+
+C:\Users\Asta>

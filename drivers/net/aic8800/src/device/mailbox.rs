@@ -44,6 +44,12 @@ pub(super) struct MailboxState {
     result: Option<Vec<u8>>,
 }
 
+impl MailboxState {
+    pub(super) const fn request(&self) -> MailboxRequest {
+        self.request
+    }
+}
+
 #[cfg(test)]
 impl MailboxState {
     pub(super) fn confirmation_for_test(deadline: MonotonicTime) -> Self {
@@ -82,6 +88,22 @@ impl AicDevice {
         })
     }
 
+    /// The request the mailbox currently carries, whatever phase it is in.
+    pub(super) fn mailbox_request(&self) -> Option<MailboxRequest> {
+        self.lifecycle
+            .mailbox
+            .as_ref()
+            .map(|mailbox| mailbox.request())
+    }
+
+    /// Whether the single mailbox is carrying a station information sample.
+    pub(super) fn station_info_in_flight(&self) -> bool {
+        self.mailbox_request()
+            == Some(MailboxRequest::Lmac {
+                message_id: crate::lmac::MM_GET_STA_INFO_REQ,
+            })
+    }
+
     pub(super) fn mailbox_timed_out(&self, now: MonotonicTime) -> bool {
         self.lifecycle.mailbox.as_ref().is_some_and(|mailbox| {
             mailbox.phase != MailboxPhase::Complete && now >= mailbox.deadline
@@ -90,6 +112,15 @@ impl AicDevice {
 
     pub(super) fn drive_mailbox(&mut self, now: MonotonicTime) -> AicAction {
         if self.mailbox_timed_out(now) {
+            if self.station_info_in_flight() {
+                // A diagnostic sample that the firmware never answers is not a
+                // reason to tear down a working link: stop the readout, give
+                // the mailbox back, and let the owner carry on.
+                self.lifecycle.station_info.stopped = true;
+                self.lifecycle.mailbox = None;
+                log::warn!("[wifi] station info request timed out; telemetry stopped");
+                return self.drive_startup_or_ready(now);
+            }
             let startup_stage = self.startup_stage_diagnostic();
             let mailbox = self
                 .lifecycle
@@ -133,7 +164,7 @@ impl AicDevice {
                 )
             }
             MailboxPhase::Confirmation => AicAction::WaitForInterruptUntil(mailbox.deadline),
-            MailboxPhase::Complete => match self.complete_mailbox() {
+            MailboxPhase::Complete => match self.complete_mailbox(now) {
                 Ok(()) => self.drive_startup_or_ready(now),
                 Err(error) => self.fail(error),
             },
@@ -207,7 +238,7 @@ impl AicDevice {
         Ok(())
     }
 
-    fn complete_mailbox(&mut self) -> Result<(), AicError> {
+    fn complete_mailbox(&mut self, now: MonotonicTime) -> Result<(), AicError> {
         let mut mailbox = self
             .lifecycle
             .mailbox
@@ -228,6 +259,13 @@ impl AicDevice {
             self.complete_startup_mailbox(result).inspect_err(|error| {
                 self.log_startup_confirmation_error(result_length, &result_header, error);
             })
+        } else if mailbox.request
+            == (MailboxRequest::Lmac {
+                message_id: crate::lmac::MM_GET_STA_INFO_REQ,
+            })
+        {
+            self.accept_station_info(&result, now);
+            Ok(())
         } else {
             self.complete_control_mailbox(result)
         };
@@ -242,6 +280,29 @@ impl AicDevice {
                 error
             }
         })
+    }
+
+    /// Books one station information sample.  The readout is diagnostic, so a
+    /// confirmation that cannot be decoded stops it rather than failing a link
+    /// that is otherwise working; a rate that has not moved since the previous
+    /// sample is booked without printing the same line again.
+    fn accept_station_info(&mut self, result: &[u8], now: MonotonicTime) {
+        let task = &mut self.lifecycle.station_info;
+        let Ok(info) = crate::lmac::parse_sta_info(result) else {
+            task.stopped = true;
+            log::warn!(
+                "[wifi] station info confirmation carried {} bytes; telemetry stopped",
+                result.len()
+            );
+            return;
+        };
+        task.samples += 1;
+        task.last = Some(info);
+        if task.printed != Some(info.descriptor()) {
+            task.printed = Some(info.descriptor());
+            log::info!("[wifi-sta-info] {info}");
+        }
+        task.next_at = Some(now.after(super::owner::STATION_INFO_PERIOD));
     }
 
     fn complete_control_mailbox(&mut self, result: Vec<u8>) -> Result<(), AicError> {
@@ -436,7 +497,10 @@ mod tests {
     use alloc::vec;
 
     use super::*;
-    use crate::{common::ChipVariant, lmac::SM_DISCONNECT_REQ, protocol::DBG_MEM_READ_REQ};
+    use crate::{
+        common::ChipVariant, device::owner::STATION_INFO_PERIOD, lmac::SM_DISCONNECT_REQ,
+        protocol::DBG_MEM_READ_REQ,
+    };
 
     fn complete(request: &SdioRequest, response: SdioResponse, now: MonotonicTime) -> AicInput {
         AicInput {
@@ -446,6 +510,65 @@ mod tests {
                 result: Ok(response),
             })),
         }
+    }
+
+    /// A ready device with an associated peer and nothing else to do.  The
+    /// association is what schedules the rate readout, so its first sample is
+    /// due from here on.
+    fn ready_associated(chip: ChipVariant) -> AicDevice {
+        let mut device = AicDevice::new(chip).unwrap();
+        device.lifecycle.state = AicState::Ready;
+        device.data.link.install_mac([2, 0, 0, 0, 0, 1]).unwrap();
+        device.data.link.install_interface(0).unwrap();
+        device
+            .data
+            .link
+            .install_peer(0, 3, [2, 1, 2, 3, 4, 5])
+            .unwrap();
+        device.lifecycle.station_info.next_at = Some(MonotonicTime::default());
+        device
+    }
+
+    /// Advances until the owner submits a FIFO write, answering the profile's
+    /// command flow-credit read on the way.
+    fn next_write(device: &mut AicDevice, now: MonotonicTime) -> SdioRequest {
+        let mut action = device.advance(AicInput::tick(now));
+        if let AicAction::SubmitSdio(request) = &action
+            && matches!(request.kind, SdioRequestKind::ReadByte { .. })
+        {
+            action = device.advance(complete(request, SdioResponse::Byte(128), now));
+        }
+        let AicAction::SubmitSdio(request) = action else {
+            panic!("expected a FIFO write, got {action:?}")
+        };
+        request
+    }
+
+    /// The message id at the front of one command frame.
+    fn written_message_id(request: &SdioRequest) -> u16 {
+        let SdioRequestKind::Write { bytes, .. } = &request.kind else {
+            panic!("expected a FIFO write")
+        };
+        u16::from_le_bytes([bytes[8], bytes[9]])
+    }
+
+    /// The payload of one command frame, without its transport and LMAC headers.
+    fn written_payload(request: &SdioRequest) -> Vec<u8> {
+        let SdioRequestKind::Write { bytes, .. } = &request.kind else {
+            panic!("expected a FIFO write")
+        };
+        bytes[16..].to_vec()
+    }
+
+    /// One `MM_GET_STA_INFO_CFM`: a 40 MHz HT rate on one stream with the
+    /// short guard interval, which is the shape a negotiated HT40 link takes.
+    fn station_info_confirmation() -> Vec<u8> {
+        let rate_info = (1u32 << 7) | (2u32 << 11) | (1u32 << 9) | 7;
+        let mut payload = vec![0; 32];
+        payload[0..4].copy_from_slice(&rate_info.to_le_bytes());
+        payload[8] = (-52i8) as u8;
+        payload[24..28].copy_from_slice(&4242u32.to_le_bytes());
+        payload
     }
 
     fn ready_device_with_control(request: ControlRequest, result: Vec<u8>) -> AicDevice {
@@ -723,7 +846,7 @@ mod tests {
             result: Some(vec![0, 1]),
         });
 
-        assert_eq!(device.complete_mailbox(), Ok(()));
+        assert_eq!(device.complete_mailbox(MonotonicTime::default()), Ok(()));
         let control = device.lifecycle.control.as_ref().unwrap();
         let beacon_upload = control
             .commands
@@ -811,7 +934,7 @@ mod tests {
         });
 
         assert!(matches!(
-            device.complete_mailbox(),
+            device.complete_mailbox(MonotonicTime::default()),
             Err(AicError::FirmwareRejected {
                 message_id: crate::lmac::MM_ADD_IF_CFM,
                 status: 3
@@ -855,7 +978,7 @@ mod tests {
         });
 
         assert!(matches!(
-            device.complete_mailbox(),
+            device.complete_mailbox(MonotonicTime::default()),
             Err(AicError::FirmwareRejected {
                 message_id: crate::lmac::APM_START_CFM,
                 status: 5
@@ -874,7 +997,7 @@ mod tests {
             vec![0],
         );
 
-        assert_eq!(device.complete_mailbox(), Ok(()));
+        assert_eq!(device.complete_mailbox(MonotonicTime::default()), Ok(()));
         assert!(device.lifecycle.control.is_some());
         assert!(device.data.events.is_empty());
     }
@@ -891,11 +1014,111 @@ mod tests {
         );
 
         assert_eq!(
-            device.complete_mailbox(),
+            device.complete_mailbox(MonotonicTime::default()),
             Err(AicError::FirmwareRejected {
                 message_id: 0x1801,
                 status: 7,
             })
+        );
+    }
+
+    #[test]
+    fn a_sample_of_the_station_info_arrives_once_the_peer_is_known() {
+        let now = MonotonicTime::default();
+        let mut device = ready_associated(ChipVariant::Aic8800D80);
+
+        let request = next_write(&mut device, now);
+        assert_eq!(written_message_id(&request), 0x0075);
+        assert_eq!(&written_payload(&request)[..4], &[3, b's', b't', b'a']);
+
+        let confirmed_at = now.after(Duration::from_millis(1));
+        device.advance(complete(&request, SdioResponse::Unit, now));
+        device
+            .accept_mailbox_confirmation(0x0076, station_info_confirmation())
+            .unwrap();
+
+        let action = device.advance(AicInput::tick(confirmed_at));
+        assert_eq!(
+            action,
+            AicAction::WaitForInterruptUntil(confirmed_at.after(STATION_INFO_PERIOD))
+        );
+        assert_eq!(device.lifecycle.state, AicState::Ready);
+        assert_eq!(device.lifecycle.station_info.samples, 1);
+        let sample = device
+            .lifecycle
+            .station_info
+            .last
+            .expect("a decoded sample is kept");
+        assert_eq!(sample.rate.width, crate::lmac::ChannelWidth::Mhz40);
+        assert_eq!(sample.rate.mcs, 7);
+        assert!(sample.rate.short_guard_interval);
+        assert_eq!(sample.rate.rssi, -52);
+        assert_eq!(sample.acknowledge_succeeded, 4242);
+    }
+
+    #[test]
+    fn an_unusable_station_info_confirmation_stops_the_readout_without_failing_the_link() {
+        let now = MonotonicTime::default();
+        let mut device = ready_associated(ChipVariant::Aic8800D80);
+
+        let request = next_write(&mut device, now);
+        device.advance(complete(&request, SdioResponse::Unit, now));
+        device
+            .accept_mailbox_confirmation(0x0076, vec![0; 4])
+            .unwrap();
+        device.advance(AicInput::tick(now.after(Duration::from_millis(1))));
+
+        assert_eq!(device.lifecycle.state, AicState::Ready);
+        assert!(device.lifecycle.station_info.stopped);
+        assert_eq!(device.lifecycle.station_info.samples, 0);
+        assert_eq!(
+            device.advance(AicInput::tick(now.after(Duration::from_secs(2)))),
+            AicAction::WaitForInterrupt
+        );
+    }
+
+    #[test]
+    fn a_station_info_timeout_stops_the_readout_without_failing_the_link() {
+        let now = MonotonicTime::default();
+        let mut device = ready_associated(ChipVariant::Aic8800D80);
+
+        let request = next_write(&mut device, now);
+        device.advance(complete(&request, SdioResponse::Unit, now));
+
+        // The firmware never answers: the mailbox deadline passes.
+        let late = now.after(Duration::from_secs(6));
+        device.advance(AicInput::tick(late));
+
+        assert_eq!(device.lifecycle.state, AicState::Ready);
+        assert!(device.lifecycle.station_info.stopped);
+        assert!(device.lifecycle.mailbox.is_none());
+    }
+
+    #[test]
+    fn a_station_info_sample_waits_behind_a_control_command() {
+        let now = MonotonicTime::default();
+        let mut device = ready_associated(ChipVariant::Aic8800D80);
+        device.lifecycle.control = Some(
+            super::super::control::build(ControlRequest::Disconnect, [2, 0, 0, 0, 0, 1], Some(0))
+                .unwrap(),
+        );
+
+        let request = next_write(&mut device, now);
+
+        assert_eq!(written_message_id(&request), 0x1803);
+    }
+
+    #[test]
+    fn no_station_info_is_requested_before_the_peer_is_known() {
+        let now = MonotonicTime::default();
+        let mut device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+        device.lifecycle.state = AicState::Ready;
+        device.data.link.install_mac([2, 0, 0, 0, 0, 1]).unwrap();
+        device.data.link.install_interface(0).unwrap();
+
+        assert_eq!(
+            device.advance(AicInput::tick(now)),
+            AicAction::WaitForInterrupt
         );
     }
 }

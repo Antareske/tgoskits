@@ -514,6 +514,240 @@ pub(crate) fn parse_key_add_confirmation(payload: &[u8]) -> Result<u8, AicError>
         .ok_or(AicError::MalformedResponse)
 }
 
+// ============================================================
+// Station information telemetry (board measurement)
+// ============================================================
+
+/// Firmware request that reports the rate currently used for a peer.
+pub(crate) const MM_GET_STA_INFO_REQ: u16 = 0x0075;
+pub(crate) const MM_GET_STA_INFO_CFM: u16 = 0x0076;
+
+/// The vendor sends `struct mm_get_sta_info_req` (one byte) only for chips at
+/// or above D80X2; every other variant, including both chips this driver
+/// supports, sends `struct mm_get_sta_info_compat_req`, which is the station
+/// index followed by the ASCII tag "sta".
+const STA_INFO_COMPAT_TAG: [u8; 3] = *b"sta";
+const STA_INFO_PAYLOAD_LEN: usize = 1 + STA_INFO_COMPAT_TAG.len();
+
+/// `struct mm_get_sta_info_cfm` is a plain 32 byte structure whose fields are
+/// already naturally aligned, so it has no padding to skip.
+const STA_INFO_CONFIRMATION_LEN: usize = 32;
+
+// `union rwnx_rate_ctrl_info` packs the transmit rate into one word; the
+// fields are declared least significant first.  Only the transmit half is
+// decoded here: the protected-half fields describe the protection frame.
+const RATE_INFO_MCS_SHIFT: u32 = 0;
+const RATE_INFO_MCS_MASK: u32 = 0x7f;
+const RATE_INFO_WIDTH_SHIFT: u32 = 7;
+const RATE_INFO_WIDTH_MASK: u32 = 0x03;
+const RATE_INFO_SHORT_GUARD_SHIFT: u32 = 9;
+const RATE_INFO_FORMAT_SHIFT: u32 = 11;
+const RATE_INFO_FORMAT_MASK: u32 = 0x07;
+const RATE_INFO_RETRY_SHIFT: u32 = 29;
+const RATE_INFO_RETRY_MASK: u32 = 0x07;
+
+const fn rate_field(word: u32, shift: u32, mask: u32) -> u32 {
+    (word >> shift) & mask
+}
+
+/// Channel width the firmware reports for the current transmit rate
+/// (`enum mac_chan_bandwidth`, which the two width bits can hold entirely).
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum ChannelWidth {
+    Mhz20,
+    Mhz40,
+    Mhz80,
+    Mhz160,
+}
+
+impl ChannelWidth {
+    const fn from_firmware(value: u32) -> Self {
+        match value {
+            1 => Self::Mhz40,
+            2 => Self::Mhz80,
+            3 => Self::Mhz160,
+            _ => Self::Mhz20,
+        }
+    }
+
+    pub(crate) const fn mhz(self) -> u16 {
+        match self {
+            Self::Mhz20 => 20,
+            Self::Mhz40 => 40,
+            Self::Mhz80 => 80,
+            Self::Mhz160 => 160,
+        }
+    }
+}
+
+/// Modulation format the firmware reports (`FORMATMOD_*` values).  The three
+/// format bits hold every value the vendor defines but `HE_TB`.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum TxFormat {
+    NonHt,
+    NonHtDuplicateOfdm,
+    HtMixed,
+    HtGreenfield,
+    Vht,
+    HeSu,
+    HeMu,
+    HeEr,
+}
+
+impl TxFormat {
+    const fn from_firmware(value: u32) -> Self {
+        match value {
+            1 => Self::NonHtDuplicateOfdm,
+            2 => Self::HtMixed,
+            3 => Self::HtGreenfield,
+            4 => Self::Vht,
+            5 => Self::HeSu,
+            6 => Self::HeMu,
+            7 => Self::HeEr,
+            _ => Self::NonHt,
+        }
+    }
+
+    pub(crate) const fn name(self) -> &'static str {
+        match self {
+            Self::NonHt => "non-ht",
+            Self::NonHtDuplicateOfdm => "non-ht-dup-ofdm",
+            Self::HtMixed => "ht-mf",
+            Self::HtGreenfield => "ht-gf",
+            Self::Vht => "vht",
+            Self::HeSu => "he-su",
+            Self::HeMu => "he-mu",
+            Self::HeEr => "he-er",
+        }
+    }
+}
+
+/// The part of one sample that answers "which rate is the firmware sending
+/// at": a change here is what a board round reads the log for, while the
+/// counters move on every sample by construction.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct TxRateDescriptor {
+    pub(crate) width: ChannelWidth,
+    pub(crate) format: TxFormat,
+    /// Modulation index inside `format`; a legacy rate index when the format
+    /// is not HT, VHT or HE.
+    pub(crate) mcs: u8,
+    /// Spatial streams the index encodes; one for a legacy rate.
+    pub(crate) streams: u8,
+    pub(crate) short_guard_interval: bool,
+    pub(crate) rssi: i8,
+}
+
+impl TxRateDescriptor {
+    /// The index field is shared with the stream count, and how the two are
+    /// packed changed with the format: HT keeps the index in the low three
+    /// bits with the stream count above it, VHT and HE use four bits for the
+    /// index, and a legacy rate is the index on its own.
+    const fn mcs_and_streams(index: u8, format: TxFormat) -> (u8, u8) {
+        match format {
+            TxFormat::NonHt | TxFormat::NonHtDuplicateOfdm => (index, 1),
+            TxFormat::HtMixed | TxFormat::HtGreenfield => (index & 0x7, ((index >> 3) & 0x7) + 1),
+            TxFormat::Vht | TxFormat::HeSu | TxFormat::HeMu | TxFormat::HeEr => {
+                (index & 0xf, ((index >> 4) & 0x7) + 1)
+            }
+        }
+    }
+
+    const fn from_rate_info(word: u32) -> Self {
+        let format = TxFormat::from_firmware(rate_field(
+            word,
+            RATE_INFO_FORMAT_SHIFT,
+            RATE_INFO_FORMAT_MASK,
+        ));
+        let (mcs, streams) = Self::mcs_and_streams(
+            rate_field(word, RATE_INFO_MCS_SHIFT, RATE_INFO_MCS_MASK) as u8,
+            format,
+        );
+        Self {
+            width: ChannelWidth::from_firmware(rate_field(
+                word,
+                RATE_INFO_WIDTH_SHIFT,
+                RATE_INFO_WIDTH_MASK,
+            )),
+            format,
+            mcs,
+            streams,
+            short_guard_interval: rate_field(word, RATE_INFO_SHORT_GUARD_SHIFT, 1) != 0,
+            rssi: 0,
+        }
+    }
+}
+
+/// One decoded `MM_GET_STA_INFO_CFM`.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) struct StationInfo {
+    pub(crate) rate: TxRateDescriptor,
+    pub(crate) retries: u8,
+    pub(crate) tx_failed: u32,
+    pub(crate) acknowledge_failed: u32,
+    pub(crate) acknowledge_succeeded: u32,
+}
+
+impl core::fmt::Display for StationInfo {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(
+            f,
+            "width={}MHz format={} mcs={} nss={} sgi={} retries={} rssi={}dBm txfailed={} \
+             ackok={} ackfail={}",
+            self.rate.width.mhz(),
+            self.rate.format.name(),
+            self.rate.mcs,
+            self.rate.streams,
+            u8::from(self.rate.short_guard_interval),
+            self.retries,
+            self.rate.rssi,
+            self.tx_failed,
+            self.acknowledge_succeeded,
+            self.acknowledge_failed,
+        )
+    }
+}
+
+impl StationInfo {
+    /// The rate fields alone, for deciding whether a sample is worth printing.
+    pub(crate) const fn descriptor(&self) -> TxRateDescriptor {
+        self.rate
+    }
+}
+
+pub(crate) const fn sta_info_payload(station_index: u8) -> [u8; STA_INFO_PAYLOAD_LEN] {
+    [
+        station_index,
+        STA_INFO_COMPAT_TAG[0],
+        STA_INFO_COMPAT_TAG[1],
+        STA_INFO_COMPAT_TAG[2],
+    ]
+}
+
+pub(crate) fn parse_sta_info(payload: &[u8]) -> Result<StationInfo, AicError> {
+    if payload.len() != STA_INFO_CONFIRMATION_LEN {
+        return Err(AicError::MalformedResponse);
+    }
+    let word = |offset: usize| {
+        u32::from_le_bytes(
+            payload[offset..offset + 4]
+                .try_into()
+                .expect("the confirmation length was checked above"),
+        )
+    };
+    let rate_info = word(0);
+    Ok(StationInfo {
+        rate: TxRateDescriptor {
+            rssi: payload[8] as i8,
+            ..TxRateDescriptor::from_rate_info(rate_info)
+        },
+        retries: rate_field(rate_info, RATE_INFO_RETRY_SHIFT, RATE_INFO_RETRY_MASK) as u8,
+        tx_failed: word(4),
+        acknowledge_failed: word(20),
+        acknowledge_succeeded: word(24),
+    })
+}
+
 pub(crate) const fn filter_payload() -> [u8; 4] {
     0x1502_868cu32.to_le_bytes()
 }
@@ -651,6 +885,111 @@ mod tests {
         assert_eq!(payload[41], 2);
         assert_eq!(payload[42], 0);
         assert_eq!(payload[43], 1);
+    }
+
+    /// One `struct mm_get_sta_info_cfm` with the fields a board round reads.
+    fn sta_info_confirmation(
+        rate_info: u32,
+        rssi: i8,
+        tx_failed: u32,
+        acknowledge_failed: u32,
+        acknowledge_succeeded: u32,
+    ) -> [u8; STA_INFO_CONFIRMATION_LEN] {
+        let mut payload = [0; STA_INFO_CONFIRMATION_LEN];
+        payload[0..4].copy_from_slice(&rate_info.to_le_bytes());
+        payload[4..8].copy_from_slice(&tx_failed.to_le_bytes());
+        payload[8] = rssi as u8;
+        payload[20..24].copy_from_slice(&acknowledge_failed.to_le_bytes());
+        payload[24..28].copy_from_slice(&acknowledge_succeeded.to_le_bytes());
+        payload
+    }
+
+    /// One `union rwnx_rate_ctrl_info` word, fields laid out the vendor way.
+    fn rate_info(
+        width: u32,
+        format: u32,
+        index: u8,
+        short_guard_interval: bool,
+        retries: u8,
+    ) -> u32 {
+        (width << 7)
+            | (format << 11)
+            | (u32::from(short_guard_interval) << 9)
+            | u32::from(index)
+            | (u32::from(retries) << 29)
+    }
+
+    #[test]
+    fn sta_info_request_carries_the_station_index_and_the_vendor_compat_tag() {
+        // The vendor sends the four byte compatibility form for every chip
+        // below D80X2, which is both chips this driver supports.
+        assert_eq!(sta_info_payload(3), [3, b's', b't', b'a']);
+    }
+
+    #[test]
+    fn station_info_decodes_the_rate_of_each_format_and_its_counters() {
+        // HT packs the stream count above a three bit index: two streams at
+        // MCS 7 is `(2 - 1) << 3 | 7`.
+        let ht = parse_sta_info(&sta_info_confirmation(
+            rate_info(1, 2, 0b1111, true, 3),
+            -52,
+            5,
+            7,
+            4242,
+        ))
+        .unwrap();
+        assert_eq!(ht.rate.width, ChannelWidth::Mhz40);
+        assert_eq!(ht.rate.format, TxFormat::HtMixed);
+        assert_eq!(ht.rate.mcs, 7);
+        assert_eq!(ht.rate.streams, 2);
+        assert!(ht.rate.short_guard_interval);
+        assert_eq!(ht.rate.rssi, -52);
+        assert_eq!(ht.retries, 3);
+        assert_eq!(ht.tx_failed, 5);
+        assert_eq!(ht.acknowledge_failed, 7);
+        assert_eq!(ht.acknowledge_succeeded, 4242);
+
+        // VHT and HE use four bits for the index: two streams at MCS 9 is
+        // `(2 - 1) << 4 | 9`.
+        let vht = parse_sta_info(&sta_info_confirmation(
+            rate_info(2, 4, 0b1_1001, false, 0),
+            -40,
+            0,
+            0,
+            1,
+        ))
+        .unwrap();
+        assert_eq!(vht.rate.width, ChannelWidth::Mhz80);
+        assert_eq!(vht.rate.format, TxFormat::Vht);
+        assert_eq!(vht.rate.mcs, 9);
+        assert_eq!(vht.rate.streams, 2);
+        assert!(!vht.rate.short_guard_interval);
+
+        // A legacy rate carries the index alone and is always one stream.
+        let legacy = parse_sta_info(&sta_info_confirmation(
+            rate_info(0, 0, 3, false, 0),
+            -30,
+            0,
+            0,
+            0,
+        ))
+        .unwrap();
+        assert_eq!(legacy.rate.format, TxFormat::NonHt);
+        assert_eq!(legacy.rate.width, ChannelWidth::Mhz20);
+        assert_eq!(legacy.rate.mcs, 3);
+        assert_eq!(legacy.rate.streams, 1);
+    }
+
+    #[test]
+    fn station_info_rejects_a_confirmation_of_the_wrong_length() {
+        let payload = sta_info_confirmation(0, 0, 0, 0, 0);
+        assert_eq!(
+            parse_sta_info(&payload[..STA_INFO_CONFIRMATION_LEN - 1]),
+            Err(AicError::MalformedResponse)
+        );
+        let mut padded = payload.to_vec();
+        padded.push(0);
+        assert_eq!(parse_sta_info(&padded), Err(AicError::MalformedResponse));
     }
 
     #[test]

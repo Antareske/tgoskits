@@ -172,7 +172,20 @@ IRQ 驱动的 RX scan，但启动 mailbox 的 credit backoff 仍返回 `RetryAt`
 
 该区分也固定 AIC 启动时序：Function enable、block size 和 vendor register setup
 可以在 card IRQ masked 时推进；只有 mailbox 已写入且进入 confirmation wait 后才
-开放 card IRQ。FriendlyARM vendor Linux tree
+开放 card IRQ。
+
+板测还会按周期读取空口速率。读数经同一个单 mailbox 发出：`MM_GET_STA_INFO_REQ`
+（`0x0075`）在 D80 与 DC 上都使用 vendor 的四字节 compat 载荷（`sta_idx` 加 tag
+`sta`，只有 D80X2 及以上才用一字节形式），返回的 `rate_info` 报告当前发射的带宽、
+调制格式、MCS/NSS、短保护间隔，并附带 RSSI 与 ack 成功/失败计数。关联成功是它的起点，
+此后每 1 s 采一次，每次仍以 `WaitForInterruptUntil(deadline)` 等待确认，不引入轮询、
+第二个执行上下文或新的唤醒源；空闲链路由该期限驱动 owner 醒来取一次样本。它按上述规则
+丢弃一次 credit 缓存（每次采样多付一次 flow-control 读），即把缓存寿命缩短到周期量级，
+“命令与数据共用固件缓冲池”的结论不变。该读数只用于板测观测：请求超时或确认无法按固定
+长度解码时停止采样并各记一行日志，不判定链路失败，也不参与发送、credit、接收或取消决策。
+诊断行由 `[wifi-sta-info]` 前缀标识，只在速率字段相对上一次采样发生变化时打印，计数器随行给出。
+
+FriendlyARM vendor Linux tree
 `174d4e6989914651850b3ba52c7880a458aa3602` 的 `aicwf_sdio_bus_start()` 先为 DC 的
 Function 1/2 安装 handler 再写两条 `intr_config_reg = 0x07`，而 RX handler 只在
 实际 IRQ 后读取相应 Function 的 `block_cnt_reg`。本项目不复制 Linux 线程和
@@ -205,7 +218,11 @@ FIFO drain”语义；固件 settle 的 timer 不能冒充这个 consumer-ready 
   main/patch 地址或 metadata。
 - DC FDRV 使用 `MM_SET_STACK_START_REQ(start=1,is_5g=false)`，随后发送 DC
   24 GHz TX gain、20/40 MHz RX gain 和 RF calibration，再进入与 D80 共用且经
-  wire-equivalence 测试证明的 MAC/reset/ME/channel/interface/start/filter 流程。
+  wire-equivalence 测试证明的 MAC/reset/channel/interface/start/filter 流程。
+- ME capability 载荷不属于共用流程：它由已验证芯片身份选择的私有 profile 编码，DC
+  保持只报 LDPC 的保守能力，D80 额外声明 20/40 MHz、SGI20/40、MCS32 与对应的单流
+  MCS/最高速率。两个 profile 都不开启 VHT、HE、STBC 或天线分集；`phy_bw_max` 也随
+  profile 取值。厂商在同一位置按 `use_2040`/`use_80` 与 `sgi` 生成这些字段。
 
 成功的 add-interface confirmation 返回的 `inst_nbr` 是唯一 firmware VIF 来源。
 AP 控制也复用 `parse_add_interface()`，要求完整两字节响应并拒绝 `0xff`；

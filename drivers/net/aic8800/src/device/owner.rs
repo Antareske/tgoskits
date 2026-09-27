@@ -102,6 +102,41 @@ pub(super) struct LifecycleState {
     pub last_time: MonotonicTime,
     pub retry_at: Option<MonotonicTime>,
     pub cancel_pending: bool,
+    pub station_info: StationInfoTask,
+}
+
+/// How often the firmware is asked which rate it uses for the peer.  Board
+/// rounds read the samples to tell a negotiated 40 MHz short guard interval
+/// link from a 20 MHz one, and to see the rate move while traffic runs.
+pub(super) const STATION_INFO_PERIOD: Duration = Duration::from_secs(1);
+
+/// Board-measurement telemetry task.  It borrows the single mailbox for one
+/// request per period and never feeds a transmit, credit, receive or cancel
+/// decision: a request that is refused or answered with something unusable
+/// stops the readout instead of failing the link, because the sample is
+/// diagnostic and the link is not.
+pub(super) struct StationInfoTask {
+    /// Earliest time the next sample may be requested.
+    pub next_at: Option<MonotonicTime>,
+    /// Set when a sample was refused or unusable; the readout stays off.
+    pub stopped: bool,
+    pub samples: u32,
+    /// The rate fields of the last printed sample, so an unchanged rate is not
+    /// printed again every period.
+    pub printed: Option<crate::lmac::TxRateDescriptor>,
+    pub last: Option<crate::lmac::StationInfo>,
+}
+
+impl StationInfoTask {
+    pub(super) const fn new() -> Self {
+        Self {
+            next_at: None,
+            stopped: false,
+            samples: 0,
+            printed: None,
+            last: None,
+        }
+    }
 }
 
 pub(super) struct IoState {
@@ -328,6 +363,7 @@ impl AicDevice {
                 last_time: MonotonicTime::default(),
                 retry_at: None,
                 cancel_pending: false,
+                station_info: StationInfoTask::new(),
             },
             io: IoState {
                 pending: None,

@@ -3,6 +3,7 @@ use core::time::Duration;
 
 use super::*;
 use crate::{
+    device::owner::STATION_INFO_PERIOD,
     lmac::{
         SM_CONNECT_IND, SM_DISCONNECT_IND, parse_connect_indication, parse_disconnect_indication,
     },
@@ -64,6 +65,15 @@ impl AicDevice {
             self.begin_lmac_mailbox(message_id, destination, &payload, expected, now);
             return self.drive_mailbox(now);
         }
+        // A due telemetry sample takes the mailbox ahead of transmit work,
+        // because a bulk transfer always has a frame waiting and the sample
+        // would otherwise never be taken.  It pays one mailbox exchange, which
+        // is what lets a board round read the rate while the link is busy.
+        if self.station_info_due(now)
+            && let Some(action) = self.begin_station_info(now)
+        {
+            return action;
+        }
         // Deliver terminal/control events before starting another level-triggered
         // receive scan.  CARD_INT may remain asserted while the firmware drains
         // queued traffic; scanning first would indefinitely postpone the
@@ -100,7 +110,47 @@ impl AicDevice {
                 write_fifo(self.data_function(), self.registers().write_fifo, frame),
             );
         }
-        AicAction::WaitForInterrupt
+        match self.station_info_deadline() {
+            Some(deadline) => AicAction::WaitForInterruptUntil(deadline),
+            None => AicAction::WaitForInterrupt,
+        }
+    }
+
+    /// Whether a station information sample may be taken now.  The readout is
+    /// off until the association schedules it, and it stops as soon as a
+    /// sample is refused; the single mailbox must be free, and control work is
+    /// checked by the caller, which submits it first.
+    fn station_info_due(&self, now: MonotonicTime) -> bool {
+        let task = &self.lifecycle.station_info;
+        !task.stopped
+            && self.lifecycle.mailbox.is_none()
+            && self.lifecycle.control.is_none()
+            && self.data.link.tx_indices().is_some()
+            && task.next_at.is_some_and(|deadline| now >= deadline)
+    }
+
+    /// When the owner has nothing else to do, it waits until the next sample
+    /// is due instead of until the next interrupt, so an idle link keeps
+    /// reporting its rate.
+    fn station_info_deadline(&self) -> Option<MonotonicTime> {
+        let task = &self.lifecycle.station_info;
+        if task.stopped || self.data.link.tx_indices().is_none() {
+            return None;
+        }
+        task.next_at
+    }
+
+    fn begin_station_info(&mut self, now: MonotonicTime) -> Option<AicAction> {
+        let (_, station) = self.data.link.tx_indices()?;
+        self.lifecycle.station_info.next_at = None;
+        self.begin_lmac_mailbox(
+            crate::lmac::MM_GET_STA_INFO_REQ,
+            crate::lmac::TASK_MM,
+            &crate::lmac::sta_info_payload(station),
+            crate::lmac::MM_GET_STA_INFO_CFM,
+            now,
+        );
+        Some(self.drive_mailbox(now))
     }
 
     fn take_priority_event(&mut self) -> Option<AicEvent> {
@@ -410,6 +460,11 @@ impl AicDevice {
                         indication.station_index,
                         indication.bssid,
                     )?;
+                    // The association is what starts the rate readout: the
+                    // first sample is due one period from here, so the request
+                    // never races the handshake that just finished.
+                    self.lifecycle.station_info.next_at =
+                        Some(self.lifecycle.last_time.after(STATION_INFO_PERIOD));
                     let control = self
                         .lifecycle
                         .control
@@ -1047,6 +1102,17 @@ mod tests {
             .unwrap();
 
         assert_eq!(device.data.link.tx_indices(), Some((2, 7)));
+        // The association also starts the rate readout, one period from the
+        // time the indication was consumed.
+        assert_eq!(
+            device.lifecycle.station_info.next_at,
+            Some(
+                device
+                    .lifecycle
+                    .last_time
+                    .after(crate::device::owner::STATION_INFO_PERIOD)
+            )
+        );
     }
 
     #[test]

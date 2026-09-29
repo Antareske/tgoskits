@@ -5,7 +5,7 @@
 
 use alloc::{vec, vec::Vec};
 
-use crate::{common::ChipVariant, device::AicError};
+use crate::device::AicError;
 
 pub(crate) const TASK_MM: u16 = 0;
 pub(crate) const TASK_ME: u16 = 5;
@@ -67,10 +67,11 @@ pub(crate) const ME_SET_CONTROL_PORT_CFM: u16 = 0x1405;
 // `rwnx_rx_me_tx_credits_update_ind`, and this driver takes its credit from the
 // flow-control register instead, so the message is only classified.
 pub(crate) const ME_TX_CREDITS_UPDATE_IND: u16 = 0x140b;
-// The Linux driver may issue this request after a TX queue transition.  The
+// The Linux driver may issue this request after a TX queue transition, so the
 // firmware can return its confirmation asynchronously even when this Rust
-// owner did not submit the optional traffic indication request, so it must not
-// be mistaken for the confirmation of the active control mailbox.
+// owner did not submit the optional traffic indication request.  The value is
+// that message's index in the vendor's LMAC message table, and it must not be
+// mistaken for the confirmation of the active control mailbox.
 pub(crate) const ME_TRAFFIC_IND_CFM: u16 = 0x140d;
 pub(crate) const SM_CONNECT_REQ: u16 = 0x1800;
 pub(crate) const SM_CONNECT_CFM: u16 = 0x1801;
@@ -297,6 +298,11 @@ const ME_CONFIG_VHT_OFFSET: usize = 32;
 const ME_CONFIG_HE_OFFSET: usize = 44;
 const ME_CONFIG_TX_LIFETIME_OFFSET: usize = 100;
 const ME_CONFIG_PHY_BW_OFFSET: usize = 102;
+/// PHY bandwidth the ME configuration declares. The vendor forces 80 MHz on
+/// D80 and derives the value on DC from the RF bandwidth the firmware reports;
+/// this driver does not read the RF feature register, so every profile declares
+/// the vendor's forced value.
+const ME_CONFIG_PHY_BW_MAX: u8 = 2;
 const ME_CONFIG_HT_SUPPORTED_OFFSET: usize = 103;
 const ME_CONFIG_VHT_SUPPORTED_OFFSET: usize = 104;
 const ME_CONFIG_HE_SUPPORTED_OFFSET: usize = 105;
@@ -309,6 +315,9 @@ const HT_CAPABILITY_INFO_OFFSET: usize = ME_CONFIG_HT_OFFSET;
 const HT_AMPDU_PARAM_OFFSET: usize = ME_CONFIG_HT_OFFSET + 2;
 const HT_MCS_OFFSET: usize = ME_CONFIG_HT_OFFSET + 3;
 const HT_MCS_RX_MASK_LEN: usize = 10;
+/// Whole HT MCS field: the rx mask, the rx highest rate, the tx parameters and
+/// the reserved tail the vendor leaves zero.
+const HT_MCS_LEN: usize = 16;
 const HT_MCS_RX_HIGHEST_OFFSET: usize = HT_MCS_OFFSET + HT_MCS_RX_MASK_LEN;
 const HT_MCS_TX_PARAMS_OFFSET: usize = HT_MCS_RX_HIGHEST_OFFSET + 2;
 const HT_MCS_RESERVED_OFFSET: usize = HT_MCS_TX_PARAMS_OFFSET + 1;
@@ -335,8 +344,8 @@ const VHT_CAP_MU_BEAMFORMEE_CAPABLE: u32 = 0x0010_0000;
 const VHT_CAP_MAX_A_MPDU_LENGTH_EXPONENT_7: u32 = 7 << 23;
 const VHT_MCS_SUPPORT_0_9: u16 = 2;
 
-/// Highest 80 MHz rate of a single stream supporting MCS 0-9, in the 1 Mbit/s
-/// units of the VHT MCS map, as the vendor's rate table records it.
+/// Highest rate the vendor's rate table records for a single stream supporting
+/// MCS 0-9, in the 1 Mbit/s units of the VHT MCS map.
 const VHT_HIGHEST_RATE_1SS_MCS_0_9: u16 = 390;
 
 const HE_MAC_CAP_INFO_LEN: usize = 6;
@@ -412,28 +421,6 @@ pub(crate) enum MeConfigProfile {
 }
 
 impl MeConfigProfile {
-    pub(crate) const fn for_chip(chip: ChipVariant) -> Option<Self> {
-        match chip {
-            ChipVariant::Aic8800DC => Some(Self::Conservative),
-            ChipVariant::Aic8800D80 => Some(Self::D80Ht40SgiVhtHe),
-            ChipVariant::Aic8801
-            | ChipVariant::Aic8800DW
-            | ChipVariant::Aic8800D80X2
-            | ChipVariant::Unknown => None,
-        }
-    }
-
-    /// The vendor forces 80 MHz on D80 and derives the value on DC from the RF
-    /// bandwidth the firmware reports. This driver does not read the RF feature
-    /// register, so DC keeps the 80 MHz declaration while D80 matches the
-    /// vendor's forced value.
-    const fn phy_bw_max(self) -> u8 {
-        match self {
-            Self::Conservative => 2,    // PHY_CHNL_BW_80
-            Self::D80Ht40SgiVhtHe => 2, // PHY_CHNL_BW_80
-        }
-    }
-
     const fn ht_capabilities(self) -> HtCapabilities {
         match self {
             Self::Conservative => HtCapabilities::CONSERVATIVE,
@@ -514,7 +501,7 @@ impl HtCapabilities {
         payload[HT_MCS_RX_HIGHEST_OFFSET..HT_MCS_RX_HIGHEST_OFFSET + 2]
             .copy_from_slice(&self.rx_highest.to_le_bytes());
         payload[HT_MCS_TX_PARAMS_OFFSET] = self.tx_params;
-        payload[HT_MCS_RESERVED_OFFSET..HT_MCS_OFFSET + 16].fill(0);
+        payload[HT_MCS_RESERVED_OFFSET..HT_MCS_OFFSET + HT_MCS_LEN].fill(0);
     }
 }
 
@@ -669,9 +656,8 @@ pub(crate) fn me_config_payload(profile: MeConfigProfile) -> [u8; ME_CONFIG_PAYL
     profile.ht_capabilities().encode_into(&mut payload);
 
     // These capability structures are naturally aligned in the vendor C ABI:
-    // HT occupies 32 bytes, VHT 12 bytes, and HE 56 bytes before tx_lft.
-    payload[ME_CONFIG_VHT_OFFSET..ME_CONFIG_HE_OFFSET].fill(0);
-    payload[ME_CONFIG_HE_OFFSET..ME_CONFIG_TX_LIFETIME_OFFSET].fill(0);
+    // HT occupies 32 bytes, VHT 12 bytes, and HE 56 bytes before tx_lft.  A
+    // profile without VHT or HE leaves its region at the payload's zero fill.
     let vht = profile.vht_capabilities();
     let he = profile.he_capabilities();
     if let Some(vht) = vht {
@@ -682,7 +668,7 @@ pub(crate) fn me_config_payload(profile: MeConfigProfile) -> [u8; ME_CONFIG_PAYL
     }
     payload[ME_CONFIG_TX_LIFETIME_OFFSET..ME_CONFIG_TX_LIFETIME_OFFSET + 2]
         .copy_from_slice(&1000u16.to_le_bytes());
-    payload[ME_CONFIG_PHY_BW_OFFSET] = profile.phy_bw_max();
+    payload[ME_CONFIG_PHY_BW_OFFSET] = ME_CONFIG_PHY_BW_MAX;
     payload[ME_CONFIG_HT_SUPPORTED_OFFSET] = 1;
     payload[ME_CONFIG_VHT_SUPPORTED_OFFSET] = if vht.is_some() { 1 } else { 0 };
     payload[ME_CONFIG_HE_SUPPORTED_OFFSET] = if he.is_some() { 1 } else { 0 };
@@ -946,19 +932,19 @@ mod tests {
         let conservative = me_config_payload(MeConfigProfile::Conservative);
         let d80 = me_config_payload(MeConfigProfile::D80Ht40SgiVhtHe);
         let expected_ampdu = [3 | (7 << 2)];
-        let mut p0a_reference = [0; 112];
-        p0a_reference[0..2].copy_from_slice(&1u16.to_le_bytes());
-        p0a_reference[2] = 31;
-        p0a_reference[3] = 0xff;
-        p0a_reference[13..15].copy_from_slice(&65u16.to_le_bytes());
-        p0a_reference[15] = 1;
-        p0a_reference[100..102].copy_from_slice(&1000u16.to_le_bytes());
-        p0a_reference[102] = 2;
-        p0a_reference[103] = 1;
-        p0a_reference[107] = 1;
-        assert_eq!(conservative, p0a_reference);
+        let mut conservative_reference = [0; 112];
+        conservative_reference[0..2].copy_from_slice(&1u16.to_le_bytes());
+        conservative_reference[2] = 31;
+        conservative_reference[3] = 0xff;
+        conservative_reference[13..15].copy_from_slice(&65u16.to_le_bytes());
+        conservative_reference[15] = 1;
+        conservative_reference[100..102].copy_from_slice(&1000u16.to_le_bytes());
+        conservative_reference[102] = 2;
+        conservative_reference[103] = 1;
+        conservative_reference[107] = 1;
+        assert_eq!(conservative, conservative_reference);
 
-        let mut d80_reference = p0a_reference;
+        let mut d80_reference = conservative_reference;
         d80_reference[0..2].copy_from_slice(&0x0863u16.to_le_bytes());
         d80_reference[7] = 1; // MCS32 in rx_mask[4].
         d80_reference[13..15].copy_from_slice(&150u16.to_le_bytes());
@@ -1109,26 +1095,6 @@ mod tests {
     }
 
     #[test]
-    fn me_config_profile_selection_is_limited_to_validated_chip_variants() {
-        assert_eq!(
-            MeConfigProfile::for_chip(ChipVariant::Aic8800DC),
-            Some(MeConfigProfile::Conservative)
-        );
-        assert_eq!(
-            MeConfigProfile::for_chip(ChipVariant::Aic8800D80),
-            Some(MeConfigProfile::D80Ht40SgiVhtHe)
-        );
-        for chip in [
-            ChipVariant::Aic8801,
-            ChipVariant::Aic8800DW,
-            ChipVariant::Aic8800D80X2,
-            ChipVariant::Unknown,
-        ] {
-            assert_eq!(MeConfigProfile::for_chip(chip), None);
-        }
-    }
-
-    #[test]
     fn channel_config_uses_six_byte_vendor_channel_entries() {
         let payload = channel_config_payload();
 
@@ -1154,6 +1120,11 @@ mod tests {
 
     #[test]
     fn asynchronous_traffic_confirmation_is_not_a_control_mailbox_result() {
+        // The ids are the vendor firmware's LMAC message indices: renumbering
+        // one silently turns an unsolicited message into a confirmation the
+        // mailbox is not waiting for, which fails the device.
+        assert_eq!(ME_TX_CREDITS_UPDATE_IND, 0x140b);
+        assert_eq!(ME_TRAFFIC_IND_CFM, 0x140d);
         assert!(is_indication_message(ME_TX_CREDITS_UPDATE_IND));
         assert!(is_indication_message(ME_TRAFFIC_IND_CFM));
         assert!(!is_indication_message(ME_SET_CONTROL_PORT_CFM));

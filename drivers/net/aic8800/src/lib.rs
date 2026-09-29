@@ -8,6 +8,9 @@
 
 extern crate alloc;
 
+#[cfg(all(test, feature = "rdif"))]
+mod rdif_test_support;
+
 pub mod common;
 mod device;
 mod firmware;

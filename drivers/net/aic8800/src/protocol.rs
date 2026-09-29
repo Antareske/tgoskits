@@ -7,6 +7,7 @@ use crate::common::{
 };
 
 pub(crate) const BLOCK_SIZE: usize = 512;
+const TX_LENGTH_MASK: usize = 0x0fff;
 pub(crate) const DBG_MEM_READ_REQ: u16 = 0x0400;
 pub(crate) const DBG_MEM_WRITE_REQ: u16 = 0x0402;
 pub(crate) const DBG_MEM_BLOCK_WRITE_REQ: u16 = 0x040b;
@@ -16,6 +17,10 @@ pub(crate) const SDIO_HEADER_SIZE: usize = 4;
 const DUMMY_WORD_SIZE: usize = 4;
 const LMAC_HEADER_SIZE: usize = 8;
 const HOST_DESCRIPTOR_SIZE: usize = 28;
+/// `hostdesc.hostid` that asks the firmware to confirm a control-port frame.
+/// Ordinary data frames are confirmed by their own write completion and carry
+/// zero instead.
+const FIRMWARE_CONFIRMATION_HOST_ID: u32 = 0x8000_0001;
 const TX_ALIGNMENT: usize = 4;
 const TAIL_SIZE: usize = 4;
 const DEBUG_BLOCK_DATA_SIZE: usize = 1024;
@@ -150,24 +155,6 @@ fn exact_two_words(payload: &[u8]) -> Result<[u32; 2], DebugConfirmationError> {
     ])
 }
 
-/// Bytes one frame occupies inside a transmit stream.
-///
-/// The firmware walks a write frame by frame, stepping by the frame's declared
-/// length rounded up to the transmit alignment, and stops at the first zero
-/// length.  A write that carries several frames therefore has to leave each
-/// frame exactly that long — the block padding the single-frame form ends with
-/// is only valid after the last frame, where it reads as the end of the stream.
-///
-/// Returns `None` for a frame whose declared length does not fit the buffer.
-pub(crate) fn stream_frame_len(frame: &[u8]) -> Option<usize> {
-    let declared = match frame.first_chunk::<2>() {
-        Some([low, high]) => usize::from(u16::from_le_bytes([*low, *high])) & 0x0fff,
-        None => return None,
-    };
-    let length = align_up(SDIO_HEADER_SIZE + declared, TX_ALIGNMENT);
-    (length <= frame.len()).then_some(length)
-}
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum TxConfirmation {
     /// Ordinary data frames are completed by the host SDIO write.
@@ -183,7 +170,7 @@ pub(crate) fn ethernet_tx_frame(
     station_index: u8,
     v3: bool,
     confirmation: TxConfirmation,
-) -> Result<Vec<u8>, ()> {
+) -> Result<(Vec<u8>, usize), ()> {
     if ethernet.len() < 14 {
         return Err(());
     }
@@ -206,8 +193,11 @@ pub(crate) fn ethernet_tx_frame(
     } else {
         aligned - SDIO_HEADER_SIZE
     };
+    if advertised > TX_LENGTH_MASK {
+        return Err(());
+    }
     frame[0] = advertised as u8;
-    frame[1] = ((advertised >> 8) & 0x0f) as u8;
+    frame[1] = (advertised >> 8) as u8;
     frame[2] = SDIO_TYPE_DATA_TX;
     frame[3] = if v3 { crc8_ponl_107(&frame[..3]) } else { 0 };
 
@@ -215,7 +205,7 @@ pub(crate) fn ethernet_tx_frame(
     descriptor[..2].copy_from_slice(&(payload.len() as u16).to_le_bytes());
     let host_id: u32 = match confirmation {
         TxConfirmation::None => 0,
-        TxConfirmation::Firmware => 0x8000_0001,
+        TxConfirmation::Firmware => FIRMWARE_CONFIRMATION_HOST_ID,
     };
     descriptor[4..8].copy_from_slice(&host_id.to_le_bytes());
     descriptor[8..14].copy_from_slice(&ethernet[..6]);
@@ -226,12 +216,38 @@ pub(crate) fn ethernet_tx_frame(
     frame[SDIO_HEADER_SIZE + HOST_DESCRIPTOR_SIZE
         ..SDIO_HEADER_SIZE + HOST_DESCRIPTOR_SIZE + payload.len()]
         .copy_from_slice(payload);
-    Ok(frame)
+    Ok((frame, aligned))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn ethernet_tx_rejects_lengths_that_do_not_fit_the_sdio_header() {
+        // The header declares the frame in twelve bits, so the host descriptor
+        // and the payload together have to stay inside that field.  The
+        // largest representable packet is accepted and encodes the limit.
+        const ETHERNET_HEADER: usize = 14;
+        let largest_payload = TX_LENGTH_MASK - HOST_DESCRIPTOR_SIZE;
+        let ethernet = alloc::vec![0; ETHERNET_HEADER + largest_payload];
+        let (frame, stream_len) =
+            ethernet_tx_frame(&ethernet, 0, 0, true, TxConfirmation::None).unwrap();
+        assert_eq!(
+            u16::from_le_bytes([frame[0], frame[1]]),
+            TX_LENGTH_MASK as u16
+        );
+        assert_eq!(
+            stream_len,
+            align_up(SDIO_HEADER_SIZE + TX_LENGTH_MASK, TX_ALIGNMENT)
+        );
+
+        let oversized = alloc::vec![0; ETHERNET_HEADER + largest_payload + 1];
+        assert_eq!(
+            ethernet_tx_frame(&oversized, 0, 0, true, TxConfirmation::None),
+            Err(())
+        );
+    }
 
     #[test]
     fn command_frame_is_block_aligned_and_typed() {
@@ -281,9 +297,11 @@ mod tests {
             0xaa, 0xbb, 0xcc,
         ];
 
-        let frame = ethernet_tx_frame(&ethernet, 2, 7, true, TxConfirmation::None).unwrap();
+        let (frame, stream_len) =
+            ethernet_tx_frame(&ethernet, 2, 7, true, TxConfirmation::None).unwrap();
 
         assert_eq!(u16::from_le_bytes([frame[0], frame[1]]), 31);
+        assert_eq!(stream_len, 36);
         assert_eq!(frame[2], 0x01);
         assert_eq!(frame[3], crc8_ponl_107(&frame[..3]));
         let descriptor = &frame[SDIO_HEADER_SIZE..SDIO_HEADER_SIZE + HOST_DESCRIPTOR_SIZE];
@@ -302,15 +320,17 @@ mod tests {
             &[0xaa, 0xbb, 0xcc]
         );
 
-        let firmware_frame =
+        let (firmware_frame, _) =
             ethernet_tx_frame(&ethernet, 2, 7, true, TxConfirmation::Firmware).unwrap();
         assert_eq!(
             &firmware_frame[SDIO_HEADER_SIZE + 4..SDIO_HEADER_SIZE + 8],
             &0x8000_0001u32.to_le_bytes()
         );
 
-        let dc_frame = ethernet_tx_frame(&ethernet, 2, 7, false, TxConfirmation::None).unwrap();
+        let (dc_frame, dc_stream_len) =
+            ethernet_tx_frame(&ethernet, 2, 7, false, TxConfirmation::None).unwrap();
         assert_eq!(u16::from_le_bytes([dc_frame[0], dc_frame[1]]), 32);
+        assert_eq!(dc_stream_len, 36);
         assert_eq!(dc_frame[2], 0x01);
         assert_eq!(dc_frame[3], 0);
     }

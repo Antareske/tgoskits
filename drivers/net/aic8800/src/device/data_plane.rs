@@ -6,7 +6,7 @@ use crate::{
     lmac::{
         SM_CONNECT_IND, SM_DISCONNECT_IND, parse_connect_indication, parse_disconnect_indication,
     },
-    protocol::{BLOCK_SIZE, TxConfirmation, ethernet_tx_frame, stream_frame_len},
+    protocol::{BLOCK_SIZE, TxConfirmation, ethernet_tx_frame},
     registers::ReceiveLength,
     rx::{ParsedFrame, parse_fifo},
 };
@@ -15,11 +15,10 @@ use crate::{
 // than a frame's air time finds fresh capacity instead of paying another
 // command round trip for an unchanged register.
 const IO_RETRY: Duration = Duration::from_micros(200);
-// A write pays its fixed cost whatever it carries, so a batch the firmware
-// pool cannot back is worth waiting for: below this many buffers the write
-// asks the firmware again shortly instead of committing what it could take.
-const DATA_TX_MIN_AGGREGATE_CREDITS: u8 = 8;
-// How long one such wait lasts, and how many of them a single write may take
+// Cap the useful-credit threshold so a large aggregation policy does not add
+// disproportionate latency while waiting for a larger batch.
+const DATA_TX_MAX_WAIT_CREDITS: u8 = 8;
+// How long one thin-pool wait lasts, and how many waits one write may take
 // before it goes out with whatever the pool holds.
 const DATA_TX_CREDIT_WAIT: Duration = Duration::from_micros(300);
 const DATA_TX_CREDIT_WAIT_BUDGET: u32 = 8;
@@ -445,17 +444,21 @@ impl AicDevice {
         if self.data.active_tx.is_none() {
             return Err(AicError::CompletionMismatch);
         }
-        // A write pays its fixed cost whatever it carries, so a pool that
-        // cannot back a batch is worth waiting for rather than spending on a
-        // small burst: while the reading is thin the write asks again shortly.
-        // The wait is bounded, and the reading is not cached, so a pool that
-        // stays thin still ends in a write instead of a stalled transmit path.
+        // Wait only when this user write still has queued frames to append and
+        // the selected policy could carry more than one frame. Lifecycle writes
+        // and single-packet policies use the available credit immediately.
         let waits = self
             .data
             .active_tx
             .as_ref()
             .map_or(0, |active| active.credit_waits);
-        let thin = credits > DATA_TX_RESERVED_CREDITS && credits < DATA_TX_MIN_AGGREGATE_CREDITS;
+        let has_queued_frame = !self.data.tx.is_empty();
+        let can_grow = self.user_write_in_flight()
+            && self.tx_aggregation.packets > 1
+            && has_queued_frame
+            && self.active_write_below_byte_target();
+        let wait_threshold = self.aggregation_credit_threshold();
+        let thin = can_grow && credits > DATA_TX_RESERVED_CREDITS && credits < wait_threshold;
         if thin && waits < DATA_TX_CREDIT_WAIT_BUDGET {
             if let Some(active) = self.data.active_tx.as_mut() {
                 active.credit_waits = waits.saturating_add(1);
@@ -465,8 +468,9 @@ impl AicDevice {
             return Ok(());
         }
         // One written packet consumes one reported buffer, so the reading
-        // authorises the next writes until the reserve boundary.
-        self.data.tx_credits = Some(credits);
+        // authorises the next writes until the reserve boundary. Reserve-only
+        // readings are not cached because they cannot authorize a data write.
+        self.data.tx_credits = (credits > DATA_TX_RESERVED_CREDITS).then_some(credits);
         if credits <= DATA_TX_RESERVED_CREDITS {
             let active = self
                 .data
@@ -533,8 +537,6 @@ impl AicDevice {
         Ok(())
     }
 
-    /// Whether the write in flight carries user packets rather than a lifecycle
-    /// frame.
     /// Takes the write in flight, returning the tokens of the packets it
     /// carried in the order they were handed over.
     pub(super) fn take_active_write_tokens(&mut self) -> Vec<TxToken> {
@@ -548,6 +550,8 @@ impl AicDevice {
         tokens
     }
 
+    /// Whether the write in flight carries user packets rather than a lifecycle
+    /// frame.
     fn user_write_in_flight(&self) -> bool {
         matches!(
             self.data
@@ -559,11 +563,12 @@ impl AicDevice {
     }
 
     /// Publishes the packets one transmit write completed.  A write that
-    /// carried a single packet keeps the per-packet event; a burst is
-    /// published as one event, because completions share the event queue with
-    /// receive frames and two thirds of an acknowledgement stream must not be
-    /// displaced by them.  With no room the tokens wait instead of displacing
-    /// anything: a completion only ever returns a buffer.
+    /// carried a single packet keeps the per-packet event; a burst is published
+    /// as one event, so a saturated transmitter cannot crowd the receive frames
+    /// out of the shared event queue with one entry per packet.  With no room
+    /// the tokens wait instead of displacing anything: a completion only ever
+    /// returns a buffer, and the next drive pass has room again once the queue
+    /// drains.
     pub(super) fn complete_write_tokens(&mut self, tokens: Vec<TxToken>) {
         if tokens.is_empty() {
             return;
@@ -605,7 +610,7 @@ impl AicDevice {
         // queue is never empty, so an unbounded continuation would keep the
         // receive side from draining the firmware buffers at all.  The drive
         // path clears the bound when it runs, which is what gives the receive
-        // scan, the mailbox and the telemetry their turn between two writes.
+        // scan and the mailbox their turn between two writes.
         if self.io.chain_used {
             return;
         }
@@ -645,7 +650,7 @@ impl AicDevice {
             return;
         };
         if let Some(internal) = self.data.pop_internal_tx() {
-            let Ok(wire_frame) = ethernet_tx_frame(
+            let Ok((wire_frame, stream_len)) = ethernet_tx_frame(
                 &internal.ethernet_frame,
                 interface_index,
                 station_index,
@@ -657,6 +662,7 @@ impl AicDevice {
             self.data.active_tx = Some(ActiveTx::new(
                 super::owner::TxCompletion::Internal(internal.kind),
                 wire_frame,
+                stream_len,
             ));
             return;
         }
@@ -668,10 +674,11 @@ impl AicDevice {
             return;
         };
         match frame {
-            Ok((token, wire_frame)) => {
+            Ok(wire) => {
                 self.data.active_tx = Some(ActiveTx::new(
-                    super::owner::TxCompletion::User(token),
-                    wire_frame,
+                    super::owner::TxCompletion::User(wire.token),
+                    wire.bytes,
+                    wire.stream_len,
                 ));
                 let limit = self.aggregate_limit();
                 self.extend_active_write(limit);
@@ -680,17 +687,35 @@ impl AicDevice {
         }
     }
 
-    /// Packets the next write may carry: bounded by the aggregate policy the
-    /// layer that hands frames over selected, and by the cached credit, which
-    /// is what the firmware still has for data.  Without a reading the write
-    /// carries one packet, because the number of firmware buffers has to be
-    /// known before a burst is committed.
+    /// Packets the next write may carry, bounded by policy and cached credit.
     fn aggregate_limit(&self) -> usize {
-        match self.data.tx_credits {
-            Some(credits) => usize::from(credits.saturating_sub(DATA_TX_RESERVED_CREDITS))
-                .min(self.tx_aggregation.packets),
-            None => 1,
-        }
+        self.data
+            .tx_credits
+            .map(|credits| self.aggregate_limit_for(credits))
+            .unwrap_or(1)
+    }
+
+    fn aggregate_limit_for(&self, credits: u8) -> usize {
+        usize::from(credits.saturating_sub(DATA_TX_RESERVED_CREDITS))
+            .min(self.tx_aggregation.packets)
+    }
+
+    fn active_write_below_byte_target(&self) -> bool {
+        self.data
+            .active_tx
+            .as_ref()
+            .is_some_and(|active| active.stream_len < self.tx_aggregation.bytes)
+    }
+
+    /// Credit level below which a write waits for a larger pool: the frames the
+    /// policy could still append, capped so a large policy does not add its
+    /// whole width to every thin reading.
+    fn aggregation_credit_threshold(&self) -> u8 {
+        let useful_frames = self.tx_aggregation.packets.min(usize::from(
+            DATA_TX_MAX_WAIT_CREDITS.saturating_sub(DATA_TX_RESERVED_CREDITS),
+        ));
+        DATA_TX_RESERVED_CREDITS
+            .saturating_add(u8::try_from(useful_frames).unwrap_or(DATA_TX_MAX_WAIT_CREDITS))
     }
 
     /// Grows the pending write up to `limit` packets by appending frames that
@@ -725,14 +750,10 @@ impl AicDevice {
                 return;
             };
             match next {
-                Ok((token, frame)) => {
-                    let Some(length) = stream_frame_len(&frame) else {
-                        self.complete_write_tokens(vec![token]);
-                        continue;
-                    };
+                Ok(wire) => {
                     if let Some(active) = self.data.active_tx.as_mut() {
-                        active.append_frame(&frame, length);
-                        active.extra_tokens.push(token);
+                        active.append_frame(&wire.bytes, wire.stream_len);
+                        active.extra_tokens.push(wire.token);
                     }
                 }
                 Err(token) => self.complete_write_tokens(vec![token]),
@@ -844,10 +865,9 @@ fn decapsulate_data_frames(frame: &[u8], decryption_status: u8) -> Option<Vec<Ve
     }
 
     if is_amsdu {
-        // The peer only sends A-MSDU once the capabilities this driver
-        // advertises say it may, so a delivered one is the evidence that the
-        // declaration reached the air.  Only a frame this driver could take
-        // apart counts; one it had to drop is not evidence of anything.
+        // A-MSDU is only expected from a peer that saw the capability this
+        // driver advertises, so the frame is taken apart into the Ethernet
+        // frames it aggregates.
         return decapsulate_amsdu(&frame[payload..]);
     }
 
@@ -913,6 +933,7 @@ mod tests {
 
     use super::*;
     use crate::{
+        TxAggregation,
         common::{ChipVariant, SDIO_TYPE_CFG_CMD_RSP, SDIO_TYPE_CFG_PRINT, SDIO_TYPE_DATA},
         rx::{RX_BYTE_CAPACITY, RX_CAPACITY},
     };
@@ -1378,82 +1399,110 @@ mod tests {
     }
 
     #[test]
-    fn data_tx_retains_packet_until_the_credit_can_back_a_batch() {
+    fn thin_credit_wait_is_bounded_and_eventually_writes_the_available_batch() {
+        let now = MonotonicTime::default();
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        device.set_tx_aggregation(aggregate(4)).unwrap();
+        device
+            .data
+            .tx
+            .enqueue(TxToken::new(2), vec![0; 60])
+            .unwrap();
+
+        let mut current = now;
+        let mut action = device.advance(AicInput::tick(current));
+        for _ in 0..DATA_TX_CREDIT_WAIT_BUDGET {
+            let flow = submit(&action);
+            assert!(matches!(flow.kind, SdioRequestKind::ReadByte { .. }));
+            action = device.advance(complete(&flow, SdioResponse::Byte(3), current));
+            let AicAction::WaitForInterruptUntil(deadline) = action else {
+                panic!("thin but useful pool must wait within the retry budget")
+            };
+            assert_eq!(deadline, current.after(DATA_TX_CREDIT_WAIT));
+            current = deadline;
+            action = device.advance(AicInput::tick(current));
+        }
+
+        let flow = submit(&action);
+        action = device.advance(complete(&flow, SdioResponse::Byte(3), current));
+        assert!(
+            matches!(
+                action,
+                AicAction::SubmitSdio(SdioRequest {
+                    kind: SdioRequestKind::Write { .. },
+                    ..
+                })
+            ),
+            "the bounded wait must write the available credit"
+        );
+    }
+
+    #[test]
+    fn reserve_credit_read_is_not_cached() {
+        let now = MonotonicTime::default();
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        let flow = submit(&device.advance(AicInput::tick(now)));
+        let retry = device.advance(complete(&flow, SdioResponse::Byte(2), now));
+
+        assert!(matches!(retry, AicAction::WaitForInterruptUntil(_)));
+        assert_eq!(device.data.tx_credits, None);
+    }
+
+    #[test]
+    fn a_pool_that_cannot_back_the_batch_does_not_buy_a_smaller_write() {
         // One full-sized packet consumes one firmware buffer, not three
         // 512-byte SDIO blocks. Two buffers stay reserved for commands, and a
-        // write waits while the pool is too thin to back a batch, because its
-        // fixed cost is paid whatever it carries.
+        // write pays its fixed cost whatever it carries, so while the reported
+        // pool cannot back the selected batch the queued packets stay queued.
         for chip in [ChipVariant::Aic8800D80, ChipVariant::Aic8800DC] {
             let mut device = ready_transmitter(chip, 1414);
+            device.set_tx_aggregation(aggregate(4)).unwrap();
+            device
+                .data
+                .tx
+                .enqueue(TxToken::new(2), vec![0; 1414])
+                .unwrap();
+
             let mut now = MonotonicTime::default();
-            let mut action = device.advance(AicInput { now, event: None });
-            for credits in [0, 1, 2, 3, 7] {
-                let AicAction::SubmitSdio(request) = action else {
-                    panic!("expected a fresh credit read")
-                };
-                assert!(matches!(request.kind, SdioRequestKind::ReadByte { .. }));
-                action = device.advance(AicInput {
-                    now,
-                    event: Some(AicInputEvent::Sdio(SdioCompletion {
-                        request_id: request.id,
-                        result: Ok(SdioResponse::Byte(credits)),
-                    })),
-                });
+            let mut action = device.advance(AicInput::tick(now));
+            for credits in [0, 1, DATA_TX_RESERVED_CREDITS, DATA_TX_RESERVED_CREDITS + 3] {
+                let flow = submit(&action);
+                assert!(matches!(flow.kind, SdioRequestKind::ReadByte { .. }));
+                action = device.advance(complete(&flow, SdioResponse::Byte(credits), now));
                 let AicAction::WaitForInterruptUntil(deadline) = action else {
-                    panic!("a pool below the batch threshold must not buy a small write")
+                    panic!("a pool of {credits} buffers must not buy a batch write")
                 };
-                assert!(device.data.active_tx.is_some());
+                assert_eq!(device.data.active_tx.as_ref().unwrap().packets(), 1);
                 assert!(device.data.events.is_empty());
                 now = deadline;
-                action = device.advance(AicInput { now, event: None });
+                action = device.advance(AicInput::tick(now));
             }
-            let AicAction::SubmitSdio(request) = action else {
-                panic!("expected a fresh credit read")
-            };
-            action = device.advance(AicInput {
+
+            let flow = submit(&action);
+            let write = submit(&device.advance(complete(
+                &flow,
+                SdioResponse::Byte(DATA_TX_RESERVED_CREDITS + 4),
                 now,
-                event: Some(AicInputEvent::Sdio(SdioCompletion {
-                    request_id: request.id,
-                    result: Ok(SdioResponse::Byte(8)),
-                })),
-            });
-            let AicAction::SubmitSdio(write) = action else {
-                panic!("a pool that backs a batch must permit the write")
-            };
-            assert!(
-                matches!(&write.kind, SdioRequestKind::Write { bytes, .. } if bytes.len() == 1536)
+            )));
+            assert_eq!(
+                written_frames(&AicAction::SubmitSdio(write.clone())),
+                vec![1428, 1428],
+                "the reading that can back the batch writes every queued packet"
             );
-            let complete = device.advance(AicInput {
-                now,
-                event: Some(AicInputEvent::Sdio(SdioCompletion {
-                    request_id: write.id,
-                    result: Ok(SdioResponse::Unit),
-                })),
-            });
-            assert!(
-                matches!(complete, AicAction::Event(AicEvent::TransmitComplete(token)) if token == TxToken::new(1))
+            assert!(device.data.tx.is_empty());
+
+            assert_eq!(
+                device.advance(complete(&write, SdioResponse::Unit, now)),
+                AicAction::Event(AicEvent::TransmitAggregateComplete(vec![
+                    TxToken::new(1),
+                    TxToken::new(2)
+                ])),
+                "the batch completes every packet it carried"
             );
-            assert!(device.data.active_tx.is_none());
-            assert!(matches!(
-                device.advance(AicInput { now, event: None }),
-                AicAction::WaitForInterrupt
-            ));
-            let next = device.advance(AicInput {
-                now,
-                event: Some(AicInputEvent::Tx {
-                    token: TxToken::new(2),
-                    frame: vec![0; 60],
-                }),
-            });
-            assert!(
-                matches!(
-                    next,
-                    AicAction::SubmitSdio(SdioRequest {
-                        kind: SdioRequestKind::Write { .. },
-                        ..
-                    })
-                ),
-                "a reading that still backs a batch serves the next write without another read"
+            assert_eq!(
+                device.data.tx_credits,
+                Some(DATA_TX_RESERVED_CREDITS + 2),
+                "one firmware buffer per packet the write carried"
             );
         }
     }
@@ -1505,6 +1554,9 @@ mod tests {
         // firmware buffer and completes its own token.
         let now = MonotonicTime::default();
         let mut single = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        single
+            .set_tx_aggregation(TxAggregation::new(1, TxAggregation::DEFAULT_BYTES))
+            .unwrap();
         single.data.tx_credits = Some(16);
         assert_eq!(
             written_frames(&single.advance(AicInput::tick(now))),
@@ -1513,7 +1565,7 @@ mod tests {
         );
 
         let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
-        device.set_tx_aggregation(aggregate(4));
+        device.set_tx_aggregation(aggregate(4)).unwrap();
         device.data.tx_credits = Some(16);
         let batched = device.advance(AicInput {
             now,
@@ -1563,13 +1615,14 @@ mod tests {
     }
 
     #[test]
-    fn the_byte_bound_ends_a_write_and_leaves_the_rest_queued() {
-        // The frame bound and the byte bound both end the growth of a write;
-        // whichever is reached first wins.  A frame that does not fit is not
-        // dropped and not reordered: it goes out with the next write.
+    fn the_soft_byte_target_allows_one_crossing_frame_then_stops_growth() {
+        // The target is checked before appending, so one frame may cross it.
+        // That frame remains intact and later frames stay queued.
         let now = MonotonicTime::default();
         let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
-        device.set_tx_aggregation(TxAggregation::new(32, 200));
+        device
+            .set_tx_aggregation(TxAggregation::new(32, 200))
+            .unwrap();
         device.data.tx_credits = Some(32);
 
         let write = device.advance(AicInput {
@@ -1581,10 +1634,11 @@ mod tests {
             ])),
         });
 
+        assert_eq!(written_frames(&write), vec![74, 78, 82]);
         assert_eq!(
-            written_frames(&write),
-            vec![74, 78, 82],
-            "the write stops before the frame that would pass the byte bound"
+            device.data.active_tx.as_ref().unwrap().stream_len,
+            252,
+            "the final frame may take the stream past the 200-byte target"
         );
         assert_eq!(
             device.data.tx.len(),
@@ -1600,7 +1654,7 @@ mod tests {
         // the queue drains, without any further stimulus.
         let now = MonotonicTime::default();
         let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
-        device.set_tx_aggregation(aggregate(4));
+        device.set_tx_aggregation(aggregate(4)).unwrap();
         device.data.tx_credits = Some(16);
         let AicAction::SubmitSdio(write) = device.advance(AicInput {
             now,
@@ -1680,7 +1734,7 @@ mod tests {
         // never return its buffer.
         let now = MonotonicTime::default();
         let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
-        device.set_tx_aggregation(aggregate(4));
+        device.set_tx_aggregation(aggregate(4)).unwrap();
         device
             .queue_internal_eapol(super::super::owner::InternalTxKind::M2, vec![0; 95])
             .unwrap();
@@ -1750,6 +1804,41 @@ mod tests {
                 TxToken::new(202)
             ])),
             "the dropped packets are reported complete"
+        );
+        assert_eq!(device.data.tx.len(), crate::tx::TX_CAPACITY);
+    }
+
+    #[test]
+    fn a_single_frame_that_does_not_fit_is_reported_complete() {
+        // The single-frame form is the same over-capacity case as the batch:
+        // the packet returns to the runtime instead of failing the device.
+        let mut device = ready_transmitter(ChipVariant::Aic8800D80, 60);
+        while device.data.tx.len() < crate::tx::TX_CAPACITY {
+            let token = TxToken::new(device.data.tx.len() as u64 + 1);
+            device
+                .data
+                .tx
+                .enqueue(token, vec![0; 60])
+                .expect("the queue is filled up to its capacity");
+        }
+
+        let action = device.advance(AicInput {
+            now: MonotonicTime::default(),
+            event: Some(AicInputEvent::Tx {
+                token: TxToken::new(200),
+                frame: vec![0; 60],
+            }),
+        });
+
+        assert_eq!(
+            device.state(),
+            AicState::Ready,
+            "a full queue must not fail the device"
+        );
+        assert_eq!(
+            action,
+            AicAction::Event(AicEvent::TransmitComplete(TxToken::new(200))),
+            "the packet that did not fit is reported complete"
         );
         assert_eq!(device.data.tx.len(), crate::tx::TX_CAPACITY);
     }

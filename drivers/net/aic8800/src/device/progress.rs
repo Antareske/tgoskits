@@ -1,4 +1,4 @@
-use alloc::vec::Vec;
+use alloc::{vec, vec::Vec};
 
 use super::*;
 
@@ -86,10 +86,11 @@ impl AicDevice {
                 if self.lifecycle.state != AicState::Ready {
                     return Err(AicError::Busy);
                 }
-                self.data
-                    .tx
-                    .enqueue(token, frame)
-                    .map_err(|_| AicError::TxQueueFull)?;
+                if self.data.tx.enqueue(token, frame).is_err() {
+                    // A full transmit queue is the same over-capacity case the
+                    // batch form reports complete, not a device failure.
+                    self.complete_write_tokens(vec![token]);
+                }
                 Ok(())
             }
             AicInputEvent::TxBatch(frames) => {
@@ -236,11 +237,14 @@ impl AicDevice {
         }
         // Nothing queued will be transmitted any more, so the packets the
         // device still holds are reported complete and their buffers return to
-        // the runtime.
+        // the runtime before the shutdown write goes out.
         let tokens = self.take_active_write_tokens();
         self.complete_write_tokens(tokens);
         let queued: Vec<_> = self.data.tx.drain_tokens().collect();
         self.complete_write_tokens(queued);
+        if let Some(event) = self.data.pop_event() {
+            return AicAction::Event(event);
+        }
         self.emit(
             IoPurpose::Shutdown,
             write_byte(self.data_function(), self.registers().interrupt_enable, 0),
@@ -288,6 +292,10 @@ impl AicDevice {
         for token in stalled {
             let _ = self.data.push_event(AicEvent::TransmitComplete(token));
         }
+        // The pop below always finds an event: a publication is refused only
+        // when the queue already holds `RX_CAPACITY` events and none of them is
+        // a receive frame to evict, and then the terminal event waits its turn
+        // while an earlier event is returned.
         let _ = self.data.push_event(AicEvent::Failed(error));
         AicAction::Event(
             self.data
@@ -539,6 +547,65 @@ mod tests {
     }
 
     #[test]
+    fn shutdown_reclaims_a_queued_aggregate_continuation_before_sdio_shutdown() {
+        let now = time(0);
+        let mut device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
+        device.lifecycle.state = AicState::Ready;
+        device
+            .set_tx_aggregation(super::owner::TxAggregation::new(2, 4096))
+            .unwrap();
+        device.data.tx_credits = Some(16);
+        device.data.link.install_interface(0).unwrap();
+        device
+            .data
+            .link
+            .install_peer(0, 1, [2, 0, 0, 0, 0, 1])
+            .unwrap();
+        for token in 1..=4 {
+            device
+                .data
+                .tx
+                .enqueue(TxToken::new(token), vec![0; 60])
+                .unwrap();
+        }
+
+        let AicAction::SubmitSdio(first_write) = device.advance(AicInput::tick(now)) else {
+            panic!("expected the first aggregate write")
+        };
+        assert_eq!(device.data.active_tx.as_ref().unwrap().packets(), 2);
+        assert!(matches!(
+            device.advance(complete(&first_write, SdioResponse::Unit, now)),
+            AicAction::Event(AicEvent::TransmitAggregateComplete(tokens))
+                if tokens == vec![TxToken::new(1), TxToken::new(2)]
+        ));
+        assert_eq!(device.data.active_tx.as_ref().unwrap().packets(), 2);
+        assert!(
+            device.io.next.is_some(),
+            "continuation is armed but not submitted"
+        );
+
+        let shutdown = device.advance(AicInput {
+            now,
+            event: Some(AicInputEvent::Control(ControlRequest::Shutdown)),
+        });
+        assert!(
+            matches!(shutdown, AicAction::Event(AicEvent::TransmitAggregateComplete(tokens))
+            if tokens == vec![TxToken::new(3), TxToken::new(4)])
+        );
+        assert!(
+            device.io.next.is_none(),
+            "shutdown discards the queued continuation"
+        );
+        assert!(matches!(
+            device.advance(AicInput::tick(now)),
+            AicAction::SubmitSdio(SdioRequest {
+                kind: SdioRequestKind::WriteByte { .. },
+                ..
+            })
+        ));
+    }
+
+    #[test]
     fn failure_reclaims_active_and_queued_transmit_tokens_before_terminal_error() {
         let mut device = AicDevice::new(ChipVariant::Aic8800D80).unwrap();
         device.lifecycle.state = AicState::Ready;
@@ -547,6 +614,7 @@ mod tests {
         device.data.active_tx = Some(ActiveTx::new(
             super::owner::TxCompletion::User(active),
             vec![1],
+            1,
         ));
         device.data.tx.enqueue(queued, vec![2]).unwrap();
 

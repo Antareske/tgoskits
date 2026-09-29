@@ -10,9 +10,9 @@ use crate::{
         MM_SET_FILTER_CFM, MM_SET_FILTER_REQ, MM_SET_RF_CALIB_CFM, MM_SET_RF_CALIB_REQ,
         MM_SET_RF_CONFIG_CFM, MM_SET_RF_CONFIG_REQ, MM_SET_STACK_START_CFM, MM_SET_STACK_START_REQ,
         MM_SET_TXPWR_IDX_LVL_CFM, MM_SET_TXPWR_IDX_LVL_REQ, MM_START_CFM, MM_START_REQ,
-        MeConfigProfile, RfCalibrationBand, TASK_ME, TASK_MM, add_interface_payload,
-        channel_config_payload, filter_payload, get_mac_payload, me_config_payload,
-        rf_calibration_payload, stack_start_payload, start_payload, tx_power_level_payload,
+        RfCalibrationBand, TASK_ME, TASK_MM, add_interface_payload, channel_config_payload,
+        filter_payload, get_mac_payload, me_config_payload, rf_calibration_payload,
+        stack_start_payload, start_payload, tx_power_level_payload,
     },
     profile::FirmwareProfile,
     protocol::{
@@ -89,6 +89,26 @@ impl StartupState {
 }
 
 impl AicDevice {
+    pub(super) fn startup_stage_diagnostic(&self) -> Option<alloc::string::String> {
+        self.lifecycle
+            .startup
+            .as_ref()
+            .map(|startup| alloc::format!("{:?}", startup.stage))
+    }
+
+    pub(super) fn log_startup_confirmation_error(
+        &self,
+        result_length: usize,
+        result_header: &[u8],
+        error: &AicError,
+    ) {
+        let stage = self.lifecycle.startup.as_ref().map(|startup| startup.stage);
+        log::error!(
+            "[wifi] AIC startup confirmation rejected: stage={stage:?} result_len={result_length} \
+             result={result_header:02x?} error={error}"
+        );
+    }
+
     pub(super) fn drive_startup(&mut self, now: MonotonicTime) -> AicAction {
         if self.mailbox_timed_out(now) {
             return self.drive_mailbox(now);
@@ -286,13 +306,10 @@ impl AicDevice {
                 self.drive_mailbox(now)
             }
             StartupStage::ConfigureMac => {
-                let Some(profile) = MeConfigProfile::for_chip(self.chip()) else {
-                    return self.fail(AicError::UnsupportedChip);
-                };
                 self.begin_lmac_mailbox(
                     ME_CONFIG_REQ,
                     TASK_ME,
-                    &me_config_payload(profile),
+                    &me_config_payload(self.profile.me_config()),
                     ME_CONFIG_CFM,
                     now,
                 );

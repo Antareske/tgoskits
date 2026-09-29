@@ -20,7 +20,7 @@ use crate::{
             MacAddressState, OwnerChannels, WifiChannels, queues::queue_parts, shared_irq_latch,
         },
         error::AicRdifError,
-        owner::{AicOwner, OwnerPolicy},
+        owner::AicOwner,
     },
 };
 
@@ -119,6 +119,9 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicRdifDevice<H> {
         {
             return Err(AicRdifError::QueueUnavailable);
         }
+        if !options.tx_aggregation.is_valid() {
+            return Err(AicRdifError::InvalidTxAggregation);
+        }
         let dma_mask = host
             .device_dma()
             .map_err(|_| AicRdifError::DmaUnavailable)?
@@ -165,9 +168,7 @@ impl<H: CompletionIrqRearmHost + Send + 'static> NetDevice for AicRdifDevice<H> 
             wifi_channels,
             Arc::clone(&irq_latch),
             Arc::clone(&mac),
-            OwnerPolicy {
-                tx_aggregation: options.tx_aggregation,
-            },
+            options.tx_aggregation,
         );
         let OwnerChannels {
             sender: owner_sender,

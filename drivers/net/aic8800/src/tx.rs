@@ -14,6 +14,18 @@ pub(crate) struct PendingTx {
     pub frame: Vec<u8>,
 }
 
+/// One queued packet encoded into the frame a transmit write carries.
+pub(crate) struct WireFrame {
+    /// Token whose buffer returns to the runtime once the packet completes.
+    pub token: TxToken,
+    /// Encoded frame: SDIO header, host descriptor, payload, and the block
+    /// padding the single-frame write form ends with.
+    pub bytes: Vec<u8>,
+    /// Stream length inside `bytes`; a write carrying several frames replaces
+    /// everything past it with the next frame.
+    pub stream_len: usize,
+}
+
 pub(crate) struct TxState {
     queue: VecDeque<PendingTx>,
 }
@@ -38,17 +50,20 @@ impl TxState {
         self.queue.len()
     }
 
-    #[cfg(test)]
     pub(crate) fn is_empty(&self) -> bool {
         self.queue.is_empty()
     }
 
+    /// Encodes the oldest queued packet for the wire.
+    ///
+    /// `Err` returns the token of a packet the encoder refused, so the caller
+    /// can report it complete instead of keeping its buffer.
     pub(crate) fn take_wire_frame(
         &mut self,
         interface_index: u8,
         station_index: u8,
         v3: bool,
-    ) -> Option<Result<(TxToken, Vec<u8>), TxToken>> {
+    ) -> Option<Result<WireFrame, TxToken>> {
         let pending = self.queue.pop_front()?;
         Some(
             ethernet_tx_frame(
@@ -58,7 +73,11 @@ impl TxState {
                 v3,
                 TxConfirmation::None,
             )
-            .map(|frame| (pending.token, frame))
+            .map(|(bytes, stream_len)| WireFrame {
+                token: pending.token,
+                bytes,
+                stream_len,
+            })
             .map_err(|_| pending.token),
         )
     }

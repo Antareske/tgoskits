@@ -200,6 +200,10 @@ pub enum AicInputEvent {
     Sdio(SdioCompletion),
     Irq(IrqSnapshot),
     Control(ControlRequest),
+    /// One frame handed over for transmission, with the token the owner
+    /// returns once the packet has left the device.  A full transmit queue
+    /// reports the packet complete instead of failing the device, exactly as
+    /// the overflow of [`Self::TxBatch`] does.
     Tx {
         token: TxToken,
         frame: Vec<u8>,
@@ -207,7 +211,8 @@ pub enum AicInputEvent {
     /// Several frames handed over in one call, so a single CMD53 can carry
     /// them.  The firmware parses a write as a stream of self-delimiting
     /// frames, which is how the vendor driver reaches many packets per
-    /// transaction.
+    /// transaction.  Frames that do not fit the transmit queue are reported
+    /// complete rather than failing the device.
     TxBatch(Vec<(TxToken, Vec<u8>)>),
 }
 
@@ -367,6 +372,8 @@ pub enum AicError {
     UnsupportedRevision(u8),
     #[error("TX queue is full")]
     TxQueueFull,
+    #[error("TX aggregation limits must both be non-zero")]
+    InvalidTxAggregation,
     #[error("AIC control command queue is full")]
     ControlQueueFull,
     #[error("AIC event queue is full")]

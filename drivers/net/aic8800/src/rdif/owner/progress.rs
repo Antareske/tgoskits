@@ -1,4 +1,4 @@
-use alloc::{sync::Arc, vec::Vec};
+use alloc::sync::Arc;
 
 use rdif_eth::WifiControlProgress;
 use ringbuf::traits::Consumer;
@@ -78,14 +78,8 @@ pub(crate) struct AicOwner<H: CompletionIrqRearmHost + 'static> {
     mac: Arc<MacAddressState>,
     started: bool,
     card_irq_wait: CardIrqWait,
-    policy: OwnerPolicy,
-}
-
-/// Data-plane policy the adapter selects when it constructs the owner.
-#[derive(Clone, Copy, Debug)]
-pub(crate) struct OwnerPolicy {
     /// Frames and bytes one transmit write may carry.
-    pub tx_aggregation: TxAggregation,
+    tx_aggregation: TxAggregation,
 }
 
 impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
@@ -96,7 +90,7 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         wifi: WifiChannels,
         irq_latch: Arc<IrqLatch>,
         mac: Arc<MacAddressState>,
-        policy: OwnerPolicy,
+        tx_aggregation: TxAggregation,
     ) -> (
         Self,
         crate::rdif::device::WifiRequestSender,
@@ -118,7 +112,7 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
             mac,
             started: false,
             card_irq_wait: CardIrqWait::Masked,
-            policy,
+            tx_aggregation,
         };
         (owner, wifi.requests_tx, wifi.progress_rx)
     }
@@ -433,7 +427,7 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         let variant = detect_sdio_card_variant(info, function)?;
         log::info!("[wifi] detected supported AIC SDIO variant {variant:?}");
         let mut device = AicDevice::new(variant)?;
-        device.set_tx_aggregation(self.policy.tx_aggregation);
+        device.set_tx_aggregation(self.tx_aggregation)?;
         device.start(MonotonicTime::from_nanos(now_nanos))?;
         self.device = Some(device);
         self.started = true;
@@ -444,16 +438,10 @@ impl<H: CompletionIrqRearmHost + Send + 'static> AicOwner<H> {
         if self.device()?.state() != AicState::Ready {
             return Ok(None);
         }
-        // Hand over a burst of frames so one CMD53 can carry several packets.
+        // Hand over a bounded burst so one CMD53 can carry several packets.
         // The core bounds the burst again by the cached credit.
         let limit = self.device()?.tx_aggregation().packets;
-        let mut batch = Vec::new();
-        while batch.len() < limit {
-            let Some(frame) = self.outputs.take_tx_frame() else {
-                break;
-            };
-            batch.push(frame);
-        }
+        let batch = self.outputs.take_tx_batch(limit);
         if batch.is_empty() {
             return Ok(None);
         }

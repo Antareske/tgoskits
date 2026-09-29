@@ -24,6 +24,9 @@ const CRG_PHANDLE: &str = "cvitek,crg";
 const RTCSYS_CTRL_PHANDLE: &str = "cvitek,rtcsys-ctrl";
 const RTCSYS_IO_PHANDLE: &str = "cvitek,rtcsys-io";
 
+const TX_AGGREGATION_PACKETS: &str = "aic,tx-aggregation";
+const TX_AGGREGATION_BYTES: &str = "aic,tx-aggregate-bytes";
+
 /// Fully translated platform input consumed by the probe orchestration.
 pub(super) struct AicFdtProfile {
     pub(super) controller: MmioRegion,
@@ -70,26 +73,7 @@ impl AicFdtProfile {
         if let Some(frame_size) = fdt_usize(info, "aic,max-frame-size")? {
             options.frame_size = frame_size;
         }
-        if let Some(packets) = fdt_usize(info, "aic,tx-aggregation")? {
-            options.tx_aggregation.packets = packets;
-        }
-        if let Some(bytes) = fdt_usize(info, "aic,tx-aggregate-bytes")? {
-            options.tx_aggregation.bytes = bytes;
-        }
-        if options.tx_aggregation.packets == 0 {
-            return Err(OnProbeError::other(format!(
-                "[{}] aic,tx-aggregation must be at least 1",
-                info.node.name()
-            )));
-        }
-        let ring_bytes = options.queue_size.saturating_mul(options.frame_size);
-        if options.tx_aggregation.bytes == 0 || options.tx_aggregation.bytes > ring_bytes {
-            return Err(OnProbeError::other(format!(
-                "[{}] aic,tx-aggregate-bytes must be in 1..={ring_bytes}, the bytes the transmit \
-                 ring holds",
-                info.node.name()
-            )));
-        }
+        options.tx_aggregation = tx_aggregation(info, options.tx_aggregation)?;
         if let Some(transaction) = startup_transaction(info)? {
             options = options.with_startup_transaction(transaction);
         }
@@ -104,6 +88,29 @@ impl AicFdtProfile {
             dma_address_mask: dma_address_mask(info)?,
             options,
         })
+    }
+}
+
+/// Applies the aggregation properties a board states on top of the adapter
+/// defaults. An omitted property keeps its default, and a zero limit is refused
+/// because it could never carry a frame.
+fn tx_aggregation(
+    info: &FdtInfo<'_>,
+    mut aggregation: aic8800::TxAggregation,
+) -> Result<aic8800::TxAggregation, OnProbeError> {
+    if let Some(packets) = fdt_usize(info, TX_AGGREGATION_PACKETS)? {
+        aggregation.packets = packets;
+    }
+    if let Some(bytes) = fdt_usize(info, TX_AGGREGATION_BYTES)? {
+        aggregation.bytes = bytes;
+    }
+    if aggregation.is_valid() {
+        Ok(aggregation)
+    } else {
+        Err(OnProbeError::other(format!(
+            "[{}] {TX_AGGREGATION_PACKETS} and {TX_AGGREGATION_BYTES} must be non-zero",
+            info.node.name()
+        )))
     }
 }
 

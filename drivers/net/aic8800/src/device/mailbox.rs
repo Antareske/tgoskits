@@ -90,16 +90,19 @@ impl AicDevice {
 
     pub(super) fn drive_mailbox(&mut self, now: MonotonicTime) -> AicAction {
         if self.mailbox_timed_out(now) {
+            let startup_stage = self.startup_stage_diagnostic();
             let mailbox = self
                 .lifecycle
                 .mailbox
                 .as_ref()
                 .expect("mailbox timeout was checked above");
             log::error!(
-                "[wifi] AIC mailbox timeout: expected={:#06x} phase={:?} flow_retries={}",
+                "[wifi] AIC mailbox timeout: expected={:#06x} phase={:?} flow_retries={} \
+                 startup_stage={}",
                 mailbox.expected_message_id,
                 mailbox.phase,
-                mailbox.flow_retries
+                mailbox.flow_retries,
+                startup_stage.as_deref().unwrap_or("none")
             );
             let error = mailbox_timeout(mailbox);
             return self.fail(error);
@@ -219,12 +222,16 @@ impl AicDevice {
                 payload_length: 0,
             })?;
         let result_length = result.len();
-        let completion = if self.lifecycle.state == AicState::Starting {
+        let startup = self.lifecycle.state == AicState::Starting;
+        // Only the startup diagnosis reads the response bytes back, so the
+        // copy is taken on that path alone.
+        let startup_header = startup.then(|| result[..result_length.min(8)].to_vec());
+        let completion = if startup {
             self.complete_startup_mailbox(result)
         } else {
             self.complete_control_mailbox(result)
         };
-        completion.map_err(|error| {
+        let completion = completion.map_err(|error| {
             if error == AicError::MalformedResponse {
                 AicError::MalformedMailboxResponse {
                     request: mailbox.request,
@@ -234,7 +241,13 @@ impl AicDevice {
             } else {
                 error
             }
-        })
+        });
+        if let Some(header) = startup_header.as_deref()
+            && let Err(error) = &completion
+        {
+            self.log_startup_confirmation_error(result_length, header, error);
+        }
+        completion
     }
 
     fn complete_control_mailbox(&mut self, result: Vec<u8>) -> Result<(), AicError> {

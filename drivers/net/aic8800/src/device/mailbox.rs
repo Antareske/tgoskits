@@ -90,19 +90,16 @@ impl AicDevice {
 
     pub(super) fn drive_mailbox(&mut self, now: MonotonicTime) -> AicAction {
         if self.mailbox_timed_out(now) {
-            let startup_stage = self.startup_stage_diagnostic();
             let mailbox = self
                 .lifecycle
                 .mailbox
                 .as_ref()
                 .expect("mailbox timeout was checked above");
             log::error!(
-                "[wifi] AIC mailbox timeout: expected={:#06x} phase={:?} flow_retries={} \
-                 startup_stage={}",
+                "[wifi] AIC mailbox timeout: expected={:#06x} phase={:?} flow_retries={}",
                 mailbox.expected_message_id,
                 mailbox.phase,
-                mailbox.flow_retries,
-                startup_stage.as_deref().unwrap_or("none")
+                mailbox.flow_retries
             );
             let error = mailbox_timeout(mailbox);
             return self.fail(error);
@@ -223,11 +220,7 @@ impl AicDevice {
             })?;
         let result_length = result.len();
         let completion = if self.lifecycle.state == AicState::Starting {
-            let result_length = result.len();
-            let result_header = result[..result.len().min(8)].to_vec();
-            self.complete_startup_mailbox(result).inspect_err(|error| {
-                self.log_startup_confirmation_error(result_length, &result_header, error);
-            })
+            self.complete_startup_mailbox(result)
         } else {
             self.complete_control_mailbox(result)
         };

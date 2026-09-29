@@ -200,7 +200,15 @@ pub enum AicInputEvent {
     Sdio(SdioCompletion),
     Irq(IrqSnapshot),
     Control(ControlRequest),
-    Tx { token: TxToken, frame: Vec<u8> },
+    Tx {
+        token: TxToken,
+        frame: Vec<u8>,
+    },
+    /// Several frames handed over in one call, so a single CMD53 can carry
+    /// them.  The firmware parses a write as a stream of self-delimiting
+    /// frames, which is how the vendor driver reaches many packets per
+    /// transaction.
+    TxBatch(Vec<(TxToken, Vec<u8>)>),
 }
 
 /// Input to one finite advancement.
@@ -249,12 +257,18 @@ pub enum MailboxRequest {
 /// Completion or data event emitted by the pure core.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum AicEvent {
-    Started { mac_address: [u8; 6] },
+    Started {
+        mac_address: [u8; 6],
+    },
     ControlComplete,
     ControlCancelled,
     ControlFailed(AicError),
     Receive(Vec<u8>),
     TransmitComplete(TxToken),
+    /// One transmit write carried several packets and completed them together.
+    /// They are published as one event so a burst of completions cannot crowd
+    /// the receive frames that share the event queue.
+    TransmitAggregateComplete(Vec<TxToken>),
     Stopped,
     Failed(AicError),
 }

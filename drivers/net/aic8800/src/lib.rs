@@ -25,7 +25,7 @@ pub use common::ChipVariant;
 pub use device::{
     AicAction, AicDevice, AicError, AicEvent, AicInput, AicInputEvent, AicState, ControlRequest,
     Entropy, IrqSnapshot, MailboxRequest, MailboxWaitPhase, MonotonicTime, Pmk, SdioCompletion,
-    SdioFailure, SdioRequest, SdioRequestKind, SdioResponse, TxToken,
+    SdioFailure, SdioRequest, SdioRequestKind, SdioResponse, TxAggregation, TxToken,
 };
 #[cfg(feature = "rdif")]
 pub use rdif::{AicRdifDevice, AicRdifError, AicRdifOptions, AicSdioIdentity};

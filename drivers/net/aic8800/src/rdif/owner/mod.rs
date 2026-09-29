@@ -5,4 +5,4 @@ mod output;
 mod progress;
 
 pub(crate) use operation::{ActiveOperation, OperationCompletion};
-pub(crate) use progress::{AicOwner, OwnerProgress, OwnerWait};
+pub(crate) use progress::{AicOwner, OwnerPolicy, OwnerProgress, OwnerWait};

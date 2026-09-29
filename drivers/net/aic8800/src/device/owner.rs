@@ -7,17 +7,74 @@ use super::{
 use crate::{
     common::ChipVariant,
     profile::ChipProfile,
+    protocol::{BLOCK_SIZE, stream_frame_len},
     rx::{RX_BYTE_CAPACITY, RX_CAPACITY},
     tx::TxState,
 };
 
 pub(super) struct ActiveTx {
     pub completion: TxCompletion,
+    /// The frames this write carries, laid out the way the firmware walks
+    /// them: one frame after another, each as long as its own declared length
+    /// rounded up to the transmit alignment.
     pub wire_frame: Vec<u8>,
+    /// Stream length inside `wire_frame`.  Everything past it is the block
+    /// padding the write form ends with, which the firmware reads as the end
+    /// of the stream and which a further frame replaces.
+    pub stream_len: usize,
     pub retry_at: Option<MonotonicTime>,
+    /// Times this write has waited for the firmware pool to drain instead of
+    /// committing a batch the pool cannot back.  Bounded so a pool that stays
+    /// empty cannot stall the transmit path.
+    pub credit_waits: u32,
+    /// Tokens of the packets this write carries beyond the first.
+    pub extra_tokens: Vec<TxToken>,
 }
 
-#[derive(Clone, Copy)]
+impl ActiveTx {
+    /// Starts a write that carries one complete wire frame.
+    pub(super) fn new(completion: TxCompletion, wire_frame: Vec<u8>) -> Self {
+        let stream_len = stream_frame_len(&wire_frame).unwrap_or(wire_frame.len());
+        Self {
+            completion,
+            wire_frame,
+            stream_len,
+            retry_at: None,
+            credit_waits: 0,
+            extra_tokens: Vec::new(),
+        }
+    }
+
+    /// Packets this write carries.
+    pub(super) fn packets(&self) -> usize {
+        1 + self.extra_tokens.len()
+    }
+
+    /// Appends one more frame, dropping the padding that ended the stream after
+    /// the frame before it.
+    pub(super) fn append_frame(&mut self, frame: &[u8], length: usize) {
+        self.wire_frame.truncate(self.stream_len);
+        self.wire_frame.extend_from_slice(&frame[..length]);
+        self.stream_len += length;
+    }
+
+    /// The bytes one CMD53 carries: the frame stream padded to whole blocks.
+    pub(super) fn wire_bytes(&self) -> Vec<u8> {
+        padded_wire_write(&self.wire_frame[..self.stream_len])
+    }
+}
+
+/// Pads one write to whole SDIO blocks, as the vendor's aggregation send does.
+/// The padding only ever follows the last frame: it reads as a zero length, the
+/// terminator of the firmware's walk over the frames of a write.
+fn padded_wire_write(frame: &[u8]) -> Vec<u8> {
+    let mut bytes = frame.to_vec();
+    let padding = (BLOCK_SIZE - bytes.len() % BLOCK_SIZE) % BLOCK_SIZE;
+    bytes.resize(bytes.len() + padding, 0);
+    bytes
+}
+
+#[derive(Clone, Copy, Eq, PartialEq)]
 pub(super) enum InternalTxKind {
     M2,
     M4,
@@ -49,6 +106,11 @@ pub(super) struct IoState {
     pub next_request_id: u64,
     pub receive: ReceiveScan,
     pub last_irq_sequence: u64,
+    /// Whether a write completion has already continued the transmit pipeline
+    /// since the drive path last ran.  Continuations are bounded to one per
+    /// drive pass so a saturated transmitter cannot keep the receive side from
+    /// draining the firmware, whose buffers are the transmit credit pool.
+    pub chain_used: bool,
 }
 
 pub(super) struct ReceiveScan {
@@ -61,9 +123,17 @@ pub(super) struct DataPlaneState {
     pub event_bytes: usize,
     pub tx: TxState,
     pub active_tx: Option<ActiveTx>,
+    /// Firmware packet buffers the last flow-control reading granted, minus the
+    /// data writes completed since.  `None` means the next transmit must re-read
+    /// the register: the value is dropped when it reaches the command reserve
+    /// and whenever command traffic or cancellation may have moved the shared
+    /// pool.
+    pub tx_credits: Option<u8>,
     pub internal_tx: VecDeque<InternalTx>,
     pub internal_tx_bytes: usize,
     pub link: LinkState,
+    /// Transmit completions that did not fit the event queue.
+    pub pending_completions: VecDeque<TxToken>,
 }
 
 impl DataPlaneState {
@@ -124,6 +194,26 @@ impl DataPlaneState {
         self.internal_tx.clear();
         self.internal_tx_bytes = 0;
     }
+
+    /// Publishes transmit completions that were held back because the event
+    /// queue was full.  Aggregated writes complete several packets at once, so
+    /// a burst can outrun the queue.
+    pub(super) fn promote_pending_completions(&mut self) {
+        while self.event_room() > 0 {
+            let Some(token) = self.pending_completions.pop_front() else {
+                return;
+            };
+            if self.push_event(AicEvent::TransmitComplete(token)).is_err() {
+                self.pending_completions.push_front(token);
+                return;
+            }
+        }
+    }
+
+    /// Room for another event without displacing a queued receive frame.
+    pub(super) fn event_room(&self) -> usize {
+        RX_CAPACITY.saturating_sub(self.events.len())
+    }
 }
 
 fn event_payload_bytes(event: &AicEvent) -> usize {
@@ -133,15 +223,68 @@ fn event_payload_bytes(event: &AicEvent) -> usize {
     }
 }
 
+/// Frames one transmit write may carry and the bytes it may hold.
+///
+/// The firmware walks a write as a stream of frames, so one CMD53 can deliver
+/// several packets: `packets` bounds how many frames that is, and `bytes`
+/// bounds how long the write occupies the bus, which receive work shares.  The
+/// firmware buffers the last flow-control reading reported bound the burst
+/// again, so a write never carries more packets than that reading allows.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct TxAggregation {
+    /// Frames one write may carry.
+    pub packets: usize,
+    /// Bytes one write may hold before it stops growing.  The bound is read
+    /// before a frame is appended, so it is a soft bound: a write may end up
+    /// one frame longer.  Size a write with `packets`; this bound only keeps
+    /// one write from holding the bus for too long.
+    pub bytes: usize,
+}
+
+impl TxAggregation {
+    /// Round size of one maximum-length wire frame, the unit these bounds are
+    /// stated in: a 1500-byte payload behind the host descriptor and the SDIO
+    /// header, rounded up to the transmit alignment.
+    pub const MAX_FRAME_BYTES: usize = 1536;
+    /// Default byte bound: four maximum-length frames, the aggregate size the
+    /// vendor's SDIO transport allocates its write buffer for.
+    pub const DEFAULT_BYTES: usize = 4 * Self::MAX_FRAME_BYTES;
+
+    /// Creates the bound of one transmit write.
+    pub const fn new(packets: usize, bytes: usize) -> Self {
+        Self { packets, bytes }
+    }
+}
+
+impl Default for TxAggregation {
+    fn default() -> Self {
+        Self::new(1, Self::DEFAULT_BYTES)
+    }
+}
+
 /// Sole owner of all AIC protocol and data-plane state.
 pub struct AicDevice {
     pub(super) profile: &'static ChipProfile,
     pub(super) lifecycle: LifecycleState,
     pub(super) io: IoState,
     pub(super) data: DataPlaneState,
+    /// What one transmit write may carry.  A single frame unless the layer
+    /// that hands frames over asks for batching.
+    pub(super) tx_aggregation: TxAggregation,
 }
 
 impl AicDevice {
+    /// Sets what one transmit write may carry.
+    pub fn set_tx_aggregation(&mut self, aggregation: TxAggregation) {
+        self.tx_aggregation =
+            TxAggregation::new(aggregation.packets.max(1), aggregation.bytes.max(1));
+    }
+
+    /// What one transmit write may carry.
+    pub const fn tx_aggregation(&self) -> TxAggregation {
+        self.tx_aggregation
+    }
+
     /// Creates a stopped device owner for one supported chip.
     ///
     /// # Errors
@@ -152,6 +295,7 @@ impl AicDevice {
         let profile = ChipProfile::for_variant(chip).ok_or(AicError::UnsupportedChip)?;
         Ok(Self {
             profile,
+            tx_aggregation: TxAggregation::default(),
             lifecycle: LifecycleState {
                 state: AicState::Stopped,
                 startup: None,
@@ -170,15 +314,18 @@ impl AicDevice {
                     next_path: 0,
                 },
                 last_irq_sequence: 0,
+                chain_used: false,
             },
             data: DataPlaneState {
                 events: VecDeque::new(),
                 event_bytes: 0,
                 tx: TxState::new(),
                 active_tx: None,
+                tx_credits: None,
                 internal_tx: VecDeque::new(),
                 internal_tx_bytes: 0,
                 link: LinkState::new(),
+                pending_completions: VecDeque::new(),
             },
         })
     }

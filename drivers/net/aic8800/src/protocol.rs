@@ -12,7 +12,7 @@ pub(crate) const DBG_MEM_WRITE_REQ: u16 = 0x0402;
 pub(crate) const DBG_MEM_BLOCK_WRITE_REQ: u16 = 0x040b;
 pub(crate) const DBG_START_APP_REQ: u16 = 0x040d;
 pub(crate) const DBG_MEM_MASK_WRITE_REQ: u16 = 0x0411;
-const SDIO_HEADER_SIZE: usize = 4;
+pub(crate) const SDIO_HEADER_SIZE: usize = 4;
 const DUMMY_WORD_SIZE: usize = 4;
 const LMAC_HEADER_SIZE: usize = 8;
 const HOST_DESCRIPTOR_SIZE: usize = 28;
@@ -150,12 +150,39 @@ fn exact_two_words(payload: &[u8]) -> Result<[u32; 2], DebugConfirmationError> {
     ])
 }
 
+/// Bytes one frame occupies inside a transmit stream.
+///
+/// The firmware walks a write frame by frame, stepping by the frame's declared
+/// length rounded up to the transmit alignment, and stops at the first zero
+/// length.  A write that carries several frames therefore has to leave each
+/// frame exactly that long — the block padding the single-frame form ends with
+/// is only valid after the last frame, where it reads as the end of the stream.
+///
+/// Returns `None` for a frame whose declared length does not fit the buffer.
+pub(crate) fn stream_frame_len(frame: &[u8]) -> Option<usize> {
+    let declared = match frame.first_chunk::<2>() {
+        Some([low, high]) => usize::from(u16::from_le_bytes([*low, *high])) & 0x0fff,
+        None => return None,
+    };
+    let length = align_up(SDIO_HEADER_SIZE + declared, TX_ALIGNMENT);
+    (length <= frame.len()).then_some(length)
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum TxConfirmation {
+    /// Ordinary data frames are completed by the host SDIO write.
+    None,
+    /// A control-port frame requests the vendor confirmation marker.
+    Firmware,
+}
+
 /// Encapsulates one Ethernet packet for the firmware data ingress path.
 pub(crate) fn ethernet_tx_frame(
     ethernet: &[u8],
     interface_index: u8,
     station_index: u8,
     v3: bool,
+    confirmation: TxConfirmation,
 ) -> Result<Vec<u8>, ()> {
     if ethernet.len() < 14 {
         return Err(());
@@ -186,7 +213,11 @@ pub(crate) fn ethernet_tx_frame(
 
     let descriptor = &mut frame[SDIO_HEADER_SIZE..SDIO_HEADER_SIZE + HOST_DESCRIPTOR_SIZE];
     descriptor[..2].copy_from_slice(&(payload.len() as u16).to_le_bytes());
-    descriptor[4..8].copy_from_slice(&0x8000_0001u32.to_le_bytes());
+    let host_id: u32 = match confirmation {
+        TxConfirmation::None => 0,
+        TxConfirmation::Firmware => 0x8000_0001,
+    };
+    descriptor[4..8].copy_from_slice(&host_id.to_le_bytes());
     descriptor[8..14].copy_from_slice(&ethernet[..6]);
     descriptor[14..20].copy_from_slice(&ethernet[6..12]);
     descriptor[20..22].copy_from_slice(&ethernet[12..14]);
@@ -250,13 +281,14 @@ mod tests {
             0xaa, 0xbb, 0xcc,
         ];
 
-        let frame = ethernet_tx_frame(&ethernet, 2, 7, true).unwrap();
+        let frame = ethernet_tx_frame(&ethernet, 2, 7, true, TxConfirmation::None).unwrap();
 
         assert_eq!(u16::from_le_bytes([frame[0], frame[1]]), 31);
         assert_eq!(frame[2], 0x01);
         assert_eq!(frame[3], crc8_ponl_107(&frame[..3]));
         let descriptor = &frame[SDIO_HEADER_SIZE..SDIO_HEADER_SIZE + HOST_DESCRIPTOR_SIZE];
         assert_eq!(&descriptor[..2], &3u16.to_le_bytes());
+        assert_eq!(&descriptor[4..8], &0u32.to_le_bytes());
         assert_eq!(&descriptor[8..14], &ethernet[..6]);
         assert_eq!(&descriptor[14..20], &ethernet[6..12]);
         assert_eq!(&descriptor[20..22], &ethernet[12..14]);
@@ -270,7 +302,14 @@ mod tests {
             &[0xaa, 0xbb, 0xcc]
         );
 
-        let dc_frame = ethernet_tx_frame(&ethernet, 2, 7, false).unwrap();
+        let firmware_frame =
+            ethernet_tx_frame(&ethernet, 2, 7, true, TxConfirmation::Firmware).unwrap();
+        assert_eq!(
+            &firmware_frame[SDIO_HEADER_SIZE + 4..SDIO_HEADER_SIZE + 8],
+            &0x8000_0001u32.to_le_bytes()
+        );
+
+        let dc_frame = ethernet_tx_frame(&ethernet, 2, 7, false, TxConfirmation::None).unwrap();
         assert_eq!(u16::from_le_bytes([dc_frame[0], dc_frame[1]]), 32);
         assert_eq!(dc_frame[2], 0x01);
         assert_eq!(dc_frame[3], 0);

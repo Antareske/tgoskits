@@ -10,9 +10,9 @@ use crate::{
         MM_SET_FILTER_CFM, MM_SET_FILTER_REQ, MM_SET_RF_CALIB_CFM, MM_SET_RF_CALIB_REQ,
         MM_SET_RF_CONFIG_CFM, MM_SET_RF_CONFIG_REQ, MM_SET_STACK_START_CFM, MM_SET_STACK_START_REQ,
         MM_SET_TXPWR_IDX_LVL_CFM, MM_SET_TXPWR_IDX_LVL_REQ, MM_START_CFM, MM_START_REQ,
-        RfCalibrationBand, TASK_ME, TASK_MM, add_interface_payload, channel_config_payload,
-        filter_payload, get_mac_payload, me_config_payload, rf_calibration_payload,
-        stack_start_payload, start_payload, tx_power_level_payload,
+        MeConfigProfile, RfCalibrationBand, TASK_ME, TASK_MM, add_interface_payload,
+        channel_config_payload, filter_payload, get_mac_payload, me_config_payload,
+        rf_calibration_payload, stack_start_payload, start_payload, tx_power_level_payload,
     },
     profile::FirmwareProfile,
     protocol::{
@@ -89,26 +89,6 @@ impl StartupState {
 }
 
 impl AicDevice {
-    pub(super) fn startup_stage_diagnostic(&self) -> Option<alloc::string::String> {
-        self.lifecycle
-            .startup
-            .as_ref()
-            .map(|startup| alloc::format!("{:?}", startup.stage))
-    }
-
-    pub(super) fn log_startup_confirmation_error(
-        &self,
-        result_length: usize,
-        result_header: &[u8],
-        error: &AicError,
-    ) {
-        let stage = self.lifecycle.startup.as_ref().map(|startup| startup.stage);
-        log::error!(
-            "[wifi] AIC startup confirmation rejected: stage={stage:?} result_len={result_length} \
-             result={result_header:02x?} error={error}"
-        );
-    }
-
     pub(super) fn drive_startup(&mut self, now: MonotonicTime) -> AicAction {
         if self.mailbox_timed_out(now) {
             return self.drive_mailbox(now);
@@ -306,10 +286,13 @@ impl AicDevice {
                 self.drive_mailbox(now)
             }
             StartupStage::ConfigureMac => {
+                let Some(profile) = MeConfigProfile::for_chip(self.chip()) else {
+                    return self.fail(AicError::UnsupportedChip);
+                };
                 self.begin_lmac_mailbox(
                     ME_CONFIG_REQ,
                     TASK_ME,
-                    &me_config_payload(),
+                    &me_config_payload(profile),
                     ME_CONFIG_CFM,
                     now,
                 );
@@ -460,6 +443,56 @@ impl From<DebugConfirmationError> for AicError {
 mod tests {
     use super::*;
     use crate::common::ChipVariant;
+
+    #[test]
+    fn startup_me_config_request_uses_chip_specific_capability_profile() {
+        for (chip, expected_capability_info, expected_bandwidth, expected_vht_he) in [
+            (ChipVariant::Aic8800DC, 1u16, 2u8, (0u8, 0u8)),
+            (ChipVariant::Aic8800D80, 0x0863, 2u8, (1u8, 1u8)),
+        ] {
+            let mut device = AicDevice::new(chip).unwrap();
+            device.lifecycle.state = AicState::Starting;
+            device.lifecycle.startup = Some(StartupState {
+                stage: StartupStage::ConfigureMac,
+                revision: Some(3),
+                dc: None,
+            });
+
+            let now = MonotonicTime::from_nanos(0);
+            let mut action = device.drive_startup(now);
+            if chip == ChipVariant::Aic8800D80 {
+                let AicAction::SubmitSdio(flow) = action else {
+                    panic!("expected D80 ME_CONFIG flow-credit read");
+                };
+                action = device.advance(AicInput {
+                    now,
+                    event: Some(AicInputEvent::Sdio(SdioCompletion {
+                        request_id: flow.id,
+                        result: Ok(SdioResponse::Byte(128)),
+                    })),
+                });
+            }
+            let AicAction::SubmitSdio(request) = action else {
+                panic!("expected ME_CONFIG mailbox write");
+            };
+            let SdioRequestKind::Write { bytes, .. } = request.kind else {
+                panic!("expected an SDIO FIFO write");
+            };
+            let lmac_header_offset = 4 + 4;
+            let payload_offset = lmac_header_offset + 8;
+            assert_eq!(
+                &bytes[lmac_header_offset..lmac_header_offset + 2],
+                &ME_CONFIG_REQ.to_le_bytes()
+            );
+            assert_eq!(
+                &bytes[payload_offset..payload_offset + 2],
+                &expected_capability_info.to_le_bytes()
+            );
+            assert_eq!(bytes[payload_offset + 102], expected_bandwidth);
+            assert_eq!(bytes[payload_offset + 104], expected_vht_he.0);
+            assert_eq!(bytes[payload_offset + 105], expected_vht_he.1);
+        }
+    }
 
     #[test]
     fn startup_refuses_to_publish_an_all_zero_mac_address() {

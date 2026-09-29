@@ -27,6 +27,7 @@ impl AicDevice {
         {
             return self.fail(error);
         }
+        self.data.promote_pending_completions();
         if let Some(event) = self.data.pop_event() {
             return AicAction::Event(event);
         }
@@ -88,7 +89,28 @@ impl AicDevice {
                 self.data
                     .tx
                     .enqueue(token, frame)
-                    .map_err(|_| AicError::TxQueueFull)
+                    .map_err(|_| AicError::TxQueueFull)?;
+                Ok(())
+            }
+            AicInputEvent::TxBatch(frames) => {
+                if self.lifecycle.state != AicState::Ready {
+                    return Err(AicError::Busy);
+                }
+                let mut frames = frames.into_iter();
+                while let Some((token, frame)) = frames.next() {
+                    if self.data.tx.enqueue(token, frame).is_err() {
+                        // The queue is full: drop this frame and the rest of the
+                        // batch, releasing their tokens so their DMA buffers
+                        // return to the runtime instead of failing the device.
+                        self.complete_write_tokens(
+                            core::iter::once(token)
+                                .chain(frames.map(|(token, _)| token))
+                                .collect(),
+                        );
+                        return Ok(());
+                    }
+                }
+                Ok(())
             }
         }
     }
@@ -110,6 +132,9 @@ impl AicDevice {
                 Ok(())
             }
             ControlRequest::Shutdown => {
+                // Nothing queued is transmitted after this point, including the
+                // write a continuation queued.
+                self.discard_pending_transmit();
                 self.lifecycle.state = AicState::Stopping;
                 self.lifecycle.control = None;
                 self.lifecycle.mailbox = None;
@@ -157,6 +182,20 @@ impl AicDevice {
             return Ok(());
         }
         let response = completion.result.map_err(AicError::Sdio)?;
+        // The command mailbox and lifecycle commands can take buffers from the
+        // firmware packet pool that a cached credit counted on the profiles
+        // where they travel over the data FIFO, so the reading is dropped
+        // whenever command work completes.  Receive work never takes pool
+        // buffers and keeps the cached credit valid.
+        if matches!(
+            pending.purpose,
+            IoPurpose::Startup
+                | IoPurpose::Shutdown
+                | IoPurpose::MailboxFlow
+                | IoPurpose::MailboxWrite
+        ) {
+            self.clear_tx_credits();
+        }
         match pending.purpose {
             IoPurpose::Startup => self.consume_startup_response(response, now),
             IoPurpose::MailboxFlow | IoPurpose::MailboxWrite => {
@@ -168,7 +207,11 @@ impl AicDevice {
             IoPurpose::ReceiveOtherAck(path) => self.consume_receive_other_ack(path, response),
             IoPurpose::ReceiveOtherClear(path) => self.consume_receive_other_clear(path, response),
             IoPurpose::TransmitFlow => self.consume_transmit_flow(response, now),
-            IoPurpose::TransmitData => self.consume_transmit_data(response),
+            IoPurpose::TransmitData => {
+                self.consume_transmit_data(response)?;
+                self.continue_transmit_pipeline(now);
+                Ok(())
+            }
             IoPurpose::Shutdown => {
                 expect_write_readback(response, 0)?;
                 self.lifecycle.state = AicState::Stopped;
@@ -191,10 +234,13 @@ impl AicDevice {
                 request_id: pending.id,
             };
         }
-        let tokens: Vec<_> = self.data.tx.drain_tokens().collect();
-        for token in tokens {
-            let _ = self.data.push_event(AicEvent::TransmitComplete(token));
-        }
+        // Nothing queued will be transmitted any more, so the packets the
+        // device still holds are reported complete and their buffers return to
+        // the runtime.
+        let tokens = self.take_active_write_tokens();
+        self.complete_write_tokens(tokens);
+        let queued: Vec<_> = self.data.tx.drain_tokens().collect();
+        self.complete_write_tokens(queued);
         self.emit(
             IoPurpose::Shutdown,
             write_byte(self.data_function(), self.registers().interrupt_enable, 0),
@@ -202,11 +248,20 @@ impl AicDevice {
     }
 
     fn finish_cancel(&mut self) {
+        // The aborted write is dropped rather than retried, so its packets are
+        // reported complete and their buffers return to the runtime.
+        let tokens = self.take_active_write_tokens();
+        self.complete_write_tokens(tokens);
+        // The write a continuation queued at the previous completion would
+        // otherwise be the next thing emitted, and its own completion would
+        // find no write to match.
+        self.discard_pending_transmit();
         self.lifecycle.cancel_pending = false;
         self.lifecycle.mailbox = None;
         self.lifecycle.control = None;
         self.data.link.clear_peer();
         self.data.clear_internal_tx();
+        self.clear_tx_credits();
         if self.lifecycle.state == AicState::Starting {
             self.lifecycle.startup = None;
             self.lifecycle.state = AicState::Stopped;
@@ -221,14 +276,16 @@ impl AicDevice {
         self.lifecycle.mailbox = None;
         self.lifecycle.control = None;
         self.data.link.clear_peer();
-        if let Some(active) = self.data.active_tx.take()
-            && let super::owner::TxCompletion::User(token) = active.completion
-        {
+        for token in self.take_active_write_tokens() {
             let _ = self.data.push_event(AicEvent::TransmitComplete(token));
         }
         self.data.clear_internal_tx();
         let tokens: Vec<_> = self.data.tx.drain_tokens().collect();
         for token in tokens {
+            let _ = self.data.push_event(AicEvent::TransmitComplete(token));
+        }
+        let stalled: Vec<_> = self.data.pending_completions.drain(..).collect();
+        for token in stalled {
             let _ = self.data.push_event(AicEvent::TransmitComplete(token));
         }
         let _ = self.data.push_event(AicEvent::Failed(error));
@@ -487,11 +544,10 @@ mod tests {
         device.lifecycle.state = AicState::Ready;
         let active = TxToken::new(7);
         let queued = TxToken::new(8);
-        device.data.active_tx = Some(ActiveTx {
-            retry_at: None,
-            completion: super::owner::TxCompletion::User(active),
-            wire_frame: vec![1],
-        });
+        device.data.active_tx = Some(ActiveTx::new(
+            super::owner::TxCompletion::User(active),
+            vec![1],
+        ));
         device.data.tx.enqueue(queued, vec![2]).unwrap();
 
         assert_eq!(

@@ -5,7 +5,11 @@ extern crate ax_std as std;
 #[cfg(target_arch = "aarch64")]
 mod aarch64;
 #[cfg(target_arch = "aarch64")]
+mod empty_user_table;
+#[cfg(target_arch = "aarch64")]
 mod fixup;
+#[cfg(target_arch = "aarch64")]
+mod kernel_access;
 #[cfg(target_arch = "aarch64")]
 mod managed;
 
@@ -27,6 +31,7 @@ fn pin_to(cpu: usize) {
 #[unsafe(no_mangle)]
 fn main() {
     fixup::run();
+    kernel_access::run();
     aarch64::run();
     std::process::exit(0);
 }

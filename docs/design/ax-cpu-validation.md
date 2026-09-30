@@ -73,6 +73,12 @@ cycle counter 只计入 EL0 执行，并触发真实溢出 PPI。回调断言 pr
 
 阶段一 MMU 配置也按本核 `ID_AA64MMFR0_EL1.PARange` 和当前描述符的 48-bit 上限选择 IPS/PS。旧 EL1 固定 48-bit 配置在 Cortex-A53 上被新用例确定性拒绝，调整后同一 `paging` 用例通过。
 
+### 4.4 无故障内核拷贝
+
+2026-09-30 `user-entry/src/kernel_access.rs` 通过 `ax_cpu::kernel_access::copy_from_kernel_nofault` 验证三类结果：两个已映射区间整段拷贝成功且内容一致；装入空用户页表后，源为未映射地址时不复制任何字节、目的地保持原内容并返回 `Fault`；目的地为未映射地址时同样返回 `Fault`。空页表与 TTBR0 的保存恢复由该用例目录的 `empty_user_table.rs` 提供，`fixup.rs` 的既有缺页恢复断言改用同一守卫，两处共用一份窗口管理。
+
+同日在四核 AArch64 QEMU 执行 `cpu` 组，9/9 通过；该用例输出 `CPU_KERNEL_ACCESS_OK`，位于既有用户 PMU 用例之前。该结果证明恢复分支在真实翻译故障下生效，不覆盖 x86_64 因非规范地址产生的 `#GP` 恢复分支，也不替代实体板卡执行。
+
 
 ## 5. 启动与映射生命周期补充
 

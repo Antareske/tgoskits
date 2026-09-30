@@ -5,4 +5,4 @@ to_bin = true
 fail_regex = ["(?i)\\bpanic(?:ked)?\\b"]
 
 [[shell_check_steps]]
-success_regex = ["(?m)^CPU_PMU_USER_OK\\s*$"]
+success_regex = ["(?m)^CPU_PMU_USER_OK\\s*$", "(?m)^CPU_KERNEL_ACCESS_OK\\s*$"]

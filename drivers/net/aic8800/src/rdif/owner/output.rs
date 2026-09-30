@@ -532,37 +532,64 @@ mod tests {
 
     #[test]
     fn aggregate_mismatch_returns_every_buffer_the_completion_named() {
-        let (mut outputs, mut tx, _) = outputs(4);
-        for length in [60, 61, 62] {
-            tx.submit(dma_buffer(length)).unwrap();
+        for full_return_ring in [false, true] {
+            let (mut outputs, mut tx, _) = outputs(4);
+            if full_return_ring {
+                for length in [64, 65, 66, 67] {
+                    tx.submit(dma_buffer(length)).unwrap();
+                }
+                let tokens = outputs
+                    .take_tx_batch(4)
+                    .iter()
+                    .map(|(token, _)| *token)
+                    .collect();
+                assert!(
+                    !outputs
+                        .consume_event(AicEvent::TransmitAggregateComplete(tokens))
+                        .unwrap()
+                );
+            }
+            for length in [60, 61, 62] {
+                tx.submit(dma_buffer(length)).unwrap();
+            }
+            let batch = outputs.take_tx_batch(3);
+            let tokens: Vec<_> = batch.iter().map(|(token, _)| *token).collect();
+
+            let result = outputs.consume_event(AicEvent::TransmitAggregateComplete(vec![
+                tokens[0],
+                TxToken::new(u64::MAX),
+                tokens[2],
+            ]));
+
+            assert!(
+                matches!(
+                    result,
+                    Err(AicRdifError::Core(AicError::CompletionMismatch))
+                ),
+                "unknown tokens must be rejected even when the return ring is full"
+            );
+            if full_return_ring {
+                for _ in 0..4 {
+                    assert!(tx.reclaim().is_some());
+                }
+                assert!(!outputs.flush().unwrap());
+                assert!(outputs.flush().unwrap());
+            }
+            assert!(
+                tx.reclaim().is_some(),
+                "the first known packet was returned"
+            );
+            assert!(
+                tx.reclaim().is_some(),
+                "the known packet behind the unknown id was returned too"
+            );
+            assert!(tx.reclaim().is_none());
+            assert_eq!(
+                outputs.tx_tokens.len(),
+                1,
+                "the packet the completion never named keeps its buffer"
+            );
+            assert_eq!(outputs.tx_tokens.front().unwrap().0, tokens[1]);
         }
-        let batch = outputs.take_tx_batch(3);
-        let tokens: Vec<_> = batch.iter().map(|(token, _)| *token).collect();
-
-        let result = outputs.consume_event(AicEvent::TransmitAggregateComplete(vec![
-            tokens[0],
-            TxToken::new(u64::MAX),
-            tokens[2],
-        ]));
-
-        assert!(matches!(
-            result,
-            Err(AicRdifError::Core(AicError::CompletionMismatch))
-        ));
-        assert!(
-            tx.reclaim().is_some(),
-            "the first known packet was returned"
-        );
-        assert!(
-            tx.reclaim().is_some(),
-            "the known packet behind the unknown id was returned too"
-        );
-        assert!(tx.reclaim().is_none());
-        assert_eq!(
-            outputs.tx_tokens.len(),
-            1,
-            "the packet the completion never named keeps its buffer"
-        );
-        assert_eq!(outputs.tx_tokens.front().unwrap().0, tokens[1]);
     }
 }

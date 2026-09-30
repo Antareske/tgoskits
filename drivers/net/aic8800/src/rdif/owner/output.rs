@@ -221,14 +221,14 @@ impl OwnerOutputs {
     }
 
     fn publish_tx_completion(&mut self, token: TxToken) -> Result<TxPublish, AicRdifError> {
-        if self.pending_tx_completion.is_some() {
-            return Ok(TxPublish::Waiting);
-        }
         let index = self
             .tx_tokens
             .iter()
             .position(|(candidate, _)| *candidate == token)
             .ok_or(AicError::CompletionMismatch)?;
+        if self.pending_tx_completion.is_some() {
+            return Ok(TxPublish::Waiting);
+        }
         let (_, buffer) = self
             .tx_tokens
             .remove(index)

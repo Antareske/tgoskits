@@ -1,6 +1,6 @@
 // Nofault byte copy between kernel addresses. The load and the store are both
 // registered in the nofault exception table, whose field-relative record
-// format matches the one the user-copy routines use on this architecture.
+// format matches the one the user-atomic routines use on this architecture.
 
 .macro _asm_kernel_nofault_extable from, to
     .pushsection __nofault_ex_table, "a"

@@ -16,8 +16,10 @@ unsafe extern "C" {
 ///
 /// Both the load and the store are registered in the nofault exception table,
 /// so an inaccessible address on either side redirects control to a recovery
-/// label instead of entering the OS page-fault path. The call therefore never
-/// sleeps and never allocates, and may be used from interrupt context.
+/// label instead of entering the OS page-fault path. Every architecture
+/// consults that table before the fault reaches the page-fault handler, and the
+/// lookup is a scan of a read-only linker section, so the call never sleeps,
+/// never allocates and takes no lock.
 ///
 /// A byte range that spans a hole copies the bytes preceding the hole and then
 /// reports [`KernelAccessError::Fault`]; the bytes after the hole keep their

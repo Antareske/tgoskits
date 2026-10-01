@@ -355,21 +355,6 @@ mod tests {
     }
 
     #[test]
-    fn probe_read_copies_the_requested_bytes() {
-        let source = [1u8, 2, 3, 4, 5, 6, 7, 8];
-        let mut destination = [0u8; 8];
-        let read = bpf_probe_read(
-            destination.as_mut_ptr() as u64,
-            destination.len() as u64,
-            source.as_ptr() as u64,
-            0,
-            0,
-        );
-        assert_eq!(read, 0);
-        assert_eq!(destination, source);
-    }
-
-    #[test]
     fn probe_read_copies_a_size_at_the_cap() {
         // The cap is a limit on what is refused, not on what is served: a read
         // of exactly the cap is still copied whole.

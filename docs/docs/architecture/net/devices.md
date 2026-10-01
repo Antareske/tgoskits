@@ -284,9 +284,12 @@ service 只有在 builder 完整成功后进入全局 `OnceLock`，因此不存�
 
 ## 12. 可观测不变量
 
-每个 group 暴露测试态 `NetQueueStats`：IRQ、schedule、MISSED、poll batch、budget
-exhaustion、spurious、probe deferred、rearm race、owner CPU、last IRQ CPU、last poll
-CPU 与 remote wake。
+每个 group 维护 `NetQueueStats`：IRQ、schedule、MISSED、poll batch、budget
+exhaustion、spurious、probe deferred、rearm race、last IRQ CPU、last poll CPU、
+remote wake 与 RX 丢弃累计；owner CPU 属于随 group 固定的身份。计数经
+`net_queue_snapshots()` 或 `/sys/kernel/debug/net_queue` 与身份（发现序索引、group
+ID、owner CPU）一起逐组读出，是诊断出口而非 ABI；计数逐字段读出，不构成同一时刻的
+一致视图。队列 RX 丢弃的累计值只增不减，接口 `rx_dropped` 仍由设备层取走的增量汇总。
 
 验收断言：
 

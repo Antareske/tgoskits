@@ -254,6 +254,27 @@ guest 用例 `test-e1000-napi-runtime` 等待 DHCP，然后 fork 两个进程并
 
 rootfs 参数补全按 `-device` 的 `netdev=net0` 连接关系识别已有网卡，而不是维护 virtio/E1000 型号白名单。`ensure_disk_boot_net_preserves_custom_network_device_bound_to_net0` 固定该契约，防止测试配置被额外注入同名默认 NIC 后在 QEMU 启动前失败。
 
+### 3.6 队列诊断出口
+
+`qemu/system/net-queue` 读取 `/sys/kernel/debug/net_queue`：每条记录必须解析出 16 个
+字段，接口名必须同时出现在 `/proc/net/dev`，owner CPU 必须落在在线 CPU 集合内；测试
+镜像的四种 QEMU 配置都挂了网卡，因此找不到非 loopback 接口或找不到任何 group 记录
+都判失败。该用例证明记录格式完整，并在真实内核里走通从 group 建立到 debugfs 输出的
+装配链路。
+
+它不校验身份取值（单网卡下发现序与发布序同为 0，取值不可区分），也不区分多设备下的
+接口归属；身份配对、接口映射与计数口径由 `ax-net` 的 crate 单元测试在构造的运行时上
+验证，渲染列序由 `starry-kernel` 的 `net_queue_tests` 验证。builder 写入身份与
+`init_network` 产出发布序这两处取值目前没有自动证据，只有真实的多设备运行时才能暴露
+错位。
+
+```bash
+cargo xtask starry test qemu --arch x86_64 -c qemu/system/net-queue
+```
+
+四种 QEMU 配置的 virtio-net 环境都报告 `groups=1 interfaces=1`，成功标记为
+`NET_QUEUE_PASSED`。
+
 ## 4. 双网卡集成测试
 
 `apps/starry/qemu/dual-net` 是双网卡集成测试，用于验证多设备初始化、双 DHCP、route table、接口绑定、并发收发和较大 APK 下载校验。它是 Starry app 级 QEMU 场景，不属于 `test-suit/starryos` system 分组。

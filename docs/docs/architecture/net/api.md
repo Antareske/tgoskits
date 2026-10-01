@@ -18,10 +18,11 @@ pub use self::{
     },
     device::{ArpEntry, EthernetFramePort, EthernetFramePortList, NetDeviceError, NetDeviceResult},
     queue_runtime::{
-        NetQueueStats, NetworkDeviceInput, NetworkQueueRuntime,
-        NetworkRuntimeBuilder, NetworkRuntimeError, PinnedNetIrqAction,
-        PinnedNetIrqError, PinnedNetIrqOutcome, PinnedNetIrqRegistrar,
-        PinnedNetIrqRegistration, ResolvedNetIrqSource, TxQueueDiscipline,
+        NetQueueIdentity, NetQueueSnapshot, NetQueueStats, NetworkDeviceInput,
+        NetworkQueueRuntime, NetworkRuntimeBuilder, NetworkRuntimeError,
+        PinnedNetIrqAction, PinnedNetIrqError, PinnedNetIrqOutcome,
+        PinnedNetIrqRegistrar, PinnedNetIrqRegistration, ResolvedNetIrqSource,
+        TxQueueDiscipline,
     },
     socket::{
         CMsgData, IpCmsg, RecvFlags, RecvOptions, SendFlags, SendOptions,
@@ -30,7 +31,7 @@ pub use self::{
     router::NetDevStats,
 };
 pub use error::{NetError, NetResult};
-pub use rd_net::{WifiLinkPolicy, WifiOperation, WifiTransaction, Wpa2Pmk};
+pub use rd_net::{NetPollGroupId, WifiLinkPolicy, WifiOperation, WifiTransaction, Wpa2Pmk};
 ```
 
 re-export 列表构成调用方可依赖的稳定表面，内部 `Service`、Router queue 与 smoltcp handle 均未公开。API 分层据此按能力和生命周期组织这些类型，而不是按内部模块目录暴露实现。
@@ -204,6 +205,7 @@ pub fn interface_by_name(name: &str) -> Option<InterfaceInfo>;
 pub fn interface_by_id(id: InterfaceId) -> Option<InterfaceInfo>;
 pub fn ipv4_config(name: &str) -> Option<Ipv4InterfaceConfig>;
 pub fn net_dev_stats() -> Vec<NetDevStats>;
+pub fn net_queue_snapshots() -> Vec<NetQueueSnapshot>;
 pub fn set_interface_ipv4(
     interface_id: InterfaceId,
     ip: Ipv4Addr,
@@ -219,6 +221,8 @@ pub fn remove_interface_ipv4(
 `set_interface_ipv4()` / `remove_interface_ipv4()` 是 StarryOS rtnetlink 使用的运行期控制入口。当前每个 Ethernet 接口最多保存一个 IPv4 地址：设置第二个地址返回 `AlreadyExists`，删除必须与现有地址和 prefix 完全一致。设置操作会移除该接口的 DHCP 状态、安装 connected route，但不会创建 default route 或 gateway；删除也会关闭该接口 DHCP 并移除它贡献的路由和 DHCP DNS。
 
 `NetDevStats` 按接口返回累计的 `rx/tx bytes`、`packets`、`errors` 和 `dropped`。Ethernet 的字节口径是“不含 FCS 的 L2 frame”，loopback 则按 IP packet 长度；统计快照由 `net/ax-net/src/router.rs` 的 `Router::net_dev_stats()` 汇总。
+
+`NetQueueSnapshot` 按 poll group 返回队列运行状态，是 `NetQueueStats` 的对外视图；列表顺序当前是 group 建立顺序，不构成契约，定位 group 用身份而不是位置。每项由三部分组成：不可变身份 `NetQueueIdentity`（设备发现序索引、驱动分配的 `NetPollGroupId`、owner CPU）、该设备发布成的接口 `InterfaceId`，以及计数 `NetQueueStats`。发现序索引是 group 建立时设备在运行时输入列表中的位置，启动跳过设备后与接口发布序不同，仅用于定位运行时内部设备；接口归属看 `InterfaceId`，同一设备的所有 group 共享它；`group_id` 只在设备内唯一，识别一个 group 需要 `(discovery_order, group_id)` 并用。身份在 build 时固定，接口在 `init_network` 发布接口时绑定，且绑定先于运行时对外可达，因此公开入口只会看到空列表或已经绑定好接口的 group；运行时尚未发布（未配置网络或初始化未完成）时返回空列表。计数按各自原子量逐字段读出，**不保证是同一时刻的一致视图**，只用于诊断定位，不能据此推导跨字段不变量（例如 `irq_to_poll_remote_wake ≤ irq`）；`rx_drops` 是只增不减的累计值；同一批丢弃随后也由设备层折入接口 `rx_dropped`，两处统计的是同一批事件，不可相加。`/sys/kernel/debug/net_queue` 渲染同一份快照，是诊断视图而非 ABI。
 
 `InterfaceId` 是稳定接口 ID，同时作为 StarryOS/Linux ifindex 来源：
 

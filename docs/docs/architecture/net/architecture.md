@@ -80,7 +80,7 @@ Public API 是上层 OS 模块进入 `ax-net` 的边界，主要定义在 `lib.r
 | API 类别 | 代表接口 | 架构作用 |
 | --- | --- | --- |
 | 初始化 | `NetworkRuntimeBuilder::build()`、`init_network()`、`init_vsock()` | 原子建立 fixed-CPU queue runtime、唯一 protocol executor、`Service`/`Router`/`NetControl`；vsock 独立初始化 |
-| 接口查询 | `interfaces()`、`interface_by_name()`、`ipv4_config()`、`default_routes()`、`arp_entries()`、`net_dev_stats()` | 从控制面或设备层返回只读快照 |
+| 接口查询 | `interfaces()`、`interface_by_name()`、`ipv4_config()`、`default_routes()`、`arp_entries()`、`net_dev_stats()`、`net_queue_snapshots()` | 从控制面或设备层返回只读快照 |
 | 运行期地址 | `set_interface_ipv4()`、`remove_interface_ipv4()` | 静态配置或精确删除单个接口 IPv4，并同步 connected route；不配置 gateway |
 | DNS | `dns_servers()`、`dns_query()`、`dns_query_timeout()` | 读取 DNS registry，并通过临时 smoltcp DNS socket 查询 |
 | Socket facade | `TcpSocket`、`UdpSocket`、`RawSocket`、`UnixSocket`、`VsockSocket` | 为 syscall/POSIX 层提供统一 socket backend |

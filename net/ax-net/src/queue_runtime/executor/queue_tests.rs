@@ -14,9 +14,20 @@ use rd_net::{
 };
 
 use super::*;
-use crate::queue_runtime::{spsc_ring, tests::TEST_DMA};
+use crate::queue_runtime::{
+    NetQueueIdentity, install_queue_poll_observer, publish_queue_poll_gate, spsc_ring,
+    tests::TEST_DMA,
+};
 
 type Trace = Arc<Mutex<Vec<&'static str>>>;
+
+fn test_identity() -> NetQueueIdentity {
+    NetQueueIdentity {
+        discovery_order: 0,
+        group_id: NetPollGroupId::new(0),
+        owner_cpu: 0,
+    }
+}
 
 struct FailingDma(AtomicBool);
 
@@ -102,7 +113,10 @@ fn rx_allocation_failure_recovers_without_disabling_tx() {
     let (recycle, rx_recycle) = spsc_ring(2);
     let (mut transmit, tx_ready) = spsc_ring(2);
     let (tx_free, _free) = spsc_ring(2);
-    let shared = Arc::new(PollGroupState::new(0, Arc::new(QueueNotification::new())));
+    let shared = Arc::new(PollGroupState::new(
+        test_identity(),
+        Arc::new(QueueNotification::new()),
+    ));
     shared.activate(false);
     let mut executor = QueueGroupExecutor {
         wifi_startup_group: None,
@@ -125,7 +139,7 @@ fn rx_allocation_failure_recovers_without_disabling_tx() {
     let outcome = executor.poll(1);
     DMA.0.store(false, Ordering::Relaxed);
     assert!(
-        !matches!(outcome, GroupPollOutcome::Failed),
+        !matches!(outcome, GroupPollOutcome::Failed(_)),
         "temporary DMA allocation failure permanently disabled RX and TX"
     );
     assert!(
@@ -163,8 +177,8 @@ fn rx_allocation_failure_recovers_without_disabling_tx() {
         &["rx", "tx", "flush", "retry", "rx", "refill", "refill"]
     );
     assert!(executor.pending_rx_refill.is_empty());
-    assert_eq!(executor.shared.take_rx_drops(), 1);
-    assert_eq!(executor.shared.take_rx_drops(), 0);
+    assert_eq!(executor.shared.take_pending_rx_drops(), 1);
+    assert_eq!(executor.shared.take_pending_rx_drops(), 0);
 
     let limit = executor.group.rx.capacity().max(QUEUE_BUDGET);
     let mut held = Vec::new();
@@ -367,7 +381,10 @@ fn missing_device_startup_is_cancelled_without_publishing_queues() {
         let (rx_recycle, recycle) = spsc_ring(2);
         let (tx_free, mut protocol_tx_free) = spsc_ring(2);
         let (_protocol_tx, tx_ready) = spsc_ring(2);
-        let shared = Arc::new(PollGroupState::new(0, Arc::new(QueueNotification::new())));
+        let shared = Arc::new(PollGroupState::new(
+            test_identity(),
+            Arc::new(QueueNotification::new()),
+        ));
         let mut executor = QueueGroupExecutor {
             wifi_startup_group: None,
             group,
@@ -447,7 +464,10 @@ fn startup_executor(absent: bool, trace: Trace) -> QueueGroupExecutor {
     let (rx_recycle, recycle) = spsc_ring(2);
     let (tx_free, _protocol_tx_free) = spsc_ring(2);
     let (_protocol_tx, tx_ready) = spsc_ring(2);
-    let shared = Arc::new(PollGroupState::new(0, Arc::new(QueueNotification::new())));
+    let shared = Arc::new(PollGroupState::new(
+        test_identity(),
+        Arc::new(QueueNotification::new()),
+    ));
     let mut executor = QueueGroupExecutor {
         group,
         wifi_startup_group: None,
@@ -671,7 +691,10 @@ fn rx_refill_retry_drains_completions_and_preserves_tx_flush() {
     let (recycle, rx_recycle) = spsc_ring(2);
     let (mut transmit, tx_ready) = spsc_ring(2);
     let (tx_free, _free) = spsc_ring(2);
-    let shared = Arc::new(PollGroupState::new(0, Arc::new(QueueNotification::new())));
+    let shared = Arc::new(PollGroupState::new(
+        test_identity(),
+        Arc::new(QueueNotification::new()),
+    ));
     shared.activate(false);
     let buffer = group.tx_pool.allocate(60).unwrap();
     assert!(
@@ -798,7 +821,10 @@ fn tx_backpressure_allows_rx_delivery_before_tx_resumes() {
     let (recycle, rx_recycle) = spsc_ring(2);
     let (mut transmit, tx_ready) = spsc_ring(2);
     let (tx_free, _free) = spsc_ring(2);
-    let shared = Arc::new(PollGroupState::new(0, Arc::new(QueueNotification::new())));
+    let shared = Arc::new(PollGroupState::new(
+        test_identity(),
+        Arc::new(QueueNotification::new()),
+    ));
     shared.activate(false);
     for byte in [0xa5, 0x5a] {
         let mut buffer = group.tx_pool.allocate(60).unwrap();
@@ -854,4 +880,275 @@ fn tx_backpressure_allows_rx_delivery_before_tx_resumes() {
         *packets.lock().unwrap(),
         vec![vec![0xa5; 60], vec![0x5a; 60]]
     );
+}
+
+/// RX queue that rejects replacements with a non-retryable error, so a round
+/// that already completed work can end in `Failed`.
+struct HardFailingRx {
+    trace: Trace,
+    completions: VecDeque<RxCompletion>,
+    initial: usize,
+}
+
+impl IRxQueue for HardFailingRx {
+    fn id(&self) -> NetQueueId {
+        NetQueueId::new(0)
+    }
+    fn config(&self) -> QueueConfig {
+        queue_config()
+    }
+    fn submit(&mut self, mut buffer: DmaBuffer) -> Result<(), SubmitError> {
+        if self.initial > 0 {
+            self.initial -= 1;
+            buffer.write_with_cpu(|packet| packet.fill(self.initial as u8));
+            self.completions.push_back(RxCompletion {
+                buffer,
+                packet_len: 60,
+            });
+            return Ok(());
+        }
+        Err(SubmitError::new(buffer, NetError::LinkDown))
+    }
+    fn reclaim(&mut self) -> Option<RxCompletion> {
+        let completion = self.completions.pop_front()?;
+        self.trace.lock().unwrap().push("rx");
+        Some(completion)
+    }
+}
+
+struct HardFailingRxDevice(Trace);
+
+impl rd_net::DriverGeneric for HardFailingRxDevice {
+    fn name(&self) -> &str {
+        "test-hard-failing-rx"
+    }
+}
+
+impl NetDevice for HardFailingRxDevice {
+    fn into_parts(self: Box<Self>) -> Result<NetDeviceParts, NetError> {
+        Ok(NetDeviceParts {
+            info: NetDeviceInfo::new("test-hard-failing-rx", [0; 6]),
+            control: Box::new(FixedNetControl::new([0; 6])),
+            wifi_control: None,
+            poll_groups: vec![NetPollGroupParts {
+                id: NetPollGroupId::new(0),
+                queues: NetQueuePairParts {
+                    tx: Box::new(TestTx(Arc::clone(&self.0))),
+                    rx: Box::new(HardFailingRx {
+                        trace: self.0,
+                        completions: VecDeque::new(),
+                        initial: 1,
+                    }),
+                },
+                irq_control: Box::new(TestIrq),
+                owner_startup: None,
+                irq_endpoints: vec![NetHardIrqEndpoint::new(
+                    NetIrqSourceId::new(0),
+                    Box::new(TestIrq),
+                )],
+            }],
+        })
+    }
+}
+
+/// Builds an executor whose RX queue rejects replacements permanently, under
+/// its own identity so its reports can be told apart from concurrent tests.
+fn port_test_executor(
+    identity: NetQueueIdentity,
+    trace: Trace,
+    tx_ready: SpscConsumer<TxRequest>,
+) -> QueueGroupExecutor {
+    let dma = DeviceDma::new(
+        DmaDeviceInfo::new(
+            DmaDomainId::Direct,
+            DmaCoherency::Coherent,
+            DmaConstraints::new(u64::MAX),
+        ),
+        &TEST_DMA,
+    );
+    let mut device =
+        rd_net::prepare_device(Box::new(HardFailingRxDevice(Arc::clone(&trace))), dma).unwrap();
+    let mut group = device.poll_groups.pop().unwrap();
+    // No initial refill and no queued completions: a plain round neither
+    // reclaims nor refills, so its outcome depends only on the test's input.
+    group.rx.initial_refill(0).unwrap();
+    let (rx_ready, _protocol_rx) = spsc_ring(2);
+    let (rx_recycle, recycle) = spsc_ring(2);
+    let (tx_free, _protocol_tx_free) = spsc_ring(2);
+    let shared = Arc::new(PollGroupState::new(
+        identity,
+        Arc::new(QueueNotification::new()),
+    ));
+    shared.activate(false);
+    QueueGroupExecutor {
+        group,
+        wifi_startup_group: None,
+        rx_ready,
+        rx_recycle: recycle,
+        rx_recycler: Arc::new(RxRecycler::new(rx_recycle, Arc::clone(&shared), 2)),
+        rx_spares: Vec::new(),
+        rx_extra_buffers: 0,
+        tx_ready,
+        tx_free,
+        pending_rx: None,
+        pending_rx_refill: VecDeque::with_capacity(2),
+        pending_tx: None,
+        pending_tx_free: None,
+        retry_at: None,
+        shared,
+    }
+}
+
+// ---- queue poll observation port ----
+
+/// The observation port is process-wide, so the tests below share one observer
+/// function (installing the same function is idempotent, replacing a live one
+/// is not), serialize on one lock, and filter captured reports by their own
+/// identity: other tests in this binary keep polling while the gate is open.
+static POLL_REPORTS: Mutex<Vec<QueuePollReport>> = Mutex::new(Vec::new());
+static POLL_PORT_LOCK: Mutex<()> = Mutex::new(());
+
+fn capture_poll_report(report: QueuePollReport) {
+    POLL_REPORTS
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
+        .push(report);
+}
+
+fn begin_poll_capture(enabled: bool) -> std::sync::MutexGuard<'static, ()> {
+    let guard = POLL_PORT_LOCK
+        .lock()
+        .unwrap_or_else(|error| error.into_inner());
+    install_queue_poll_observer(capture_poll_report);
+    publish_queue_poll_gate(enabled);
+    POLL_REPORTS
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
+        .clear();
+    guard
+}
+
+fn reports_of(identity: NetQueueIdentity) -> Vec<QueuePollReport> {
+    POLL_REPORTS
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
+        .iter()
+        .filter(|report| report.identity == identity)
+        .copied()
+        .collect()
+}
+
+/// Identity reserved for one port test, so reports from other tests that poll
+/// concurrently cannot be mistaken for its own.
+fn port_identity(tag: usize) -> NetQueueIdentity {
+    NetQueueIdentity {
+        discovery_order: 900 + tag,
+        group_id: NetPollGroupId::new(7),
+        owner_cpu: 3,
+    }
+}
+
+#[test]
+fn queue_poll_reports_exactly_once_per_round_with_its_identity_and_budget() {
+    let _port = begin_poll_capture(true);
+    let identity = port_identity(1);
+    let trace = Arc::new(Mutex::new(Vec::new()));
+    let (mut transmit, tx_ready) = spsc_ring(2);
+    let mut executor = port_test_executor(identity, Arc::clone(&trace), tx_ready);
+
+    let outcome = executor.poll(256);
+    assert_eq!(outcome, GroupPollOutcome::Idle(0));
+    let reports = reports_of(identity);
+    assert_eq!(reports.len(), 1, "one round must report exactly once");
+    assert_eq!(reports[0].budget, 256);
+    assert_eq!(reports[0].work_units, 0);
+    assert_eq!(reports[0].outcome, QueuePollOutcome::Idle);
+
+    // A second round reports again, and still only once.
+    let buffer = executor.group.tx_pool.allocate(60).unwrap();
+    assert!(
+        transmit
+            .push(TxRequest {
+                buffer,
+                options: TxSubmitOptions {
+                    notify: TxNotify::Deferred,
+                    ..Default::default()
+                },
+            })
+            .is_ok()
+    );
+    let outcome = executor.poll(64);
+    assert_eq!(outcome, GroupPollOutcome::Idle(1));
+    let reports = reports_of(identity);
+    assert_eq!(reports.len(), 2);
+    assert_eq!(reports[1].budget, 64);
+    assert_eq!(reports[1].work_units, 1);
+    publish_queue_poll_gate(false);
+}
+
+#[test]
+fn queue_poll_reports_the_work_done_before_a_failed_round() {
+    let _port = begin_poll_capture(true);
+    let identity = port_identity(2);
+    let trace = Arc::new(Mutex::new(Vec::new()));
+    let (mut transmit, tx_ready) = spsc_ring(2);
+    let mut executor = port_test_executor(identity, Arc::clone(&trace), tx_ready);
+
+    // One submitted frame and one pending refill that the device rejects
+    // permanently: the round does work and then fails.
+    let buffer = executor.group.tx_pool.allocate(60).unwrap();
+    assert!(
+        transmit
+            .push(TxRequest {
+                buffer,
+                options: TxSubmitOptions {
+                    notify: TxNotify::Deferred,
+                    ..Default::default()
+                },
+            })
+            .is_ok()
+    );
+    let replacement = executor.group.rx.allocate_replacement().unwrap();
+    executor.pending_rx_refill.push_back(PendingRxRefill {
+        completion: None,
+        replacement,
+    });
+
+    let outcome = executor.poll(256);
+    let work = outcome.work();
+    assert!(
+        matches!(outcome, GroupPollOutcome::Failed(_)),
+        "a permanent RX refill error must fail the round"
+    );
+    assert!(work > 0, "the round submitted a frame before failing");
+    let reports = reports_of(identity);
+    assert_eq!(reports.len(), 1);
+    assert_eq!(reports[0].outcome, QueuePollOutcome::Failed);
+    assert_eq!(
+        reports[0].work_units, work,
+        "a failed round must report the work it completed"
+    );
+    publish_queue_poll_gate(false);
+}
+
+#[test]
+fn queue_poll_outcome_is_unchanged_by_the_observation_port() {
+    let identity = port_identity(3);
+    let trace = Arc::new(Mutex::new(Vec::new()));
+    let (_tx, tx_ready) = spsc_ring(2);
+    let mut executor = port_test_executor(identity, Arc::clone(&trace), tx_ready);
+
+    let _port = begin_poll_capture(false);
+    let closed = executor.poll(256);
+    assert!(
+        reports_of(identity).is_empty(),
+        "a closed gate must not report"
+    );
+
+    publish_queue_poll_gate(true);
+    let open = executor.poll(256);
+    assert_eq!(reports_of(identity).len(), 1);
+
+    assert_eq!(closed, open, "observation must not change the poll outcome");
+    publish_queue_poll_gate(false);
 }

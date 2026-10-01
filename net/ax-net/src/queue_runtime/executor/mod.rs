@@ -12,6 +12,7 @@ use super::{
     PollGroupState, QUEUE_BUDGET, QueueNotification, STATE_MASK, STATE_MISSED, STATE_POLLING,
     STATE_SCHEDULED, STATUS_EMPTY, STATUS_FAILED, STATUS_PENDING, STATUS_READY, SpscConsumer,
     SpscProducer, TxQueueDiscipline,
+    observe::{QueuePollOutcome, QueuePollReport, report_queue_poll},
 };
 use crate::device::{
     ETH_ZLEN, EthernetFramePort, NetDeviceError, NetDeviceResult, ProtocolEthernetFrame,
@@ -192,7 +193,7 @@ impl EthernetFramePort for QueueFramePort {
     fn drain_rx_drops(&mut self) -> u64 {
         self.groups
             .iter()
-            .map(|group| group.shared.take_rx_drops())
+            .map(|group| group.shared.take_pending_rx_drops())
             .sum()
     }
 
@@ -367,11 +368,33 @@ impl QueueFramePort {
     }
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(super) enum GroupPollOutcome {
     Idle(usize),
     More(usize),
     Blocked(usize),
-    Failed,
+    /// A failed round still carries the work completed before the failure, so
+    /// the report never claims that no work happened.
+    Failed(usize),
+}
+
+impl GroupPollOutcome {
+    /// Executor work units completed by the round.
+    fn work(&self) -> usize {
+        match self {
+            Self::Idle(work) | Self::More(work) | Self::Blocked(work) | Self::Failed(work) => *work,
+        }
+    }
+
+    /// Reported result code for the round.
+    fn kind(&self) -> QueuePollOutcome {
+        match self {
+            Self::Idle(_) => QueuePollOutcome::Idle,
+            Self::More(_) => QueuePollOutcome::More,
+            Self::Blocked(_) => QueuePollOutcome::Blocked,
+            Self::Failed(_) => QueuePollOutcome::Failed,
+        }
+    }
 }
 
 pub(super) struct PendingRxRefill {
@@ -457,7 +480,7 @@ impl QueueGroupExecutor {
         log::error!(
             "network poll group {} on CPU {} disabled during {operation}: {error}",
             self.group.id.get(),
-            self.shared.owner_cpu,
+            self.shared.identity.owner_cpu,
         );
         self.shared.disable();
     }
@@ -537,13 +560,25 @@ impl QueueGroupExecutor {
         Ok(())
     }
 
+    /// Runs one poll round and reports it exactly once.
     fn poll(&mut self, cpu_budget: usize) -> GroupPollOutcome {
+        let outcome = self.poll_inner(cpu_budget);
+        report_queue_poll(QueuePollReport {
+            identity: self.shared.identity,
+            budget: cpu_budget,
+            work_units: outcome.work(),
+            outcome: outcome.kind(),
+        });
+        outcome
+    }
+
+    fn poll_inner(&mut self, cpu_budget: usize) -> GroupPollOutcome {
         if self.shared.is_disabled() {
-            return GroupPollOutcome::Failed;
+            return GroupPollOutcome::Failed(0);
         }
         if let Err(error) = self.group.irq_control.quiesce() {
             self.disable_after_error("IRQ quiesce", &error);
-            return GroupPollOutcome::Failed;
+            return GroupPollOutcome::Failed(0);
         }
 
         let mut work = 0;
@@ -655,7 +690,7 @@ impl QueueGroupExecutor {
                         });
                         if !matches!(reason, NetError::Retry) {
                             self.disable_after_error("RX refill", &reason);
-                            return GroupPollOutcome::Failed;
+                            return GroupPollOutcome::Failed(work);
                         }
                         rx_refill_blocked = true;
                     }
@@ -907,7 +942,10 @@ pub(super) fn queue_executor_main(
                 GroupPollOutcome::Blocked(work) => {
                     cpu_work += work;
                 }
-                GroupPollOutcome::Failed => {}
+                // A failed round reports its work through the event port, but
+                // the round budget keeps the previous accounting and does not
+                // charge it.
+                GroupPollOutcome::Failed(_) => {}
             }
         }
         if runnable && cpu_work >= CPU_ROUND_BUDGET {

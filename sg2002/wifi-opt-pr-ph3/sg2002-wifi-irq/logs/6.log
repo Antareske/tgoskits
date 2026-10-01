@@ -1,0 +1,29 @@
+root@starry:/root # ip addr
+[ 36.712290 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+[ 36.712680 0:37 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+[ 36.766746 0:37 starry_kernel::task::ops:348] Task(37, "busybox") exit with code: 0
+    inet 127.0.0.1/8 scope host dynamic lo
+[ 36.782674 0:37 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+2: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP qlen 1000
+[ 36.783382 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+    link/ether 38:7a:cc:9b:2c:c8 brd ff:ff:ff:ff:ff:ff
+[ 36.783734 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+root@starry:/root #
+root@starry:/root #
+root@starry:/root # wifi-ctl wlan0 ap SG2002 6
+[ 40.329684 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+wlan0: switched to access-point ssid=SG2002
+[ 40.330074 0:38 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+root@starry:/root # [ 40.352917 0:38 ax_net:246] [wifi] wlan0: submitting control transaction
+[ 40.356516 0:11 aic8800::rdif::owner::output:228] [wifi] control result queued for network runtime
+[ 40.356756 0:11 aic8800::rdif::device::endpoints::control:95] [wifi] control result consumed by network runtime
+[ 40.356968 0:38 ax_net:251] [wifi] wlan0: control transaction complete
+[ 40.357097 0:38 ax_net::service:678] dev 0: reconfigured as AP 192.168.50.1/24, DHCP server lease 192.168.50.2
+[ 40.358462 0:38 starry_kernel::task::ops:348] Task(38, "wifi-ctl") exit with code: 0
+[ 40.361007 0:38 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 40.361618 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[ 40.361968 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+
+root@starry:/root #

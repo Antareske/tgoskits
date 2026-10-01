@@ -1,0 +1,23 @@
+root@starry:/root # wifi-ctl eth0 ap SG2002 6
+[ 65.603106 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[ 65.603511 0:37 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+[ 65.627735 0:11 aic8800::device::mailbox:295] aic: mailbox begin id=0x0006 expected=0x0007 frame_len=512
+ioctl[ 65.627887 0:11 aic8800::device::mailbox:149] aic: mailbox flow: credits=125 raw=0x7d
+:[ 70.631455 0:37 starry_kernel::task::ops:348] Task(37, "wifi-ctl") exit with code: -256
+ [ 70.634282 0:37 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+Bad address[ 70.634911 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+
+[ 70.635281 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+root@starry:/root # ip addr
+[ 85.512050 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+[ 85.512453 0:38 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+[ 85.566281 0:38 starry_kernel::task::ops:348] Task(38, "busybox") exit with code: 0
+    inet 127.0.0.1/8 scope host dynamic lo
+[ 85.583492 0:38 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP qlen 1000
+[ 85.584128 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+    link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+[ 85.584498 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+root@starry:/root #

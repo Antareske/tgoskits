@@ -1,0 +1,1159 @@
+﻿
+===== [2026-09-17 16:10:50.277] probe :: uname -a; iperf3 --version; echo PROBE_DONE
+uname -a; iperf3 --version; echo PROBE_DONE
+[37m[243.403455 0:77309411353 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[243.407878 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+iperf3: unrecognized option: a
+
+Usage: iperf3 [-s|-c host] [options]
+Try `iperf3 --help' for more information.
+[37m[243.913583 0:77309411353 [37mstarry_kernel::task::ops:539] [32mTask(77309411353, "iperf3") exit with code: 256[m[m
+[37m[243.914206 0:77309411353 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[243.915906 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[243.944045 0:81604378649 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[243.950965 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+iperf 3.19.1 (cJSON 1.7.15)
+[37m[244.076509 0:81604378649 [37mstarry_kernel::task::ops:539] [32mTask(81604378649, "iperf3") exit with code: 0[m[m
+Linux starry 10.0.0 10.0.0 riscv64
+[37m[244.077217 0:81604378649 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+Optional features available: CPU affinity setting, TCP congestion algorithm setting, sendfile / zerocopy, socket pacing, authentication, bind to device, support IPv4 don't fragment, POSIX threads
+[37m[244.078124 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+PROBE_DONE
+root@starry:/root # [6n
+
+===== [2026-09-17 16:11:19.289] start starry server starryos-sta-board-s-tcp-tx-P1 :: rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; echo SRV_LAUNCHED
+rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iper
+f3_s.log; echo SRV_LAUNCHED
+[37m[273.849806 0:85899345945 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[273.861441 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[273.888003 0:85899345945 [37mstarry_kernel::task::ops:539] [32mTask(85899345945, "busybox") exit with code: 0[m[m
+[37m[273.888637 0:85899345945 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[273.889420 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[273.908268 0:90194313241 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[273.949119 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[274.069845 0:4294967322 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+SRV_LAUNCHED
+[37m[274.070512 0:90194313241 [37mstarry_kernel::task::ops:539] [32mTask(90194313241, "iperf3") exit with code: 0[m[m
+root@starry:/root # [37m[274.072549 0:90194313241 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[6n[37m[274.074375 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[274.106326 0:94489280537 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[274.109273 0:4294967322 [37mstarry_kernel::task::ops:539] [32mTask(4294967322, "iperf3") exit with code: 0[m[m
+[37m[274.111465 0:4294967322 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+
+
+===== [2026-09-17 16:11:31.643] cat starry server log starryos-sta-board-s-tcp-tx-P1 :: cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[285.338535 0:98784247833 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[285.344490 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 60139
+[  6] local 192.168.137.17 port 5201 connected[37m[285.348923 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+ to 192.168.137.1 port 60140
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  6]   0.00-1.00   sec  1.00 MBytes  8.36 Mbits/sec    0   0.00 Bytes       (omitted)
+[  6]   0.01-0.99   sec   896 KBytes  7.31 Mbits/sec    0   0.00 Bytes  [37m[285.349164 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+     
+[  6]   0.99-1.99   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  6]   1.99-2.99   sec   896 KBytes  7.35 Mbits/sec    0   0.00 Bytes       
+[  6]   2.99-3.99   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  6]   3.99[37m[285.379183 0:98784247833 [37mstarry_kernel::task::ops:539] [32mTask(98784247833, "busybox") exit with code: 0[m[m
+-4.99   sec   896 KBytes  7.32 Mbits/sec    0   0.00 Bytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  6]   0.00-4.99   sec  4.25 MBytes  7.14 Mbits/sec    0            sender
+[37m[285.387927 0:98784247833 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+SRVLOG_DONE
+[37m[285.388687 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+root@starry:/root # [6n
+
+===== [2026-09-17 16:11:41.388] start starry server starryos-sta-board-s-tcp-tx-P1 :: rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; echo SRV_LAUNCHED
+rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iper
+f3_s.log; echo SRV_LAUNCHED
+[37m[295.975845 0:103079215129 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[295.980152 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[296.015892 0:103079215129 [37mstarry_kernel::task::ops:539] [32mTask(103079215129, "busybox") exit with code: 0[m[m
+[37m[296.016523 0:103079215129 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[296.018221 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[296.047437 0:107374182425 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[296.066599 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[296.197397 0:12884901914 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+SRV_LAUNCHED
+[37m[296.198522 0:107374182425 [37mstarry_kernel::task::ops:539] [32mTask(107374182425, "iperf3") exit with code: 0[m[m
+root@starry:/root # [37m[296.208914 0:107374182425 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[6n[37m[296.210500 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[296.234355 0:111669149721 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[296.241865 0:12884901914 [37mstarry_kernel::task::ops:539] [32mTask(12884901914, "iperf3") exit with code: 0[m[m
+[37m[296.242760 0:12884901914 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+
+
+===== [2026-09-17 16:12:19.690] cat starry server log starryos-sta-board-s-tcp-tx-P1 :: cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[333.171359 0:115964117017 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[333.182891 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 65529
+[  6] local 192.168.137.17 port 5201 connected[37m[333.183252 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+ to 192.168.137.1 port 65530
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  6]   0.00-1.00   sec  1.00 MBytes  8.37 Mbits/sec    0   0.00 Bytes       (omitted)
+[  6]   1.00-2.00   sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes  [37m[333.183427 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+     (omitted)
+[  6]   2.00-3.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       (omitted)
+[  6]   0.00-1.00   sec   768 KBytes  6.27 Mbits/sec    0   0.00 Bytes       
+[  6]   1.00-2.00   sec   896 KBytes  7.36 Mbits/sec    0   0.00 Bytes   [37m[333.210830 0:115964117017 [37mstarry_kernel::task::ops:539] [32mTask(115964117017, "busybox") exit with code: 0[m[m
+    
+[  6]   2.00-3.00   sec   896 KBytes  7.32 Mbits/sec    0   0.00 Bytes       
+[  6]   3.00-4.00   sec   896 KBytes  7.31 Mbits/sec    0   0.00 Bytes       
+[  6]   4.00-5.00   sec   896 KBytes  7.38 Mbits/sec    0   0.00 Bytes       
+[  6]   5.00-[37m[333.211427 0:115964117017 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+6.00   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  6]   6.00-7.00   sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  6]   7.00-8.01   sec   896 KBytes  7.29 Mbits/sec    0   0.00 Bytes       
+[  6]   8.01-9.00   sec   768 KB[37m[333.212466 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+ytes  6.33 Mbits/sec    0   0.00 Bytes       
+[  6]   9.00-10.00  sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  6]  10.00-11.00  sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  6]  11.00-12.00  sec   768 KBytes  6.31 Mbits/sec    0   0.00 Bytes       
+[  6]  12.00-13.00  sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  6]  13.00-14.00  sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  6]  14.00-15.00  sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  6]  15.00-16.00  sec  1.12 MBytes  9.37 Mbits/sec    0   0.00 Bytes       
+[  6]  16.00-17.00  sec  1.25 MBytes  10.6 Mbits/sec    0   0.00 Bytes       
+[  6]  17.00-18.00  sec  1.00 MBytes  8.39 Mbits/sec    0   0.00 Bytes       
+[  6]  18.00-19.00  sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  6]  19.00-20.00  sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  6]  20.00-21.00  sec   896 KBytes  7.35 Mbits/sec    0   0.00 Bytes       
+[  6]  21.00-22.00  sec   896 KBytes  7.31 Mbits/sec    0   0.00 Bytes       
+[  6]  22.00-23.00  sec   896 KBytes  7.38 Mbits/sec    0   0.00 Bytes       
+[  6]  23.00-24.00  sec   768 KBytes  6.25 Mbits/sec    0   0.00 Bytes       
+[  6]  24.00-25.00  sec   896 KBytes  7.37 Mbits/sec    0   0.00 Bytes       
+[  6]  25.00-26.00  sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  6]  26.00-27.00  sec   896 KBytes  7.35 Mbits/sec    0   0.00 Bytes       
+[  6]  27.00-28.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  6]  28.00-29.00  sec  1.00 MBytes  8.39 Mbits/sec    0   0.00 Bytes       
+[  6]  29.00-30.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  6]   0.00-30.00  sec  26.1 MBytes  7.30 Mbits/sec    0            sender
+SRVLOG_DONE
+root@starry:/root # [6n
+
+===== [2026-09-17 16:12:23.470] start starry server starryos-sta-board-s-tcp-tx-P4 :: rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; echo SRV_LAUNCHED
+rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iper
+f3_s.log; echo SRV_LAUNCHED
+[37m[338.055006 0:120259084313 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[338.066620 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[338.093795 0:120259084313 [37mstarry_kernel::task::ops:539] [32mTask(120259084313, "busybox") exit with code: 0[m[m
+[37m[338.094416 0:120259084313 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[338.095189 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[338.116908 0:124554051609 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[338.144860 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[338.275182 0:21474836506 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+SRV_LAUNCHED
+[37m[338.275859 0:124554051609 [37mstarry_kernel::task::ops:539] [32mTask(124554051609, "iperf3") exit with code: 0[m[m
+root@starry:/root # [37m[338.283768 0:124554051609 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[6n[37m[338.285350 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[338.311357 0:128849018905 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[338.318182 0:21474836506 [37mstarry_kernel::task::ops:539] [32mTask(21474836506, "iperf3") exit with code: 0[m[m
+[37m[338.319093 0:21474836506 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+
+
+===== [2026-09-17 16:13:03.163] cat starry server log starryos-sta-board-s-tcp-tx-P4 :: cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[375.487878 0:133143986201 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[375.499212 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 64652
+[  6] local 192.168.137.17 port 5201 connected[37m[375.499405 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+ to 192.168.137.1 port 64653
+[  9] local 192.168.137.17 port 5201 connected to 192.168.137.1 port 64654
+[ 11] local 192.168.137.17 port 5201 connected to 192.168.137.1 port 64655
+[ 13] local 192.168.137.17 port 5201 connected to 192.168.137.1 port 64656[37m[375.499600 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  6]   0.00-1.00   sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       (omitted)
+[  9]   0.00-1.00   sec   256 KBytes  2.09 Mbits/sec    0   0.00 Bytes       (omitted)
+[ 11]   0.00-1.00   sec   256 KBytes  2.09 Mbits/sec    0   0.00 Bytes       (omitted)
+[ 13]   0.00-1.00   sec   256 KBytes  2.09 Mbits/sec    0   0.00 Bytes       (omitted)
+[SUM]   0.00-1.00   sec  1.50 MBytes  12.6 Mbits/sec    0             (omitted)
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   1.00-2.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       (omitted)
+[  9]   1.00-2.00   sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       (omitted)
+[ 11]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       (omitted)
+[ 13]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       (omitted)
+[SUM]   1.00-2.00   sec   896 KBytes  7.35 Mbits/sec    0             (omitted)
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   2.00-3.00   sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes       (omitted)
+[  9]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       (omitted)
+[ 11]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       (omitted)
+[ 13]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       (omitted)
+[SUM]   2.00-3.00   sec   640 KBytes  5.24 Mbits/sec    0             (omitted)
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   0.00-1.00   sec   768 KBytes  6.27 Mbits/sec    0   0.00 Bytes       
+[  9]   0.00-1.00   sec   128 KBytes  1.04 Mbits/sec    0   0.00 Bytes       
+[ 11]   0.00-1.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]   0.00-1.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   0.00-1.00   sec   896 KBytes  7.31 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   1.00-2.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  9]   1.00-2.00   sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   1.00-2.00   sec   896 KBytes  7.35 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   2.00-3.00   sec   768 KBytes  6.24 Mbits/sec    0   0.00 Bytes       
+[  9]   2.00-3.00   sec   128 KBytes  1.04 Mbits/sec    0   0.00 Bytes       
+[ 11]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   2.00-3.00   sec   896 KBytes  7.28 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   3.00-4.00   sec   640 KBytes  5.29 Mbits/sec    0   0.00 Bytes       
+[  9]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   3.00-4.00   sec   640 KBytes  5.29 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   4.00-5.01   sec   896 KBytes  7.27 Mbits/sec    0   0.00 Bytes       
+[  9]   4.00-5.01   sec   128 KBytes  1.04 Mbits/sec    0   0.00 Bytes       
+[ 11]   4.00-5.01   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]   4.00-5.01   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   4.00-5.01   sec  1.00 MBytes  8.31 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   5.01-6.00   sec   768 KBytes  6.33 Mbits/sec    0   0.00 Bytes       
+[  9]   5.01-6.00   sec   128 KBytes  1.06 Mbits/sec    0   0.00 Bytes       
+[ 11]   5.01-6.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]   5.01-6.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   5.01-6.00   sec   896 KBytes  7.39 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   6.00-7.00   sec   768 KBytes  6.31 Mbits/sec    0   0.00 Bytes       
+[  9]   6.00-7.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   6.00-7.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]   6.00-7.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   6.00-7.00   sec   768 KBytes  6.31 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   7.00-8.00   sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes       
+[  9]   7.00-8.00   sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]   7.00-8.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]   7.00-8.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   7.00-8.00   sec   768 KBytes  6.29 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   8.00-9.00   sec   896 KBytes  7.32 Mbits/sec    0   0.00 Bytes       
+[  9]   8.00-9.00   sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]   8.00-9.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]   8.00-9.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   8.00-9.00   sec  1.00 MBytes  8.36 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   9.00-10.00  sec   640 KBytes  5.25 Mbits/sec    0   0.00 Bytes       
+[  9]   9.00-10.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   9.00-10.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]   9.00-10.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   9.00-10.00  sec   640 KBytes  5.25 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  10.00-11.00  sec   512 KBytes  4.20 Mbits/sec    0   0.00 Bytes       
+[  9]  10.00-11.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  10.00-11.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  10.00-11.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  10.00-11.00  sec   640 KBytes  5.25 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  11.00-12.00  sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  9]  11.00-12.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  11.00-12.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  11.00-12.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  11.00-12.00  sec   768 KBytes  6.28 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  12.00-13.00  sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  9]  12.00-13.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  12.00-13.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  12.00-13.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  12.00-13.00  sec   896 KBytes  7.33 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  13.00-14.00  sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  9]  13.00-14.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  13.00-14.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  13.00-14.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  13.00-14.00  sec   896 KBytes  7.36 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  14.00-15.00  sec   640 KBytes  5.25 Mbits/sec    0   0.00 Bytes       
+[  9]  14.00-15.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  14.00-15.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  14.00-15.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  14.00-15.00  sec   640 KBytes  5.25 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  15.00-16.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  9]  15.00-16.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  15.00-16.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 13]  15.00-16.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  15.00-16.00  sec  1.00 MBytes  8.38 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  16.00-17.00  sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  9]  16.00-17.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  16.00-17.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  16.00-17.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  16.00-17.00  sec   896 KBytes  7.32 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  17.00-18.00  sec   768 KBytes  6.31 Mbits/sec    0   0.00 Bytes       
+[  9]  17.00-18.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  17.00-18.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  17.00-18.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  17.00-18.00  sec   768 KBytes  6.31 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  18.00-19.00  sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes       
+[  9]  18.00-19.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  18.00-19.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  18.00-19.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  18.00-19.00  sec   768 KBytes  6.29 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  19.00-20.00  sec   768 KBytes  6.25 Mbits/sec    0   0.00 Bytes       
+[  9]  19.00-20.00  sec   128 KBytes  1.04 Mbits/sec    0   0.00 Bytes       
+[ 11]  19.00-20.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  19.00-20.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  19.00-20.00  sec   896 KBytes  7.29 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  20.00-21.00  sec   768 KBytes  6.34 Mbits/sec    0   0.00 Bytes       
+[  9]  20.00-21.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  20.00-21.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  20.00-21.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  20.00-21.00  sec   768 KBytes  6.34 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  21.00-22.00  sec   640 KBytes  5.23 Mbits/sec    0   0.00 Bytes       
+[  9]  21.00-22.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  21.00-22.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  21.00-22.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  21.00-22.00  sec   768 KBytes  6.28 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  22.00-23.00  sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  9]  22.00-23.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  22.00-23.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  22.00-23.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  22.00-23.00  sec   76[37m[376.633875 0:133143986201 [37mstarry_kernel::task::ops:539] [32mTask(133143986201, "busybox") exit with code: 0[m[m
+8 KBytes  6.30 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  23.00-24.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  9]  23.00-24.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 1[37m[376.634568 0:133143986201 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+1]  23.00-24.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  23.00-24.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  23.00-24.00  sec   896 KBytes  7.34 Mbits/sec    0             
+- - - - - - - - - - - - - - - - -[37m[376.635313 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+ - - - - - - - -
+[  6]  24.00-25.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  9]  24.00-25.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  24.00-25.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  24.00-25.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  24.00-25.00  sec   896 KBytes  7.34 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  25.00-26.00  sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  9]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  25.00-26.00  sec   768 KBytes  6.30 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  26.00-27.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  9]  26.00-27.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  26.00-27.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  26.00-27.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  26.00-27.00  sec   896 KBytes  7.34 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  27.00-28.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  9]  27.00-28.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  27.00-28.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  27.00-28.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  27.00-28.00  sec   896 KBytes  7.33 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  28.00-29.00  sec   640 KBytes  5.25 Mbits/sec    0   0.00 Bytes       
+[  9]  28.00-29.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  28.00-29.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  28.00-29.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  28.00-29.00  sec   640 KBytes  5.25 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  29.00-30.00  sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes       
+[  9]  29.00-30.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  29.00-30.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 13]  29.00-30.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  29.00-30.00  sec   768 KBytes  6.29 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  6]   0.00-30.00  sec  21.5 MBytes  6.01 Mbits/sec    0            sender
+[  9]   0.00-30.00  sec  2.50 MBytes   699 Kbits/sec    0            sender
+[ 11]   0.00-30.00  sec   128 KBytes  34.9 Kbits/sec    0            sender
+[ 13]   0.00-30.00  sec  0.00 Bytes  0.00 bits/sec    0            sender
+[SUM]   0.00-30.00  sec  24.1 MBytes  6.74 Mbits/sec    0             sender
+SRVLOG_DONE
+root@starry:/root # [6n
+
+===== [2026-09-17 16:13:06.952] start starry server starryos-sta-board-s-tcp-rx-P1 :: rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; echo SRV_LAUNCHED
+rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iper
+f3_s.log; echo SRV_LAUNCHED
+[37m[381.518313 0:137438953497 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[381.529950 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[381.557360 0:137438953497 [37mstarry_kernel::task::ops:539] [32mTask(137438953497, "busybox") exit with code: 0[m[m
+[37m[381.557949 0:137438953497 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[381.558737 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[381.577586 0:8589934621 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[381.609524 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[381.739871 0:141733920793 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+SRV_LAUNCHED
+[37m[381.740538 0:8589934621 [37mstarry_kernel::task::ops:539] [32mTask(8589934621, "iperf3") exit with code: 0[m[m
+root@starry:/root # [37m[381.742753 0:8589934621 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[6n[37m[381.744339 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[381.776582 0:12884901917 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[381.784935 0:141733920793 [37mstarry_kernel::task::ops:539] [32mTask(141733920793, "iperf3") exit with code: 0[m[m
+[37m[381.785761 0:141733920793 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+
+
+===== [2026-09-17 16:13:32.643] cat starry server log starryos-sta-board-s-tcp-rx-P1 :: cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[406.396080 0:146028888089 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[406.400221 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+SRVLOG_DONE
+[37m[406.411321 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+root@starry:/root # [37m[406.436209 0:146028888089 [37mstarry_kernel::task::ops:539] [32mTask(146028888089, "busybox") exit with code: 0[m[m
+[6n[37m[406.436843 0:146028888089 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[406.437632 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+
+
+===== [2026-09-17 16:13:36.413] start starry server starryos-sta-board-s-tcp-rx-P4 :: rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; echo SRV_LAUNCHED
+rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iper
+f3_s.log; echo SRV_LAUNCHED
+[37m[410.964215 0:150323855385 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[410.974975 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[411.002749 0:150323855385 [37mstarry_kernel::task::ops:539] [32mTask(150323855385, "busybox") exit with code: 0[m[m
+[37m[411.003357 0:150323855385 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[411.004185 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[411.036983 0:154618822681 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[411.045348 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[411.187842 0:8589934620 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+SRV_LAUNCHED
+[37m[411.188553 0:154618822681 [37mstarry_kernel::task::ops:539] [32mTask(154618822681, "iperf3") exit with code: 0[m[m
+root@starry:/root # [37m[411.197650 0:154618822681 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[6n[37m[411.199146 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[411.224608 0:158913789977 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[411.232042 0:8589934620 [37mstarry_kernel::task::ops:539] [32mTask(8589934620, "iperf3") exit with code: 0[m[m
+[37m[411.232973 0:8589934620 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[411.236426 0:158913789977 [37mstarry_kernel::task::ops:539] [32mTask(158913789977, "iperf3") exit with code: 256[m[m
+[37m[411.237262 0:158913789977 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+
+
+===== [2026-09-17 16:14:02.007] cat starry server log starryos-sta-board-s-tcp-rx-P4 :: cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[435.757612 0:163208757273 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[435.763983 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+iperf3: error - unable to start listener for connections: Address in use
+iperf3: exiting
+[37m[435.773734 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+SRVLOG_DONE
+[37m[435.773962 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+root@starry:/root # [37m[435.805548 0:163208757273 [37mstarry_kernel::task::ops:539] [32mTask(163208757273, "busybox") exit with code: 0[m[m
+[6n[37m[435.806224 0:163208757273 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[435.806903 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+
+
+===== [2026-09-17 16:14:05.807] start starry server starryos-sta-board-s-tcp-bidir-P1 :: rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; echo SRV_LAUNCHED
+rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iper
+f3_s.log; echo SRV_LAUNCHED
+[37m[440.360483 0:167503724569 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[440.371904 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[440.399003 0:167503724569 [37mstarry_kernel::task::ops:539] [32mTask(167503724569, "busybox") exit with code: 0[m[m
+[37m[440.399562 0:167503724569 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[440.400378 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[440.427655 0:171798691865 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[440.449656 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[440.578849 0:12884901916 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+SRV_LAUNCHED
+[37m[440.579521 0:171798691865 [37mstarry_kernel::task::ops:539] [32mTask(171798691865, "iperf3") exit with code: 0[m[m
+root@starry:/root # [37m[440.583789 0:171798691865 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[6n[37m[440.584748 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[440.616285 0:176093659161 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[440.620551 0:12884901916 [37mstarry_kernel::task::ops:539] [32mTask(12884901916, "iperf3") exit with code: 0[m[m
+[37m[440.622504 0:12884901916 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[440.627785 0:176093659161 [37mstarry_kernel::task::ops:539] [32mTask(176093659161, "iperf3") exit with code: 256[m[m
+[37m[440.628538 0:176093659161 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+
+
+===== [2026-09-17 16:14:31.367] cat starry server log starryos-sta-board-s-tcp-bidir-P1 :: cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[465.172099 0:180388626457 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[465.176557 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+iperf3: error - unable to start listener for connections: Address in use
+iperf3: exiting
+[37m[465.185159 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+SRVLOG_DONE
+[37m[465.185402 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+root@starry:/root # [37m[465.213568 0:180388626457 [37mstarry_kernel::task::ops:539] [32mTask(180388626457, "busybox") exit with code: 0[m[m
+[6n[37m[465.214184 0:180388626457 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[465.214963 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+
+
+===== [2026-09-17 16:14:35.184] start starry server starryos-sta-board-s-tcp-bidir-P4 :: rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; echo SRV_LAUNCHED
+rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iper
+f3_s.log; echo SRV_LAUNCHED
+[37m[469.686891 0:184683593753 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[469.694762 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[469.733373 0:184683593753 [37mstarry_kernel::task::ops:539] [32mTask(184683593753, "busybox") exit with code: 0[m[m
+[37m[469.734048 0:184683593753 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[469.734753 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[469.758890 0:188978561049 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[469.784564 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[469.907782 0:17179869212 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+SRV_LAUNCHED
+[37m[469.908457 0:188978561049 [37mstarry_kernel::task::ops:539] [32mTask(188978561049, "iperf3") exit with code: 0[m[m
+root@starry:/root # [37m[469.910719 0:188978561049 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[6n[37m[469.911430 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[469.944771 0:193273528345 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[469.947241 0:17179869212 [37mstarry_kernel::task::ops:539] [32mTask(17179869212, "iperf3") exit with code: 0[m[m
+[37m[469.949030 0:17179869212 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[469.965722 0:193273528345 [37mstarry_kernel::task::ops:539] [32mTask(193273528345, "iperf3") exit with code: 256[m[m
+[37m[469.966502 0:193273528345 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+
+
+===== [2026-09-17 16:15:17.866] cat starry server log starryos-sta-board-s-tcp-bidir-P4 :: cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[511.624290 0:17179869213 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[511.635026 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+iperf3: error - unable to start listener for connections: Address in use
+iperf3: exiting
+[37m[511.635286 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+SRVLOG_DONE
+[37m[511.635422 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+root@starry:/root # [37m[511.635594 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[6n[37m[511.675122 0:17179869213 [37mstarry_kernel::task::ops:539] [32mTask(17179869213, "busybox") exit with code: 0[m[m
+[37m[511.675764 0:17179869213 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[511.677128 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+
+
+===== [2026-09-17 16:15:53.426] start starry server starryos-sta-board-s-tcp-rx-P1 :: killall iperf3 2>/dev/null; sleep 2; rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; sleep 2; echo SRV_LAUNCHED
+killall iperf3 2>/dev/null; sleep 2; rm -f /tmp/iperf3_s.log
+; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; sleep 2; echo SRV_LAUNCHED
+[37m[542.284726 0:21474836509 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffecb0[m[m
+[37m[542.289005 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[542.340586 0:21474836509 [37mstarry_kernel::task::ops:539] [32mTask(21474836509, "busybox") exit with code: 256[m[m
+[37m[542.341226 0:21474836509 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[542.342123 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[542.368592 0:25769803805 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffecb0[m[m
+[37m[542.384858 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[544.414737 0:25769803805 [37mstarry_kernel::task::ops:539] [32mTask(25769803805, "busybox") exit with code: 0[m[m
+[37m[544.415375 0:25769803805 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[544.416508 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[544.440692 0:30064771101 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffee70[m[m
+[37m[544.457280 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[544.480203 0:30064771101 [37mstarry_kernel::task::ops:539] [32mTask(30064771101, "busybox") exit with code: 0[m[m
+[37m[544.480790 0:30064771101 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[544.481349 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[544.513901 0:34359738397 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff030[m[m
+[37m[544.523880 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[544.672888 0:12884901915 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[544.673626 0:34359738397 [37mstarry_kernel::task::ops:539] [32mTask(34359738397, "iperf3") exit with code: 0[m[m
+[37m[544.675643 0:34359738397 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[544.676241 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[544.714354 0:38654705693 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[544.725557 0:8589934625 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[544.737373 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[544.738027 0:12884901915 [37mstarry_kernel::task::ops:539] [32mTask(12884901915, "iperf3") exit with code: 0[m[m
+[37m[544.738753 0:12884901915 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[544.739480 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[546.786599 0:8589934625 [37mstarry_kernel::task::ops:539] [32mTask(8589934625, "busybox") exit with code: 0[m[m
+SRV_LAUNCHED
+[37m[546.787244 0:8589934625 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+root@starry:/root # [37m[546.788011 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[6n
+
+===== [2026-09-17 16:16:31.418] cat starry server log starryos-sta-board-s-tcp-rx-P1 :: cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[584.965994 0:42949672989 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[584.977528 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 64242
+[  6] local 192.168.137.17 port 5201 connected[37m[584.977891 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+ to 192.168.137.1 port 64243
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-1.00   sec  2.00 MBytes  16.8 Mbits/sec                  (omitted)
+[  6]   1.00-2.00   sec  2.62 MBytes  22.0 Mbits/sec                  (omitted)
+[  6]   2.00-3.00[37m[585.005949 0:42949672989 [37mstarry_kernel::task::ops:539] [32mTask(42949672989, "busybox") exit with code: 0[m[m
+   sec  2.38 MBytes  20.0 Mbits/sec                  (omitted)
+[  6]   0.00-1.00   sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]   1.00-2.00   sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]   2.00-3.00   sec  2.50 MBytes  21.0 Mbits[37m[585.006552 0:42949672989 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+/sec                  
+[  6]   3.00-4.00   sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]   4.00-5.00   sec  2.75 MBytes  23.1 Mbits/sec                  
+[  6]   5.00-6.00   sec  2.12 MBytes  17.8 Mbits/sec                  
+[  6]   6.00-7.0[37m[585.013831 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+0   sec  2.25 MBytes  18.9 Mbits/sec                  
+[  6]   7.00-8.00   sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]   8.00-9.00   sec  2.25 MBytes  18.9 Mbits/sec                  
+[  6]   9.00-10.00  sec  1.62 MBytes  13.6 Mbits/sec                  
+[  6]  10.00-11.00  sec  2.12 MBytes  17.8 Mbits/sec                  
+[  6]  11.00-12.00  sec  2.50 MBytes  20.9 Mbits/sec                  
+[  6]  12.00-13.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]  13.00-14.00  sec  2.62 MBytes  22.1 Mbits/sec                  
+[  6]  14.00-15.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]  15.00-16.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[  6]  16.00-17.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[  6]  17.00-18.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]  18.00-19.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]  19.00-20.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]  20.00-21.00  sec  2.50 MBytes  20.9 Mbits/sec                  
+[  6]  21.00-22.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]  22.00-23.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]  23.00-24.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]  24.00-25.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[  6]  25.00-26.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[  6]  26.00-27.00  sec  2.25 MBytes  18.9 Mbits/sec                  
+[  6]  27.00-28.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[  6]  28.00-29.00  sec  2.25 MBytes  18.9 Mbits/sec                  
+[  6]  29.00-30.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-30.01  sec  72.8 MBytes  20.3 Mbits/sec                  receiver
+SRVLOG_DONE
+root@starry:/root # [6n
+
+===== [2026-09-17 16:16:40.920] start starry server starryos-sta-board-s-tcp-rx-P4 :: killall iperf3 2>/dev/null; sleep 2; rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; sleep 2; echo SRV_LAUNCHED
+killall iperf3 2>/dev/null; sleep 2; rm -f /tmp/iperf3_s.log
+; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; sleep 2; echo SRV_LAUNCHED
+[37m[589.809257 0:47244640285 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffecb0[m[m
+[37m[589.820904 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[589.864083 0:47244640285 [37mstarry_kernel::task::ops:539] [32mTask(47244640285, "busybox") exit with code: 256[m[m
+[37m[589.864686 0:47244640285 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[589.865225 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[589.890464 0:51539607581 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffecb0[m[m
+[37m[589.899613 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[591.938129 0:51539607581 [37mstarry_kernel::task::ops:539] [32mTask(51539607581, "busybox") exit with code: 0[m[m
+[37m[591.938767 0:51539607581 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[591.939525 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[591.957272 0:55834574877 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffee70[m[m
+[37m[591.984614 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[592.002297 0:55834574877 [37mstarry_kernel::task::ops:539] [32mTask(55834574877, "busybox") exit with code: 0[m[m
+[37m[592.002922 0:55834574877 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[592.003463 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[592.036317 0:60129542173 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff030[m[m
+[37m[592.045598 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[592.195721 0:17179869217 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[592.196389 0:60129542173 [37mstarry_kernel::task::ops:539] [32mTask(60129542173, "iperf3") exit with code: 0[m[m
+[37m[592.198648 0:60129542173 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[592.199351 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[592.241295 0:64424509469 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[592.250291 0:17179869211 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[592.263452 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[592.264422 0:17179869217 [37mstarry_kernel::task::ops:539] [32mTask(17179869217, "iperf3") exit with code: 0[m[m
+[37m[592.265237 0:17179869217 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[592.266035 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[594.302962 0:17179869211 [37mstarry_kernel::task::ops:539] [32mTask(17179869211, "busybox") exit with code: 0[m[m
+SRV_LAUNCHED
+[37m[594.303663 0:17179869211 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+root@starry:/root # [37m[594.304308 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[6n
+
+===== [2026-09-17 16:17:20.311] cat starry server log starryos-sta-board-s-tcp-rx-P4 :: cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[632.730025 0:68719476765 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[632.733756 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 64241
+[  6] local 192.168.137.17 port 5201 connected[37m[632.737862 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+ to 192.168.137.1 port 64243
+[  9] local 192.168.137.17 port 5201 connected to 192.168.137.1 port 64245
+[ 11] local 192.168.137.17 port 5201 connected to 192.168.137.1 port 64246
+[ 13] local 192.168.137.17 port 5201 connected to 192.168.137.1 port 64247
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-1.00   sec   128 KBytes  1.05 Mbits/sec                  (omitted)
+[  9]   0.00-1.00   sec  1.25 MBytes  10.5 Mbits/sec                  (omitted)
+[ 11]   0.00-1.00   sec   256 KBytes  2.10 Mbits/sec                  (omitted)
+[ 13]   0.00-1.00   sec  1.12 MBytes  9.43 Mbits/sec                  (omitted)
+[SUM]   0.00-1.00   sec  2.75 MBytes  23.0 Mbits/sec                  (omitted)
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   1.00-2.00   sec   128 KBytes  1.05 Mbits/sec                  (omitted)
+[  9]   1.00-2.00   sec  1.38 MBytes  11.5 Mbits/sec                  (omitted)
+[ 11]   1.00-2.00   sec   256 KBytes  2.10 Mbits/sec                  (omitted)
+[ 13]   1.00-2.00   sec  1.12 MBytes  9.44 Mbits/sec                  (omitted)
+[SUM]   1.00-2.00   sec  2.88 MBytes  24.1 Mbits/sec                  (omitted)
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   2.00-3.00   sec   128 KBytes  1.05 Mbits/sec                  (omitted)
+[  9]   2.00-3.00   sec  1.25 MBytes  10.5 Mbits/sec                  (omitted)
+[ 11]   2.00-3.00   sec   512 KBytes  4.19 Mbits/sec                  (omitted)
+[ 13]   2.00-3.00   sec  1.00 MBytes  8.38 Mbits/sec                  (omitted)
+[SUM]   2.00-3.00   sec  2.88 MBytes  24.1 Mbits/sec                  (omitted)
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   0.00-1.00   sec   256 KBytes  2.09 Mbits/sec                  
+[  9]   0.00-1.00   sec  1.12 MBytes  9.42 Mbits/sec                  
+[ 11]   0.00-1.00   sec   512 KBytes  4.19 Mbits/sec                  
+[ 13]   0.00-1.00   sec   640 KBytes  5.23 Mbits/sec                  
+[SUM]   0.00-1.00   sec  2.50 MBytes  20.9 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   1.00-2.00   sec   384 KBytes  3.15 Mbits/sec                  
+[  9]   1.00-2.00   sec   768 KBytes  6.29 Mbits/sec                  
+[ 11]   1.00-2.00   sec   768 KBytes  6.29 Mbits/sec                  
+[ 13]   1.00-2.00   sec   640 KBytes  5.24 Mbits/sec                  
+[SUM]   1.00-2.00   sec  2.50 MBytes  21.0 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   2.00-3.00   sec   256 KBytes  2.10 Mbits/sec                  
+[  9]   2.00-3.00   sec   640 KBytes  5.25 Mbits/sec                  
+[ 11]   2.00-3.00   sec   896 KBytes  7.35 Mbits/sec                  
+[ 13]   2.00-3.00   sec   640 KBytes  5.25 Mbits/sec                  
+[SUM]   2.00-3.00   sec  2.38 MBytes  19.9 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   3.00-4.00   sec   384 KBytes  3.14 Mbits/sec                  
+[  9]   3.00-4.00   sec   768 KBytes  6.28 Mbits/sec                  
+[ 11]   3.00-4.00   sec   896 KBytes  7.33 Mbits/sec                  
+[ 13]   3.00-4.00   sec   896 KBytes  7.33 Mbits/sec                  
+[SUM]   3.00-4.00   sec  2.88 MBytes  24.1 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   4.00-5.00   sec   384 KBytes  3.14 Mbits/sec                  
+[  9]   4.00-5.00   sec   512 KBytes  4.19 Mbits/sec                  
+[ 11]   4.00-5.00   sec   768 KBytes  6.29 Mbits/sec                  
+[ 13]   4.00-5.00   sec   896 KBytes  7.34 Mbits/sec                  
+[SUM]   4.00-5.00   sec  2.50 MBytes  21.0 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   5.00-6.00   sec   512 KBytes  4.20 Mbits/sec                  
+[  9]   5.00-6.00   sec   768 KBytes  6.29 Mbits/sec                  
+[ 11]   5.00-6.00   sec   640 KBytes  5.24 Mbits/sec                  
+[ 13]   5.00-6.00   sec   896 KBytes  7.34 Mbits/sec                  
+[SUM]   5.00-6.00   sec  2.75 MBytes  23.1 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   6.00-7.00   sec   512 KBytes  4.20 Mbits/sec                  
+[  9]   6.00-7.00   sec   768 KBytes  6.30 Mbits/sec                  
+[ 11]   6.00-7.00   sec   640 KBytes  5.25 Mbits/sec                  
+[ 13]   6.00-7.00   sec   896 KBytes  7.34 Mbits/sec                  
+[SUM]   6.00-7.00   sec  2.75 MBytes  23.1 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   7.00-8.00   sec   512 KBytes  4.18 Mbits/sec                  
+[  9]   7.00-8.00   sec   896 KBytes  7.32 Mbits/sec                  
+[ 11]   7.00-8.00   sec   896 KBytes  7.32 Mbits/sec                  
+[ 13]   7.00-8.00   sec   768 KBytes  6.28 Mbits/sec                  
+[SUM]   7.00-8.00   sec  3.00 MBytes  25.1 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   8.00-9.00   sec   512 KBytes  4.20 Mbits/sec                  
+[  9]   8.00-9.00   sec   640 KBytes  5.25 Mbits/sec                  
+[ 11]   8.00-9.00   sec   640 KBytes  5.25 Mbits/sec                  
+[ 13]   8.00-9.00   sec   512 KBytes  4.20 Mbits/sec                  
+[SUM]   8.00-9.00   sec  2.25 MBytes  18.9 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]   9.00-10.00  sec   640 KBytes  5.24 Mbits/sec                  
+[  9]   9.00-10.00  sec   768 KBytes  6.29 Mbits/sec                  
+[ 11]   9.00-10.00  sec   768 KBytes  6.29 Mbits/sec                  
+[ 13]   9.00-10.00  sec   640 KBytes  5.24 Mbits/sec                  
+[SUM]   9.00-10.00  sec  2.75 MBytes  23.1 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  10.00-11.01  sec   640 KBytes  5.16 Mbits/sec                  
+[  9]  10.00-11.02  sec   896 KBytes  7.21 Mbits/sec                  
+[ 11]  10.00-11.02  sec   640 KBytes  5.14 Mbits/sec                  
+[ 13]  10.00-11.02  sec   640 KBytes  5.13 Mbits/sec                  
+[SUM]  10.00-11.01  sec  2.75 MBytes  22.7 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  11.01-12.00  sec   768 KBytes  6.39 Mbits/sec                  
+[  9]  11.02-12.00  sec   768 KBytes  6.40 Mbits/sec                  
+[ 11]  11.02-12.00  sec   512 KBytes  4.27 Mbits/sec                  
+[ 13]  11.02-12.00  sec   640 KBytes  5.35 Mbits/sec                  
+[SUM]  11.01-12.00  sec  2.62 MBytes  22.4 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  12.00-13.00  sec   512 KBytes  4.20 Mbits/sec                  
+[  9]  12.00-13.00  sec   896 KBytes  7.34 Mbits/sec                  
+[ 11]  12.00-13.00  sec   640 KBytes  5.24 Mbits/sec                  
+[ 13]  12.00-13.00  sec   512 KBytes  4.20 Mbits/sec                  
+[SUM]  12.00-13.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  13.00-14.00  sec   640 KBytes  5.24 Mbits/sec                  
+[  9]  13.00-14.00  sec   896 KBytes  7.34 Mbits/sec                  
+[ 11]  13.00-14.00  sec   768 KBytes  6.29 Mbits/sec                  
+[ 13]  13.00-14.00  sec   640 KBytes  5.24 Mbits/sec                  
+[SUM]  13.00-14.00  sec  2.88 MBytes  24.1 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  14.00-15.00  sec   512 KBytes  4.19 Mbits/sec                  
+[  9]  14.00-15.00  sec   768 KBytes  6.29 Mbits/sec                  
+[ 11]  14.00-15.00  sec   512 KBytes  4.19 Mbits/sec                  
+[ 13]  14.00-15.00  sec   640 KBytes  5.24 Mbits/sec                  
+[SUM]  14.00-15.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  15.00-16.00  sec   512 KBytes  4.20 Mbits/sec                  
+[  9]  15.00-16.00  sec   512 KBytes  4.20 Mbits/sec                  
+[ 11]  15.00-16.00  sec   384 KBytes  3.15 Mbits/sec                  
+[ 13]  15.00-16.00  sec   384 KBytes  3.15 Mbits/sec                  
+[SUM]  15.00-16.00  sec  1.75 MBytes  14.7 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  16.00-17.00  sec   256 KBytes  2.10 Mbits/sec                  
+[  9]  16.00-17.00  sec   256 KBytes  2.10 Mbits/sec                  
+[ 11]  16.00-17.00  sec   128 KBytes  1.05 Mbits/sec                  
+[ 13]  16.00-17.00  sec   384 KBytes  3.14 Mbits/sec                  
+[SUM]  16.00-17.00  sec  1.00 MBytes  8.38 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  17.00-18.00  sec   768 KBytes  6.27 Mbits/sec                  
+[  9]  17.00-18.00  sec   768 KBytes  6.27 Mbits/sec                  
+[ 11]  17.00-18.00  sec   256 KBytes  2.09 Mbits/sec                  
+[ 13]  17.00-18.00  sec   896 KBytes  7.31 Mbits/sec                  
+[SUM]  17.00-18.00  sec  2.62 MBytes  21.9 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  18.00-19.00  sec   768 KBytes  6.32 Mbits/sec                  
+[  9]  18.00-19.00  sec   768 KBytes  6.32 Mbits/sec                  
+[ 11]  18.00-19.00  sec   384 KBytes  3.16 Mbits/sec                  
+[ 13]  18.00-19.00  sec   768 KBytes  6.32 Mbits/sec                  
+[SUM]  18.00-19.00  sec  2.62 MBytes  22.1 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  19.00-20.00  sec   896 KBytes  7.33 Mbits/sec                  
+[  9]  19.00-20.00  sec   768 KBytes  6.29 Mbits/sec                  
+[ 11]  19.00-20.00  sec   512 KBytes  4.19 Mbits/sec                  
+[ 13]  19.00-20.00  sec   640 KBytes  5.24 Mbits/sec                  
+[SUM]  19.00-20.00  sec  2.75 MBytes  23.0 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  20.00-21.00  sec   896 KBytes  7.34 Mbits/sec                  
+[  9]  20.00-21.00  sec   640 KBytes  5.24 Mbits/sec                  
+[ 11]  20.00-21.00  sec   512 KBytes  4.19 Mbits/sec                  
+[ 13]  20.00-21.00  sec   768 KBytes  6.29 Mbits/sec                  
+[SUM]  20.00-21.00  sec  2.75 MBytes  23.1 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  21.00-22.00  sec   768 KBytes  6.30 Mbits/sec                  
+[  9]  21.00-22.00  sec   512 KBytes  4.20 Mbits/sec                  
+[ 11]  21.00-22.00  sec   384 KBytes  3.15 Mbits/sec                  
+[ 13]  21.00-22.00  sec   640 KBytes  5.25 Mbits/sec                  
+[SUM]  21.00-22.00  sec  2.25 MBytes  18.9 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  22.00-23.00  sec   896 KBytes  7.34 Mbits/sec                  
+[  9]  22.00-23.00  sec   896 KBytes  7.34 Mbits/sec                  
+[ 11]  22.00-23.00  sec   640 KBytes  5.24 Mbits/sec                  
+[ 13]  22.00-23.00  sec   512 KBytes  4.20 Mbits/sec                  
+[SUM]  22.00-23.00  sec  2.88 MBytes  24.1 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  23.00-24.00  sec   896 KBytes  7.33 Mbits/sec                  
+[  9]  23.00-24.00  sec   512 KBytes  4.19 Mbits/sec                  
+[ 11]  23.00-24.00  sec   512 KBytes  4.19 Mbits/sec                  
+[ 13]  23.00-24.00  sec   512 KBytes  4.19 Mbits/sec                  
+[37m[633.841101 0:68719476765 [37mstarry_kernel::task::ops:539] [32mTask(68719476765, "busybox") exit with code: 0[m[m
+[SUM]  23.00-24.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  24.00-25.00  sec  1.00 MBytes  8.37 Mbits/sec                  
+[  9]  24.00-25.00  sec   512 KBytes  4.18 Mbits/sec         [37m[633.841767 0:68719476765 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+         
+[ 11]  24.00-25.00  sec   640 KBytes  5.23 Mbits/sec                  
+[ 13]  24.00-25.00  sec   384 KBytes  3.14 Mbits/sec                  
+[SUM]  24.00-25.00  sec  2.50 MBytes  20.9 Mbits/sec                  
+- - - - - - - - - - - - - - -[37m[633.843057 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+ - - - - - - - - - -
+[  6]  25.00-26.00  sec  1.00 MBytes  8.41 Mbits/sec                  
+[  9]  25.00-26.00  sec   640 KBytes  5.26 Mbits/sec                  
+[ 11]  25.00-26.00  sec   640 KBytes  5.26 Mbits/sec                  
+[ 13]  25.00-26.00  sec   512 KBytes  4.21 Mbits/sec                  
+[SUM]  25.00-26.00  sec  2.75 MBytes  23.1 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  26.00-27.00  sec   896 KBytes  7.34 Mbits/sec                  
+[  9]  26.00-27.00  sec   640 KBytes  5.24 Mbits/sec                  
+[ 11]  26.00-27.00  sec   640 KBytes  5.24 Mbits/sec                  
+[ 13]  26.00-27.00  sec   640 KBytes  5.24 Mbits/sec                  
+[SUM]  26.00-27.00  sec  2.75 MBytes  23.1 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  27.00-28.00  sec   896 KBytes  7.34 Mbits/sec                  
+[  9]  27.00-28.00  sec   512 KBytes  4.19 Mbits/sec                  
+[ 11]  27.00-28.00  sec   512 KBytes  4.19 Mbits/sec                  
+[ 13]  27.00-28.00  sec   768 KBytes  6.29 Mbits/sec                  
+[SUM]  27.00-28.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  28.00-29.00  sec   896 KBytes  7.31 Mbits/sec                  
+[  9]  28.00-29.00  sec   512 KBytes  4.18 Mbits/sec                  
+[ 11]  28.00-29.00  sec   512 KBytes  4.18 Mbits/sec                  
+[ 13]  28.00-29.00  sec   640 KBytes  5.22 Mbits/sec                  
+[SUM]  28.00-29.00  sec  2.50 MBytes  20.9 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  29.00-30.00  sec   768 KBytes  6.31 Mbits/sec                  
+[  9]  29.00-30.00  sec   512 KBytes  4.21 Mbits/sec                  
+[ 11]  29.00-30.00  sec   512 KBytes  4.21 Mbits/sec                  
+[ 13]  29.00-30.00  sec   768 KBytes  6.31 Mbits/sec                  
+[SUM]  29.00-30.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  6]  30.00-30.03  sec   128 KBytes  33.2 Mbits/sec                  
+[  9]  30.00-30.03  sec   128 KBytes  33.2 Mbits/sec                  
+[ 11]  30.00-30.03  sec  0.00 Bytes  0.00 bits/sec                  
+[ 13]  30.00-30.03  sec  0.00 Bytes  0.00 bits/sec                  
+[SUM]  30.00-30.03  sec   256 KBytes  66.4 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-30.03  sec  19.2 MBytes  5.38 Mbits/sec                  receiver
+[  9]   0.00-30.03  sec  20.5 MBytes  5.73 Mbits/sec                  receiver
+[ 11]   0.00-30.03  sec  17.2 MBytes  4.82 Mbits/sec                  receiver
+[ 13]   0.00-30.03  sec  19.2 MBytes  5.38 Mbits/sec                  receiver
+[SUM]   0.00-30.03  sec  76.2 MBytes  21.3 Mbits/sec                  receiver
+SRVLOG_DONE
+root@starry:/root # [6n
+
+===== [2026-09-17 16:17:29.797] start starry server starryos-sta-board-s-tcp-bidir-P1 :: killall iperf3 2>/dev/null; sleep 2; rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; sleep 2; echo SRV_LAUNCHED
+killall iperf3 2>/dev/null; sleep 2; rm -f /tmp/iperf3_s.log
+; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; sleep 2; echo SRV_LAUNCHED
+[37m[638.692860 0:73014444061 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffecb0[m[m
+[37m[638.701157 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[638.747904 0:73014444061 [37mstarry_kernel::task::ops:539] [32mTask(73014444061, "busybox") exit with code: 256[m[m
+[37m[638.748558 0:73014444061 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[638.749066 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[638.764306 0:77309411357 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffecb0[m[m
+[37m[638.795248 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[640.811112 0:77309411357 [37mstarry_kernel::task::ops:539] [32mTask(77309411357, "busybox") exit with code: 0[m[m
+[37m[640.811752 0:77309411357 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[640.812513 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[640.837329 0:81604378653 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffee70[m[m
+[37m[640.850227 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[640.877908 0:81604378653 [37mstarry_kernel::task::ops:539] [32mTask(81604378653, "busybox") exit with code: 0[m[m
+[37m[640.878532 0:81604378653 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[640.879078 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[640.911261 0:85899345949 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff030[m[m
+[37m[640.925710 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[641.069199 0:25769803809 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[641.069876 0:85899345949 [37mstarry_kernel::task::ops:539] [32mTask(85899345949, "iperf3") exit with code: 0[m[m
+[37m[641.072084 0:85899345949 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[641.072622 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[641.106021 0:90194313245 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[641.128103 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[641.137668 0:25769803809 [37mstarry_kernel::task::ops:539] [32mTask(25769803809, "iperf3") exit with code: 0[m[m
+[37m[641.138526 0:25769803809 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[641.139947 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[641.140414 0:25769803803 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[643.175328 0:90194313245 [37mstarry_kernel::task::ops:539] [32mTask(90194313245, "busybox") exit with code: 0[m[m
+SRV_LAUNCHED
+[37m[643.175970 0:90194313245 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+root@starry:/root # [37m[643.176738 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[6n
+
+===== [2026-09-17 16:18:13.078] cat starry server log starryos-sta-board-s-tcp-bidir-P1 :: cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[686.324175 0:30064771099 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[686.334813 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 64088
+[  6] local 192.168.137.17 port 5201 connected[37m[686.335259 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+ to 192.168.137.1 port 64089
+[  9] local 192.168.137.17 port 5201 connected to 192.168.137.1 port 64090
+[ ID][Role] Interval           Transfer     Bitrate         Retr  Cwnd
+[  6][RX-S]   0.00-1.00   sec   128 KBytes  1.05 Mbits/sec                  (omitted)
+[  9][TX-S]   0.00-1.01   sec  1.00 MBytes  8.33 Mbits/sec    0   0.00 Bytes       (omitted)
+[  6][RX-S]   1.00-2.00   sec   512 KBytes  4.20 Mbits/sec                  (omitted)
+[  9][TX-S]   1.01-2.00   sec   896 KBytes  7.38 Mbits/sec    0   0.00 Bytes       (omitted)
+[  6][RX-S]   2.00-3.00   sec   512 KBytes  4.20 Mbits/sec                  (omitted)
+[  9][TX-S]   2.00-3.00   sec   640 KBytes  5.25 Mbits/sec    0   0.00 Bytes       (omitted)
+[  6][RX-S]   0.00-1.00   sec   640 KBytes  5.23 Mbits/sec                  
+[  9][TX-S]   0.00-1.00   sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   1.00-2.00   sec   384 KBytes  3.15 Mbits/sec                  
+[  9][TX-S]   1.00-2.00   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   2.00-3.00   sec   384 KBytes  3.15 Mbits/sec                  
+[  9][TX-S]   2.00-3.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   3.00-4.00   sec   384 KBytes  3.14 Mbits/sec                  
+[  9][TX-S]   3.00-4.00   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   4.00-5.00   sec   384 KBytes  3.15 Mbits/sec                  
+[  9][TX-S]   4.00-5.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   5.00-6.00   sec   256 KBytes  2.09 Mbits/sec                  
+[  9][TX-S]   5.00-6.00   sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   6.00-7.00   sec   512 KBytes  4.20 Mbits/sec                  
+[  9][TX-S]   6.00-7.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   7.00-8.00   sec   384 KBytes  3.15 Mbits/sec                  
+[  9][TX-S]   7.00-8.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   8.00-9.00   sec   384 KBytes  3.14 [37m[686.585233 0:30064771099 [37mstarry_kernel::task::ops:539] [32mTask(30064771099, "busybox") exit with code: 0[m[m
+Mbits/sec                  
+[  9][TX-S]   8.00-9.00   sec   896 KBytes  7.33 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]   9.00-10.00  sec   384 KBytes  3.14 Mbits/sec                  
+[  9][TX-S]   9.00-10.00  sec   768 KBytes  6.29 Mbits/sec    0 [37m[686.585844 0:30064771099 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+  0.00 Bytes       
+[  6][RX-S]  10.00-11.00  sec   640 KBytes  5.24 Mbits/sec                  
+[  9][TX-S]  10.00-11.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]  11.00-12.00  sec   640 KBytes  5.25 Mbits/sec              [37m[686.586530 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+    
+[  9][TX-S]  11.00-12.00  sec   896 KBytes  7.35 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]  12.00-13.00  sec   640 KBytes  5.24 Mbits/sec                  
+[  9][TX-S]  12.00-13.00  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]  13.00-14.00  sec   768 KBytes  6.26 Mbits/sec                  
+[  9][TX-S]  13.00-14.00  sec   896 KBytes  7.31 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]  14.00-15.00  sec   256 KBytes  2.10 Mbits/sec                  
+[  9][TX-S]  14.00-15.00  sec   640 KBytes  5.26 Mbits/sec    0   0.00 Bytes       
+[  6][RX-S]  15.00-16.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  15.00-16.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  16.00-17.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  16.00-17.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  17.00-18.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  17.00-18.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  18.00-19.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  18.00-19.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  19.00-20.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  19.00-20.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  20.00-21.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  20.00-21.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  21.00-22.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  21.00-22.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  22.00-23.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  22.00-23.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  23.00-24.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  23.00-24.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  24.00-25.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  24.00-25.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  26.00-27.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  26.00-27.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  27.00-28.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  27.00-28.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  28.00-29.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  28.00-29.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  6][RX-S]  29.00-30.00  sec  0.00 Bytes  0.00 bits/sec                  
+[  9][TX-S]  29.00-30.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID][Role] Interval           Transfer     Bitrate         Retr
+[  6][RX-S]   0.00-30.00  sec  6.88 MBytes  1.92 Mbits/sec                  receiver
+[  9][TX-S]   0.00-30.00  sec  11.9 MBytes  3.32 Mbits/sec    0            sender
+SRVLOG_DONE
+root@starry:/root # [6n
+
+===== [2026-09-17 16:18:58.824] start starry server starryos-sta-board-s-udp-tx-P1 :: killall iperf3 2>/dev/null; sleep 2; rm -f /tmp/iperf3_s.log; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; sleep 2; echo SRV_LAUNCHED
+killall iperf3 2>/dev/null; sleep 2; rm -f /tmp/iperf3_s.log
+; iperf3 -s -1 -D --logfile /tmp/iperf3_s.log; sleep 2; echo SRV_LAUNCHED
+[37m[727.719998 0:34359738395 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffecb0[m[m
+[37m[727.731694 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[727.774160 0:34359738395 [37mstarry_kernel::task::ops:539] [32mTask(34359738395, "busybox") exit with code: 256[m[m
+[37m[727.774739 0:34359738395 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[727.775279 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[727.800896 0:38654705691 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffecb0[m[m
+[37m[727.810753 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[729.840188 0:38654705691 [37mstarry_kernel::task::ops:539] [32mTask(38654705691, "busybox") exit with code: 0[m[m
+[37m[729.840826 0:38654705691 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[729.842437 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[729.856856 0:42949672987 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffee70[m[m
+[37m[729.897610 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[729.902047 0:42949672987 [37mstarry_kernel::task::ops:539] [32mTask(42949672987, "busybox") exit with code: 0[m[m
+[37m[729.902674 0:42949672987 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[729.903273 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[729.935811 0:47244640283 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff030[m[m
+[37m[729.945093 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[730.096041 0:34359738401 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[730.097059 0:47244640283 [37mstarry_kernel::task::ops:539] [32mTask(47244640283, "iperf3") exit with code: 0[m[m
+[37m[730.099024 0:47244640283 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[730.100478 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[730.135945 0:51539607579 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff1f0[m[m
+[37m[730.151112 0:98784247837 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffffae0[m[m
+[37m[730.153922 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[730.164428 0:34359738401 [37mstarry_kernel::task::ops:539] [32mTask(34359738401, "iperf3") exit with code: 0[m[m
+[37m[730.167323 0:34359738401 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[730.168146 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[732.204131 0:51539607579 [37mstarry_kernel::task::ops:539] [32mTask(51539607579, "busybox") exit with code: 0[m[m
+SRV_LAUNCHED
+[37m[732.204774 0:51539607579 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+root@starry:/root # [37m[732.206356 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[6n
+
+===== [2026-09-17 16:19:33.813] cat starry server log starryos-sta-board-s-udp-tx-P1 :: cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[767.620972 0:103079215133 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[767.625188 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 64002
+iperf3: error - unable to start stream listene[37m[767.628866 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+r: Address in use
+[37m[767.670620 0:103079215133 [37mstarry_kernel::task::ops:539] [32mTask(103079215133, "busybox") exit with code: 0[m[m
+SRVLOG_DONE
+[37m[767.671125 0:103079215133 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+root@starry:/root # [37m[767.671990 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[6n
+
+===== [2026-09-17 16:20:50.442] manual-cleanup :: killall iperf3 2>/dev/null; sleep 1; echo CLEAN_DONE; ip -o addr | grep wlan0
+killall iperf3 2>/dev/null; sleep 1; echo CLEAN_DONE; ip -o 
+addr | grep wlan0
+[37m[843.368161 0:107374182429 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff030[m[m
+[37m[843.374873 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[843.424748 0:107374182429 [37mstarry_kernel::task::ops:539] [32mTask(107374182429, "busybox") exit with code: 256[m[m
+[37m[843.425384 0:107374182429 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[843.427099 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[843.451551 0:111669149725 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff030[m[m
+[37m[843.460983 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[844.498960 0:111669149725 [37mstarry_kernel::task::ops:539] [32mTask(111669149725, "busybox") exit with code: 0[m[m
+CLEAN_DONE
+[37m[844.499593 0:111669149725 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[844.501757 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[844.526378 0:115964117021 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff420[m[m
+[37m[844.565906 0:55834574875 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff420[m[m
+2: wlan0    inet 192.168.137.17/24 brd 192.168.137.255 scope global dynamic wlan0
+[37m[844.575429 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+root@starry:/root # [37m[844.617223 0:115964117021 [37mstarry_kernel::task::ops:539] [32mTask(115964117021, "busybox") exit with code: 0[m[m
+[6n[37m[844.617804 0:115964117021 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[844.619235 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[844.652163 0:55834574875 [37mstarry_kernel::task::ops:539] [32mTask(55834574875, "busybox") exit with code: 0[m[m
+[37m[844.652770 0:55834574875 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[844.662130 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+
+
+===== [2026-09-17 16:24:15.115] cleanup2 :: killall iperf3 2>/dev/null; sleep 1; echo CLEAN_OK; ip -o addr | grep wlan0
+killall iperf3 2>/dev/null; sleep 1; echo CLEAN_OK; ip -o addr | grep wlan0
+
+
+===== [2026-09-17 16:24:25.015] alive-check :: echo MARK1; ip -o addr | grep wlan0; echo MARK2
+echo MARK1; ip -o addr | grep wlan0; echo MARK2
+
+
+===== [2026-09-17 16:30:26.717] wifi-state :: echo MARK; ip -o addr | grep wlan0; ps | grep -i -E "wpa|dhcp|udhcpc" | grep -v grep; ls /etc/ | grep -i wpa; echo DONE
+echo MARK; ip -o addr | grep wlan0; ps | grep -i -E "wpa|dhc
+p|udhcpc" | grep -v grep; ls /etc/ | grep -i wpa; echo DONE
+MARK
+[37m[1418.803683 0:111669149723 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffeee0[m[m
+[37m[1418.844215 0:219043332121 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3ffffeee0[m[m
+[37m[1418.850985 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+2: wlan0    inet 192.168.137.17/24 brd 192.168.137.255 scope global dynamic wlan0
+[37m[1418.894098 0:111669149723 [37mstarry_kernel::task::ops:539] [32mTask(111669149723, "busybox") exit with code: 0[m[m
+[37m[1418.894738 0:111669149723 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[1418.895954 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[1418.928658 0:219043332121 [37mstarry_kernel::task::ops:539] [32mTask(219043332121, "busybox") exit with code: 0[m[m
+[37m[1418.929269 0:219043332121 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[1418.938840 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[1418.960563 0:223338299417 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff0a0[m[m
+[37m[1419.002480 0:115964117019 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff0a0[m[m
+[37m[1419.071265 0:17179869216 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff0a0[m[m
+[37m[1419.083960 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+DONE
+[37m[1419.160196 0:223338299417 [37mstarry_kernel::task::ops:539] [32mTask(223338299417, "busybox") exit with code: 0[m[m
+root@starry:/root # [37m[1419.160879 0:223338299417 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[6n[37m[1419.162586 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[1419.163230 0:115964117019 [37mstarry_kernel::task::ops:539] [32mTask(115964117019, "busybox") exit with code: 0[m[m
+[37m[1419.177977 0:115964117019 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[1419.179429 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[1419.194511 0:17179869216 [37mstarry_kernel::task::ops:539] [32mTask(17179869216, "busybox") exit with code: 256[m[m
+[37m[1419.194983 0:17179869216 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[1419.196207 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+[37m[1419.217547 0:21474836512 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff260[m[m
+[37m[1419.283372 0:120259084315 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff260[m[m
+[37m[1419.302691 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[1419.364570 0:21474836512 [37mstarry_kernel::task::ops:539] [32mTask(21474836512, "busybox") exit with code: 0[m[m
+[37m[1419.365150 0:21474836512 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[1419.365860 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[1419.367788 0:120259084315 [37mstarry_kernel::task::ops:539] [32mTask(120259084315, "busybox") exit with code: 256[m[m
+[37m[1419.368429 0:120259084315 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[1419.368983 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+
+
+===== [2026-09-17 16:33:48.013] get-ip :: ip -o addr | grep wlan0; echo DONE
+
+
+===== [2026-09-17 16:34:15.806] get-ip2 :: ip -o addr | grep wlan0; echo DONE
+ip -o addr | grep wlan0; echo DONE
+[37m[ 70.293151 0:68719476761 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff420[m[m
+[37m[ 70.328819 0:4294967322 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff420[m[m
+[37m[ 70.343445 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+2: wlan0    inet 192.168.137.76/24 brd 192.168.137.255 scope global dynamic wlan0
+[37m[ 70.384597 0:68719476761 [37mstarry_kernel::task::ops:539] [32mTask(68719476761, "busybox") exit with code: 0[m[m
+DONE
+[37m[ 70.385222 0:68719476761 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+root@starry:/root # [37m[ 70.386645 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[6n[37m[ 70.414975 0:4294967322 [37mstarry_kernel::task::ops:539] [32mTask(4294967322, "busybox") exit with code: 0[m[m
+[37m[ 70.415592 0:4294967322 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+[37m[ 70.416904 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+
+
+===== [2026-09-17 16:37:23.979] alive-check2 :: echo ALIVE; ip -o addr | grep wlan0; echo END
+echo ALIVE; ip -o addr | grep wlan0; echo END
+
+
+===== [2026-09-17 16:38:40.331] shelltest :: echo SHELLTEST
+echo SHELLTEST
+SHELLTEST
+root@starry:/root # [6n

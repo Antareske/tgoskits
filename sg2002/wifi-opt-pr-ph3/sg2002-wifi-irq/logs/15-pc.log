@@ -1,0 +1,19 @@
+asta@Astalia:~$ iperf3 -c 192.168.137.184
+Connecting to host 192.168.137.184, port 5201
+[  5] local 172.25.36.69 port 46250 connected to 192.168.137.184 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.01   sec  4.00 MBytes  33.1 Mbits/sec    0    177 KBytes
+[  5]   1.01-2.01   sec  0.00 Bytes  0.00 bits/sec    0    177 KBytes
+[  5]   2.01-3.01   sec  0.00 Bytes  0.00 bits/sec    0    177 KBytes
+[  5]   3.01-4.03   sec  0.00 Bytes  0.00 bits/sec    0    177 KBytes
+[  5]   4.03-5.01   sec  0.00 Bytes  0.00 bits/sec    0    177 KBytes
+[  5]   5.01-6.01   sec  0.00 Bytes  0.00 bits/sec    0    177 KBytes
+[  5]   6.01-7.01   sec  0.00 Bytes  0.00 bits/sec    0    177 KBytes
+[  5]   7.01-8.00   sec  0.00 Bytes  0.00 bits/sec    0    177 KBytes
+[  5]   8.00-9.00   sec  0.00 Bytes  0.00 bits/sec    0    177 KBytes
+^C[  5]  10.00-14.91  sec  0.00 Bytes  0.00 bits/sec    0    177 KBytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-14.91  sec  4.00 MBytes  2.25 Mbits/sec    0             sender
+[  5]   0.00-14.91  sec  0.00 Bytes  0.00 bits/sec                  receiver
+iperf3: interrupt - the client has terminated

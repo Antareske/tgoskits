@@ -1,0 +1,42 @@
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 10.187.134.1, port 42148
+[  6] local 10.187.134.2 port 5201 connected to 10.187.134.1 port 37763
+[ ID] Interval           Transfer     Bitrate         Total Datagrams
+[  6]   0.00-1.00   sec  1.58 MBytes  13.3 Mbits/sec  1146  (omitted)
+[  6]   1.00-2.00   sec  1.27 MBytes  10.7 Mbits/sec  920  (omitted)
+[  6]   2.00-3.00   sec  1.24 MBytes  10.4 Mbits/sec  896  (omitted)
+[  6]   0.00-1.00   sec  1.25 MBytes  10.5 Mbits/sec  907  
+[  6]   1.00-2.00   sec  1.29 MBytes  10.8 Mbits/sec  933  
+[  6]   2.00-3.00   sec  1.37 MBytes  11.5 Mbits/sec  992  
+[  6]   3.00-4.00   sec  1.32 MBytes  11.1 Mbits/sec  954  
+[  6]   4.00-5.00   sec  1.29 MBytes  10.8 Mbits/sec  933  
+[  6]   5.00-6.00   sec  1.25 MBytes  10.4 Mbits/sec  902  
+[  6]   6.00-7.00   sec  1.27 MBytes  10.6 Mbits/sec  920  
+[  6]   7.00-8.00   sec  1.16 MBytes  9.77 Mbits/sec  843  
+[  6]   8.00-9.00   sec  1.27 MBytes  10.7 Mbits/sec  921  
+[  6]   9.00-10.00  sec  1.27 MBytes  10.7 Mbits/sec  921  
+[  6]  10.00-11.00  sec  1.15 MBytes  9.62 Mbits/sec  830  
+[  6]  11.00-12.00  sec  1.27 MBytes  10.6 Mbits/sec  919  
+[  6]  12.00-13.00  sec  1.30 MBytes  10.9 Mbits/sec  938  
+[  6]  13.00-14.00  sec  1.29 MBytes  10.9 Mbits/sec  937  
+[  6]  14.00-15.00  sec  1.30 MBytes  10.9 Mbits/sec  943  
+[  6]  15.00-16.00  sec  1.28 MBytes  10.7 Mbits/sec  925  
+[  6]  16.00-17.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  17.00-18.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  18.00-19.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  19.00-20.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  20.00-21.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  21.00-22.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  22.00-23.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  23.00-24.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  24.00-25.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  25.00-26.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  26.00-27.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  27.00-28.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  28.00-29.00  sec  0.00 Bytes  0.00 bits/sec  0  
+[  6]  29.00-30.00  sec  0.00 Bytes  0.00 bits/sec  0  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  6]   0.00-30.01  sec  20.3 MBytes  5.68 Mbits/sec  0.000 ms  0/14718 (0%)  sender

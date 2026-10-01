@@ -1,0 +1,4 @@
+﻿
+===== [2026-09-17 16:36:46.856] manual starryos-sta-board-c-udp-tx-P1 :: iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 1 --get-server-output -u -b 0
+iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 1 --get-server-output -u -b 0
+

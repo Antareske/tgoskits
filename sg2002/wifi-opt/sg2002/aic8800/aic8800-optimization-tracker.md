@@ -16,6 +16,48 @@
 > 只有同一热点会话内、且当轮读数健康的样本才用于归因。每轮测量按文末「板测协议」执行。
 > 第二阶段各轮的提交与镜像对应关系见「分支与提交」的镜像表。后续工作与开放项见文末「待办与下一步」。P0a 镜像保留为回滚镜像。
 
+**阶段二的处置（2026-09-28）**：四轮工作（P0a、HT40/SGI、速率遥测、VHT/HE）全部保留——没有性能衰减的证据，
+但也没有性能提升的直接证据（会话间第一变量是 PC 热点状态）。未收敛的收尾项（`-b` 复测、ARP 表项到期、
+聚合选值、owner 分段计时、`0x140b` credit 偏移核对）转入待办、不阻塞后续。阶段二**暂时搁置且不予否定**，
+当下方向为「通用性下的硬件配置 + 驱动层异步优化」，见执行方案 §3.4/§3.5。
+
+**第三阶段进展（2026-09-28）**：四轮已完成——观测裁决轮（判主机侧完成路径）、聚合上界轮（K=4→32）、发送环对照轮（环 32→64，否定该旋钮）、
+credit 等待轮（小写占比 29.3%→7.4%、写中位 23.0→29.3 KB、发送 36.9 Mbps）。主机侧聚合粒度已到本轮实测的上界；
+接收侧由卡的交批节奏决定。各轮的数字口径与审查后的更正见瓶颈文档 §1 与 §2.27；
+位置与下一步见执行方案 §6.5，**设计保留清单（哪些提交留、哪些被否定）见 §6.8**。
+
+### 第三阶段首轮审查遗留待办（2026-09-28）
+
+审查判定为 `REQUEST CHANGES`，阻断项全在文档侧（已在瓶颈文档 §1/§2.22/§2.23/§2.25/§2.26/§2.27/§2.28 与执行方案 §6.5/§6.8 更正）。
+下列为实现与资产侧的建议，尚未处理：
+
+| 项 | 内容 | 触发条件 |
+| --- | --- | --- |
+| 入库 DTB 的可复核来源 | 被追踪的设计文档只列属性名、不记取值，仓库内无对应 DTS；第二个分支改同一二进制会静默丢一侧 | 上游 reviewer 追问，或再有分支改这个 DTB |
+| AKA 板 DTB | `aka-00-sg2002.toml` 启用了 aic8800，但该板 DTB 里一条 `aic,` 属性都没有 ⇒ 同驱动两板默认不同（AKA 仍是 4 帧 / 6144 B） | 在 AKA 上测吞吐或做两板对比前 |
+| `aic,rx-defer-ms` 校验 | 仍放行 `0..=10`，其中 3 ms 已实测把链路打垮 | 下次改该旋钮的解析时 |
+| credit 等待的常量 | 阈值 8 / 300 µs / 预算 8 是代码常量、未扫值；单次等待实测 703 µs（标称 300），预算打满时约 5.6 ms/笔 | 同会话对照轮一并处理 |
+| 探针钩子的位置 | `note_irq_serviced` 是探针专用时间戳，却长在公开的 `rdif-eth` trait 上（跨三 crate + 进程级静态） | 该接口被别的传输层复用前 |
+| 环满丢弃分支 | 没有计数器 | 需要观测丢弃时 |
+| 默认上界并存 | 1 帧 / 4 帧 / DTB 32 帧三条默认路径并存 | 新增 `AicDevice` 构造路径时 |
+
+**第三阶段首轮 OCR 审查（2026-09-28）**：独立会话的 4 名实例（`principal` ×2、`performance`、空口/接收各一）对第三阶段五个提交做审查，
+裁定 `REQUEST CHANGES`（4 阻断 / 8 should fix / 7 suggestion，**全部在文档口径侧，无代码改动要求**）。
+主要更正：加权每字节成本的两个口径被混用（"−22%"应为按笔 −12.9% / 按字节 −2.8%）、
+接收侧曾用批上限除平均间隔、空口 `mpdu/ampdu` 曾取最后三个样本、`irq split` 的"精确闭合"是恒等式、
+credit 等待的收益定级越过"只在同会话对照下宣称"的纪律（已下调为机制已确立、收益待判定）。
+更正已落到瓶颈文档 §1/§2.22/§2.23/§2.25/§2.26/§2.27 与执行方案 §6.5/§6.8。
+该轮唯一的代码改动是一处注释更正（提交 `a6633f3f6`）：`lmac.rs` 的 `RcStats` 不再把未与厂商核对的布局与比值写成既成语义，
+并记明 `avg_mpdus` 是 16.16 定点（实测 520378 ⇒ 7.94 MPDU/A-MPDU，与比值的样本中位 8.0 一致）。
+其余为只读审查，无行为改动。
+
+**第三阶段**以 `ocr-review-20260928-bottleneck-round1.md` 为边界。该轮以"驱动瓶颈到底在哪"为问题，
+由 7 名 reviewer 独立判定并做三方交叉质证，**否掉了第二阶段的两个方向性前提**：
+TX 受固件缓冲池排空限制（其证据链由两个探针窗口拼成）、RX 限在交付节奏（"50% 占空比"分子口径不全，真实占用 58%~69%）。
+第三阶段的前提是"每笔事务固定开销 + 事务间空档决定事务率"：固定项中位 445~480 µs 且 2 块以上几乎不随字节缩放，
+其中至少一半已实测为主机侧（`owner 20.65% + poll 3.33% + park_sw 12.50% = 36.5%` 墙钟），
+而每笔字节数当时被默认的 4 帧 / 6144 B 钉死（credit 并不系统性夹取）。该前提随后被四轮推进改写：见本节上面的「第三阶段进展」与执行方案 §6.5/§6.8。
+
 历史周期中的 M/P 编号和旧分析方案的“阶段 1/2/3/4”是当时局部计划的批次编号；本节所述的两阶段边界以 OCR 审查为准。
 
 | 周期 | 日期 | 改动（要解决的问题 / 对应方案） | 测试 | 现象 | 状态 |
@@ -33,13 +75,58 @@
 | 第二阶段首轮 P0a | 2026-09-27 | 普通 Ethernet data 使用 `hostid=0`，typed FIFO 计数区分 data、data confirmation、control confirmation/indication、print；默认 `rx-defer-ms` 改为 0 | `cargo fmt --all`、`cargo xtask clippy --package aic8800`、`cargo test -p aic8800 --features host-test,rdif`（152 单测 + 1 公共 API 测试）、`cargo xtask test --since dev`（14 个受影响包）均通过；构建镜像并完成 FIT/boot/rootfs 自检；COM6 与 Windows cmd 原始日志已归档 | Windows cmd 直连测试后，完整 TCP 轮次包括板端接收 16.4/20.7 Mbps、双向板端 TX/RX 约 9.69/6.14 Mbps、反向板端 TX 16.0 Mbps；活跃窗口 `data_confirmations=0`。`-b 100M` 反向完整轮次板端 TX 为 6.71 Mbps，需单独复测；中止轮次不作为完整吞吐结论 | 代码、镜像与首轮板测完成 |
 | 第二阶段 HT40/SGI | 2026-09-28 | 将 `ME_CONFIG_REQ` 改为类型化 profile；D80 只启用 HT40+SGI 和对应单流 HT MCS mask/rate，VHT/HE 仍关；DC 保守 profile 不变 | vendor C 声明与构造路径只读对照（标准 `CONFIG_RWNX_TL4=n` ABI）；Rust 单测 + 三组 AIC clippy + `cargo xtask test --since dev` 通过；独立镜像 FIT/boot/rootfs 自检通过；两轮板测共 11 个用例，原始日志已归档 | 板端确认运行 `d80-ht40-sgi`：正向 25.3/28.8/26.7/29.9 Mbps（P0a 轮 16.4/20.7），反向 18.8/15.6/19.4/19.0/20.6（P0a 轮 16.0），双向 13.6/12.5（P0a 轮 9.69/6.14）；均为跨会话观察。`data_confirmations=0` 保持；板端发送窗口 credit 长期见底（`min=2`、回退 500~1300 次/2 s）。另定位 ARP 表项 300 s 到期事件与一次偶发断链，详见下文 | 实板完成 |
 | 第二阶段速率遥测 | 2026-09-28 | `MM_GET_STA_INFO`（`0x0075`，4 字节 compat 载荷）每 1 s 读一次协商速率/RSSI/ack 统计；读数只作观测，超时或坏确认只停读数不判链路失败 | vendor 结构、位域与发送路径只读对照；`cargo fmt --all`、三组 clippy、`cargo xtask test --since dev`（162 单测 + 1 公开 API 测试）通过；新增 7 条单测；镜像 `sg2002_starryos_wifi_sta_stainfo_20260928.img`，SHA-256 `8954110d907340ab323369d9c004fc6d0ccea6a3d523d1b1995210457040f23b`，FIT 内核与 `starryos.bin` 逐字节一致、Load `0x80200000`、默认配置 `config-sg2002_licheervnano_sd`、rootfs `/bin/sh` 与 `/starryos.uimg` 校验通过 | 复测（`com6-board-20260928-042935.log`）恢复正常吞吐：接收（PC→板）30.5 Mbps、发送（板→PC）23.5 / 22.9 Mbps、双向 19.1（板发）/ 10.4（板收）Mbps。259 条读数全部 `width=20MHz format=ht-mf nss=1 sgi=1`，MCS 以 7（95 次）与 6（93 次）为主、另有 5（56）、4（10）、3（3）、2/1（各 1）；`retries=2` 恒定、`txfailed=0`、`rssi` −12~−16 dBm；ack 计数到末尾为 362135 成功 / 66444 失败（约 15%，会话早期一度接近 1:1，随后改善），停止发包后计数冻结 | 实板完成 |
-| 第二阶段 VHT/HE 能力 | 2026-09-28 | 与厂商 `me_config_req` 构造路径逐字节对照后扩展 D80 profile：新增 VHT 与 HE 能力块（单流 MCS 0–9 / 0–11、40 MHz-in-2G、LDPC、PPE 阈值等，取值照厂商 `rwnx_set_vht_capa()` / `rwnx_set_he_capa()` 在 2.4 GHz 单流下的结果），把 `phy_bw_max` 由 40 MHz 改为厂商对 D80 强制使用的 80 MHz；DC 保守 profile 不变 | 对照项与结论见下文「第二阶段 VHT/HE 能力」小节；`cargo fmt --all`、`cargo xtask clippy --package aic8800` 三组、`cargo xtask test --since dev`（aic8800 通过）均通过；新增 VHT/HE 金样本单测并扩展 startup 路径断言；镜像 `sg2002_starryos_wifi_sta_vhthe_20260928.img`，SHA-256 `c8dc9ccd2a6ebc8f1939df9017a8e431baecdcb6f92480a78ff11f4b5ac0a7e9`，自检：FIT 内 kernel 尺寸 16435552 B 与 `starryos.bin` 一致且 crc32 `f3f7c289` 相符、Load `0x80200000`、默认配置 `config-sg2002_licheervnano_sd`、`/bin/sh` 与 `/starryos.uimg` 校验通过 | 代码已提交 `1fb1bc91c`；镜像已构建并自检 | **实板完成（两遍）**：HE 协商生效——第二遍读数全部 `format=he-su`、MCS 以 9~11 为主（11:60、10:38、9:29），吞吐 接收 30.6 / 发送 26.9 Mbps；第一遍（同一镜像）只有 15.7 / 2.50 Mbps，读数为 `he-su` 低 MCS 与 `non-ht mcs=3` 混跳、ack 失败约 31%。两遍之间**同时**重启了热点与板卡，因此成因未归因；详见下文「热点状态是跨会话第一变量」 | 实板完成（性能变量待分离） |
+| 参照·同床对照 | 2026-09-28 | 观察（无代码改动，除新增 `[wifi-stack] is_5g_support` 一行，提交 `aae244c88`） | 厂商 Linux 与 dev 主线内核在同一天、同一热点（SSID `aasta`）各跑一轮，日志归档为日志目录下的 `linux-wifi/` 与 `dev主线wifi/` | ① 厂商最好轮 发送 56.5 / 接收 50.4 / 双向 48.9-12.1 Mbps（姿态不佳的轮次只有 5.35~22.1，说明姿态对厂商同样致命）；② 结论：**差距与频段无关**（同一热点、Windows 热点单频段、本板 2.4-only 能连 → 2.4 GHz；且 56.5 Mbps 在 5 GHz VHT80 下只占 13% 不合常理），**差距在同一频段/带宽下均匀约 2 倍**；③ **双向接收塌陷两栈同形**（厂商 24% 对 我们 27% 的跌幅）→ 移出待归因项；④ 厂商日志含 `Mode: SD High Speed (50MHz)` → 当时判为"SDIO 速率成为首要候选"；**该判读已更正**：该行是 u-boot 对 `SD_HS` 的枚举标签且属于 microSD（`cv-sd@4310000`），相邻 `Bus Speed: 25000000` 才是实测速率；**厂商 Wi-Fi SDIO 的实际时钟在记录中无读回**（厂商 DTS 上限 25 MHz，但 BSP 对 D80 请求 150 MHz 且绕过内核钳位）→ 该项降级为"待一次读回定论"，见瓶颈文档 §2.20 | 完成（遗留一次厂商侧读回） |
+| 当下方向·协商读数与姿态变量 | 2026-09-28 | 观察（无代码改动，除告警条件收窄）：分析含新证据行的实板日志 | `com6-board-20260928-180304.log`（正确姿态）+ 两份扰动日志；告警条件收窄的改动经 171 单测与三组 clippy 通过，提交 `a86512cf8` | ① **40 MHz 开放项关闭**：`[wifi-assoc] width=0`、`ap ht40=0` → 该 AP 的 BSS 就是 20 MHz；`ap he=1` 佐证厂商基线高吞吐来自 HE。② **A-MSDU 生效**：`our_amsdu=Some(true)`、`ap ht_amsdu=1`、`amsdu=` 计数出现 147/258 的窗口 → 下行确实在用 A-MSDU。③ **固件自述** `features=0x01e877d7`（vht/he 开、amsdu 特性位关、amsdu_max=2、ant_div=0）——厂商按 `min(modparam, amsdu_max)` 仍会宣告 A-MSDU，故硬编码声明与该固件下的厂商行为一致。④ **会话变量再定位**：扰动轮 MCS 塌到 3~7 而 `rssi` 反而更高（−23 对 −26）→ 发射侧变差，与天线姿态/放置相符；正确姿态轮 RX 31.3/31.2、TX 27.2、双向 21.3/8.39 | 完成（下一轮板测按新协议确认姿态后再比数字） |
+| 当下方向·证据型 info | 2026-09-28 | 让"配置"与"协商"两类不明确处都能自证：启动读一次 `MM_VERSION_REQ` 打印固件版本与特性字（含 A-MSDU 支持与最大尺寸、VHT/HE、ant_div）；关联指示解出固件认定的频点/带宽与 assoc req/rsp 元素，打印对端 HT/VHT/HE、HT Operation 带宽位、A-MSDU 位、A-MPDU 指数与 DS 信道，并标出本驱动请求里是否带 A-MSDU 位；A-MSDU 交付计数进 `[wifi-probe-rx]` 的 `amsdu=` | `cargo fmt --all`、`cargo xtask clippy --package aic8800` 三组、`cargo xtask test --since dev` 通过（169 单测，含新增的固件特性解码、协商解码与"字段缺失仍可连接"三条）；提交 `139347056`；**第二轮 OCR 审查（round 2）抓到三个真缺陷并在 `a366b59ee` 修复**：新启动阶段 `ReadVersion` 的条件互斥会让启动必失败（Critical）、`sm_connect_ind` 偏移整体偏低 2、固件特性位序整体偏低 2；镜像 `sg2002_starryos_wifi_sta_negotiation_20260928.img`（**修复后重建，SHA-256 `a97548ae7ba54a71a04f2d07609448aeedfaaadf087cfde32fcafdf743347448`**；此前同名镜像含启动缺陷，已删除替换，勿使用旧哈希），FIT 内核 crc32 `9864b321`、自检通过 | 待板测：上板即可从 `[wifi-fw]` 与 `[wifi-assoc]` 两行读出"AP 是否支持 40 MHz/A-MSDU""固件自报的 A-MSDU 能力"等证据 | 待板测 |
+| 对照镜像·dev 主线内核 | 2026-09-28 | 为对比主线（dev）性能，用主线内核替换本工作树镜像的内核，其余资产（rootfs、DTB、payload）全部复用 | 在临时工作树 `wt-dev`（detached `d3536651c`）编译 dev 内核（`AIC8800_FIRMWARE_DIR` 用离线缓存），再以 `update-kernel --kernel <dev>/…/starryos.bin` 装入基镜像；FIT 内核 crc32 `e11120e6`（本工作树内核为 `8d6c8eca`，两者确实不同）、尺寸 16410976 B、自检通过。**注意**：`update-kernel` 不做编译，只传 `--commit` 会静默复用工作区上一次的内核（本次首建即因此出错，已重做） | 镜像 `sg2002_starryos_wifi_sta_dev_20260928.img`，SHA-256 `e4f0dd57969394fc9dff15ddd0946d78352873fbeb3f897b63b5288a48297551`；其 `.json` 的 `commit` 字段记的是本工作树 HEAD（脚本不记录 `--commit` 的 rev），实际的 dev 提交是 `d3536651c`，以本行为准 | 已完成（待用户测） |
+| 当下方向·RX 交付放大 | 2026-09-28 | D80 profile 声明 HT `MAX_AMSDU`（A-MSDU 接收上限 7935 字节），让 AP 可用 A-MSDU 发送、固件每笔交付载荷更大；接收路径本就有 A-MSDU 解包分支 | `cargo fmt --all`、`cargo xtask clippy --package aic8800` 三组、`cargo xtask test --since dev` 通过；金样本与 startup 断言更新（D80 capability info `0x0063` → `0x0863`，并断言该位与"保守 profile 不含该位"）；镜像 `sg2002_starryos_wifi_sta_amsdu_20260928.img`，SHA-256 `cebf412fde7444b0b91d2a54f8d40ce758b2f13fb5121d3dee7e698c9a92ad39`，自检：kernel 尺寸 16435552 B、crc32 `7864980e` 相符、Load `0x80200000`、默认配置与 `/bin/sh`、`/starryos.uimg` 校验通过，`.json` 记录提交 `ac62a558a` | 待板测：判据是 `[wifi-probe-rx]` 的读大小分布（`<=512/<=2k/<=8k/>8k`）与 `data_reads`/字节——若 AP 接受 A-MSDU，应看到大块读变多、每字节读事务减少 | 待板测 |
+| 当下方向·写管线续接 | 2026-09-28 | 写完成后立即续排下一笔写（缓存 credit 用尽则先排流控读），续接限定每轮协议推进至多一次；完成事件、token 归还、单笔在飞与完成先于 card 事实的顺序不变 | `cargo fmt --all`、`cargo xtask clippy --package aic8800` 三组、`cargo xtask test --since dev` 均通过；新增 3 条行为单测（续接一次后让位给接收扫描、缓存用尽时先读流控寄存器、取消时丢弃已排队的写），并把既有延窗用例更新到新时序；两条续接用例经变异验证（删掉续接即失败） | 提交 `2772a4c0e` 后做了一轮 OCR 审查（5 个 reviewer 实例），结论 REQUEST CHANGES：取消路径会留下已武装的写 → `CompletionMismatch` → 设备 `Failed`（4/5 独立指出），另有"新测试无红-绿判别力"等应修项；修复提交 `dfdc282cc`：放弃管线处窄清 `io.next`、发出决策归一为一个 helper、修正探针语义并拆分续接计数、补齐取消路径用例（变异验证：去掉修复即失败）。镜像 `sg2002_starryos_wifi_sta_txchain_20260928.img`，SHA-256 `4cf1c4a5757eea7c53c1fd04b244476eacac40363473ab72e598eabbdcc7e765`，自检：FIT 内 kernel 尺寸 16435552 B 与 `starryos.bin` 一致且 crc32 `badffd84` 相符、`boot.sd` Load `0x80200000`、默认配置 `config-sg2002_licheervnano_sd`、`/bin/sh` 与 `/starryos.uimg` 校验通过，构建时 `.json` 记录的提交为 `dfdc282cc`<br>**实板完成，未见性能提升**（`com6-board-20260928-162606.log`）：续接确实在生效——大流量窗口里 `chain write` 占写次数约 37%、`chain flow` 5%、`yield`（上界让位）42%、`idle` 17%；但周期由**单笔写自身**主导（1.66 ms 周期里写占 1.06 ms，64%），空档只剩 207 µs（1056/1203 笔）与 3.4 ms（147 笔）。更关键的是最忙窗口 `credit` 均值仅 7.1、`backoff` 225 次/秒、`min=2`（贴着保留位）——**发送方向受固件缓冲池/空口排空限制，不是提交调度**，故续接无处发力。该轮吞吐：接收（PC→板）32.8/32.1 Mbps（历次最好）、发送（板→PC）17.3/19.3、双向 17.0/8.63；读数全为 `he-su`、MCS 6~11，但低档占比高于上一轮（`mcs=7` 76 次、`6` 46 次），会话状态不可与上一轮直接比较<br>建议：TX 侧停止在此投入（限制项在固件/空口），异步线转向 **RX 侧**（RX 事务占总线时间约 81%，且 RX 是当前较好方向） | 实板完成（无收益） |
+| 第二阶段 VHT/HE 能力 | 2026-09-28 | 与厂商 `me_config_req` 构造路径逐字节对照后扩展 D80 profile：新增 VHT 与 HE 能力块（单流 MCS 0–9 / 0–11、40 MHz-in-2G、LDPC、PPE 阈值等，取值照厂商 `rwnx_set_vht_capa()` / `rwnx_set_he_capa()` 在 2.4 GHz 单流下的结果），把 `phy_bw_max` 由 40 MHz 改为厂商对 D80 强制使用的 80 MHz；DC 保守 profile 不变 | 对照项与结论见下文「第二阶段 VHT/HE 能力」小节；`cargo fmt --all`、`cargo xtask clippy --package aic8800` 三组、`cargo xtask test --since dev`（aic8800 通过）均通过；新增 VHT/HE 金样本单测并扩展 startup 路径断言；镜像 `sg2002_starryos_wifi_sta_vhthe_20260928.img`，SHA-256 `c8dc9ccd2a6ebc8f1939df9017a8e431baecdcb6f92480a78ff11f4b5ac0a7e9`，自检：FIT 内 kernel 尺寸 16435552 B 与 `starryos.bin` 一致且 crc32 `f3f7c289` 相符、Load `0x80200000`、默认配置 `config-sg2002_licheervnano_sd`、`/bin/sh` 与 `/starryos.uimg` 校验通过 | 代码已提交 `1fb1bc91c`；镜像已构建并自检<br>**实板完成（两遍）**：HE 协商生效——第二遍读数全部 `format=he-su`、MCS 以 9~11 为主（11:60、10:38、9:29），吞吐 接收 30.6 / 发送 26.9 Mbps；第一遍（同一镜像）只有 15.7 / 2.50 Mbps，读数为 `he-su` 低 MCS 与 `non-ht mcs=3` 混跳、ack 失败约 31%。两遍之间**同时**重启了热点与板卡，因此成因未归因；详见下文「热点状态是跨会话第一变量」 | 实板完成（性能变量待分离） |
+| 参照·SDIO 时钟出处追查 | 2026-09-28 | 只读调查（无代码改动）：查清本板 SD/SDIO 拓扑、时钟策略及其决策链，并追查"超过 25 MHz 不稳定"这句话的出处与强度 | `clock.rs:29-53`、板级 DTB（`cv-sd@4310000` / `wifi-sd@4320000`）、厂商板级 DTS 与 BSP/内核 SDHCI 路径、`git log -S "becomes unreliable"`、记录内全部 `SD High Speed` 出现处 | ① 两路控制器独立（microSD 走 SDIO0、AIC8800 走 SDIO1），改 Wi-Fi 那路不影响卡槽，但速率策略在共享的 `clock.rs` 里；② 25 MHz 封顶的**唯一**依据就是 `clock.rs` 的两行注释（提交 `0fc626fa4`，与该次 50→25 MHz 改动同一处 diff），无配套文档/测试/测量，且与早期笔记"补上 PHY delay 后 50 MHz 跑通"的记录相左；③ 要提高需先补 UHS-I 信令表达与 tuning（本项目均无），只改 DTB 无效；④ 更正：`Mode: SD High Speed (50MHz)` 是 u-boot 对 microSD 的枚举标签（实测行是 `Bus Speed: 25000000`）；"厂商被平台钳到 50 MHz"无代码支撑（厂商 D80 请求 150 MHz 且绕过内核钳位）；⑤ 记录中**无 Wi-Fi SDIO 时钟读回** → "两侧同为 25 MHz"只是 DTS 推断，该项降级为待一次读回 | 待一次读回（厂商侧 `debugfs` 的 mmc `ios`）；在此之前不投入 UHS-I/tuning 实现 |
+| 第三阶段·完成路径分段与聚合上界对照 | 2026-09-28 | ① 把设备中断的**入口与出口**都交给驱动，使一行往返分成「设备+总线 / 中断处理本身 / 唤醒并取走完成」三段；② 把写跨度的 credit 最高桶细分为 `16-33 / 34-65 / 66+`，用于回答"能否一笔 32 帧"；③ DTB 变体 `lcn-sta-aggr32.dtb` 把 `aic,tx-aggregation` 设为 32、`aic,tx-aggregate-bytes` 设为 49152（32×1536，远小于环形上限 32×2048） | `cargo fmt --all`、`cargo xtask clippy --package aic8800`（三组）与 `--package ax-net`（九组）、`cargo xtask test --since dev` 全部通过；提交 `e01089b60`；两份镜像同源内核、只差 DTB，FIT/boot/rootfs 自检均通过 | 待板测（**必须在同一热点会话内成对完成**，两轮之间只重启板卡并记录姿态与 MCS 分布）：基线臂 `…_split_20260928.img`（K=4）与实验臂 `…_aggr32_20260928.img`（K=32）。判读：① 实验臂的 `size blk` 分布与 `bytes/笔` 是否真的形成 32 帧（约 48 KB）；② `write credit 34-65 / 66+` 桶的笔数决定 K=32 在多少比例的窗口里可用；③ 两臂的 `irq split` 里 `isr` 与 `post` 两段各占多少（基线臂的 post 为 396 µs/笔）；④ 吞吐只作观察，机制读数（`bytes/笔`、跨度对 B 的斜率、`accounted`）才是判据<br>实板完成（A1/B1/A2 三臂，同热点会话，§2.23）： **K=32 生效且按模型奏效**——字节/笔 5.6 KB → **18.7 KB**、写笔数减半、每字节成本 189 → **133~144 ns/B**（1.42×，与 `F + r·B` 一致）；<br>发送 **22.6 → 30.9 → 25.1 Mbps**、双向板发 21.4 → 26.0 → 20.2、双向板收 7.60 → **13.2** → 9.66；<br>B 轮 MCS 9~11 占比 **80%**（A1 60% / A2 65%）、低档样本更少，与"B 轮波动但无突然退化"的观察一致；ack 失败率三臂相近（29/26/26%）。<br>**新发现**：K=32 下写长随 credit 增长（10.1 / 22.8 / 26.7 KB）且**从未到 48 KB** ⇒ 限制已从策略上界转为**固件 credit**；<br>低 credit 桶（3–6）占比从 12% 升到 23.4%、每字节 261 ns/B（是 34–65 桶的两倍）。<br>`irq split` 三分段：**`isr` 中位仅 2 µs**（中断处理本身可忽略），`post` 317~367 µs 绝对值不变但占比从 35% 降到 13.6% | 完成 |
+| 第三阶段·接收侧三条验证 | 2026-09-28 | 为零成本验证三个问题做读数：① 卡片报的块数分布与上限（`rx count empty/blocks/bytemode/other`、`blocks max`、`blocks` 分桶）；② refill 节奏（从"读到空"到"再看到数据"的间隔，>0.1 s 记为 idle）；③ mask 语义（`irq rearm n= / card_pending= / completion_pending=`，重武装时卡中断是否仍 asserted） | `cargo fmt --all`、`cargo xtask clippy --package aic8800`（三组）与 `--package ax-net`（九组）、`cargo xtask test --since dev` 通过；提交 `4c07118b5`；镜像基于聚合臂、DTB 用入库板级文件（自带 32 帧上界），FIT/boot/rootfs 自检通过 | 待板测：① `blocks max` 与 33-64/65+ 桶是否有样本——若封顶在约 43 块则 21~22 KiB 就是卡侧上限，"读得更大"没有空间；② `refill avg` 若聚在某一固定值附近即为卡自定时聚合，若很小则限制在我们的轮询步调；③ `card_pending` 占 `rearm` 的比例<br>实板完成（a1/b1/a2，同热点会话，§2.25）：① **块数最大 63、`65+` 桶零样本** ⇒ 实测批上限 = 63 块 = 31.5 KiB（64~127 之间无样本）；② refill avg ≈ 7.5~8.7 ms，同口径折算（平均批 42~45 块 ÷ 8 ms）≈ **21 Mbps**，低于实测接收吞吐（31~34 Mbps）⇒ 卡的交批节奏足以供上主机，主机侧无余量；③ `card_pending` 仅 **1.8%~2.4%** ⇒ 通知基本不丢，43% 空档不是"等下一次边沿" | 完成 |
+| 第三阶段·发送环深度对照 | 2026-09-28 | 厂商在聚合那一刻从 64/8192 深的队列 pull，我们 push 进 32 槽环、取完即 break，写长的真实上界是"那一刻环里有几帧"（瓶颈文档 §2.24）。实验臂把 `aic,queue-size` 由 32 提到 64（环 64×2048=128 KB，`aic,tx-aggregate-bytes=49152` 仍合法），内核与基线臂完全相同、只差 DTB | 与基线臂同源内核（`4c07118b5`），FIT/boot/rootfs 自检通过；零代码改动（纯 DTB） | 待板测（**与基线臂在同一热点会话内成对**，两轮之间只重启板卡）：基线臂 `…_rxprobe_20260928.img`。判读：① `bytes/笔` 是否从 18.7 KB 升向 32 帧的 48 KB；② `write credit 34-65 / 66+` 桶的 `bytes/笔` 是否也上去（若上去 ⇒ 之前确实是"环里没帧"，若不动 ⇒ 供给本身不足）；③ `accounted` 与 `tx 忙` 是否随之上升；④ 吞吐只作观察<br>实板完成：**写确实变大但吞吐没动**——字节/笔 19.7 → 23.0 KB、credit 34–65 桶 21.7 → 33.3 KB（ns/B 137 → 126），但 credit 3–6 小写占比从 18% 翻到 **29%**（263 ns/B），**按笔加权的 ns/B 基本不变（171.8 / 174.9 / 167.3）**、发送 34.2 / 34.8 / 33.5 Mbps ⇒ 环深不是约束（判据是吞吐不变；按字节加权整段口径下环 64 反而略低，见瓶颈文档 §2.25） | 完成（否定） |
+| 第三阶段·credit 低时先等（对齐厂商） | **已实现并实板验证**（`3cb53bb17`） | 厂商在 credit 见底时**原地等**（`FLOW_CTRL_RETRY_COUNT=50`，预算约 126 ms），我们只登记 200 µs 退避后用小写把 credit 花掉。改成"credit 低于一档就等"直接冲着那 29% 的 263 ns/B 小写去（按笔加权口径下它们占了加权成本的近一半，按字节口径只占 5.0%）；需一轮对照确认不引入停顿 | 已实板：小写占比 29.3% → 7.4%、写中位 23.0 → 29.3 KB、发送 36.9 Mbps、慢尾收缩；每字节成本同口径为按笔 174.9 → 152.4、按字节 139.3 → 135.4（后者的幅度在同会话自然波动内）⇒ **机制成立、收益幅度待同会话对照判定** | 见 §2.27 | 完成 |
+| 第三阶段·观测裁决轮 | 2026-09-28 | 零行为变更的观测轮（M1 写跨度按提交时 credit 分桶、M3 按设备中断把往返切成"设备+总线"与"主机取走"两段、M6 按时间口径的派生读数；探针口径修正与遥测口径修正），见执行方案 §6.3 | `cargo fmt --all`、`cargo xtask clippy --package aic8800`（三组）与 `--package ax-net`（九组）、`cargo xtask test --since dev` 全部通过；提交 `0fce56495`；镜像 `sg2002_starryos_wifi_sta_observe_20260928.img`，SHA-256 `2802b6b1f0e499706d2f319879524a197ca7e5f303d084d9e01005f0bb6e930d`，FIT 内核 crc32 `c4e67b95`、Load `0x80200000`、默认配置 `config-sg2002_licheervnano_sd`、rootfs `/bin/sh` 与 `/starryos.uimg` 校验通过 | 待板测：① `[wifi-probe-time]` 的 `write credit 2/3-6/7-15/16+` 分桶——跨度随 credit 单调上升则判设备反压、基本平坦则判主机侧；②同行的 `irq split` 给出每类事务"中断前/中断后"两段；③`accounted` 与 `supply` 三档的按时间占比；④`[wifi-sta-info]` 的 `ackok_d`/`ackfail_d` 逐秒增量<br>实板完成（`com6-board-20260928-194254.log`）——吞吐与上一版同级（接收 32.2、发送 28.3、双向 22.7/9.97 Mbps），符合零行为变更；三组读数互证：<br>① **M1**：保留位桶（credit 0–2）**0 笔**；跨度随 credit 下降而**变短**（788 对 1036 µs），因为写里帧更少（3189 对 5453 B），每字节反而更贵（247 对 190 ns/B）⇒ **设备反压不成立**；最忙窗口三桶拟合 `F≈604 µs、r≈91 ns/B`；<br>② **M3**：`irq split` 的两段之和等于该笔跨度是计时口径本身（非独立验证），写往返 **pre 724 µs / post 396 µs（35%）**，RX 大读 pre 2150 / post 245（10%）⇒ 那 35% 按构造全是设备报完成之后的主机软件时间；<br>③ **M6**：饱和窗口写事务占窗口 73~77%、accounted 83~85%、`supply none` 约 7%；纯 TX 整段的 39% 有 22.9 s 落在 16 个未饱和窗口 ⇒ 饱和时供帧不是限制项；RX 测试 rx 事务占窗口 48~55%、每笔 22.3 KiB、105~108 ns/B。<br>**归属判为主机侧完成路径**（ISR → 唤醒 → 恢复 → 取走完成），去掉 post 段后同一窗口的发送上限约 43 Mbps。遗留观测缺口：credit 最高桶（16+）过宽（要判"能否一笔 32 帧"需知有多少笔 credit ≥34）、post 段内部未再分段、IRQ 戳可能被同窗 CARD_INT 覆盖 | 完成（归属已判定） |
+| 参照·瓶颈归属 OCR（首轮，独立会话） | 2026-09-28 | 只读审查（无代码改动）：以"驱动瓶颈到底在哪"为问题，7 个 reviewer 独立判定 + 三阵营交叉质证；完整报告归档 `ocr-review-20260928-bottleneck-round1.md` | `dev...HEAD` 全部驱动改动 + 全部板测日志逐窗重算 + 厂商参考实现只读对照；未运行任何构建/测试/静态检查 | ① **收敛结论**：瓶颈形状是「每笔固定开销（中位 445~480 µs，与承载字节基本无关）+ 事务间空档」决定事务率，**不是每字节速率**——两个方向的边际成本相同（写 9.11~10.43、读 9.88 MB/s，即贴 11.72 MB/s 总线）；② **三条既有结论被否**：C1（TX 限在固件/空口）证据链由两个窗口拼成且核心分解是恒等式，C2（RX 限在交付节奏）分子口径不全（真实占用 58~69% 而非 50%），"纯上行受上游供帧限制"是按计数关闭、按时间是窗口 21~29%；③ **固定项里至少一半已实测是主机侧**：`owner 20.65% + poll 3.33% + park_sw 12.50% = 36.5% 墙钟 / 360 µs 每笔写`；`handoff`（中断→执行器恢复，239~346 µs/笔）按构造 100% 是内核软件时间，机制候选为同权重 Fair 线程的条件抢占被拒；④ **`packets=4` 是真天花板**（两个入库 DTB 都没设该旋钮；credit 并不系统性夹取：`credit max` 中位 131），上调估计 1.87×；⑤ 时钟翻倍上界 1.15~1.56×（<2×），不作为主攻方向；空口税 24~28% 真实但不可叠加 | 待两条**裁决测量**：M1（每笔写跨度按提交时 credit 分桶）+ M3（SDIO 提交/完成边界时间戳）；另有零代价项 M-K1（打开已注册未启用的 `sched:sched_switch`）与 M6（按时间重算已打印字段） |
+
+| 参照·接口规格外查与本地考证 | 2026-09-28 | 就"卡侧块计数语义 / CARD_INT mask 语义 / 卡是否自定时聚合"三问向外检索，并把两份外部结论逐条拿到本地厂商树上复核 | 厂商源码只读对照（`aicwf_sdio.c`/`aicwf_sdio.h`/`aicsdio.c`/`soph_base.dtsi`）与我们的 `registers.rs`；未运行构建或烧录 | ① **证实**：流控单位为 1536 字节缓冲槽（`BUFFER_SIZE=1536`，门控按字节 `len < buf×1536`）；D80 **不做** `&0x7F`（掩码只对 8801/DC/DW）；块计数 `&0x7F`、`120` 为 byte mode；bit7 = dev→host soft IRQ 需读改写清 bit0；寄存器偏移 0x01/0x03/0x04/0x05 与我们逐项一致；② **纠错**：外部结论称"wifi 节点声明 `sd-uhs-sdr25/ddr50/sdr104`"——实际 `sd-uhs-*` 只在 microSD 节点，且 `sd-uhs-ddr50` 在设备树里根本不存在；③ 双方均**未找到**：流控寄存器位数/最大值、卡侧 RX 批的触发规则、私有 0x01/0x04 位语义 | 完成（登记层可排除） |
+| 第三阶段·每秒分布与波动归因 | 2026-09-28 | 只读分析（无代码改动）：把三臂的每秒 iperf3 序列与同刻 `[wifi-sta-info]` 对齐，判断"波动"是主机侧还是空口侧 | 现有日志逐秒重算 | ① **三臂都能冲到 40+ Mbps**（A1 有 8 秒 ≥40、B1 4 秒、A2 1 秒），每秒中位几乎相同（35.5 / 35.5 / 34.4）⇒ 均值差异在噪声内，**峰值不是 B 独有**；② 均值低于中位说明损失在**慢秒**（最低 16.8 Mbps）而不是峰值不够；③ 慢秒与链路质量同向：A1 慢秒 MCS 8.1、B1 慢秒 rssi −23（对快秒 −14）⇒ 形态属空口/姿态，不属主机路径。原判读里同时引用的"ack 失败 33% 对 24%"自 §2.26 起**不再作为链路质量证据**（该计数不是每帧统计），此处只保留 MCS 与 rssi 两项 | 完成 |
+| 参照·ack 统计口径更正 | 2026-09-28 | 只读核对（无代码改动）：核实 `[wifi-sta-info]` 里 `ackok`/`ackfail` 的单位 | 厂商 `lmac_msg.h` 的结构定义 + 三臂逐秒计数与 MPDU 速率对比 | ① 字段真实名是 `ack_fail_stat`/`ack_succ_stat`，厂商驱动**全树从未使用**；② `(ackok_d+ackfail_d)/MPDU = 0.21~0.32` ⇒ 跳动频率只有 MPDU 速率的 1/4~1/5，**不是每帧统计**；③ 原"首次尝试失败率 24%~28%"等表述全部降级为"口径未定"（瓶颈文档 §2.26）；④ 顺带发现同一确认里 **`chan_time`/`chan_busy_time`/`chan_tx_busy_time` 三个信道时间字段从未解析**，其中 `busy/time` 可直接给出信道占用比例 | 完成 |
+| 第三阶段·空口统计与 credit 等待 | 2026-09-28 | ① 每 2 s 读一次 `ME_RC_STATS_REQ`（`0x140e`），解析 `me_rc_stats_cfm` 前缀：`mpdu`/`ampdu` 计数与固件自算的 `avg_mpdus`，并打印 `mpdu/ampdu` 比值——这是唯一能说明"空口每聚合装几个 MPDU"的读数；② credit 落在保留位之上、批次阈值（8）之下时，写不再用小突发把 credit 花掉，而是等一档再问一次（每次 300 µs、至多 8 次，超预算则照发；空池仍走原有 200 µs 退避）；③ 修正 `0x140b` 的命名（它是 credits update，traffic ind 是 `0x140d`） | `cargo fmt --all`、`cargo xtask clippy --package aic8800`（三组）与 `--package ax-net`（九组）、`cargo xtask test --since dev` 全部通过（含新增的 rc 统计布局 golden 测试与改写后的 credit 保留测试）；提交 `3cb53bb17`；镜像基于环 64 臂、DTB 带 `rng-seed`，FIT/boot/rootfs 自检通过 | 待板测：① `[wifi-rc]` 行是否出现、`mpdu/ampdu` 是多少（若远小于 32，说明空口聚合深度才是我们与厂商的差距所在）；② credit 3–7 占比是否下降、加权 ns/B 是否下降；③ 发送吞吐与每秒波动是否改善<br>实板完成（`com6-board-20260929-011955.log`，§2.27）： **credit 等待把小写（credit 3–6）的笔数占比从 29.3% 压到 7.4%**、每字节成本同口径为按笔 174.9 → **152.4（−12.9%）**、按字节 139.3 → **135.4（−2.8%）**（后者落在同会话自然波动内）、写中位 23.0 → **29.3 KB**；发送 **36.9 Mbps**（每秒中位 37.8、均值 38.0、最低 23、低于 30 的仅 6 秒），对照上一会话三臂 34.8 / 34.2 / 33.5 且慢尾更深。**空口读数首次取得**：`[wifi-rc]` 的 `mpdu/ampdu` 在有流量的 63 个样本里中位 **8.0**、上四分位 **15.0**、最大 **40.0**，与我们每笔交出的约 20 帧同量级 ⇒ **不能据此认为"空口用不掉更大的 K"**，该方向回到开放。`ampdu_len` 是固件采样区间的累计量（非 2 s 窗口量）、`avg_mpdus` 为 16.16 定点数 | 完成 |
+
+| 第四阶段·设备层时钟与全归因探针 | 2026-09-28 | 把时钟借给驱动（`AicRdifOptions::probe_clock`，平台填 `axklib::time::monotonic_nanos`），据此把一笔事务拆成 `dispatch/dma/program/bus` 四条腿（`bus` 由**结束该事务**的中断界定），把 owner 侧工作拆成 `release/rx_copy/pull/teardown/form/bytes/rx_parse/report` 八段（`form` 在 `prepare_next_transmit` 内部打点，覆盖链式续写；`bytes` 在唯一做该拷贝的函数里打点）；`advance` 行按所取完成的类别归档、无完成的步归 `other`；修掉上一轮归因探针接错路径（整场零样本）与运行时逐中断打戳（卡中断会把宿主唤醒记进 `bus`）两处；两臂的每笔字节拷贝计数改为对称，并注明 `tx_scratch` 实际未被复用 | `cargo fmt --all`；`cargo xtask clippy --package aic8800`（三组）、`--package ax-net`（九组）、`--package rdif-eth`、`--package ax-driver`（51 项）全过；`cargo test -p aic8800 --features rdif,host-test`（178 + 1）；`cargo xtask test --since dev`；板级内核 `licheerv-nano-sg2002-wifi.toml` 构建通过。新增一条判别性单测（advance 费用归到它取走的完成所属类别；对"丢掉无完成步"的旧行为验证为失败） | **一轮 OCR 审查（6 名实例：principal ×2、quality ×2、performance、reliability）：REQUEST CHANGES**，5 项 blocker / 6 项应修 / 3 项建议；blocker 全部按审查结论修完，其中最重要的是"链式续写的成形未被计时"（本轮原本量不到它要量的那条路径）与"完成中断无身份" | **实板完成**（`com6 …065738`，§2.29）：仪器闭合成立（`pre` = 四条腿之和，逐窗 ±9 µs / 0.3%）；`clock=on`、`agg=32x49152`、framed 路径。纯 TX 10 窗（80.769–98.786 s）：375 笔/窗、21063 B/笔、周期 5310 µs、往返 2458（46%）、`bus` 1869、`dma` 140、`program` 53、`post` 389、`P`(pull+form+bytes) 379；双向 10 窗（104.789–122.796 s）：298 笔/窗、24923 B/笔、周期 6459、往返 2803（43%）、`bus` 2218、`dma` 154、`post` 372、`P` 465。**两条新结论**：① `bus` 拟合为边际 11.2 MB/s、截距≈0（原始的 96%；接收 99.5%），第三阶段"每笔固定开销 445~604 µs"是旧往返口径产物；② 空档占周期 54%/57%，其中 credit 退避 1017/418 µs、其余 1354/2506 µs；机制是完成路径空手结束（`progress.rs:401-406` 对 `WaitForInterrupt` 立即返回），同调用内排在后面的环→核心 pull（`submit_one_tx`）不执行，而 `rdif_at_write` 非空 62.6%/53.9%、`chain idle` 49%/53%、`chain write` 0%。**与并行设计文档对照**：其基础数字全部复现（`P` 379/465、`dma` 140/154、`bus` 1869/2218、`post` 389/372、环非空 62.6%/53.9%），分歧在分母（服务周期 2843 µs 只占实测周期 54%，故 13.3%/18.3% 换成吞吐口径是 7.1%/9.8%）、未列 credit 退避、未用 `chain` 计数器 |
+
+| 第四阶段·完成前交帧（链式续写） | 2026-09-29 | 上一轮认定「完成路径空手结束、环里的帧没人取」，本轮让那一笔能自己续上：owner 的步内顺序由「init → active → control → pull → tick」改为「init → control → **pull** → active → tick」，环里已有的帧在**在飞请求被推进之前**交给核心；这次交付若换来核心的 `WaitForInterrupt`、而此刻仍有在飞请求，则不结束本轮（`handover_keeps_the_step`），继续把该请求推进到完成。判读修正：核心的续写只在**取走完成的那一刻**找帧（`consume_transmit_data` → `continue_transmit_pipeline` → `prepare_next_transmit`），所以 §8.7 原先设想的「返回等待前做一次 pull」排不出续写——把 pull 提到完成之前，完成时核心才有一帧可续，续写被排进 `io.next`，下一次 advance 的**顶部**就会发出它（早于 `drive_ready` 的全部内容，含接收扫描）。**第二个目标（OCR 发现后采纳）**：同一处重排把控制请求块也移到了在飞请求之前，于是控制事务进行期间有一笔写在飞时，取消立即对该写生效（核心 `AbortSdio` → 中止 → 载荷按完成上报并归还 token，续接已排出的写丢弃）。这是核心本来的意图（`cancellation_releases_the_write_in_flight`），旧步序让 `AbortSdio` 在稳态下不可达、并让「写卡住时取消服务不到」，故保留该次序、按新语义改设计文档与注释，不回退。 | `cargo fmt --all`；`cargo xtask clippy --package aic8800`（base / `rdif` / `host-test` 三组，全过）；`cargo test -p aic8800 --features rdif,host-test`（180 + 1）、`cargo xtask test --since dev`（全过）；两条新增单测经变异验证（谓词改恒真、以及关掉 `continue_transmit_pipeline` 各自失败）；板级内核 `licheerv-nano-sg2002-wifi.toml` 构建通过、`strings starryos.bin \| grep -c aasta` = 1；设计文档 `docs/design/unified-sdio-aic8800.md` 的续接条款补入交付时序、取消条款按新语义重写。镜像 `sg2002_starryos_wifi_sta_prechain_20260929.img`（基座 `…_q64_20260928.img`、DTB `lcn-sta-defer0.dtb`，与上一轮臂**只差内核**），FIT 内 kernel 哈希与 `starryos.bin` 逐字节一致、Load `0x80200000`、默认配置 `config-sg2002_licheervnano_sd`、`/bin/sh` 与 `/starryos.uimg` 校验通过，SHA-256 见「镜像与提交对应表」。**一轮 OCR 审查（2026-09-29，6 实例：principal ×2、quality ×2、performance、reliability）：REQUEST CHANGES**，1 阻断 / 3 应修 / 8 建议；阻断项即上面的控制块次序（已按采纳的处置落地），应修项（主体改动无测试守卫、判据口径被本轮重置、设计文档未更新）与建议里的探针口径、`aic,queue-size` 上界也一并落地 | 待板测。**判据（口径已按审查重写）**：本轮**同时动了被测量与观测器**——`supply ring/core`、`rdif_at_write`、`pull avg`、`advance other` 的样本总体与 `gap` 各档的计时起点都被重置，这些量**只在同一窗口内**读、不与上一轮做差；可跨轮比较的是 `chain *`、`tx_writes`、`size blk`/`bytes=`、`period_avg/max`（须与写长度同读）、`scans/deferred/tx_ready`、`credit backoff`。验收读数：① `pull in_flight n=/frames=` 显著非零（旧步序下该打点结构上不可能看到在飞请求，故必然为 0 ⇒ 新次序确实在跑；它是次序的足迹，不是效果的证据）；② `chain` 七项之和 = `tx_writes`（闭合式，被取消的完成不记账）；③ 收益判据落在 `chain write/flow` 上升与`chain idle` 占比下降（上一轮 49%/53%）；若 `pull in_flight frames` 与 `pull frames` 同量级而 `chain write` 仍 ≈0、`chain idle` 不动，则判为「交付了但完成没续接」。不退化项：`[wifi-probe-rx]` 的 `reads`/`bytes`/`rx delivered`、`control n`、往返三项（`bus`/`dma`/`post`）与吞吐。**已知上界**：核心的「每轮驱动至多续一次」（`io.chain_used`，只在 `drive_ready` 里清）使续写只能落在每隔一笔上，故可及收益是「约一半的写提前于接收扫描发出」。详见执行方案 §9 | **实板完成（同一热点会话，10 个 iperf3 用例，板端作 server）**：**机制完全兑现、收益未兑现**。① **机制**（上行相位四次运行均值，全部为窗口内读数）：`chain write` 占完成笔数 **0% → 16~24%**、`chain idle` **51% → 13~24%**、`chain yield` 19% → 34~39%（即「每轮至多续一次」的让位上界，与预测一致）、`supply ring` **46~52% → 0%**、`supply core` 29~33% → 74~84%；新计数器 `pull in_flight frames / pull frames` ≈ **73%**（帧确实在在飞期间被搬走）；`chain` 七项之和 = `tx_writes` 逐窗精确闭合。② **收益**：下行 **28.5/28.6 vs 28.6/27.9 Mbps（持平）**，RX 事务数每字节与每字节成本一致（122 vs 123 ns/B）⇒ 接收侧不退化；上行 **30.1（28.4~32.9）vs 30.2 Mbps（持平）**，周期 5641 vs 5323 µs（+6%，落在同会话逐轮 ±9% 的散布内）；双向板发 25.0/26.6 vs 29.5 Mbps，但该相位的接收形状不同（A-MSDU 942/窗 → ≈0）、接收量少 14%、其中一次运行发生接收塌陷（365 Kbps）⇒ **不可判**。③ **空档分解（本轮新知识）**：上行相位每笔空档 ≈ 3145 µs，其中「哪里都没有帧」（`supply none`，占 17% 的笔 × 8370 µs）≈ 1423 µs/笔，**占空档 45%**；空档相对上一轮的 +304 µs/笔**全部**发生在这个桶（+351 µs/笔）⇒ 是会话供给变了，不是改动所致。含 RX 事务的空档只占 32%，且**纯上行相位里扫描本就很少挡在写前面**（上一轮该相位的 `ring` 档空档均值仅 651 µs，是最快的一档）⇒ 次序改动在纯上行相位无处发力，与实测持平一致。**判读更正**：§3.3 的「环里的帧没人取 ⇒ 空档 2.9/3.7 ms」出自**双向**窗口，适用范围应限定在双向相位。④ **无异常**：无错误/超时/abort；`chain` 的未命中只落在 `idle`/`yield`（`busy`/`backoff`/`not_ready` 全窗为 0），`deferred=0`；链路健康不差于对照（MCS 11 为主、rssi −13~−25 dBm、ack 失败率 23~28% 与对照同档）。⑤ **下一步**：次序已不是纯上行的杠杆（剩余空档最大单项是「没有帧可发」）；双向相位需**同会话 A/B** 才能判定；**round-2 证据与归因审查（5 实例，含厂商对照）：REQUEST CHANGES**，2 阻断 / 4 应修 / 6 建议。两处口径更正：① 周期账（锚在 owner 调用入口）与空档账（锚在即时读钟）是两个估计量、差 300~580 µs/笔，本行此前并列的「总量 3145 µs 与分档合计 2758 µs」不可相加，「+6%」与「增量全部发生在 none 桶」两条**撤回**；② 「哪里都没有帧占空档 45%」**降为推断**（`supply` 是完成时刻的瞬时采样；本轮 `supply core` 占 80.8~85.3% 而该桶空档仍 1.1~1.8 ms）。**并否掉「总线时钟是差距来源」这一候选**（厂商 D80 的 150 MHz 请求是 `#if 0` 死代码：fdrv `aicwf_sdio.c` 3184…3218、BSP `aicsdio.c` 1835…1868 包住了两侧 v3 的时钟块；两边同为 25 MHz 量级、差 1.067×，折整窗约 +2.2%）。收敛结论：全部 SDIO 事务在飞占窗口 45~50%、**无事务在飞 46.9~51.9%**、执行器 park 72~78%（owner 22~23%）、credit 自选等待 15~16%（后者此前后从未出现在任何空档归因里）；正确措辞为「搬运方式不再是可动项，可动项在两次搬运之间」。下一步：零代码的 `lcn-sta-nowait.dtb` 对照（判那 15~16% 值不值）＋ 一条新读数（`chan_*` 解析 / 栈侧供帧间隔 / park 唤醒来源 / 帧年龄，五票无多数）。详见 `aic8800-async-optimization-plan.md` §9.6（已按审查改正）与 `.ocr/sessions/2026-09-29-sg2002-wifi-opt/rounds/round-2/`。 |
+| 第四阶段·归因探针深化（park 唤醒来源 / 信道占用 / 栈侧供帧） | 2026-09-29 | round-2 归因审查给出的三个首选读数一次做齐，全部是仪器（不改行为）：① **执行器 park 的唤醒来源**——`QueueNotification` 增带 `WakeReason`（`Irq`/`Transmit`/`Receive`/`Recycle`/`Control`/`Work`），`schedule_irq` 用 `Irq`，三处协议侧发布点分别用 `Recycle`/`Receive`/`Transmit`，控制请求起止用 `Control`，其余归 `Work`；park 前先丢弃陈旧原因、返回后按来源归档（`None` = 到达等待时事件已置位、这次 park 从未睡下）。`[netprobe]` 新增 `park_end irq/tx/rx/recycle/ctrl/other/none/timer`，把执行器 72~78% 的停驻从"睡着了"拆成"在等谁"。② **卡自己的信道时间**——`StationInfo` 解析 `channel_time`/`channel_busy_time`/`channel_tx_busy_time`（`word(12)/word(16)/word(28)`，与厂商 `lmac_msg.h:1287-1297` 逐字段对齐、总长 32 字节与 `STA_INFO_CONFIRMATION_LEN` 一致；厂商主机侧从不读这三个字段），按上一采样做差后随 `[wifi-sta-info]` 打印 `busy=Npermille txbusy=Npermille`，同一秒的信道窗口做分母。用卡自己的读数回答"空口是不是天花板"，不再靠推断。③ **栈侧供帧**——`poll_inner` 入口采样 `tx_ready` 深度（0/1/2-3/4+）与相邻两次提交的间隔，`[netprobe]` 的 `supply` 行补 `gap n/avg/max`；"环里没有帧"（上一轮判为推断的 `supply none`，占空档 45%）由此变成观测。另修两处既有口径：`other` 档改为打印真正的 OTHER 类并把原列改名 `rx_ctrl`；自算的 `period` 均值改按 `period_samples` 计数（此前分母用了写笔数） | `cargo fmt --all`；`cargo xtask clippy --package ax-net --package aic8800`（12 项全过）；`cargo test -p ax-net --lib`（129）、`cargo test -p aic8800 --features rdif,host-test`（180 + 1）全过；板级内核 `licheerv-nano-sg2002-wifi.toml` 构建通过 | 纯仪器轮，无行为改动，不单独送审查；判据在上板前定下（见"状态"） | **实板完成**（`com6 2026-09-30_001748`，同一热点会话内 4 个 iperf3 用例：下行 20 s / 下行 30 s / 上行 30 s / 双向 30 s）。① **仪器成立**：`park_end` 八项之和 = `waits`，**76 个窗口逐窗闭合**；`timer` 只在有 deadline 等待的窗口出现。② **停驻去向（第一条新读数）**：`none` 在所有相位都占 **≈50%**——到达等待时事件已置位，**一半的 park 从未睡下**；其次是 `tx` 25.7%（下行）/12.7%（上行）、`irq` 22.4%/14.0%、`recycle` 1.5~6.8%、`rx` ≈0.2%、`other` 与 `ctrl` 全零；`timer` 下行 0.05%、**上行 18.1%**、双向 14.7%。`wait_kind deadline` 比 `timer` 多出 5~12%，差值是「等到截止时刻才被通知」的那部分，两者不可互换。③ **credit 等待被独立证实**：上行由截止时间结束的 park 合计 **16.1% 墙钟**（4831 ms/30 s、均 680 µs/次），与上一轮三条读数的 15~16% 吻合；次数（7103）与 `credit backoff`（7642）同量级 ⇒ 执行器侧对同一等待的独立记账。④ **栈侧供给（第三条）**：上行 82% `core` / 18% `none` / **0% `ring`**（与上一轮 `ring 46~52% → 0` 一致），下行 85% `none`（只有 ACK）；上行 `supply 4+` 占 10.4% ⇒ 栈是突发式交付而非持续积压。⑤ **信道占用（第二条）读数失效**：77 个采样**全部 `busy=0 txbusy=0`**，含上行 30 Mbps 期间。厂商树里这三个字段（`lmac_msg.h:1292/1293/1296`，都在 `mm_get_sta_info_cfm` 内）**主机侧从不消费**；厂商真正使用的信道时间是另一条消息 `MM_CHANNEL_SURVEY_IND` 的 `chan_time_ms`/`chan_time_busy_ms`（`rwnx_msg_rx.c:292-318`，进 nl80211 survey）。故本轮不能判「空口是不是天花板」；下一轮或改读 survey 指示，或加打印原始值以区分「字段恒零」与「窗口不前进」。**时间账（上行 30 s，全部窗口内读数）**：事务在飞 **38%**（写总线腿 36%、收 1%、控制 0.9%）；写往返 2515 µs/笔 = 总线腿 1951（78%）+ 主机 564；总线效率写 89 ns/B、收 87~96 ns/B ≈ 物理底速。非在飞 62% 中：`supply none`（哪里都没有帧）**20%**、`supply core`（有帧却在等）**23%**——后者**包含**上面 16.1% 的 credit 等待（同一段墙钟，不可相加），其余约 7% 是完成→中断→交接→再发的固有延迟。**吞吐**：下行 27.6 / 30.5、上行 32.0、双向板发 29.2 / 板收 6.31 Mbps；逐秒中位 28.3 / 30.3 / 32.6，无错误、无超时、`deferred=0`。**结论**：搬运方式确已到底（96% 物理底速、`ring` 空档归零），差距在**占空比**（我们 38%）；非在飞时间里「没有帧」20% 属上层节奏，可动的只剩 credit 自选等待 16% 与其外的 7%。六条判据四条给出实读，第③条因读数失效未判。 |
+| 第四阶段·前车成形（在飞窗口内排好下一笔） | 2026-09-29 | 上一轮把可动项定在「两次搬运之间」的固有延迟（完成→中断→交接→再发约 7%，加上每笔约 0.5 ms 的成形与 DMA 准备），本轮把其中**成形**一段搬进在飞窗口。① **核心新增 staging 槽**：`DataPlaneState` 增加 `staged_tx`，`active_tx` 仍是「总线槽」——两者的区别是 `active_tx` 已被请求路径读到、`staged_tx` 还没有。`prepare_next_transmit_inner` 在 `active_tx` 空闲时先把 `staged_tx` 提升进总线槽、否则才成形；`form_transmit(limit)` / `extend_write(&mut ActiveTx, limit)` 改为操作局部写，聚合逻辑仍只有一份（顺带删掉 `extend_active_write` 里那条「槽在本次遍历中消失」的防御分支——按 `&mut ActiveTx` 形参它构造上不可达）。`advance_once` 在 `io.pending` 是数据写、状态 `Ready` 时，先做一次有界 `stage_next_transmit()` 再返回 `WaitForInterrupt`，于是 owner 在飞期间的每次交帧都会顺带排好下一笔；核心仍只返回 `WaitForInterrupt`，**不产生第二笔提交**。② **允许提前成形的窗口被收紧到「已经交给总线的写」**：仍在等流控读数的写会按读数继续从 `data.tx` 生长（`consume_transmit_flow` → `extend_active_write`），提前成形的后继会把帧先取走、使它在总线上小于刚读到的 credit 所能支持的规模；因此只有 `IoPurpose::TransmitData` 在飞时才 staging。成形上限再扣掉在飞写将要花掉的包数（`aggregate_limit().saturating_sub(in_flight)`），同一份 credit 不被两笔写重复认领。③ **token 归属**：`take_active_write_tokens()` 同时回收两个槽，取消（`finish_cancel`）、停机（`drive_shutdown`）、失败（`fail`）三条路径各归还一次；`bulk_sender()` 把 staged 写也算作「本方在发载荷」（`rx_defer` 默认 0，当前无行为影响，只是口径更正）。④ **旋钮与探针**：新增 `aic,tx-prepare-ahead`（0/1，默认 1；`AicRdifOptions::tx_prepare_ahead` → `OwnerPolicy::tx_prepare_ahead` → `AicDevice::set_tx_prepare_ahead`），供同会话 A/B；probe 的 `chain` 行新增 `staged ready/missed`（每笔完成时后继是否已经成形）。⑤ **DMA 活动前缀公共契约就位（下一步 owner 双槽的前提）**：`memory/dma-api/src/owned.rs` 增 `CpuDmaBuffer::capacity()` 与 `prepare_prefix(len)`，`DmaError` 增 `InvalidActiveLength`，`PreparedDma`/`InFlightDma`/`CompletedDma`/`QuarantinedDma` 全链路携带活动长度（`len()` 返回活动前缀、`capacity()` 返回整个 backing，cache 同步与 `segment()` 只覆盖 `0..active`，`into_cpu_buffer()` 恢复完整 backing，提交拒绝原样归还）；`prepare_for_device()` 语义不变。消费方 `sdmmc-protocol`/`sdhci-host`/`dwmmc-host` 的 `DmaError` 穷尽匹配补 `InvalidActiveLength` 分支（映射为 `InvalidArgument`）。⑥ **正式文档**：`docs/design/unified-sdio-aic8800.md` 增「前车成形」条款（含「只有已交给总线的写才允许有后继提前成形」与 credit 不重复认领两条理由），并把 token 回收范围补成两个槽 | `cargo fmt --all`（干净）；`cargo xtask clippy --package aic8800`（base / `rdif` / `host-test` 三组全过）、`--package sdmmc-protocol --package sdhci-host --package sdmmc-host --package ax-net`（15 项全过）、`--package ax-driver`（51 项全过）；`cargo xtask test --since dev`（全过）；`cargo test -p aic8800 --features host-test`（161 + 1，含四条新增）。四条新增单测：`a_write_on_the_bus_leaves_its_successor_already_formed`（在飞期间交帧 ⇒ `staged_tx` 非空、`data.tx` 清空、返回仍是 `WaitForInterrupt`，完成把它提升并提交）、`a_write_waiting_on_credit_keeps_the_frames_its_reading_will_add`（流控读在飞时不得 staging，读数回来后写仍长到两帧）、`prepare_ahead_can_be_turned_off_for_the_serial_arrangement`（关掉旋钮回到旧排列）、`shutdown_returns_the_packets_of_the_write_staged_behind_the_bus`（两槽各归还一次）。`dma-api` 的五条前缀测试经变异验证（同步整块 backing / `segment()` 用 capacity 各自失败），但**在本树无法执行**：该 crate 的集成测试目标有既有的 `__SpinOps_acquire/release` 链接缺口，且它不在 `scripts/test/std_crates.csv` 中，故 `cargo xtask test` 不会选中它（见「已知缺陷」） | 已实现、**已板测**（同会话两臂；吞吐判不出差异，机制足迹明确） | **实板完成**（ahead1 四次运行 / ahead0 一次，同一内核同一基座，只差 DTB 一个属性）。① **机制成立且闭合**：`staged ready` 占完成笔数 85–90%（b1 恒 0），`staged ready+missed = tx_writes` 与 `chain` 七项之和 = `tx_writes` 逐窗精确闭合（79/54/98 窗零违例）。② **空档被填了一部分**：`chain idle`（完成时排不出后继）A 10.0/10.0% → B 17.6%；写周期 A 4483–4718 µs 区间。③ **总线占用与吞吐都不动**：总线腿占比 A 35.9/36.0% 对 B 36.1%；上行 iperf A {33.4, 36.9, 37.2, 36.4} 对 B {38.0}，但**两臂判不出次序**——B 仅一个样本，双向 TX 里 A 反快 2.4%（29.50 对 28.8），合池 A 33.20(n=7) 对 B 33.40(n=2) 差 0.6%，逐秒 Mann-Whitney p=0.081。④ **写长度差约 9%，但归因未定**：单向上行 like-for-like A 少 8.6%（合池 11.5%，双向窗 17.5%）；然而 pre-knob 镜像（attrib3）的每笔字节与 A 臂相符、且 b1 自己两半窗口之间就差 2884 B（大于两臂差约 2000 B）⇒ 不能判为旋钮效应。**我曾据此说'A 的分布更紧'，方向是反的**（CV：A 8.9% 对 B 8.5%），那是按绝对四分位比较的尺度错觉。⑤ **代码追踪指出一处实现缺陷（未修）**：`stage_next_transmit` 的 `limit = aggregate_limit().saturating_sub(in_flight).max(1)` 把减法放在策略上限**之外**，credit 充足时把成形上限从 32 帧压到 `32 − s_prev`。判别性证据是该缺口只出现在'照缓存 credit 直接发出、不再走流控读'的带宽带里并随 credit 增大而扩大（3-6 档 A/B 相符，34-65 档 −8.5/−11.5%），但**要证否必须补逐笔 `s`/`s_prev` 插桩**，现有日志做不到。⑥ **下一步**：不用重编，把现成的 `attrib3` 镜像当第三臂，在同一会话里与 ahead0/ahead1 用相同用例序列交错 2–3 次，可一次分清'会话 vs 我的重构公共路径'（两者都含该重构，B 不是它的对照）。 |
+| 第四阶段·无等待对照（`aic,tx-credit-wait-us=0`） | 2026-09-29 | 只改 DTB 一个属性：以 `ahead1` 为基准把 `aic,tx-credit-wait-us` 设为 0（`lcn-sta-ahead1-nowait.dtb`，与 `ahead1.dtb` 只差该属性），内核/基座/其余属性全同，构成严格单变量对照。驱动侧改动为零：`consume_transmit_flow` 里 `if !wait.is_zero() && thin && waits < BUDGET` 这条薄池自等待分支被跳过（`thin` = credits 3..=7） | `cargo fmt`（干净）；镜像 `sg2002_starryos_wifi_sta_ahead1-nowait_20260929.img`（`update-kernel` 于基座 `q64`，内核与 ahead1/ahead0 同一份 `57ac05ff…`；从镜像 FAT 抽出 DTB 与源文件逐字节比对相同；脚本自检 Load/默认配置/`/bin/sh`/`/starryos.uimg` 四项全过） | 已板测；**机制足迹明确、总线层面不动** | **实板完成**（`nowait 063542`，与同日的 ahead1 四次运行对照）。① **旋钮确实生效，且足迹很大**：`write credit` 的 3-6 档份额 4.8/4.9/6.4/5.4% → **20.2%**（逐窗 64/68 窗 ≥10%，而 ahead1 四次合计仅 6/203；该位移是 boot 间散布的约 11 倍）；每笔字节 20.6–21.8 KB → **18.6 KB**（10+ 块占比 89% → 75.6%）；写周期 4483–4718 µs → **3914/3984 µs**（−12%，与 ahead1 四次零重叠）；`chain idle` 8.0–8.7% → **6.3/7.1%**；发射相位的 deadline 等待占比 11.0–13.7% → **8.2/10.5%**（按每次写的停驻时间算 −24%）。② **但它买到的东西不在总线上**：总线腿占比 35.8% 对 ahead1 的 35.9/36.0/36.1%；上行吞吐 38.0/35.3 对 36.4/34.6 —— 都不动。③ **代码归因（已核对到 file:line）**：该旋钮只作用于薄池分支（`data_plane.rs` 的 `credits 3..=7`）；**保留量分支（`credits <= 2`，`IO_RETRY` 200 µs）与遥测/邮箱/启动/SDIO 寄存器重试等其余截止时间来源都不受它影响**，前者占 credit 等待约 78%。④ **结论**：那 16.1% 并非空转——等待在等池子回填以便下一笔聚合得更大；去掉它只是把每笔写变小，占空比与吞吐均不变。⑤ **交叉影响**：我此前判断「`chain idle` 只受 prepare-ahead 影响、nowait 不会动它」**是错的**，实测降了 1.2–2.3 点（boot 内散布仅 0.3–0.8）。 |
+
+### 本轮登记的口径更正（跨轮适用，先登记再算数）
+
+1. **「事务在飞 38%」是另一个口径**。此前各处引用的 38% 只算**总线腿**（写 36% + 收 1% + 控制 0.9%）；
+   probe 的 `accounted=` 含整个往返（dispatch + dma + program + bus），同期约 50–61%。两者差约 20 个百分点，
+   **不可混比**；引用「在飞」时必须写明是哪一种。
+2. **RSSI 不能作为「会话/射频」的证据**。`[wifi-sta-info]` 的 rssi 是**下行**方向收到的信号：
+   2026-09-29 22:43 那次的 `-15 dBm` 好于 22:47 那次的 `-24 dBm`，却是慢的那一次（28.3/28.9 对 36.4/34.6）。
+   用它预测上行走廊不成立。
+3. **`064020` 与 `064400` 是两次不同开机，不是同会话重复**，且前者带一段深衰落、固件池也更薄
+   （平均 credit 8.5 对 12.3–14.1）。因此不能把两者的 24% 差当作重复性度量，
+   也不能据此说「噪声地板超过一切效应」——NOWAIT 的 credit 3-6 档位移是它的约 11 倍。
+4. **`supply core/none` 在 prepare-ahead 开启的臂里口径已被改动**：帧已经进了 `staged_tx`，
+   而 `supply` 只看 `data.tx`，于是 A 臂的 `none` 虚高（24–26% 对 b1 的 15.9%）。**该量不可跨臂比较。**
+   下一轮应先修探针（把 `staged_tx` 计入供给），否则同样的误判会再来一次。
+5. **逐秒 iperf3 行不可用**：`log::info!` 会穿插、覆盖串口输出，逐秒行常与探针文本粘在同一行。
+   只有整段汇总行（区间自 `0.00` 起）可判读；每臂末尾多出的一条 `Server listening (test #N)` 是「起了没跑」，
+   不是丢失的结果行。
+
 
 ## 分支与提交
 
 - **工作分支：`sg2002/wifi-opt`**。AIC8800 的全部工作（含调试与探针）都在此分支上迭代；
   需要开 PR 时另建去掉探针调用的整理分支，不在本分支直接开。
 - 第一阶段已提交至 `751555277`。第二阶段 P0a 与 D80 HT40/SGI 的改动在构建镜像时还留在工作树中，随后于 2026-09-27 提交为 `fd80b2b69`（P0a）与 `752f308e0`（HT40/SGI）；速率遥测（`8a350076a`）与 VHT/HE 能力（`1fb1bc91c`）提交在镜像构建之前。OCR 前后的范围以本文件顶部「阶段索引」为准。
+- 第三阶段首轮 OCR 审查的代码侧改动只有一处注释（提交 `a6633f3f6`），内容与结论见「阶段索引」的审查段与遗留待办表；其余为只读审查。
 
 ### 镜像与提交对应表
 
@@ -50,8 +137,22 @@
 | `sg2002_starryos_wifi_sta_phase2_p0a_20260927.img` | `751555277` | `751555277` + 工作树的 P0a 改动，即 `fd80b2b69` | `lcn-sta-defer0.dtb` | 已板测（P0a 轮、HT40/SGI 轮均以其为对照） |
 | `sg2002_starryos_wifi_sta_ht40sgi_20260927.img` | `751555277` | `fd80b2b69` + `752f308e0` | `lcn-sta-defer0.dtb` | 已板测（HT40/SGI 两轮） |
 | `sg2002_starryos_wifi_sta_stainfo_20260928.img` | `8a350076a` | `8a350076a` | `lcn-sta-defer0.dtb` | 已板测（遥测复测轮） |
-| `sg2002_starryos_wifi_sta_vhthe_20260928.img` | `1fb1bc91c` | `1fb1bc91c` | `lcn-sta-defer0.dtb` | 已构建自检，待板测 |
+| `sg2002_starryos_wifi_sta_vhthe_20260928.img` | `1fb1bc91c` | `1fb1bc91c` | `lcn-sta-defer0.dtb` | 已板测（HE 生效；两遍暴露热点变量） |
+| `sg2002_starryos_wifi_sta_txchain_20260928.img` | `dfdc282cc` | `dfdc282cc` | `lcn-sta-defer0.dtb` | 已板测（续接命中 37%，未见提升） |
+| `sg2002_starryos_wifi_sta_amsdu_20260928.img` | `ac62a558a` | `ac62a558a` | `lcn-sta-defer0.dtb` | 未单独板测（其内容被后续镜像覆盖） |
+| `sg2002_starryos_wifi_sta_negotiation_20260928.img` | `139347056` | `a366b59ee` | `lcn-sta-defer0.dtb` | 已板测（协商证据与姿态变量轮）；SHA-256 `a97548ae`（修复后重建） |
+| `sg2002_starryos_wifi_sta_observe_20260928.img` | `0fce56495` | `0fce56495` | `lcn-sta-defer0.dtb` | 已板测（第三阶段观测裁决轮，§2.22）；SHA-256 `2802b6b1f0e499706d2f319879524a197ca7e5f303d084d9e01005f0bb6e930d` |
+| `sg2002_starryos_wifi_sta_split_20260928.img` | `e01089b60` | `e01089b60` | `lcn-sta-defer0.dtb` | 已板测（成对对照的**基线臂** A1/A2：K=4）；SHA-256 `6986652997d491ee476835e8324980364be9a00dfb8abeaacfc16bcad0703c35` |
+| `sg2002_starryos_wifi_sta_aggr32_20260928.img` | `e01089b60` | `e01089b60` | `lcn-sta-aggr32.dtb` | 已板测（成对对照的**实验臂** B1：`aic,tx-aggregation=32` / `aic,tx-aggregate-bytes=49152`）；SHA-256 `a97703986d3b21c102ca00e877cdf4c9f9ce07775ef7523edb6b45892179ff3b` |
+| `sg2002_starryos_wifi_sta_q64_20260928.img` | `4c07118b5` | `4c07118b5` | `www/sg2002/wifi-sta/lcn-sta-q64.dtb`（STA 血统 + `aic,queue-size=64`，环 128 KB） | 已构建自检，待板测（**成对对照的实验臂**：加深发送环）；SHA-256 `2784c0698c477304b56c1fc092aa13b3ae5edc963fd298e69a552f6552e134d8`（**再次重建**：2026-09-29 误加 `--overwrite` 就地覆盖成新内核，随后按同一方式（`4c07118b5` 内核 + `lcn-sta-q64.dtb`）重新组装；FIT 时间戳不同故哈希与上一版不一致，勿用旧哈希 `fc1b748d…` / `e593bf32…`） |
+| `sg2002_starryos_wifi_sta_airstat_20260928.img` | `3cb53bb17` | `3cb53bb17` | `www/sg2002/wifi-sta/lcn-sta-q64.dtb`（含 `rng-seed`） | 已板测（空口统计 + credit 等待，§2.27）；SHA-256 `c4f357f894b445b8bbf810ed4a3a58c73e1993c083cb1053605be2511403a774` |
+| `sg2002_starryos_wifi_sta_rxprobe_20260928.img` | `4c07118b5` | `4c07118b5` | `lcn-sta-defer0.dtb`（STA 血统，自带 32 帧上界） | 已板测（**接收侧三问的基线臂** a1/a2，§2.25）；SHA-256 `f8b1e67fd95c6f08fb48b60784f20256e78a0c9054a7d1e73aa5fb2de9e0e849`（**重建**：首版用入库板级 DTB 构建，缺 `/chosen/rng-seed`，启动即 panic `secure Wi-Fi startup entropy failed`，已替换，勿用旧哈希 `2dd64187…`） |
+| `sg2002_starryos_wifi_sta_prechain_20260929.img` | `a6633f3f6` + 工作树未提交 | 同上 | `www/sg2002/wifi-sta/lcn-sta-defer0.dtb` | 已构建自检，待板测（第四阶段·完成前交帧：owner 步内顺序 + 取消语义声明；与 `…_attrib2_20260928.img` **只差内核**）；SHA-256 `4ed9d8d8c377f6bf52dcbc4812a471ec3e3d435522aae4569505b63065adc873`（**审查修复后重建，以本行为准**；修复前的同回合同名镜像哈希为 `8911f913…`，勿用） |
+| `sg2002_starryos_wifi_sta_attrib3_20260929.img` | `a6633f3f6` + 工作树未提交 | 同上 | `www/sg2002/wifi-sta/lcn-sta-defer0.dtb` | 已板测（第四阶段·归因探针深化：park 唤醒来源 + `chan_*` 信道占用 + 栈侧供帧深度/间隔；与 `…_attrib2_20260928.img` **只差内核**）；SHA-256 `8867305d3e2049547431f45fec52d4ca434555015372c96beb6bbf51dcf9cef1` |
+| `sg2002_starryos_wifi_sta_instr_20260930.img` | `a6633f3f6` + 工作树未提交 | 同上 | `www/sg2002/wifi-sta/lcn-sta-ahead1.dtb` | 已构建自检，待板测（第五阶段第二轮：S0 仪器 + S1 后继成形上限；基座 `…_ahead1_20260929.img`，**只差内核**）；SHA-256 `5292431dac05d138110ebc07965a02feaffde02b08460bd2cdeb5c5f1238bb40` |
+- 入库板级 DTB（`os/StarryOS/configs/board/licheerv-nano-sg2002.dtb`）在提交 `22e0890f0` 中带上 `aic,tx-aggregation=32` / `aic,tx-aggregate-bytes=49152`；它服务走板级配置的构建，**不作为板测镜像的 DTB 输入**（板测镜像必须用带 `rng-seed` 的 STA 血统设备树）。
 
+- **镜像必须用 STA 血统的设备树**（`www/sg2002/wifi-sta/lcn-sta-*.dtb`）：它带 `/chosen/rng-seed`，而入库板级 DTB 没有；缺该属性时内核会在网络队列初始化处 panic （`secure Wi-Fi startup entropy failed: trusted wireless connection entropy is unavailable`）。
 - 构建时 HEAD 早于内容提交的两个镜像（P0a、HT40/SGI）用「内容对应的提交」一列表示其代码内容；这两个镜像是从同一工作树状态分别构建的，提交顺序为 `fd80b2b69` → `752f308e0`。
 - 镜像文件名、SHA-256 与原始日志按轮记录在各自小节；镜像本体与 `.json` 在本地构建产物目录，不入库。
 - **2026-09-25 迁移**：dev 由 `9a7b868ba` 更新到 `714accd8f`，此前散在 `probe/aic8800-*` 上的工作
@@ -630,7 +731,7 @@ K 个信用全部扣减、日志无错误。厂商驱动同样逐帧只做 4 字
 
 ---
 
-## 周期 P8：接收扫描的有界推迟（2026-09-27，待板测）
+## 周期 P8：接收扫描的有界推迟（2026-09-27，已板测：否定，默认已关闭）
 
 提交 `4b4987b27`。
 
@@ -1055,41 +1156,242 @@ ack 失败 12266 对成功 27677（约 31%），且 `rssi` 为 −31~−41 dBm�
 
 ---
 
-## 待办与下一步（2026-09-28 修订）
+## 第五阶段第二轮：以「让 SDIO 尽可能忙碌」为目标重构（2026-09-29，进行中）
 
-1. **热点状态这个第一变量（最高优先）**：同一镜像两遍可差一个数量级（发送 26.9 对 2.50 Mbps），
-   而两遍之间同时重启了热点与板卡。按「实板读数与热点状态变量」里的四个实验分离变量：
-   先做"只重启热点"与"只重启板卡"两臂，再做"热点在线时长 vs 吞吐"的定时参考测量（判定线性退化还是阶跃事件），
-   以及厂商镜像的对照两遍。**在这些结论出来之前，不再用吞吐数字做任何轮间对比**。
-2. **VHT/HE 已生效**：第二遍读数全部 `he-su`、MCS 9~11（PHY 约 143 Mbps），但 TCP 只到 26.9 Mbps（约 19% 效率）。
-   若参考臂正常而效率仍低，说明瓶颈回到主机路径与聚合形状（见第 5、6 项），不再是调制格式。
-3. **ack 失败计数的口径**：三个会话分别约 15%（HT 会话）、28%（HE 正常遍）、31%（HE 异常遍），
-   与吞吐没有单调关系，疑似按聚合/尝试计数。需要与厂商 `rwnx_main.c` 的 STA 信息路径对齐语义后才可作为重传率使用。
-4. **该 AP 的 BSS 宽度与信道**：带宽仍未到 40 MHz，且厂商基线不再能证明 AP 支持 40 MHz（见瓶颈文档 §2.16）。
-   用第三台设备读该 BSS 的 beacons 宽度/信道，或记录热点的信道设置，成本接近零。
-5. **聚合选值轮（TX 侧形状差异）**：`aic,tx-aggregation` / `aic,tx-aggregate-bytes` 已经由 DTB 配置，
-   厂商默认 32 帧、缓冲 96 KB，本仓库当前为 4 帧 / 6144 字节。换 DTB（不改内核）即可扫字节上界
-   （6144 → 12288 / 24576，配帧数 8 / 16）与帧数上界（4 → 16 / 32，字节上界按 帧数 × 1536 放宽）。
+### 改动（S0：补仪器，无行为变更）
+
+**目标口径已变更**：不再以吞吐是否显著提高为收益指标，改以「异步架构使 SDIO 尽可能忙碌」为达成目标。
+验收分三层——A 架构层为「总线槽为空且任一单元有 ready offer」的驱动侧空档，且**必须按原因分类**；
+B 机制层为 `completion_to_commit`（出分布不出均值）；C 结果层为总线腿占比，**仅观测、不作验收**。
+方案与实施阶梯见执行方案 §11。
+
+S0 只加计数器，不改任何决策：
+
+- `owner_flush_blocked`（`device/probe.rs` 全局静态，调用点在 `rdif/owner/progress.rs:161` 的
+  `outputs.flush()` 提前返回处）：发布环满、整步不推进的次数。此前这个状态在报告里完全不可见。
+- `note_tx_harvest_at`/`book_tx_harvest_gap`：量「总线从空闲到再次被占用」的整段墙钟
+  （`[wifi-probe-time]` 的 `harvest_to_bus=…us/… long=…`），供判据 1 把交接段拆成
+  「调度恢复」与「驱动代码」两部分。起点取**完成中断进入时刻**（与既有的 `irq_handler`/`post_irq`
+  两栏同一锚点，三者相加即交接段全貌），收口在**每一次**事务提交前，而不是只在写之前：
+  同一时刻只有一笔事务在飞，若按写收口，完成之后先跑的那笔读会把它的整段往返算进交接空档。
+  超过 20 ms 的空档计进 `long` 而不入均值，那是「栈里没有帧」的停摆，不是驱动自己的交接。
+- `credit_reserved_backoff`：保留量分支（`credits <= 2`）的重试次数与等待时长单列
+  （`[wifi-probe]` 的 `reserve backoff=… avg=…us`）。此前它与薄池分支的 `backoff=` 合并，
+  而旋钮 `aic,tx-credit-wait-us` 只作用于后者。
+- `note_credit_over_claim`：成形时超出 credit 预算的笔数与包数（`[wifi-probe]` 的 `credit_over n=… pkts=…`）。
+  这是 S1 缺陷（`stage_next_transmit` 把 `saturating_sub(in_flight)` 写在 `.max(1)` 之前）
+  在下一次上板时的直接证据。
+- 供给口径修正：`write_done` 的 `core_ready` 补上 `staged_tx`。成形到后继槽的帧已经离开核心队列，
+  只读队列会把「核心手里正握着后继」报成 `supply none`。
+
+- `ax-net` 侧只加两个计数打印（本阶段唯一一次触及该目录，无行为变更）：
+  `more_round` 计 `poll` 返回 `More`、该轮不推进 owner 的次数（`[netprobe]` 的 `more=`），
+  `rearm_race` 计重武装时发现已有工作发布的次数，即「若无该复查会被丢掉的唤醒」（`rearm_race=`）。
+
+### 改动（S1：后继写的成形上限）
+
+`stage_next_transmit` 原先写 `min(credits - 2, policy) - in_flight`，两个方向都错：策略上限管的是
+一笔写、不与在飞写共享，把它也减掉会在 credit 充足时把后继压到 `policy - in_flight`；
+而归零后的 `.max(1)` 又会在 credit 紧张时成形一帧，把在飞写将要花掉的固件缓冲再认领一次。
+改为 `successor_limit(in_flight) = min(credits - 2 - in_flight, policy)`，未知读数取 0，
+且预算为零时不调用 `form_transmit`（它无论如何会先取一帧，传零拦不住）。
+`credit_over` 因此恒为 0，由缺陷证据转为回归守卫。
+
+### 测试
+
+`cargo fmt --all` 干净；`cargo xtask clippy --since dev`（7 包 186 项）与 `cargo xtask test --since dev` 全过；
+`cargo test -p aic8800 --features host-test` 163 + 1 全过。
+S1 新增两条单测——credit 充足时后继取满策略、读数已被在飞写花完时不成形——
+按项目要求先做了变异验证：两条都在改前的实现上必然失败（分别读到 1 帧、以及「仍然成形了一帧」）。
+
+### 结论
+
+S0 无行为变更，可与既有 `ahead1` 镜像直接 A/B 而不必重烧对照臂。S1 改变成形上限，
+其效果是 **C 类读数**（写长度分布），不许当作 A 层的收益记。
+三个待答判据（执行方案 §11.4）里，判据 2 由既有的分类往返与 `legs`/`stages` 两栏回答，未新增计数器；
+判据 1 与判据 3 由上列计数器在下一轮上板时回答。
+
+### 本轮要构建的镜像
+
+`sg2002_starryos_wifi_sta_instr_20260930.img`：基座 `sg2002_starryos_wifi_sta_ahead1_20260929.img`，
+只换内核（工作树 `a6633f3f6` + 未提交的 S0/S1 改动），DTB 沿用 `lcn-sta-ahead1.dtb`
+（S0/S1 未引入新 FDT 属性；该 DTB 已与 `lcn-sta-ahead1.dts` 逐字节比对一致，且带 `/chosen/rng-seed`）。
+不给 `--overwrite`，`-o` 直接指向构建产物目录。SHA-256 `5292431d…`（见镜像表）。
+
+组装后的独立复核（脚本自检之外）：从镜像 p1 取出 `boot.sd`，`dumpimage` 拆出的 kernel 与
+`target/riscv64gc-unknown-none-elf/release/starryos.bin` 逐字节相同、fdt 与 `lcn-sta-ahead1.dtb`
+逐字节相同；p2 的 `/starryos.uimg` 与同目录 `starryos.uimg` 相同；FIT 三镜像与默认配置
+与上一轮 `ahead1` **完全一致**（同带 `ramdisk-1`）；内核里逐一确认 S0/S1 的格式串齐备
+（`flush_blocked=`、`credit_over n=`、`harvest_to_bus=`、`reserve backoff=`、`more=` 与 `rearm_race=`）。
+基座镜像时间戳未变，未被就地改写。
+
+### 判据（上板后读探针行）
+
+按执行方案 §11.4 与 §11.6，本轮读数要回答两个判据、并给三处机制计数与非退化做守卫：
+
+| # | 读什么 | 在哪一行 | 判读 |
+| --- | --- | --- | --- |
+| 1 | **`More` 路径的真实贡献**（判据 3） | `[netprobe]` 的 `more=` 与同行 `polls=`/`owner_calls=` | 若 `more` 远小于 `polls`，判据 3 的答案就是「贡献≈0」，**S8 直接删除**，不必动 `ax-net` |
+| 2 | **交接空档归因**（判据 1） | `[wifi-probe-time]` 的 `harvest_to_bus=…us/… long=…`，与同行的 `irq split pre/isr/post` | `harvest_to_bus` 已经把「调度恢复」算进去；若它接近 `post` 而远大于 `legs/program`，这段不是驱动代码，S6 的「合并两次 owner 调用」不在钱上 |
+| 3 | **发布环是否真的会满** | `[wifi-probe]` 的 `flush_blocked=` | 若恒 0，S7 的前提不成立；若非 0，它就是被 `outputs.flush()` 挡住的那部分墙钟 |
+| 4 | **credit 重试的构成** | `[wifi-probe]` 的 `backoff=`（薄池 3..=7）与 `reserve backoff=`（保留量 ≤2） | 保留量分支应占约 78%；若否，说明此前从代码推出的构成不对 |
+| 5 | **S1 回归守卫** | `[wifi-probe]` 的 `credit_over n=… pkts=…` | **必须为 0**；非 0 说明成形仍在超出 credit 预算 |
+| 6 | **S1 的 C 类读数** | `[wifi-probe]` 的 `size blk … 10+ n=…` 与 `write … bytes=` | 与 `ahead1` 四次运行对照；写长度差是否消失属 **C 类观测，不作 A 层验收** |
+| 7 | **非退化** | 上行吞吐、TCP RX、双向用例 | 双向不新增停住；吞吐按 §4.3 的协议只在同会话内比较 |
+
+### 现象（2026-09-30 实板，日志 `(2026-09-30_095951)`）
+
+一次启动内四个用例：下行 31.6 Mbps、**上行两遍（先 15.4，重测 32.4）**、双向 RX 11.6 / TX 23.1 Mbps。
+下面所有数字都出自这一份日志。
+
+**口径登记（先登记再算数）**：
+
+- 窗口 = `[wifi-probe]` 的 2 s 统计窗（`dt≈2000ms`，共 91 个）。
+- 分段按 iperf3 任务退出时刻切，并用各用例 30 s 的名义时长反推起点：上行第一遍 82.7–113.0 s、
+  上行重测 122.8–153.1 s、双向 155–192 s。
+- `harvest_to_bus` 是窗口内的**和 ÷ 样本数**；样本是「任意事务完成 → 下一笔事务提交」且间隔 ≤20 ms 的
+  那些，因此样本数大于 `tx_writes`（读/控制事务也会收口）。**它不按事务类别分开**，这是下面把
+  「驱动自己那段」写成相减结果时必须记住的限制。
+- 完成中断分项 `pre/isr/post` 只统计 TX 类，按样本数加权。
+- 总线腿占比 = 主时间线的 `tx busy` ÷ 窗口时长，**逐窗取值再平均**（不是全段求和后相除）。
+  用这个定义复核同日的历史日志：ahead1 41.4%/48.1%、nowait 47.3%——**瓶颈文档里的「36%」出自
+  2026-09-28 那次会话，用本定义在同日日志上复现不出来**，故本轮只与同日日志做 like-for-like，
+  不与那个 36% 直接比。
+
+**判据 3（`More` 路径的真实贡献）——已有答案**：`more` 全日志合计 **155 / 200473 polls = 0.077%**，
+91 个窗口里 76 个为 0，非零的最大 17。`poll` 返回 `More` 而该轮不推进 owner 这条路径**贡献≈0**，
+**S8 删除，不必动 `ax-net` 的执行器循环**。
+
+**判据 1（交接空档归因）——已有答案，数字已按 2026-09-30 独立复核更正**：
+
+| 段 | `harvest_to_bus` 均值（样本） | TX 完成中断 `pre` / `isr` / `post` |
+| --- | --- | --- |
+| 上行第一遍 | 703 µs（8719） | 2077 / 1 / **458** µs |
+| 上行重测 | 755 µs（10138） | 2091 / 1 / **412** µs |
+| 双向 | 707 µs（8617） | 2074 / 1 / **380** µs |
+
+- 唤醒/调度恢复（`post`）是整段里最大的一项，但**占比必须写口径**：逐窗比值再平均是 45.6–63.9%，
+  按样本加权（各自求和再相除）是 **36.0%**——差在分子只算 TX、分母含读写。**以 36% 为准。**
+- `post` 的终点**不是「核心取走完成」**，而是「中断处理退出 → 取走该完成的那次 `advance` 拿到的时钟」。
+- 「驱动自己那段 = 整段 − `post`」是**跨总体**的减法，不能这么叫；同窗 `legs` 能直接量到的下游成本只有
+  下一笔写的 `dma`（125–158 µs）与 `program`（42–64 µs）。
+- 替代解释已否证：`post` 不是执行器一轮循环的节拍（`corr(post, P) ≈ 0`），且它与执行器独立测的
+  park 交接逐窗几乎相等（比值 0.88–1.00，相关 0.87）——两种独立测法互证这段就是唤醒。
+- **判读更正**：原写「`rearm_race` 60.6% 说明执行器频繁被重新调度而不是停在 park 上」**方向是反的**。
+  越是从头到尾停在 park 上的空载窗该比值越高（17 个空载窗 `rr/oc = 74.9%`，那些窗
+  `waits × wait_us / dt ≈ 0.999`，整窗停在 wait 上）。`rearm_race` 不是「没在 park」的证据。
+- **覆盖口径**：`harvest_to_bus` 只在块读/块写两个 DMA 分支收口，`Direct`（含 credit 读与大部分
+  mailbox/控制）与 `Bus` 分支不收口，它们之间的空档既不进均值也不进 `long`。
+
+**结论：交接空档里唤醒/调度恢复是最大的一项，S6 的「合并两次 owner 调用」动不到它**——
+同窗能被 `legs` 直接量到的下游成本只有 `dma` + `program` 约 0.17–0.22 ms/笔。
+
+**另两条判据前提不成立、可以删**：
+
+- `flush_blocked=0`：91/91 窗为 0，`outputs.flush()` 从未挡住过任何一步 ⇒ **S7 的前提不成立**。
+- `long=0`：91/91 窗为 0，本轮没有超过 20 ms 的停摆。
+
+**S1 的回归守卫通过**：`credit_over n=0 pkts=0`，91/91 窗。恒等式也全部闭合：
+`chain` 七项之和 = `tx_writes`、`staged ready + missed` = `tx_writes`，均 91/91 窗零违例。
+
+**口径更正（两项）**：
+
+- 保留量分支（`credits ≤ 2`）占 credit 重试 **67.7–70.4%**（三段分别 70.4 / 69.7 / 67.7），
+  此前按代码推算写作「约 78%」。方向不变（旋钮够不到的那一支是多数），数值以此处实测为准。
+- credit 等待**不可与 `accounted` 相加**：该跨度含重试读自身的往返（该窗 ≥23 ms、约 1.2 点），
+  且退避期间 RX 不被挡住。段内饱和窗（n=33）中位 15.9%、均值 18.3%、分布 7.0–45.8%，不是常数。
+  credit 等待与 deadline park **是同一段**（credit 分支设 `retry_at` → 成为 park 的 deadline）。
+
+**上行两遍的对照（同一次启动内，这是本轮最有信息量的一条）**：
+
+| 项 | 第一遍（退化） | 重测 |
+| --- | ---: | ---: |
+| 驱动交给 SDIO 写的线上字节 / 30.3 s | 119.6 MB（31.6 Mbps） | 135.4 MB（35.7 Mbps） |
+| iperf3 交付 | 55.0 MB（15.4 Mbps） | 116.0 MB（32.4 Mbps） |
+| **交付 / 线上** | **0.49** | **0.91** |
+| 每笔写 | 20.5 KB | 20.4 KB |
+| 写周期 | 5861 µs | 4941 µs |
+| 保留量 backoff 占比 | 70.2% | 69.7% |
+| `staged ready` 率 | 51.3% | 57.7% |
+| 总线腿占比 | 44.7% | 50.1% |
+
+**驱动侧行为两遍几乎一致（每笔写只差 0.5%、保留量占比只差 0.5 点），而交付差 2.1 倍。**
+退化的变量在 SDIO 之下——空口/链路侧，不是本轮改动。这与既有的「同一镜像两次开机可差 24%」
+同源，但更强：这次是**同一次启动内背靠背的两遍**。`[wifi-sta-info]` 上两段的 `mcs`（7–11）、
+`rssi`（−19 ~ −23 dBm）也都不支持「退化段链路更差」的简单解释，具体成因未定位，
+按既有约定不在驱动侧追。
+
+**S1 的 C 类足迹（不作 A 层收益）**：`staged ready` 率由 `ahead1` 的 85–90% 降到 51–58%——
+credit 吃紧时后继不再成形（这正是 S1 的目的），`chain idle` 7.8–9.3%（`ahead1` 10.0%）。
+每笔写 20.4–20.5 KB（`ahead1` 20.6–21.8 KB）。**本轮没有同会话对照臂**（原计划的 `attrib3` 第三臂未跑），
+所以这些跨会话差值不作证据。
+
+**复核带出的新线索（已自行复算确认）**：owner 一次调用的固定开销是本轮最大的、且完全在
+`aic8800` 与 `ax-driver` 边界内的未分解项——1313–1856 次/秒、括号 130–165 µs/次，占墙钟
+**21.7–24.9%**，而其中 `device.advance` 四类合计只占 7.3–8.2 点，余下 **14.4–16.7 点落在 owner 脚手架里**。
+`rearm_and_check` 并非纯重武装：`rdif/device/endpoints/startup.rs:242-251` 里它调
+`owner.rearm_and_advance(now)`，是一整次 owner 推进。比 `post`（8–9 点）与主机侧每笔准备（约 3.6 点）都大。
+**动手前必须先把它分段分解**（flush / latch / advance / submit / rearm / publish），未标定不得优化。
+详见执行方案 §11.11。
+
+---
+
+## 待办与下一步（2026-09-29 第五阶段第二轮 S0 后修订）
+
+**本轮新增（按性价比排序）：**
+
+- **A. 补 `attrib3` 第三臂（零代码，最优先）**：`ahead0`/`ahead1` 都含本轮重构，
+  它们**互为该重构的对照不成立**。把现成的 `sg2002_starryos_wifi_sta_attrib3_20260929.img`
+  当第三臂，在同一热点会话内与 `ahead0`/`ahead1` 用相同用例序列交错 2–3 次，
+  一次分清「会话差异」与「本轮重构公共路径的非等价改动」。
+- ~~**B. 修两条实现问题**~~**（已完成，见本节上方的 S1 与供给口径修正）**：
+  `stage_next_transmit` 的减法位置与 `supply` 漏计 `staged_tx`。
+- **C. 判读口径（本轮教训）**：判断 5% 量级的改动**不要用吞吐**——同一镜像两次开机可差 24%
+  （`064020` 28.3/28.9 对 `064400` 36.4/34.6），且该差本身来自链路状态变化；
+  用机制计数与阶段账。板端 `rssi` 是**下行**量，不能预测上行走廊。
+
+
+1. **credit 自选等待值不值（已结清，2026-09-29）**：`aic,tx-credit-wait-us=0` 单变量对照已做，
+   答案是**保留**（判据落在后一支）。那 16.1% 不是空转：去掉等待后每笔写从 20.9 KB 压到 18.6 KB、
+   写周期虽短 12% 但总线腿占比与吞吐都不动；且该旋钮只管薄池分支（`credits 3..=7`），
+   **credit 等待里约 78% 属于旋钮够不到的保留量分支**。详见跟踪文档「第四阶段·无等待对照」行与
+   执行方案 §10.5。
+2. **信道占用读数改源**：现读数（`get_sta_info` 的 `chan_time` 三字段）在本固件上恒零，不能用于判定
+   「空口是不是天花板」。厂商真正在用的是 `MM_CHANNEL_SURVEY_IND` 的 `chan_time_ms`/`chan_time_busy_ms`
+   （`rwnx_msg_rx.c:292-318`）；改造前不要再引用 `busy`/`txbusy`。
+3. **帧年龄**：入环打点、emit 时读出（1 次读时钟/帧），与 credit 统计成对读。round-2 四候选里唯一未做的读数。
+4. **热点状态这个第一变量**：同一镜像两遍可差一个数量级，而两遍之间同时重启了热点与板卡。
+   先做「只重启热点」与「只重启板卡」两臂，再做「热点在线时长 vs 吞吐」的定时参考测量，
+   以及厂商镜像的对照两遍。**在这些结论出来之前，不用吞吐数字做任何轮间对比**。
+5. **双向相位需同会话 A/B**：第四阶段第三轮的三种双向读数互不可判（接收形状不同、一次接收塌陷），
+   纯上行相位已确认次序改动无处发力；双向要给结论只能成对测。
 6. **ARP 表项 300 s 到期事件（板载网络栈，需决定是否处理）**：`net/ax-net` 的
    `NEIGHBOR_TTL = 300 s` 到期后重新解析网关 MAC，期间待发包堆在
    `ETHERNET_MAX_PENDING_PACKETS = 128` 的缓冲里、装满即丢包，解析完成后成批冲刷。
    两轮板测各出现一次，且都落在事件所在的那一个用例里（逐秒吞吐单调下滑）；它不是 AIC 驱动问题，
    是否处理（提前刷新、或排队期间不让 TCP 回退）由上层决定。
-
-7. **一次 owner 推进的分段归因**：把「RDIF 收割 / 核心状态机 / 提交准备（构帧、DMA 分配与拷贝、
-   ADMA2 重建）/ rearm 寄存器」四段分开计时，驱动核心没有时钟源（时间由 `AicInput::now` 传入），
-   需要在执行器侧加钩子。`netprobe` 的 `wake` 是"最近一次中断 → 本轮 owner 推进结束"≈ 执行器迭代周期，
-   不是调度延迟。分段结果决定是否重新论证单 owner 串行契约（理论上界约 19% 墙钟）。
-
-8. **RX 侧每帧必付的事务**：收尾空读的占比尚无实测；"晚点读"方向已在周期 P8/P8b 被否定，
-   不再重复；若要动只能动事务本身（状态读、收尾空读）或固件侧。
-
+7. **该 AP 的 BSS 宽度与信道**：带宽仍未到 40 MHz，且厂商基线不再能证明 AP 支持 40 MHz（见瓶颈文档 §2.16）。
+   用第三台设备读该 BSS 的 beacons 宽度/信道，或记录热点的信道设置，成本接近零。
+8. **ack 失败计数的口径**：三个会话分别约 15%（HT 会话）、28%（HE 正常遍）、31%（HE 异常遍），
+   与吞吐没有单调关系，疑似按聚合/尝试计数。需要与厂商 `rwnx_main.c` 的 STA 信息路径对齐语义后才可作为重传率使用。
 9. **已知缺陷与偶发，保留记录**：
    - `device/control.rs` 的 `scan_command` 用 376 字节载荷缓冲，却写到偏移 403 及之后
      （`payload[bssid_offset..bssid_offset + 6]`），任何扫描请求都会越界 panic；需要与厂商
      `struct scan_start_req` 的布局对照后单独修复。
    - 双向用例偶发断链：第一轮第八例板端只剩零星 512 B 写、接收计数为 0、无驱动错误事件，
      PC 侧观测 Wi-Fi 断链；第二轮同一命令正常。按偶发记录。
+   - 2026-09-30 一轮无错误、无超时、`deferred=0`；`[wifi-sta-info]` 全程 `he-su`、MCS 5~11、rssi −24~−28 dBm。
+   - `memory/dma-api` 的测试在本树跑不起来（**既有问题，与本轮的改动无关**）：
+     `cargo test -p dma-api` 默认 feature 下 `tests/test.rs` 因 `contiguous_buffer_pool` 受 `pool`
+     feature 门控而编译失败；加上 `--features host-test` 后两个集成目标都能编译，
+     但链接时缺 `__SpinOps_acquire`/`__SpinOps_release`（`ax-sync` 的 crate-interface
+     `SpinOps` 需要在测试侧提供宿主实现，`memory/buddy-slab-allocator/tests/common/` 有一个可照抄的先例）。
+     该 crate 也不在 `scripts/test/std_crates.csv` 中，故 `cargo xtask test` 不会选中它。
+     本轮新增的前缀测试放在 `tests/test.rs`，已用临时的宿主 provider 跑通并做过变异验证，
+     但在补齐 provider 并登记白名单之前**不构成项目入口下的证据**。
+
+---
+
 ## 已作废/降级的方向
 
 - **阶段 2「完成即续发」作为主线**：见周期 P3 结论 1，收益上限约 6%，降为后续小项。

@@ -1,0 +1,633 @@
+=~=~=~=~=~=~=~=~=~=~=~= MobaXterm log 2026.09.24 20:49:36 =~=~=~=~=~=~=~=~=~=~=~=
+C.SzWi%1.SRI0캧0BiESE0zx/PQBSz00a2z.BT%1zIue:3V"MeKVK:-I9'f0%:j
+s_Y"A0j
+sf.Vnj%000&.SzL/00zPQ500I0rj
+S00I0zx/D,W켆DJiHra+80Mr*_^=C!TM_C!I3T)ea.eL6DDSSHSCPLQ/C!Cb[V20z000EcrI0zc0zx,0rMQH/0&.82zx&0&//M3fYefa00/38j
+.CSDI8z0S0/DCu020E00a11DxL*0.C!+e%rloX.ae+ H]jtKata00rj
+O9BR'tX0x0&aV08
+SBR.NC!_  _____}5
+z_A    zz}_ 5
+    __(_| } |5
+| | \\_\|<|!| |}) |}_U|_ 
+ }}|r/}__} |}_}_}_|C!  C! }5
+CPXKNaY  bcY*ro!o2t  lHo[BITA  'j
+EfKAIR"iY  ,+5
++f.m."c 'ntC!EfsADYk '8Mj
++fM YWk   'j-C!fZR"c KHZee   000!TKwaZe   &Z
+e* Y :rCDnrmY   oC!+0HA  '+n0BT.  :R*
++0*V0  :A000-000fA(RJHHmZYVA1  00린j같2 JHmaZRYVA2  000fff (*%+02t
+rA :A0�0j
++0jtPV  0같*+0tS   +0RY.  CBAH*J  0CoBR"mXZ  'oWHHt *I R*A   '4iXu5HA2uY.  erY+uemC P*5AC] '6!oBRPn+i^*HA5AAAVs.t'8!oBRTj!Mn j
+ HP*jPu 8CoBRjDj 002oBRjDj   00�09C
+
+U-Boot 2021.10 (Jan 22 2026 - 14:08:22 +0800) soph
+
+DRAM:  254 MiB
+gd->relocaddr=0x88a33000. offset=0x8833000
+MMC:   cv-sd@4310000: 0, wifi-sd@4320000: 1
+Loading Environment from nowhere... OK
+In:    serial
+Out:   serial
+Err:   serial
+Net:   
+Warning: ethernet@4070000 (eth0) using random MAC address - be:9c:40:4c:af:25
+eth0: ethernet@4070000
+Hit any key to stop autoboot:  0 
+Device: cv-sd@4310000
+Manufacturer ID: 3
+OEM: 5344
+Name: SK64G
+Bus Speed: 25000000
+Mode: SD High Speed (50MHz)
+Rd Block Len: 512
+SD version 3.0
+High Capacity: Yes
+Capacity: 59.5 GiB
+Bus Width: 4-bit
+Erase Group Size: 512 Bytes
+** Unable to read file uEnv.txt **
+Failed to load 'uEnv.txt'
+cvi_vo_probe: Warning: cannot get power GPIO: ret=-2
+** Unable to read file board **
+Failed to load 'board'
+Failed to load file: board
+Init panel zct2133v1-800x1280
+dm_gpio_set_value(disp_power_ct_gpio, deassert) failed: -2switch to partitions #0, OK
+mmc0 is current device
+** Unable to read file logo.jpeg **
+Failed to load 'logo.jpeg'
+
+start jpeg dec task!, bs_addr 0000000084080000, yuv_addr 0000000088d30000, size 524288
+[ERR] JpegDecodeHeader = 1307, DONE_DEC_HEADER
+[ERR] JpegDecodeHeader = 1439, fail
+[ERR] JPU_DecGetInitialInfo = 209, JpegDecodeHeader
+jpeg_decode_helper = 251, JPU_DecGetInitialInfo failed Error code is 0x1, inst=0
+Boot from SD dev 0 ...
+switch to partitions #0, OK
+mmc0 is current device
+18889092 bytes read in 1695 ms (10.6 MiB/s)
+## Loading kernel from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'kernel-1' kernel subimage
+     Description:  StarryOS kernel
+     Type:         Kernel Image
+     Compression:  uncompressed
+     Data Start:   0x818000d4
+     Data Size:    16337248 Bytes = 15.6 MiB
+     Architecture: RISC-V
+     OS:           Linux
+     Load Address: 0x80200000
+     Entry Point:  0x80200000
+     Hash algo:    crc32
+     Hash value:   ddb40c97
+   Verifying Hash Integrity ... crc32+ OK
+## Loading ramdisk from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'ramdisk-1' ramdisk subimage
+     Description:  cvitek ramdisk
+     Type:         RAMDisk Image
+     Compression:  uncompressed
+     Data Start:   0x82794b14
+     Data Size:    2527648 Bytes = 2.4 MiB
+     Architecture: RISC-V
+     OS:           Linux
+     Load Address: unavailable
+     Entry Point:  unavailable
+     Hash algo:    crc32
+     Hash value:   1330f105
+   Verifying Hash Integrity ... crc32+ OK
+## Loading fdt from FIT Image at 81800000 ...
+   Using 'config-sg2002_licheervnano_sd' configuration
+   Trying 'fdt-sg2002_licheervnano_sd' fdt subimage
+     Description:  cvitek device tree - sg2002_licheervnano_sd
+     Type:         Flat Device Tree
+     Compression:  uncompressed
+     Data Start:   0x829fdda0
+     Data Size:    22722 Bytes = 22.2 KiB
+     Architecture: RISC-V
+     Hash algo:    sha256
+     Hash value:   d5923a852fca8c65f0a08255323a90daeb6ed262b83e8371d6f59fed3379b127
+   Verifying Hash Integrity ... sha256+ OK
+   Booting using the fdt blob at 0x829fdda0
+   Loading Kernel Image
+   Decompressing 16337248 bytes used 21ms
+   Loading Ramdisk to 87e81000, end 880ea1a0 ... OK
+ERROR: reserving fdt memory region failed (addr=80000000 size=40000 flags=0)
+   Loading Device Tree to 0000000087e78000, end 0000000087e808c1 ... OK
+
+Starting kernel ...
+
+RISC-V64 SBI kernel entry.
+Boot entropy source: FDT /chosen/rng-seed
+root=/dev/mmcblk0p2 rootwait rw console=ttyS0,115200 earlycon=sbi riscv.fwsz=0x80000 release loglevel=0
+VM Load @PA:0x80200000
+VM Load Offset: 0x100200000
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080080000 (512 KiB)
+  Free   0x00000080080000 - 0x00000080200000 (1.5 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Free   0x00000081200000 - 0x00000087e81000 (108.5 MiB)
+  Rsv    0x00000087e81000 - 0x000000880eb000 (2.41 MiB)
+  Free   0x000000880eb000 - 0x0000008fe00000 (125.08 MiB)
+Initialize RAM allocator: 0x81200000..0x87e81000
+Reserving CPU-local areas
+CPU-local area stride: 0x41000 bytes
+Total CPU-local allocation: 0x41000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x81200000..0x81207000, current: 0x81207000
+Flushed RAM used range to memory map: 0x81207000..0x81248000, current: 0x81248000
+CPU-local areas allocated at 0x81207000 - 0x81248000
+Mapping early memory regions...
+Ram                 : [0x0000000080000000, 0x000000008fe00000) -> [0x0000000080000000, 0x000000008fe00000) (254 MiB)
+Ram                 : [0xffffffc080000000, 0xffffffc08fe00000) -> [0x0000000080000000, 0x000000008fe00000) (254 MiB)
+KImage              : [0xffffffff80000000, 0xffffffff81000000) -> [0x0000000080200000, 0x0000000081200000) (16 MiB)
+PerCpu              : [0xffffffe081207000, 0xffffffe081248000) -> [0x0000000081207000, 0x0000000081248000) (260 KiB)
+Boot page table at physical address: 0x81248000
+MMU Entry point at physical address: 0x8020415c
+Enabling MMU...
+MMU enabled, jumping to 0xffffffff8000415c, sp=0xffffffe081248000
+Trap vector at 0xffffffff80003de4
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080080000 (512 KiB)
+  Free   0x00000080080000 - 0x00000080200000 (1.5 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Rsv    0x00000081200000 - 0x00000081207000 (28 KiB)
+  PerCPU 0x00000081207000 - 0x00000081248000 (260 KiB)
+  Rsv    0x00000081248000 - 0x00000081354000 (1.05 MiB)
+  Free   0x00000081354000 - 0x00000087e81000 (107.18 MiB)
+  Rsv    0x00000087e81000 - 0x000000880eb000 (2.41 MiB)
+  Free   0x000000880eb000 - 0x0000008fe00000 (125.08 MiB)
+Jumping to main entry point at 0xffffffff802420ac with SP 0xffffffe081248000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = riscv64
+platform = LicheeRv Nano
+target = riscv64gc-unknown-none-elf
+build_mode = 
+log_level = info
+backtrace = false
+smp = 1
+
+[  5.224622 0 ax_runtime::bootstrap:98] Logging is enabled.
+[  5.232058 0 ax_runtime::bootstrap:99] Primary CPU 0 started, arg = 0x81200000.
+[  5.241376 0 ax_runtime::bootstrap:101] Found physcial memory regions:
+[  5.249917 0 ax_runtime::bootstrap:103]   [PA:0x80000000, PA:0x80080000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.262611 0 ax_runtime::bootstrap:103]   [PA:0x80080000, PA:0x80200000) free memory (READ | WRITE | FREE)
+[  5.274349 0 ax_runtime::bootstrap:103]   [PA:0x80200000, PA:0x81200000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.287072 0 ax_runtime::bootstrap:103]   [PA:0x81200000, PA:0x81207000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.299795 0 ax_runtime::bootstrap:103]   [PA:0x81207000, PA:0x81248000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.312518 0 ax_runtime::bootstrap:103]   [PA:0x81248000, PA:0x81354000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.325242 0 ax_runtime::bootstrap:103]   [PA:0x81354000, PA:0x87e81000) free memory (READ | WRITE | FREE)
+[  5.336979 0 ax_runtime::bootstrap:103]   [PA:0x87e81000, PA:0x880eb000) reserved (READ | WRITE | EXECUTE | RESERVED)
+[  5.349702 0 ax_runtime::bootstrap:103]   [PA:0x880eb000, PA:0x8fe00000) free memory (READ | WRITE | FREE)
+[  5.361440 0 ax_runtime::boot_memory:6] Initialize global memory allocator...
+[  5.370579 0 ax_runtime::boot_memory:7]   use buddy-slab-allocator allocator.
+[  5.379720 0 ax_alloc::buddy_slab:169] Initialize global memory allocator, start_vaddr: 0xffffffc0880eb000, size: 0x7d15000
+[  5.393179 0 ax_alloc::buddy_slab:407] global allocator initialized
+[  5.401255 0 ax_alloc::buddy_slab:179] Add memory region, start_vaddr: 0xffffffc080080000, size: 0x180000
+[  5.412903 0 buddy_slab_allocator::global:151] GlobalAllocator: skip region 0xffffffc080080000+0x180000, no allocator-visible memory after 2097152 alignment
+[  5.429120 0 ax_alloc::buddy_slab:179] Add memory region, start_vaddr: 0xffffffc081354000, size: 0x6b2d000
+[  5.441028 0 ax_runtime::bootstrap:148] kernel aspace: [VA:0xffffffc000000000, VA:0xffffffffffffffff)
+[  5.452146 0 ax_mm:136] Initialize virtual memory management...
+[  5.469885 0:4294967296 ax_runtime::bootstrap:45] Initialize platform devices...
+[  5.487676 0:4294967296 somehal::driver:5] Initializing rdrive with FDT at 0xffffffc081200000
+[  5.541450 0:4294967296 ax_runtime::bootstrap:172] Initialize interrupt handlers...
+[  5.553744 0:4294967296 ax_runtime::devices:2] Probe platform devices...
+[  5.566424 0:4294967296 ax_driver::serial::ns16550:89] Probing NS16550 serial device: serial@04140000
+[  5.577809 0:4294967296 ax_driver::serial::ns16550:132] NS16550 serial@0xffffffc004140000 registered successfully
+[  5.590103 0:4294967296 ax_driver::serial::ns16550:89] Probing NS16550 serial device: serial@04150000
+[  5.601423 0:4294967296 ax_driver::serial::ns16550:132] NS16550 serial@0xffffffc004150000 registered successfully
+[  5.613755 0:4294967296 ax_driver::serial::ns16550:89] Probing NS16550 serial device: serial@04160000
+[  5.625076 0:4294967296 ax_driver::serial::ns16550:132] NS16550 serial@0xffffffc004160000 registered successfully
+[  5.637409 0:4294967296 ax_driver::serial::ns16550:89] Probing NS16550 serial device: serial@04170000
+[  5.648732 0:4294967296 ax_driver::serial::ns16550:132] NS16550 serial@0xffffffc004170000 registered successfully
+[  5.665644 0:4294967296 ax_driver::block::cvsd:67] cvsd probe: node=cv-sd@4310000, src=375000000Hz min=400000Hz max=25000000Hz bus_width=Bit4 no_1v8=true no_mmc=true no_sdio=true cd_gpio=true
+[  5.685138 0:4294967296 ax_driver::block::cvsd:99] cvsd block device registered irq=None
+[  5.737749 0:4294967296 ax_driver::net::aic8800:70] [wifi] SDIO1 resources prepared (node=wifi-sd@4320000, controller=0x4320000, src=375000000Hz, bus=Bit4)
+[  5.753870 0:4294967296 ax_driver::net::aic8800:99] [wifi] wlan0 device registered (probe stage done)
+[  5.766738 0:4294967296 ax_runtime::serial:1040] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [44, 4] }))), polling=false
+[  5.786726 0:4294967296 ax_runtime::serial:1040] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [45, 4] }))), polling=false
+[  5.806707 0:4294967296 ax_runtime::serial:1040] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [46, 4] }))), polling=false
+[  5.826597 0:4294967296 ax_runtime::serial:1040] serial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [47, 4] }))), polling=false
+[ 10.789232 0:4294967296 ax_runtime::bootstrap:202] runtime console active: serial0, ttyS0
+Boot at 1970-01-01 00:00:10.789261280 UTC
+
+[ 10.792283 0:4294967305 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op ResetAll
+[ 10.793948 0:4294967305 ax_fs_ng::block::runtime::hctx:237] prepared block hctx 0 on CPU 0 with hardware depth 1
+[ 10.794104 0:4294967305 ax_fs_ng::block::runtime::lifecycle::device:336] block device cvsd IRQ source 0 (IrqId { domain: IrqDomainId(7), hwirq: HwIrq(36) }) fixed to CPU 0 for queue mask 0x1
+[ 10.795559 0:4294967306 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op PowerOn
+[ 10.805970 0:4294967306 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op SwitchVoltage(V330)
+[ 10.812630 0:4294967306 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit1)
+[ 10.812753 0:4294967306 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Identification)
+[ 10.837469 0:4294967306 sdmmc_protocol::sdio::init::state_machine::identify:175] sdio: detected Sd ocr=0xc1ff8000
+[ 10.839309 0:4294967306 sdmmc_protocol::sdio::init::state_machine::identify:340] sdio: CSD capacity_blocks=Some(124735488)
+[ 10.840086 0:4294967306 sdmmc_protocol::sdio::init::state_machine::identify:354] sdio: switch SD bus width to 4-bit
+[ 10.841237 0:4294967306 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit4)
+[ 10.842210 0:4294967306 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Default)
+[ 10.846858 0:4294967306 sdmmc_protocol::sdio::init::state_machine::sd:185] sdio: SD speed selected HighSpeed
+[ 10.847743 0:4294967306 sdmmc_protocol::sdio::init::state_machine:237] sdio: init done kind=Sd sd_v2=true high_capacity=true rca=0xaaaa ocr=0xc1ff8000 host_bus_width=Bit4 ext_csd_bus_width=None ext_csd_timing=None
+[ 10.847826 0:4294967306 sdmmc_protocol::rdif::queue:173] sdmmc block init complete: kind=Sd high_capacity=true rca=43690 capacity_blocks=124735488 cache_enabled=false
+[ 10.850299 0:4294967296 ax_fs_ng::root:353]     partition 1 name=None fs=None lba 2048..133120
+[ 10.851444 0:4294967296 ax_fs_ng::root:353]     partition 2 name=None fs=Some(Ext4) lba 133120..5033984
+[ 10.851523 0:4294967296 ax_fs_ng::root:369]   block device 0 (cvsd) has Mbr partition table with 2 partitions
+[ 10.852031 0:4294967296 ax_fs_ng::root:479]   matched root by device path on disk0 partition 2 (<unnamed>, fs=ext4, lba 133120..5033984)
+[ 10.852131 0:4294967296 ax_fs_ng:100] Initialize filesystem subsystem...
+[ 10.852155 0:4294967296 ax_fs_ng:101]   selected root device: disk0 partition 2 (<unnamed>, fs=ext4, lba 133120..5033984)
+[ 10.978543 0:4294967296 ax_fs_ng:113]   filesystem type: "ext4"
+[ 10.978861 0:4294967296 ax_input:25] Initialize input subsystem...
+[ 10.981380 0:4294967296 ax_runtime::irq:193] registered wlan0-g0-s0 IRQ IrqId { domain: IrqDomainId(7), hwirq: HwIrq(38) } on fixed CPU 0
+[ 10.981605 0:4294967307 aic8800::rdif::device::endpoints::startup:90] [wifi] AIC owner startup timeout armed for 60s
+[ 10.981643 0:4294967307 aic8800::rdif::device::endpoints::startup:98] [wifi] AIC owner startup waiting 1ms for SDIO1 reset settle
+[ 10.982860 0:4294967307 aic8800::rdif::device::endpoints::startup:157] [wifi] AIC owner reset settle complete; starting SDIO card enumeration
+[ 10.982931 0:4294967307 aic8800::rdif::owner::progress:121] [wifi] SDIO completion IRQ enabled; submitting IO-card initialization
+[ 11.025505 0:4294967307 aic8800::rdif::owner::progress:422] [wifi] detected supported AIC SDIO variant Aic8800D80
+[ 12.637163 0:4294967296 ax_net::queue_runtime:827] [wifi] secure startup connection entropy prepared
+[ 12.637925 0:4294967307 aic8800::device::mailbox:278] [wifi] stale station association cleared before connect
+[ 13.580005 0:4294967307 aic8800::device::data_plane:317] [wifi] association complete; learned firmware vif=0 station=0
+[ 13.600177 0:4294967307 aic8800::device::control:171] [wifi] WPA2 EAPOL frame consumed by handshake state machine
+[ 13.600581 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1 dt=2575ms period_avg=0us period_max=0us | credit n=1 min=127 max=127 avgx10=1270 backoff=0 backoff_avg=0us | c52 n=1 avg=58us | c53 n=1 avg=108us max=108us full n=0 avg=0us | small n=1 avg=108us | cache fresh n=1 avg=108us | hit n=0 avg=0us | gap ready n=0 avg=0us max=0us | idle n=0 avg=0us max=0us | txq backlog=0/0 | steps=84172 per_pkt=84172.0
+[ 13.605741 0:4294967307 aic8800::device::control:171] [wifi] WPA2 EAPOL frame consumed by handshake state machine
+[ 13.609262 0:4294967307 aic8800::device::mailbox:305] [wifi] WPA2 keys installed and control port enabled
+[ 13.609302 0:4294967307 aic8800::rdif::owner::output:228] [wifi] control result queued for network runtime
+[ 13.609442 0:4294967307 aic8800::rdif::device::endpoints::control:95] [wifi] control result consumed by network runtime
+[ 13.609738 0:4294967296 ax_net:386] Initialize network subsystem...
+[ 13.610751 0:4294967296 ax_net:408]   use NIC 0: "wlan0"
+[ 13.611647 0:4294967296 ax_net:443]   Wi-Fi control for wlan0 is owned by CPU 0
+[ 13.611679 0:4294967296 ax_net:455] wlan0:
+[ 13.611696 0:4294967296 ax_net:456]   id:   2
+[ 13.611711 0:4294967296 ax_net:457]   mac:  38-7a-cc-9b-2c-c8
+[ 13.611737 0:4294967296 ax_net:474]   mode: dhcp
+[ 13.611760 0:4294967296 ax_net:523] Device: lo
+[ 13.611782 0:4294967296 ax_net:523] Device: wlan0
+[ 13.611813 0:4294967296 ax_net::service:554] wlan0: DHCP enabled
+[ 14.696568 0:4294967308 ax_net::service:436] wlan0: DHCP offered address 192.168.137.166 from 192.168.137.1
+[ 14.709195 0:4294967308 ax_net::service:868] wlan0: DHCP acquired address 192.168.137.166/24
+
+[ 14.709274 0:4294967308 ax_net::service:870] wlan0: DHCP router 192.168.137.1
+[ 14.709411 0:4294967308 ax_net::device::ethernet:338] wlan0: requesting ARP for 192.168.137.1
+[ 14.709578 0:4294967296 ax_net:684] Initialize vsock subsystem...
+[ 14.709606 0:4294967296 ax_net:686]   No vsock device found!
+[ 14.709627 0:4294967296 ax_runtime::bootstrap:236] Primary CPU 0 init OK.
+[ 14.710367 0:4294967296 ax_fs_ng::block::runtime::lifecycle::device:431] block device cvsd online with 1 hctxs across 1 CPUs
+[ 14.712629 0:4294967308 ax_net::device::ethernet:409] wlan0: ARP 192.168.137.1 -> 66-d6-9a-fb-71-56
+[ 14.712727 0:4294967308 ax_net::device::ethernet:479] wlan0: sending pending IPv4 packet to 192.168.137.1 via 66-d6-9a-fb-71-56
+[ 14.713455 0:4294967296 ax_tracepoint:327] tracepoint_data_start: 0xffffffff80731c60, tracepoint_data_end: 0xffffffff80731d08
+[ 14.713504 0:4294967296 ax_tracepoint:370] tracepoint_data_len: 7
+[ 14.713528 0:4294967296 ax_tracepoint:389] tracepoint registered: sched:sched_process_exit
+[ 14.713550 0:4294967296 ax_tracepoint:389] tracepoint registered: sched:sched_process_fork
+[ 14.713596 0:4294967296 ax_tracepoint:389] tracepoint registered: sched:sched_switch
+[ 14.713620 0:4294967296 ax_tracepoint:389] tracepoint registered: syscalls:sys_clone
+[ 14.713640 0:4294967296 ax_tracepoint:389] tracepoint registered: raw_syscalls:sys_enter
+[ 14.713660 0:4294967296 ax_tracepoint:389] tracepoint registered: syscalls:sys_enter_openat
+[ 14.713680 0:4294967296 ax_tracepoint:389] tracepoint registered: syscalls:sys_mkdirat
+Initialized 7 tracepoints
+Welcome to Starry OS!
+kmod subsystem initialized
+STARRY_LEGACY_BOARD_INIT
+[ 14.718847 0:4294967296 starry_kernel::pseudofs:88] Initialize pseudofs...
+[ 14.720799 0:4294967296 starry_kernel::pseudofs::dev::tty::serial:238] ttyS0 registered: path=/serial@04140000, alias=Some(0), paddr=0x4140000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [44, 4] })))
+USER=root
+[ 14.722446 0:4294967296 starry_kernel::pseudofs::dev::tty::serial:238] ttyS1 registered: path=/serial@04150000, alias=Some(1), paddr=0x4150000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [45, 4] })))
+HOSTNAME=starry
+[ 14.724248 0:4294967296 starry_kernel::pseudofs::dev::tty::serial:238] ttyS2 registered: path=/serial@04160000, alias=Some(2), paddr=0x4160000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [46, 4] })))
+SHLVL=1
+[ 14.726015 0:4294967296 starry_kernel::pseudofs::dev::tty::serial:238] ttyS3 registered: path=/serial@04170000, alias=Some(3), paddr=0x4170000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [47, 4] })))
+HOME=/root
+[ 14.726136 0:4294967296 starry_kernel::pseudofs::dev::tty::serial:182] /dev/console bound to runtime console ttyS0
+TERM=xterm-256color
+[ 14.728199 0:4294967296 sg2002_tpu::tpu::device:181] TPU device initialized
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+[ 14.728283 0:4294967296 starry_kernel::pseudofs::dev::tpu::device:249] [TPU] TDMA IRQ IrqId { domain: IrqDomainId(7), hwirq: HwIrq(76) } registered and enabled
+PWD=/
+[ 14.728312 0:4294967296 starry_kernel::pseudofs::dev::tpu::device:361] [TPU] resource tdma=[0xc100000, +0x1000) tiu=[0xc101000, +0x1000) irq=Some(IrqId { domain: IrqDomainId(7), hwirq: HwIrq(76) }) irq_wait=true source=fdt
+
+[ 14.729919 0:4294967317 starry_kernel::pseudofs::dev::tpu::device:307] [TPU] worker thread started
+[ 14.731901 0:4294967296 starry_kernel::pseudofs:82] Mounted devfs at /dev
+[ 14.731975 0:4294967296 starry_kernel::pseudofs::usbfs:57] usbfs: initializing manager
+[ 14.732030 0:4294967296 starry_kernel::pseudofs::usbfs::manager:1773] usbfs: discovered 0 USB host(s)
+[ 14.732053 0:4294967296 starry_kernel::pseudofs::usbfs:60] usbfs: no USB host found, skip mounting usbfs
+[ 14.732191 0:4294967296 starry_kernel::pseudofs:82] Mounted tmpfs at /dev/shm
+[ 14.732448 0:4294967296 starry_kernel::pseudofs:82] Mounted tmpfs at /tmp
+[ 14.732623 0:4294967296 starry_kernel::pseudofs:82] Mounted mqueue at /dev/mqueue
+[ 14.733008 0:4294967296 starry_kernel::dyn_debug:63] debug_init: initializing dynamic debug sites
+[ 14.734465 0:4294967296 starry_kernel::dyn_debug:66] debug_init: found 218 dynamic debug sites
+[ 14.734515 0:4294967296 starry_kernel::pseudofs::proc:89] Read kallsyms, size: 1083KB
+[ 14.767402 0:4294967296 starry_kernel::pseudofs:82] Mounted proc at /proc
+[ 14.767669 0:4294967296 starry_kernel::pseudofs:82] Mounted sysfs at /sys
+[ 14.768190 0:4294967296 starry_kernel::pseudofs:82] Mounted debug at /sys/kernel/debug
+[ 14.771497 0:4294967296 starry_kernel::task::timer::alarm:75] Initialize alarm...
+[ 14.989174 0:4294967322 starry_kernel::task::user:83] Enter user space: ip=0x6015684e, sp=0x3fffff860
+[ 15.032162 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.067627 0:4294967323 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.068495 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.099846 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.133083 0:8589934619 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.157450 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.211145 0:12884901915 starry_kernel::task::ops:539] Task(12884901915, "busybox") exit with code: 0
+/bin/sh: [ 15.211842 0:12884901915 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+can't access tty; job control turned off[ 15.212798 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+
+[ 15.230035 0:17179869211 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffef80
+root@starry:~# [ 15.242219 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+
+[ 15.278642 0:17179869211 starry_kernel::task::ops:539] Task(17179869211, "busybox") exit with code: 0
+root@starry:~# [ 15.279243 0:17179869211 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.279756 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.298403 0:21474836507 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffedc0
+[ 15.311984 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.347800 0:21474836507 starry_kernel::task::ops:539] Task(21474836507, "busybox") exit with code: 0
+[ 15.348411 0:21474836507 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.349011 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.366498 0:25769803803 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffedc0
+[ 15.381971 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.417321 0:25769803803 starry_kernel::task::ops:539] Task(25769803803, "busybox") exit with code: 0
+[ 15.418011 0:25769803803 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.418574 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.436820 0:30064771099 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 15.452013 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.486889 0:30064771099 starry_kernel::task::ops:539] Task(30064771099, "busybox") exit with code: 0
+[ 15.487607 0:30064771099 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.488118 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.506919 0:34359738395 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 15.531975 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.555642 0:34359738395 starry_kernel::task::ops:539] Task(34359738395, "busybox") exit with code: 0
+[ 15.556252 0:34359738395 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.556818 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.575688 0:38654705691 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 15.602009 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.625511 0:38654705691 starry_kernel::task::ops:539] Task(38654705691, "busybox") exit with code: 0
+[ 15.626226 0:38654705691 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.626738 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.645703 0:42949672987 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 15.671977 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.694482 0:42949672987 starry_kernel::task::ops:539] Task(42949672987, "busybox") exit with code: 0
+[ 15.695107 0:42949672987 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.695617 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.714592 0:47244640283 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 15.741988 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.765127 0:47244640283 starry_kernel::task::ops:539] Task(47244640283, "busybox") exit with code: 0
+[ 15.765724 0:47244640283 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.766295 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.784985 0:51539607579 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 15.812000 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.833377 0:51539607579 starry_kernel::task::ops:539] Task(51539607579, "busybox") exit with code: 0
+[ 15.834440 0:51539607579 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.834934 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.854128 0:55834574875 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 15.881981 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.902783 0:55834574875 starry_kernel::task::ops:539] Task(55834574875, "busybox") exit with code: 0
+[ 15.903639 0:55834574875 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.905033 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 15.923953 0:60129542171 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffeba0
+[ 15.928848 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 15.976393 0:60129542171 starry_kernel::task::ops:539] Task(60129542171, "busybox") exit with code: 0
+[ 15.976992 0:60129542171 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 15.977567 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 16.002209 0:64424509467 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3ffffef80
+[ 16.004578 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.043837 0:64424509467 starry_kernel::task::ops:539] Task(64424509467, "busybox") exit with code: 0
+[ 16.044422 0:64424509467 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+[ 16.045380 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+
+root@starry:~# 
+root@starry:~# 
+root@starry:~# ip addr
+[ 23.246255 0:68719476763 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+[ 23.248377 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+[ 23.300170 0:68719476763 starry_kernel::task::ops:539] Task(68719476763, "busybox") exit with code: 0
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+[ 23.300795 0:68719476763 starry_kernel::task::signal:763] Send signal SIGCHLD to process 1
+    inet 127.0.0.1/8 scope host dynamic lo
+[ 23.301466 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+2: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP qlen 1000
+    link/ether 38:7a:cc:9b:2c:c8 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.137.166/24 brd 192.168.137.255 scope global dynamic wlan0
+root@starry:~# 
+root@starry:~# 
+root@starry:~# ipercf3 -s 1
+[ 32.974089 0:73014444059 starry_kernel::task::user:83] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+[ 32.976385 0:4294967322 starry_kernel::syscall::task::wait:380] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+[ 43.711925 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=6 dt=30111ms period_avg=185430us period_max=1006825us | credit n=2 min=127 max=127 avgx10=1270 backoff=0 backoff_avg=0us | c52 n=2 avg=69us | c53 n=6 avg=119us max=136us full n=0 avg=0us | small n=6 avg=119us | cache fresh n=2 avg=103us | hit n=4 avg=127us | gap ready n=0 avg=0us max=0us | idle n=6 avg=185310us max=1006720us | txq backlog=0/5 | steps=665 per_pkt=110.8
+Accepted connection from 192.168.137.1, port 63547
+[  5] local 192.168.137.166 port 5201 connected to 192.168.137.1 port 63548
+[ 44.032048 0:4294967324 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  2.62 MBytes  22.0 Mbits/sec                  
+[ 45.711943 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=428 dt=2000ms period_avg=72377us period_max=29002558us | credit n=3 min=115 max=127 avgx10=1213 backoff=0 backoff_avg=0us | c52 n=3 avg=49us | c53 n=428 avg=126us max=1417us full n=0 avg=0us | small n=428 avg=126us | cache fresh n=3 avg=123us | hit n=425 avg=126us | gap ready n=358 avg=900us max=33636us | idle n=70 avg=437158us max=29002420us | txq backlog=366/437 | steps=6829 per_pkt=15.9
+[  5]   1.00-2.00   sec  3.00 MBytes  25.2 Mbits/sec                  
+[  5]   2.00-3.00   sec  3.50 MBytes  29.4 Mbits/sec                  
+[ 47.712313 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=614 dt=2000ms period_avg=3279us period_max=48372us | credit n=5 min=112 max=127 avgx10=1198 backoff=0 backoff_avg=0us | c52 n=5 avg=54us | c53 n=614 avg=147us max=1885us full n=0 avg=0us | small n=614 avg=147us | cache fresh n=5 avg=116us | hit n=609 avg=147us | gap ready n=534 avg=1103us max=34686us | idle n=80 avg=16680us max=48245us | txq backlog=533/612 | steps=9715 per_pkt=15.8
+[  5]   3.00-4.00   sec  3.50 MBytes  29.4 Mbits/sec                  
+[  5]   4.00-5.00   sec  3.62 MBytes  30.4 Mbits/sec                  
+[ 49.712612 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=615 dt=2000ms period_avg=3246us period_max=58420us | credit n=5 min=109 max=127 avgx10=1220 backoff=0 backoff_avg=0us | c52 n=5 avg=48us | c53 n=615 avg=125us max=1458us full n=0 avg=0us | small n=615 avg=125us | cache fresh n=5 avg=108us | hit n=610 avg=125us | gap ready n=530 avg=861us max=31834us | idle n=85 avg=17215us max=58292us | txq backlog=523/608 | steps=9752 per_pkt=15.8
+[  5]   5.00-6.00   sec  3.50 MBytes  29.4 Mbits/sec                  
+[  5]   6.00-7.00   sec  3.12 MBytes  26.2 Mbits/sec                  
+[ 51.730767 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=708 dt=2018ms period_avg=2840us period_max=63656us | credit n=6 min=114 max=130 avgx10=1245 backoff=0 backoff_avg=0us | c52 n=6 avg=58us | c53 n=708 avg=137us max=1757us full n=0 avg=0us | small n=708 avg=137us | cache fresh n=6 avg=109us | hit n=702 avg=137us | gap ready n=580 avg=872us max=24658us | idle n=128 avg=10998us max=63522us | txq backlog=580/708 | steps=9529 per_pkt=13.4
+[  5]   7.00-8.00   sec  3.12 MBytes  26.2 Mbits/sec                  
+[  5]   8.00-9.00   sec  2.38 MBytes  19.9 Mbits/sec                  
+[ 53.730781 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=732 dt=2000ms period_avg=2747us period_max=43963us | credit n=6 min=118 max=129 avgx10=1250 backoff=0 backoff_avg=0us | c52 n=6 avg=52us | c53 n=732 avg=145us max=1950us full n=0 avg=0us | small n=732 avg=145us | cache fresh n=6 avg=339us | hit n=726 avg=143us | gap ready n=583 avg=642us max=12415us | idle n=149 avg=10274us max=43839us | txq backlog=583/732 | steps=8618 per_pkt=11.7
+[  5]   9.00-10.00  sec  1.88 MBytes  15.7 Mbits/sec                  
+[  5]  10.00-11.00  sec  2.25 MBytes  18.9 Mbits/sec                  
+[ 55.730993 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=704 dt=2000ms period_avg=2815us period_max=51790us | credit n=6 min=122 max=130 avgx10=1266 backoff=0 backoff_avg=0us | c52 n=6 avg=54us | c53 n=704 avg=149us max=2182us full n=0 avg=0us | small n=704 avg=149us | cache fresh n=6 avg=104us | hit n=698 avg=150us | gap ready n=556 avg=839us max=11770us | idle n=148 avg=9528us max=51618us | txq backlog=557/706 | steps=8528 per_pkt=12.1
+[  5]  11.00-12.00  sec  2.88 MBytes  24.1 Mbits/sec                  
+[  5]  12.00-13.00  sec  3.25 MBytes  27.3 Mbits/sec                  
+[ 57.731611 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=636 dt=2000ms period_avg=3182us period_max=39882us | credit n=5 min=121 max=131 avgx10=1256 backoff=0 backoff_avg=0us | c52 n=5 avg=54us | c53 n=636 avg=153us max=2185us full n=0 avg=0us | small n=636 avg=153us | cache fresh n=5 avg=322us | hit n=631 avg=151us | gap ready n=536 avg=678us max=18665us | idle n=100 avg=15627us max=39760us | txq backlog=544/643 | steps=8995 per_pkt=14.1
+[  5]  13.00-14.00  sec  3.12 MBytes  26.2 Mbits/sec                  
+[  5]  14.00-15.00  sec  3.25 MBytes  27.3 Mbits/sec                  
+[ 59.732179 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=600 dt=2000ms period_avg=3334us period_max=50475us | credit n=5 min=118 max=130 avgx10=1254 backoff=0 backoff_avg=0us | c52 n=5 avg=49us | c53 n=600 avg=143us max=1691us full n=0 avg=0us | small n=600 avg=143us | cache fresh n=5 avg=112us | hit n=595 avg=143us | gap ready n=519 avg=1019us max=27444us | idle n=82 avg=16893us max=50345us | txq backlog=510/592 | steps=9285 per_pkt=15.4
+[  5]  15.00-16.00  sec  3.62 MBytes  30.4 Mbits/sec                  
+[  5]  16.00-17.00  sec  3.25 MBytes  27.3 Mbits/sec                  
+[ 61.732224 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=608 dt=2000ms period_avg=3287us period_max=85679us | credit n=5 min=98 max=122 avgx10=1144 backoff=0 backoff_avg=0us | c52 n=5 avg=49us | c53 n=608 avg=138us max=2160us full n=0 avg=0us | small n=608 avg=138us | cache fresh n=5 avg=107us | hit n=603 avg=139us | gap ready n=510 avg=959us max=28733us | idle n=97 avg=14689us max=85508us | txq backlog=518/615 | steps=9678 per_pkt=15.9
+[  5]  17.00-18.00  sec  3.25 MBytes  27.3 Mbits/sec                  
+[  5]  18.00-19.00  sec  3.12 MBytes  26.2 Mbits/sec                  
+[ 63.732858 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=664 dt=2000ms period_avg=2959us period_max=60675us | credit n=5 min=127 max=128 avgx10=1276 backoff=0 backoff_avg=0us | c52 n=5 avg=65us | c53 n=664 avg=141us max=1833us full n=0 avg=0us | small n=664 avg=141us | cache fresh n=5 avg=109us | hit n=659 avg=141us | gap ready n=572 avg=805us max=27074us | idle n=92 avg=15332us max=60547us | txq backlog=569/662 | steps=9445 per_pkt=14.2
+[  5]  19.00-20.00  sec  3.12 MBytes  26.2 Mbits/sec                  
+[  5]  20.00-21.00  sec  3.00 MBytes  25.2 Mbits/sec                  
+[ 65.733097 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=646 dt=2000ms period_avg=3121us period_max=80609us | credit n=6 min=125 max=132 avgx10=1281 backoff=0 backoff_avg=0us | c52 n=6 avg=60us | c53 n=646 avg=140us max=1715us full n=0 avg=0us | small n=646 avg=140us | cache fresh n=6 avg=119us | hit n=640 avg=140us | gap ready n=549 avg=761us max=15692us | idle n=97 avg=15545us max=80486us | txq backlog=545/642 | steps=8230 per_pkt=12.7
+[  5]  21.00-22.00  sec  2.12 MBytes  17.8 Mbits/sec                  
+[  5]  22.00-23.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[ 67.733860 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=497 dt=2000ms period_avg=4032us period_max=112329us | credit n=4 min=122 max=131 avgx10=1260 backoff=0 backoff_avg=0us | c52 n=4 avg=56us | c53 n=497 avg=134us max=1949us full n=0 avg=0us | small n=497 avg=134us | cache fresh n=4 avg=123us | hit n=493 avg=134us | gap ready n=417 avg=1100us max=26360us | idle n=80 avg=18477us max=112206us | txq backlog=417/497 | steps=7499 per_pkt=15.0
+[  5]  23.00-24.00  sec  3.00 MBytes  25.2 Mbits/sec                  
+[  5]  24.00-25.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[ 69.734047 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=484 dt=2000ms period_avg=4155us period_max=229388us | credit n=3 min=130 max=131 avgx10=1303 backoff=0 backoff_avg=0us | c52 n=3 avg=58us | c53 n=484 avg=134us max=1473us full n=0 avg=0us | small n=484 avg=134us | cache fresh n=3 avg=107us | hit n=481 avg=134us | gap ready n=398 avg=1033us max=24862us | idle n=86 avg=17844us max=229259us | txq backlog=405/490 | steps=7351 per_pkt=15.1
+[  5]  25.00-26.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+[  5]  26.00-27.00  sec  2.12 MBytes  17.8 Mbits/sec                  
+[ 71.734186 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=422 dt=2000ms period_avg=4695us period_max=230927us | credit n=4 min=122 max=132 avgx10=1275 backoff=0 backoff_avg=0us | c52 n=4 avg=58us | c53 n=422 avg=149us max=1813us full n=0 avg=0us | small n=422 avg=149us | cache fresh n=4 avg=111us | hit n=418 avg=149us | gap ready n=358 avg=979us max=28606us | idle n=64 avg=24497us max=230799us | txq backlog=359/424 | steps=6687 per_pkt=15.8
+[  5]  27.00-28.00  sec  2.88 MBytes  24.0 Mbits/sec                  
+[  5]  28.00-28.96  sec  3.00 MBytes  26.3 Mbits/sec                  
+[ 72.995265 0:4294967324 starry_kernel::task::ops:539] Task(4294967324, "iperf3") exit with code: 0
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-28.96  sec  84.9 MBytes  24.6 Mbits/sec                  receiver
+-----------------------------------------------------------
+Server listening on 5201 (test #2)
+-----------------------------------------------------------
+[ 73.796796 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=375 dt=2062ms period_avg=3837us period_max=107615us | credit n=3 min=115 max=128 avgx10=1226 backoff=0 backoff_avg=0us | c52 n=3 avg=53us | c53 n=375 avg=141us max=1913us full n=0 avg=0us | small n=375 avg=141us | cache fresh n=3 avg=105us | hit n=372 avg=142us | gap ready n=317 avg=937us max=27769us | idle n=58 avg=18771us max=107490us | txq backlog=308/365 | steps=5738 per_pkt=15.3
+[ 78.076568 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1 dt=4279ms period_avg=4928863us period_max=4928863us | credit n=0 min=0 max=0 avgx10=0 backoff=0 backoff_avg=0us | c52 n=0 avg=0us | c53 n=1 avg=133us max=133us full n=0 avg=0us | small n=1 avg=133us | cache fresh n=0 avg=0us | hit n=1 avg=133us | gap ready n=0 avg=0us max=0us | idle n=1 avg=4928730us max=4928730us | txq backlog=0/1 | steps=94 per_pkt=94.0
+[ 80.145932 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=2 dt=2069ms period_avg=916509us period_max=1525244us | credit n=0 min=0 max=0 avgx10=0 backoff=0 backoff_avg=0us | c52 n=0 avg=0us | c53 n=2 avg=127us max=128us full n=0 avg=0us | small n=2 avg=127us | cache fresh n=0 avg=0us | hit n=2 avg=127us | gap ready n=0 avg=0us max=0us | idle n=2 avg=916382us max=1525118us | txq backlog=0/2 | steps=85 per_pkt=42.5
+[ 82.706379 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1 dt=2560ms period_avg=1250389us period_max=1250389us | credit n=0 min=0 max=0 avgx10=0 backoff=0 backoff_avg=0us | c52 n=0 avg=0us | c53 n=1 avg=127us max=127us full n=0 avg=0us | small n=1 avg=127us | cache fresh n=0 avg=0us | hit n=1 avg=127us | gap ready n=0 avg=0us max=0us | idle n=1 avg=1250262us max=1250262us | txq backlog=0/1 | steps=65 per_pkt=65.0
+Accepted connection from 192.168.137.1, port 52807
+[  5] local 192.168.137.166 port 5201 connected to 192.168.137.1 port 52808
+[ 83.112645 0:8589934620 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes       
+[ 84.706642 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=877 dt=2000ms period_avg=4043us period_max=1871016us | credit n=8 min=90 max=127 avgx10=1021 backoff=0 backoff_avg=0us | c52 n=8 avg=93us | c53 n=877 avg=614us max=2443us full n=869 avg=619us | small n=8 avg=150us | cache fresh n=8 avg=468us | hit n=869 avg=616us | gap ready n=500 avg=346us max=10172us | idle n=378 avg=7496us max=1870866us | txq backlog=506/884 | steps=4904 per_pkt=5.5
+[  5]   1.00-2.00   sec  1.00 MBytes  8.39 Mbits/sec    0   0.00 Bytes       
+[  5]   2.00-3.00   sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       
+[ 86.708433 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=479 dt=2001ms period_avg=4095us period_max=98150us | credit n=5 min=74 max=132 avgx10=1046 backoff=0 backoff_avg=0us | c52 n=5 avg=80us | c53 n=479 avg=673us max=1935us full n=479 avg=673us | small n=0 avg=0us | cache fresh n=5 avg=606us | hit n=474 avg=673us | gap ready n=157 avg=540us max=12129us | idle n=321 avg=4842us max=97631us | txq backlog=151/472 | steps=2955 per_pkt=6.1
+[  5]   3.00-4.01   sec   384 KBytes  3.11 Mbits/sec    0   0.00 Bytes       
+[  5]   4.01-5.00   sec   640 KBytes  5.30 Mbits/sec    0   0.00 Bytes       
+[ 88.722228 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=748 dt=2013ms period_avg=2676us period_max=57883us | credit n=8 min=69 max=113 avgx10=936 backoff=0 backoff_avg=0us | c52 n=8 avg=118us | c53 n=748 avg=662us max=2251us full n=748 avg=662us | small n=0 avg=0us | cache fresh n=8 avg=554us | hit n=740 avg=663us | gap ready n=233 avg=416us max=7914us | idle n=515 avg=2737us max=57067us | txq backlog=233/748 | steps=4419 per_pkt=5.9
+[  5]   5.00-6.00   sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       
+[  5]   6.00-7.00   sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes       
+[ 90.722603 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=512 dt=2000ms period_avg=4006us period_max=80926us | credit n=5 min=68 max=129 avgx10=1150 backoff=0 backoff_avg=0us | c52 n=5 avg=77us | c53 n=512 avg=672us max=2481us full n=511 avg=673us | small n=1 avg=126us | cache fresh n=5 avg=645us | hit n=507 avg=672us | gap ready n=146 avg=457us max=9631us | idle n=367 avg=4472us max=80116us | txq backlog=146/513 | steps=3155 per_pkt=6.1
+[  5]   7.00-8.00   sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       
+[  5]   8.00-9.00   sec   384 KBytes  3.15 Mbits/sec    0   0.00 Bytes       
+[ 92.722727 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=590 dt=2000ms period_avg=3391us period_max=77100us | credit n=6 min=51 max=129 avgx10=1050 backoff=0 backoff_avg=0us | c52 n=6 avg=128us | c53 n=590 avg=676us max=2025us full n=590 avg=676us | small n=0 avg=0us | cache fresh n=6 avg=523us | hit n=584 avg=678us | gap ready n=111 avg=436us max=5629us | idle n=479 avg=3240us max=76537us | txq backlog=111/590 | steps=3657 per_pkt=6.1
+[  5]   9.00-10.00  sec   384 KBytes  3.15 Mbits/sec    0   0.00 Bytes       
+[  5]  10.00-11.00  sec   384 KBytes  3.14 Mbits/sec    0   0.00 Bytes       
+[ 94.753667 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=426 dt=2030ms period_avg=4654us period_max=84106us | credit n=4 min=92 max=127 avgx10=1105 backoff=0 backoff_avg=0us | c52 n=4 avg=82us | c53 n=426 avg=677us max=1494us full n=426 avg=677us | small n=0 avg=0us | cache fresh n=4 avg=574us | hit n=422 avg=677us | gap ready n=39 avg=892us max=3150us | idle n=386 avg=4299us max=83700us | txq backlog=39/425 | steps=2672 per_pkt=6.2
+[  5]  11.00-12.00  sec   384 KBytes  3.15 Mbits/sec    0   0.00 Bytes       
+[  5]  12.00-13.00  sec   384 KBytes  3.14 Mbits/sec    0   0.00 Bytes       
+[ 96.753841 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=585 dt=2000ms period_avg=3499us period_max=110131us | credit n=5 min=89 max=127 avgx10=1068 backoff=0 backoff_avg=0us | c52 n=5 avg=75us | c53 n=585 avg=683us max=2068us full n=585 avg=683us | small n=0 avg=0us | cache fresh n=5 avg=654us | hit n=580 avg=683us | gap ready n=214 avg=468us max=10244us | idle n=372 avg=4162us max=109447us | txq backlog=214/586 | steps=3467 per_pkt=5.9
+[  5]  13.00-14.00  sec   384 KBytes  3.15 Mbits/sec    0   0.00 Bytes       
+[  5]  14.00-15.00  sec   384 KBytes  3.14 Mbits/sec    0   0.00 Bytes       
+[ 98.754055 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=644 dt=2000ms period_avg=3105us period_max=73884us | credit n=7 min=79 max=127 avgx10=1038 backoff=0 backoff_avg=0us | c52 n=7 avg=80us | c53 n=644 avg=677us max=2411us full n=643 avg=678us | small n=1 avg=116us | cache fresh n=7 avg=523us | hit n=637 avg=679us | gap ready n=40 avg=900us max=5632us | idle n=604 avg=2530us max=73087us | txq backlog=40/644 | steps=3931 per_pkt=6.1
+[  5]  15.00-16.00  sec   640 KBytes  5.25 Mbits/sec    0   0.00 Bytes       
+[  5]  16.00-17.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[100.799196 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=392 dt=2045ms period_avg=5104us period_max=74139us | credit n=3 min=91 max=127 avgx10=1150 backoff=0 backoff_avg=0us | c52 n=3 avg=87us | c53 n=392 avg=705us max=2331us full n=391 avg=706us | small n=1 avg=122us | cache fresh n=3 avg=424us | hit n=389 avg=707us | gap ready n=31 avg=642us max=2169us | idle n=360 avg=4730us max=73194us | txq backlog=31/391 | steps=2563 per_pkt=6.5
+[  5]  17.00-18.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  5]  18.00-19.00  sec   640 KBytes  5.23 Mbits/sec    0   0.00 Bytes       
+[102.840868 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=839 dt=2041ms period_avg=2435us period_max=83912us | credit n=8 min=89 max=127 avgx10=1046 backoff=0 backoff_avg=0us | c52 n=8 avg=85us | c53 n=839 avg=667us max=2429us full n=839 avg=667us | small n=0 avg=0us | cache fresh n=8 avg=570us | hit n=831 avg=668us | gap ready n=319 avg=458us max=7980us | idle n=520 avg=2571us max=83120us | txq backlog=319/839 | steps=4852 per_pkt=5.7
+[  5]  19.00-20.00  sec   512 KBytes  4.20 Mbits/sec    0   0.00 Bytes       
+[  5]  20.00-21.00  sec   384 KBytes  3.15 Mbits/sec    0   0.00 Bytes       
+[104.840903 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=610 dt=2000ms period_avg=3350us period_max=80106us | credit n=6 min=69 max=130 avgx10=998 backoff=0 backoff_avg=0us | c52 n=6 avg=86us | c53 n=610 avg=668us max=1962us full n=610 avg=668us | small n=0 avg=0us | cache fresh n=6 avg=538us | hit n=604 avg=669us | gap ready n=209 avg=465us max=14952us | idle n=401 avg=3838us max=79326us | txq backlog=209/610 | steps=3760 per_pkt=6.1
+[  5]  21.00-22.00  sec   640 KBytes  5.23 Mbits/sec    0   0.00 Bytes       
+[  5]  22.00-23.00  sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       
+[106.840897 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=296 dt=2000ms period_avg=6546us period_max=86788us | credit n=3 min=118 max=128 avgx10=1243 backoff=0 backoff_avg=0us | c52 n=3 avg=75us | c53 n=296 avg=710us max=2044us full n=296 avg=710us | small n=0 avg=0us | cache fresh n=3 avg=708us | hit n=293 avg=710us | gap ready n=14 avg=1055us max=2800us | idle n=282 avg=6073us max=86011us | txq backlog=14/296 | steps=1986 per_pkt=6.7
+[  5]  23.00-24.00  sec   128 KBytes  1.04 Mbits/sec    0   0.00 Bytes       
+[  5]  24.00-25.00  sec   512 KBytes  4.21 Mbits/sec    0   0.00 Bytes       
+[108.842823 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=620 dt=2001ms period_avg=3244us period_max=81638us | credit n=5 min=92 max=127 avgx10=1158 backoff=0 backoff_avg=0us | c52 n=5 avg=79us | c53 n=620 avg=690us max=2162us full n=620 avg=690us | small n=0 avg=0us | cache fresh n=5 avg=815us | hit n=615 avg=689us | gap ready n=151 avg=528us max=9637us | idle n=469 avg=3206us max=81041us | txq backlog=151/620 | steps=3855 per_pkt=6.2
+[  5]  25.00-26.00  sec   384 KBytes  3.14 Mbits/sec    0   0.00 Bytes       
+[  5]  26.00-27.00  sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       
+[110.844772 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=403 dt=2001ms period_avg=5077us period_max=89547us | credit n=4 min=98 max=127 avgx10=1197 backoff=0 backoff_avg=0us | c52 n=4 avg=74us | c53 n=403 avg=689us max=2236us full n=403 avg=689us | small n=0 avg=0us | cache fresh n=4 avg=680us | hit n=399 avg=689us | gap ready n=26 avg=845us max=2783us | idle n=377 avg=4632us max=88953us | txq backlog=26/403 | steps=2580 per_pkt=6.4
+[  5]  27.00-28.00  sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       
+[  5]  28.00-29.00  sec   896 KBytes  7.31 Mbits/sec    0   0.00 Bytes       
+[  5]  29.00-29.46  sec   256 KBytes  4.63 Mbits/sec    0   0.00 Bytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-29.46  sec  12.5 MBytes  3.56 Mbits/sec    0            sender
+[112.587369 0:8589934620 starry_kernel::task::ops:539] Task(8589934620, "iperf3") exit with code: 0
+[112.844872 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=894 dt=2000ms period_avg=2244us period_max=70013us | credit n=9 min=46 max=129 avgx10=1006 backoff=0 backoff_avg=0us | c52 n=9 avg=75us | c53 n=894 avg=663us max=2955us full n=894 avg=663us | small n=0 avg=0us | cache fresh n=9 avg=827us | hit n=885 avg=661us | gap ready n=261 avg=557us max=10240us | idle n=634 avg=2003us max=69528us | txq backlog=261/895 | steps=5179 per_pkt=5.7
+-----------------------------------------------------------
+Server listening on 5201 (test #3)
+-----------------------------------------------------------
+[129.006097 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=157 dt=16161ms period_avg=7381us period_max=746177us | credit n=1 min=127 max=127 avgx10=1270 backoff=0 backoff_avg=0us | c52 n=1 avg=77us | c53 n=157 avg=486us max=1605us full n=149 avg=506us | small n=8 avg=125us | cache fresh n=1 avg=388us | hit n=156 avg=487us | gap ready n=8 avg=411us max=1168us | idle n=148 avg=7280us max=746033us | txq backlog=8/156 | steps=1148 per_pkt=7.3
+[135.878805 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1 dt=6872ms period_avg=15005115us period_max=15005115us | credit n=0 min=0 max=0 avgx10=0 backoff=0 backoff_avg=0us | c52 n=0 avg=0us | c53 n=1 avg=131us max=131us full n=0 avg=0us | small n=1 avg=131us | cache fresh n=0 avg=0us | hit n=1 avg=131us | gap ready n=0 avg=0us max=0us | idle n=1 avg=15004983us max=15004983us | txq backlog=0/1 | steps=13 per_pkt=13.0
+[135.881955 0:4294967308 ax_net::orphan:156] Reaped expired orphan socket #2
+Accepted connection from 192.168.137.1, port 59615
+[  5] local 192.168.137.166 port 5201 connected to 192.168.137.1 port 59616
+[  8] local 192.168.137.166 port 5201 connected to 192.168.137.1 port 59617
+[135.995094 0:12884901916 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x448af0
+[135.998983 0:4294967325 starry_kernel::task::user:83] Enter user space: ip=0x601524d0, sp=0x46baf0
+[ ID][Role] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5][RX-S]   0.00-1.00   sec   512 KBytes  4.18 Mbits/sec                  
+[  8][TX-S]   0.00-1.00   sec  1.25 MBytes  10.4 Mbits/sec    0   0.00 Bytes       
+[137.878822 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1664 dt=2000ms period_avg=5328us period_max=6875507us | credit n=17 min=79 max=129 avgx10=998 backoff=0 backoff_avg=0us | c52 n=17 avg=78us | c53 n=1664 avg=590us max=3406us full n=1479 avg=648us | small n=185 avg=130us | cache fresh n=17 avg=586us | hit n=1647 avg=590us | gap ready n=1581 avg=466us max=24611us | idle n=83 avg=86104us max=6875369us | txq backlog=1605/1688 | steps=9404 per_pkt=5.6
+[  5][RX-S]   1.00-2.00   sec   640 KBytes  5.25 Mbits/sec                  
+[  8][TX-S]   1.00-2.00   sec  1.00 MBytes  8.41 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]   2.00-3.00   sec   640 KBytes  5.25 Mbits/sec                  
+[  8][TX-S]   2.00-3.00   sec  1.12 MBytes  9.42 Mbits/sec    0   0.00 Bytes       
+[139.879142 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1574 dt=2000ms period_avg=1272us period_max=32429us | credit n=16 min=80 max=131 avgx10=986 backoff=0 backoff_avg=0us | c52 n=16 avg=80us | c53 n=1574 avg=668us max=3503us full n=1487 avg=698us | small n=87 avg=148us | cache fresh n=16 avg=610us | hit n=1558 avg=668us | gap ready n=1574 avg=604us max=31592us | idle n=0 avg=0us max=0us | txq backlog=1581/1581 | steps=9564 per_pkt=6.0
+[  5][RX-S]   3.00-4.00   sec   768 KBytes  6.28 Mbits/sec                  
+[  8][TX-S]   3.00-4.00   sec  1.00 MBytes  8.39 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]   4.00-5.00   sec   768 KBytes  6.29 Mbits/sec                  
+[  8][TX-S]   4.00-5.00   sec  1.00 MBytes  8.39 Mbits/sec    0   0.00 Bytes       
+[141.879172 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1660 dt=2000ms period_avg=1201us period_max=39030us | credit n=18 min=76 max=127 avgx10=942 backoff=0 backoff_avg=0us | c52 n=18 avg=78us | c53 n=1660 avg=633us max=2698us full n=1408 avg=720us | small n=252 avg=142us | cache fresh n=18 avg=511us | hit n=1642 avg=634us | gap ready n=1658 avg=544us max=23460us | idle n=2 avg=20598us max=38416us | txq backlog=1653/1655 | steps=9604 per_pkt=5.7
+[  5][RX-S]   5.00-6.01   sec   512 KBytes  4.17 Mbits/sec                  
+[  8][TX-S]   5.00-6.01   sec  1.00 MBytes  8.32 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]   6.01-7.00   sec   640 KBytes  5.29 Mbits/sec                  
+[  8][TX-S]   6.01-7.00   sec  1.12 MBytes  9.54 Mbits/sec    0   0.00 Bytes       
+[143.879214 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1628 dt=2000ms period_avg=1232us period_max=17272us | credit n=17 min=82 max=129 avgx10=1019 backoff=0 backoff_avg=0us | c52 n=17 avg=75us | c53 n=1628 avg=665us max=2724us full n=1574 avg=684us | small n=54 avg=127us | cache fresh n=17 avg=594us | hit n=1611 avg=666us | gap ready n=1629 avg=566us max=16439us | idle n=0 avg=0us max=0us | txq backlog=1631/1631 | steps=9605 per_pkt=5.8
+[  5][RX-S]   7.00-8.00   sec   640 KBytes  5.24 Mbits/sec                  
+[  8][TX-S]   7.00-8.00   sec  1.00 MBytes  8.39 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]   8.00-9.00   sec   512 KBytes  4.19 Mbits/sec                  
+[  8][TX-S]   8.00-9.00   sec  1.12 MBytes  9.40 Mbits/sec    0   0.00 Bytes       
+[145.879262 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1723 dt=2000ms period_avg=1161us period_max=24911us | credit n=19 min=76 max=112 avgx10=905 backoff=0 backoff_avg=0us | c52 n=19 avg=111us | c53 n=1723 avg=637us max=3062us full n=1599 avg=675us | small n=124 avg=151us | cache fresh n=19 avg=486us | hit n=1704 avg=639us | gap ready n=1722 avg=523us max=24151us | idle n=0 avg=0us max=0us | txq backlog=1723/1723 | steps=9823 per_pkt=5.7
+[  5][RX-S]   9.00-10.00  sec   512 KBytes  4.19 Mbits/sec                  
+[  8][TX-S]   9.00-10.00  sec  1.12 MBytes  9.46 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]  10.00-11.00  sec   384 KBytes  3.15 Mbits/sec                  
+[  8][TX-S]  10.00-11.00  sec  1.12 MBytes  9.45 Mbits/sec    0   0.00 Bytes       
+[147.879844 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1655 dt=2000ms period_avg=1208us period_max=18326us | credit n=16 min=75 max=132 avgx10=1025 backoff=0 backoff_avg=0us | c52 n=16 avg=81us | c53 n=1655 avg=673us max=2369us full n=1594 avg=694us | small n=61 avg=130us | cache fresh n=16 avg=636us | hit n=1639 avg=674us | gap ready n=1656 avg=534us max=17640us | idle n=0 avg=0us max=0us | txq backlog=1645/1645 | steps=9661 per_pkt=5.8
+[  5][RX-S]  11.00-12.00  sec   384 KBytes  3.14 Mbits/sec                  
+[  8][TX-S]  11.00-12.01  sec  1.12 MBytes  9.35 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]  12.00-13.00  sec   384 KBytes  3.14 Mbits/sec                  
+[  8][TX-S]  12.01-13.00  sec  1.12 MBytes  9.50 Mbits/sec    0   0.00 Bytes       
+[149.879843 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1682 dt=2000ms period_avg=1188us period_max=23918us | credit n=18 min=76 max=130 avgx10=963 backoff=0 backoff_avg=0us | c52 n=18 avg=136us | c53 n=1682 avg=664us max=2481us full n=1633 avg=680us | small n=49 avg=137us | cache fresh n=18 avg=489us | hit n=1664 avg=666us | gap ready n=1681 avg=524us max=23444us | idle n=0 avg=0us max=0us | txq backlog=1688/1688 | steps=9921 per_pkt=5.8
+[  5][RX-S]  13.00-14.00  sec   384 KBytes  3.15 Mbits/sec                  
+[  8][TX-S]  13.00-14.00  sec  1.12 MBytes  9.45 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]  14.00-15.00  sec   384 KBytes  3.15 Mbits/sec                  
+[  8][TX-S]  14.00-15.00  sec  1.00 MBytes  8.37 Mbits/sec    0   0.00 Bytes       
+[151.880176 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1693 dt=2000ms period_avg=1182us period_max=27187us | credit n=18 min=70 max=132 avgx10=946 backoff=0 backoff_avg=0us | c52 n=18 avg=77us | c53 n=1693 avg=665us max=4003us full n=1597 avg=696us | small n=96 avg=135us | cache fresh n=18 avg=542us | hit n=1675 avg=666us | gap ready n=1693 avg=502us max=25544us | idle n=1 avg=25623us max=25623us | txq backlog=1694/1695 | steps=9441 per_pkt=5.5
+[  5][RX-S]  15.00-16.00  sec   384 KBytes  3.14 Mbits/sec                  
+[  8][TX-S]  15.00-16.00  sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]  16.00-17.00  sec   384 KBytes  3.14 Mbits/sec                  
+[  8][TX-S]  16.00-17.00  sec  1.12 MBytes  9.42 Mbits/sec    0   0.00 Bytes       
+[153.880257 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1667 dt=2000ms period_avg=1199us period_max=20140us | credit n=19 min=79 max=127 avgx10=910 backoff=0 backoff_avg=0us | c52 n=19 avg=92us | c53 n=1667 avg=662us max=3042us full n=1606 avg=683us | small n=61 avg=129us | cache fresh n=19 avg=608us | hit n=1648 avg=663us | gap ready n=1666 avg=536us max=19285us | idle n=0 avg=0us max=0us | txq backlog=1661/1661 | steps=9710 per_pkt=5.8
+[  5][RX-S]  17.00-18.00  sec   512 KBytes  4.20 Mbits/sec                  
+[  8][TX-S]  17.00-18.00  sec  1.12 MBytes  9.43 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]  18.00-19.00  sec   512 KBytes  4.20 Mbits/sec                  
+[  8][TX-S]  18.00-19.00  sec  1.00 MBytes  8.41 Mbits/sec    0   0.00 Bytes       
+[155.880591 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1616 dt=2000ms period_avg=1238us period_max=32421us | credit n=17 min=78 max=129 avgx10=948 backoff=0 backoff_avg=0us | c52 n=17 avg=84us | c53 n=1616 avg=682us max=3318us full n=1555 avg=704us | small n=61 avg=134us | cache fresh n=17 avg=680us | hit n=1599 avg=682us | gap ready n=1617 avg=555us max=31556us | idle n=0 avg=0us max=0us | txq backlog=1623/1623 | steps=9595 per_pkt=5.9
+[  5][RX-S]  19.00-20.00  sec   512 KBytes  4.19 Mbits/sec                  
+[  8][TX-S]  19.00-20.00  sec  1.12 MBytes  9.43 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]  20.00-21.00  sec   768 KBytes  6.28 Mbits/sec                  
+[  8][TX-S]  20.00-21.01  sec  1.00 MBytes  8.35 Mbits/sec    0   0.00 Bytes       
+[157.881386 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1559 dt=2000ms period_avg=1282us period_max=31654us | credit n=16 min=79 max=131 avgx10=1038 backoff=0 backoff_avg=0us | c52 n=16 avg=76us | c53 n=1559 avg=668us max=4209us full n=1488 avg=693us | small n=71 avg=133us | cache fresh n=16 avg=688us | hit n=1543 avg=668us | gap ready n=1558 avg=614us max=30793us | idle n=0 avg=0us max=0us | txq backlog=1560/1560 | steps=9867 per_pkt=6.3
+[  5][RX-S]  21.00-22.01  sec   768 KBytes  6.27 Mbits/sec                  
+[  8][TX-S]  21.01-22.01  sec  1.00 MBytes  8.38 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]  22.01-23.00  sec   640 KBytes  5.27 Mbits/sec                  
+[  8][TX-S]  22.01-23.00  sec  1.00 MBytes  8.44 Mbits/sec    0   0.00 Bytes       
+[159.881850 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1673 dt=2000ms period_avg=1195us period_max=39136us | credit n=17 min=63 max=132 avgx10=1012 backoff=0 backoff_avg=0us | c52 n=17 avg=74us | c53 n=1673 avg=637us max=3485us full n=1457 avg=715us | small n=216 avg=116us | cache fresh n=17 avg=614us | hit n=1656 avg=638us | gap ready n=1635 avg=543us max=26570us | idle n=39 avg=1162us max=38324us | txq backlog=1629/1668 | steps=9653 per_pkt=5.7
+[  5][RX-S]  23.00-24.00  sec   512 KBytes  4.19 Mbits/sec                  
+[  8][TX-S]  23.00-24.01  sec  1.00 MBytes  8.34 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]  24.00-25.01  sec   512 KBytes  4.17 Mbits/sec                  
+[  8][TX-S]  24.01-25.01  sec  1.12 MBytes  9.44 Mbits/sec    0   0.00 Bytes       
+[161.882410 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1653 dt=2000ms period_avg=1210us period_max=22351us | credit n=18 min=74 max=129 avgx10=918 backoff=0 backoff_avg=0us | c52 n=18 avg=75us | c53 n=1653 avg=653us max=2897us full n=1554 avg=685us | small n=99 avg=155us | cache fresh n=18 avg=511us | hit n=1635 avg=655us | gap ready n=1653 avg=555us max=21519us | idle n=0 avg=0us max=0us | txq backlog=1658/1658 | steps=9785 per_pkt=5.9
+[  5][RX-S]  25.01-26.00  sec   512 KBytes  4.22 Mbits/sec                  
+[  8][TX-S]  25.01-26.00  sec  1.12 MBytes  9.48 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]  26.00-27.00  sec   512 KBytes  4.19 Mbits/sec                  
+[  8][TX-S]  26.00-27.00  sec  1.12 MBytes  9.41 Mbits/sec    0   0.00 Bytes       
+[163.882433 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1623 dt=2000ms period_avg=1233us period_max=19143us | credit n=17 min=83 max=128 avgx10=987 backoff=0 backoff_avg=0us | c52 n=17 avg=82us | c53 n=1623 avg=674us max=2284us full n=1546 avg=701us | small n=77 avg=130us | cache fresh n=17 avg=605us | hit n=1606 avg=675us | gap ready n=1622 avg=558us max=18619us | idle n=0 avg=0us max=0us | txq backlog=1621/1621 | steps=9410 per_pkt=5.7
+[  5][RX-S]  27.00-28.00  sec   512 KBytes  4.20 Mbits/sec                  
+[  8][TX-S]  27.00-28.00  sec  1.00 MBytes  8.41 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]  28.00-29.00  sec   640 KBytes  5.23 Mbits/sec                  
+[  8][TX-S]  28.00-29.00  sec  1.12 MBytes  9.42 Mbits/sec    0   0.00 Bytes       
+[  5][RX-S]  29.00-29.49  sec   256 KBytes  4.29 Mbits/sec                  
+[  8][TX-S]  29.00-29.50  sec   512 KBytes  8.50 Mbits/sec    0   0.00 Bytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID][Role] Interval           Transfer     Bitrate         Retr
+[  5][RX-S]   0.00-29.49  sec  15.6 MBytes  4.44 Mbits/sec                  receiver
+[  8][TX-S]   0.00-29.49  sec  31.9 MBytes  9.07 Mbits/sec    0            sender
+[165.531932 0:4294967325 starry_kernel::task::ops:539] Task(4294967325, "iperf3") exit with code: 0
+[165.532500 0:12884901916 starry_kernel::task::ops:539] Task(12884901916, "iperf3") exit with code: 0
+-----------------------------------------------------------
+Server listening on 5201 (test #4)
+-----------------------------------------------------------
+[166.474590 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1532 dt=2592ms period_avg=1221us period_max=49121us | credit n=17 min=68 max=127 avgx10=927 backoff=0 backoff_avg=0us | c52 n=17 avg=73us | c53 n=1532 avg=634us max=2718us full n=1435 avg=668us | small n=97 avg=123us | cache fresh n=17 avg=485us | hit n=1515 avg=635us | gap ready n=1531 avg=555us max=29423us | idle n=1 avg=48992us max=48992us | txq backlog=1504/1505 | steps=9380 per_pkt=6.1
+[170.756069 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1 dt=4281ms period_avg=5002595us period_max=5002595us | credit n=0 min=0 max=0 avgx10=0 backoff=0 backoff_avg=0us | c52 n=0 avg=0us | c53 n=1 avg=136us max=136us full n=0 avg=0us | small n=1 avg=136us | cache fresh n=0 avg=0us | hit n=1 avg=136us | gap ready n=0 avg=0us max=0us | idle n=1 avg=5002458us max=5002458us | txq backlog=0/1 | steps=18 per_pkt=18.0
+[173.823115 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=2 dt=3067ms period_avg=919543us period_max=1527514us | credit n=0 min=0 max=0 avgx10=0 backoff=0 backoff_avg=0us | c52 n=0 avg=0us | c53 n=2 avg=123us max=125us full n=0 avg=0us | small n=2 avg=123us | cache fresh n=0 avg=0us | hit n=2 avg=123us | gap ready n=0 avg=0us max=0us | idle n=2 avg=919419us max=1527388us | txq backlog=0/2 | steps=46 per_pkt=23.0
+[176.280953 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1 dt=2457ms period_avg=1228975us period_max=1228975us | credit n=0 min=0 max=0 avgx10=0 backoff=0 backoff_avg=0us | c52 n=0 avg=0us | c53 n=1 avg=129us max=129us full n=0 avg=0us | small n=1 avg=129us | cache fresh n=0 avg=0us | hit n=1 avg=129us | gap ready n=0 avg=0us max=0us | idle n=1 avg=1228846us max=1228846us | txq backlog=0/1 | steps=13 per_pkt=13.0
+[181.094007 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1 dt=4813ms period_avg=2457927us period_max=2457927us | credit n=0 min=0 max=0 avgx10=0 backoff=0 backoff_avg=0us | c52 n=0 avg=0us | c53 n=1 avg=153us max=153us full n=0 avg=0us | small n=1 avg=153us | cache fresh n=0 avg=0us | hit n=1 avg=153us | gap ready n=0 avg=0us max=0us | idle n=1 avg=2457773us max=2457773us | txq backlog=0/1 | steps=12 per_pkt=12.0
+[186.443823 0:4294967307 aic8800::device::probe:248] [wifi-probe] pkts=1 dt=5349ms period_avg=4812945us period_max=4812945us | credit n=0 min=0 max=0 avgx10=0 backoff=0 backoff_avg=0us | c52 n=0 avg=0us | c53 n=1 avg=129us max=129us full n=0 avg=0us | small n=1 avg=129us | cache fresh n=0 avg=0us | hit n=1 avg=129us | gap ready n=0 avg=0us max=0us | idle n=1 avg=4812815us max=4812815us | txq backlog=0/1 | steps=17 per_pkt=17.0

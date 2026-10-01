@@ -1,0 +1,69 @@
+root@starry:/root # iperf3 -s 1
+[ 61.575717 0:25 starry_kernel::syscall::task::wait:244] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[ 61.575934 0:42 starry_kernel::task::user:25] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.50.2, port 62154
+[  5] local 192.168.50.1 port 5201 connected to 192.168.50.2 port 62166
+[ 64.657941 0:43 starry_kernel::task::user:25] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.03   sec   128 KBytes  1.02 Mbits/sec    0   0.00 Bytes
+[  5]   1.03-2.00   sec   128 KBytes  1.08 Mbits/sec    0   0.00 Bytes
+[  5]   2.00-3.03   sec   128 KBytes  1.02 Mbits/sec    0   0.00 Bytes
+[  5]   3.03-4.04   sec   128 KBytes  1.04 Mbits/sec    0   0.00 Bytes
+[  5]   4.04-5.02   sec   256 KBytes  2.14 Mbits/sec    0   0.00 Bytes
+[  5]   5.02-6.01   sec   256 KBytes  2.12 Mbits/sec    0   0.00 Bytes
+[  5]   6.01-7.04   sec   256 KBytes  2.04 Mbits/sec    0   0.00 Bytes
+[  5]   7.04-8.00   sec   128 KBytes  1.09 Mbits/sec    0   0.00 Bytes
+[  5]   8.00-9.00   sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes
+[  5]   9.00-10.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]  10.00-10.87  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-10.87  sec  1.50 MBytes  1.16 Mbits/sec    0            sender
+[ 76.840876 0:43 starry_kernel::task::ops:398] Task(43, "iperf3") exit with code: 0
+-----------------------------------------------------------
+Server listening on 5201 (test #2)
+-----------------------------------------------------------
+[ 81.101167 0:15 ax_net::device::ethernet:485] wlan0: ARP 192.168.50.2 -> 90-de-80-92-bc-cd
+Accepted connection from 192.168.50.2, port 62208
+[  5] local 192.168.50.1 port 5201 connected to 192.168.50.2 port 62116
+[ 95.037712 0:44 starry_kernel::task::user:25] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  1.38 MBytes  11.5 Mbits/sec
+[  5]   1.00-2.00   sec  1.38 MBytes  11.5 Mbits/sec
+[  5]   2.00-3.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   3.00-4.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   4.00-5.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   5.00-6.00   sec  1.38 MBytes  11.5 Mbits/sec
+[  5]   6.00-7.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   7.00-8.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   8.00-9.00   sec  1.38 MBytes  11.5 Mbits/sec
+[  5]   9.00-10.00  sec  1.50 MBytes  12.6 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-10.03  sec  14.5 MBytes  12.1 Mbits/sec                  receiver
+[105.075092 0:44 starry_kernel::task::ops:398] Task(44, "iperf3") exit with code: 0
+-----------------------------------------------------------
+Server listening on 5201 (test #3)
+-----------------------------------------------------------
+[108.139697 0:18 starry_kernel::task::signal:643] Send signal SIGINT to process group 42
+[108.139749 0:18 starry_kernel::task::signal:570] Send signal SIGINT to process 42
+^Ciperf3: interrupt - the server has terminated by signal Interrupt(2)
+[108.140505 0:42 starry_kernel::task::ops:398] Task(42, "iperf3") exit with code: 0
+[108.145256 0:42 starry_kernel::task::signal:570] Send signal SIGCHLD to process 1
+[108.145731 0:25 starry_kernel::syscall::task::wait:244] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[108.145869 0:25 starry_kernel::syscall::task::wait:244] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+root@starry:/root # cat /proc/net/dev
+[116.312839 0:25 starry_kernel::syscall::task::wait:244] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[116.313057 0:45 starry_kernel::task::user:25] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+Inter-|   Receive                                                |  Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
+    lo:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+ wlan0: 16088329   11779    0    0    0     0          0         0  2188958    6004    0    0    0     0       0          0
+[116.333858 0:45 starry_kernel::task::ops:398] Task(45, "busybox") exit with code: 0
+[116.337105 0:45 starry_kernel::task::signal:570] Send signal SIGCHLD to process 1
+[116.337618 0:25 starry_kernel::syscall::task::wait:244] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[116.337760 0:25 starry_kernel::syscall::task::wait:244] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+root@starry:/root # 

@@ -1,0 +1,326 @@
+﻿
+===== [2026-09-17 16:22:35.952] manual starryos-sta-board-c-tcp-tx-P4 :: iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 4 --get-server-output
+iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 4 --get-server-ou
+tput
+[37m[911.541712 0:64424509467 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff570[m[m
+[37m[911.553605 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[911.665997 0:64424509467 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.17:49154 to 192.168.137.1:5201[m[m
+Connecting to host 192.168.137.1, port 5201
+[37m[912.691923 0:64424509467 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.17:49155 to 192.168.137.1:5201[m[m
+[  5] local 192.168.137.17 port 49155 connected to 192.168.137.1 port 5201
+[37m[912.716671 0:64424509467 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.17:49156 to 192.168.137.1:5201[m[m
+[  7] local 192.168.137.17 port 49156 connected to 192.168.137.1 port 5201
+[37m[912.744072 0:64424509467 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.17:49157 to 192.168.137.1:5201[m[m
+[  9] local 192.168.137.17 port 49157 connected to 192.168.137.1 port 5201
+[37m[912.768666 0:64424509467 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.17:49158 to 192.168.137.1:5201[m[m
+[ 11] local 192.168.137.17 port 49158 connected to 192.168.137.1 port 5201
+[37m[912.798303 0:124554051613 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x601524d0, sp=0x489af0[m[m
+[37m[912.812461 0:38654705697 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x601524d0, sp=0x4acaf0[m[m
+[37m[912.828611 0:12884901920 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x601524d0, sp=0x4cfaf0[m[m
+[37m[912.841498 0:206158430233 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x601524d0, sp=0x4f2af0[m[m
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec   896 KBytes  7.34 Mbits/sec    0   0.00 Bytes       (omitted)
+[  7]   0.00-1.00   sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       (omitted)
+[  9]   0.00-1.00   sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       (omitted)
+[ 11]   0.00-1.00   sec   256 KBytes  2.10 Mbits/sec    0   0.00 Bytes       (omitted)
+[SUM]   0.00-1.00   sec  1.62 MBytes  13.6 Mbits/sec    0             (omitted)
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   1.00-2.00   sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes       (omitted)
+[  7]   1.00-2.00   sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       (omitted)
+[  9]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       (omitted)
+[ 11]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       (omitted)
+[SUM]   1.00-2.00   sec   768 KBytes  6.28 Mbits/sec    0             (omitted)
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   2.00-3.00   sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       (omitted)
+[  7]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       (omitted)
+[  9]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       (omitted)
+[ 11]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       (omitted)
+[SUM]   2.00-3.00   sec   768 KBytes  6.29 Mbits/sec    0             (omitted)
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   0.01-0.99   sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  7]   0.01-0.99   sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]   0.01-0.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   0.01-0.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   0.01-0.99   sec   896 KBytes  7.33 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   0.99-1.99   sec   640 KBytes  5.25 Mbits/sec    0   0.00 Bytes       
+[  7]   0.99-1.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  9]   0.99-1.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[37m[917.832237 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[ 11]   0.99-1.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[37m[917.862532 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[SUM]   0.99-1.99   sec   640 KBytes  5.25 Mbits/sec    0             
+[37m[917.866589 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.866713 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.866962 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.867169 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.867210 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.870691 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.870776 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.874325 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.874410 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.874438 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.874459 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.876372 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.876454 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.876482 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.876503 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.882065 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.882150 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.883880 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.883967 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.883995 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.884016 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.887599 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.887685 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.892306 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.892392 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.895341 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.895422 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.897853 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.898748 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.901113 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[917.901197 0:4294967307 [37max_net::device::ethernet:761] [33mwlan0: Pending packets buffer is full, dropping packet[m[m
+[37m[918.280704 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.280766 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.280825 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.280882 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.280939 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.280998 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.281057 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.281116 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.281174 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.281231 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.283062 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.283864 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284008 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284123 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284191 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284249 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284307 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284363 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284421 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284479 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284536 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284593 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284673 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284732 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284789 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284846 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284904 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.284961 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285018 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285076 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285135 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[37m[918.285193 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[  5]   1.99-2.99   sec   384 KBytes  3.15 Mbits/sec    0   0.00 Bytes       
+[37m[918.285251 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[  7]   1.99-2.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[37m[918.285308 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[  9]   1.99-2.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[37m[918.285365 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[ 11]   1.99-2.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[37m[918.285407 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[SUM]   1.99-2.99   sec   384 KBytes  3.15 Mbits/sec    0             
+[37m[918.285446 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285487 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285528 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285569 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285618 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285660 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285701 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285742 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285782 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285822 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285862 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285906 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285947 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.285988 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286030 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286071 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286113 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286153 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286197 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286237 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286277 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286317 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286357 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286398 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286439 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286484 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286527 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+[37m[918.286567 0:4294967307 [37max_net::device::ethernet:479] [32mwlan0: sending pending IPv4 packet to 192.168.137.1 via 90-de-80-92-bc-cd[m[m
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   2.99-3.99   sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes       
+[  7]   2.99-3.99   sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]   2.99-3.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   2.99-3.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   2.99-3.99   sec   768 KBytes  6.29 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   3.99-4.99   sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7]   3.99-4.99   sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]   3.99-4.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   3.99-4.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   3.99-4.99   sec   896 KBytes  7.34 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   4.99-5.99   sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  7]   4.99-5.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  9]   4.99-5.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   4.99-5.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   4.99-5.99   sec   768 KBytes  6.28 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   5.99-6.99   sec   640 KBytes  5.25 Mbits/sec    0   0.00 Bytes       
+[  7]   5.99-6.99   sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]   5.99-6.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   5.99-6.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   5.99-6.99   sec   768 KBytes  6.30 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   6.99-7.99   sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes       
+[  7]   6.99-7.99   sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]   6.99-7.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   6.99-7.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   6.99-7.99   sec   768 KBytes  6.29 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   7.99-8.99   sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7]   7.99-8.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  9]   7.99-8.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   7.99-8.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   7.99-8.99   sec   768 KBytes  6.29 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   8.99-9.99   sec   640 KBytes  5.23 Mbits/sec    0   0.00 Bytes       
+[  7]   8.99-9.99   sec   128 KBytes  1.04 Mbits/sec    0   0.00 Bytes       
+[  9]   8.99-9.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   8.99-9.99   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   8.99-9.99   sec   768 KBytes  6.28 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]   9.99-10.99  sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  7]   9.99-10.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  9]   9.99-10.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]   9.99-10.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]   9.99-10.99  sec   768 KBytes  6.30 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  10.99-11.99  sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  7]  10.99-11.99  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]  10.99-11.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  10.99-11.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  10.99-11.99  sec   896 KBytes  7.35 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  11.99-12.99  sec   640 KBytes  5.23 Mbits/sec    0   0.00 Bytes       
+[  7]  11.99-12.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  9]  11.99-12.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  11.99-12.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  11.99-12.99  sec   640 KBytes  5.23 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  12.99-13.99  sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  7]  12.99-13.99  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]  12.99-13.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  12.99-13.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  12.99-13.99  sec   896 KBytes  7.33 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  13.99-14.99  sec   768 KBytes  6.32 Mbits/sec    0   0.00 Bytes       
+[  7]  13.99-14.99  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]  13.99-14.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  13.99-14.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  13.99-14.99  sec   896 KBytes  7.38 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  14.99-15.99  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7]  14.99-15.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  9]  14.99-15.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  14.99-15.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  14.99-15.99  sec   768 KBytes  6.29 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  15.99-16.99  sec   768 KBytes  6.27 Mbits/sec    0   0.00 Bytes       
+[  7]  15.99-16.99  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]  15.99-16.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  15.99-16.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  15.99-16.99  sec   896 KBytes  7.32 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  16.99-17.99  sec   640 KBytes  5.26 Mbits/sec    0   0.00 Bytes       
+[  7]  16.99-17.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  9]  16.99-17.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  16.99-17.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  16.99-17.99  sec   640 KBytes  5.26 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  17.99-18.99  sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  7]  17.99-18.99  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]  17.99-18.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  17.99-18.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  17.99-18.99  sec   896 KBytes  7.33 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  18.99-19.99  sec   768 KBytes  6.31 Mbits/sec    0   0.00 Bytes       
+[  7]  18.99-19.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  9]  18.99-19.99  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[ 11]  18.99-19.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  18.99-19.99  sec   896 KBytes  7.36 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  19.99-20.99  sec   640 KBytes  5.23 Mbits/sec    0   0.00 Bytes       
+[  7]  19.99-20.99  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]  19.99-20.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  19.99-21.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  19.99-20.99  sec   768 KBytes  6.27 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  20.99-21.99  sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  7]  20.99-21.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  9]  20.99-21.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  21.00-21.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  20.99-21.99  sec   768 KBytes  6.30 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  21.99-22.99  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7]  21.99-22.99  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]  21.99-22.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  21.99-22.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  21.99-22.99  sec   896 KBytes  7.34 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  22.99-23.99  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7]  22.99-23.99  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]  22.99-23.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  22.99-23.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  22.99-23.99  sec   896 KBytes  7.34 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  23.99-24.99  sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes       
+[  7]  23.99-24.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  9]  23.99-24.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  23.99-24.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  23.99-24.99  sec   640 KBytes  5.24 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  24.99-25.99  sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes       
+[  7]  24.99-25.99  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]  24.99-25.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  24.99-25.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  24.99-25.99  sec   896 KBytes  7.33 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  25.99-26.99  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7]  25.99-26.99  sec   128 KBytes  1.04 Mbits/sec    0   0.00 Bytes       
+[  9]  25.99-26.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  25.99-26.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  25.99-26.99  sec   896 KBytes  7.34 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  26.99-27.99  sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes       
+[  7]  26.99-27.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[  9]  26.99-27.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  26.99-27.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  26.99-27.99  sec   768 KBytes  6.30 Mbits/sec    0             
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[  5]  27.99-28.99  sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes       
+[  7]  27.99-28.99  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes       
+[  9]  27.99-28.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[ 11]  27.99-28.99  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes       
+[SUM]  27.99-28.99  sec   896 KBytes  7.34 Mbits/sec    0             
+[37m[945.796093 0:64424509467 [37mstarry_kernel::task::signal:703] [32mSend signal SIGRT1 to thread 116[m[m
+[37m[945.798403 0:124554051613 [37mstarry_kernel::task::ops:539] [32mTask(124554051613, "iperf3") exit with code: 0[m[m
+[37m[945.801849 0:64424509467 [37mstarry_kernel::task::signal:703] [32mSend signal SIGRT1 to thread 117[m[m
+[37m[945.804224 0:38654705697 [37mstarry_kernel::task::ops:539] [32mTask(38654705697, "iperf3") exit with code: 0[m[m
+[37m[945.807154 0:64424509467 [37mstarry_kernel::task::signal:703] [32mSend signal SIGRT1 to thread 118[m[m
+[37m[945.809939 0:12884901920 [37mstarry_kernel::task::ops:539] [32mTask(12884901920, "iperf3") exit with code: 0[m[m
+[37m[945.814045 0:64424509467 [37mstarry_kernel::task::signal:703] [32mSend signal SIGRT1 to thread 119[m[m
+[37m[945.817085 0:206158430233 [37mstarry_kernel::task::ops:539] [32mTask(206158430233, "iperf3") exit with code: 0[m[m
+
+
+===== [2026-09-17 16:23:14.163] manual starryos-sta-board-c-tcp-tx-P4 v2 :: iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 4 --get-server-output
+iperf3 -c 192.168.137.1 -t 30 -O 3 -i 1 -P 4 --get-server-ou
+tput
+[37m[982.983672 0:68719476763 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff570[m[m
+[37m[982.995288 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+[37m[983.107570 0:68719476763 [37max_net::tcp:1018] [32mTCP connection from 192.168.137.17:49159 to 192.168.137.1:5201[m[m
+

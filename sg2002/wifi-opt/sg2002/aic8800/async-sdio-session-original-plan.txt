@@ -1,0 +1,42 @@
+Context
+
+当前 AIC8800 由 AicDevice::advance()、AicOwner::advance_with_cause() 与 SDIO host 的单事务状态机串行推进：一笔写从协议帧抽取、成形/聚合、复制、DMA 分配与填充，到 host 提交都在前一笔事务完成后依次进行。用户希望进行较大范围重构，令 CPU 准备与 SDIO 传输重叠，并明确选择直接做到 DMA 双缓冲。
+
+必须区分“两个缓冲槽”与“两个 SDIO 请求同时在飞”。drivers/blk/sdhci-host/README.md 明确传统 SDHCI queue_depth = max_submit_batch = 1，sdmmc-protocol::sdio::SdioCard 也通过唯一 active_io_request_id 拒绝第二个活动 I/O 请求。目标因此是：SDIO/DMA 正在使用槽 A 时，owner CPU 有界地准备槽 B；A 完成并通过优先级与 credit 门控后再提交 B。本任务不扩展为多笔总线事务并发、不新增 owner 线程，也不把硬中断变为数据处理上下文。
+
+进度依据 www/sg2002/aic8800/stage-delivery-20260930.md 与 www/sg2002/aic8800/aic8800-async-optimization-plan.md §9.7：文档记载最新一轮为纯观测、行为不变；前一轮完成前交帧兑现了机制但纯上行吞吐未改善。注意这些材料标注的实板日期为 2026-09-30，晚于当前会话日期 2026-09-29；执行前应核对该轮是否已经实际完成，不把未来日期记录当成本会话已观察的证据。既有 www/sg2002/aic8800/gpt/aic8800-hardware-async-pipeline-design.md 的 attrib2 探针记录每笔写 pull + form + bytes 约 0.38–0.47 ms、DMA 准备约 0.14–0.16 ms、总线腿约 1.87–2.23 ms；这些数值只表明潜在重叠窗口，不证明性能收益。当前仍有大量用户工作树改动，实施时必须保留，不得清理或回退；.claude/、.ocr/ 及 AGENTS.md、CLAUDE.md 不纳入任务提交。
+
+推荐实现
+
+1. 重构单一 TX 所有权状态机。 在 drivers/net/aic8800/src/device/owner.rs、device/data_plane.rs、device/model.rs 中，将现有职责混杂的 active_tx/io.next 拆为明确的批次/计划状态：排队帧、可继续追加的聚合批次、已准备待提交批次、已提交事务的完成元数据。每个 move-only TX token 在任一时刻只有一个权威所有者。保留 wire 格式、聚合上限、普通数据 hostid=0、credit 的包单位和现有 RX/控制协议语义；删除不再需要的可克隆请求/缓存副本。AicDevice 仍是无 OS/DMA 依赖的协议核心，不持有 DeviceDma。
+2. 让 owner 在一笔 SDIO 请求等待期间准备下一笔。 主要接入点为 drivers/net/aic8800/src/rdif/owner/progress.rs::advance_with_cause、submit_one_tx，以及 rdif/owner/operation.rs::ActiveOperation::{submit,advance}。AicOwner 独占一个硬件 active 请求和一个 CPU-owned staged 槽：每次被已有 TX 到达通知唤醒时，先处理已确认 IRQ、在飞事务推进/完成、控制请求及 RX/mailbox 工作，再以单次有界预算从 RDIF 拉取有限批次并准备空槽，随后在没有更高优先级工作时等待原有 IRQ/截止时间。禁止增加定时轮询或额外执行线程。更新 net/ax-net/src/queue_runtime/executor/mod.rs 的接入仅限已有固定 CPU 所有者通知路径确实需要的调度语义；复用 WakeReason::Transmit 与 sticky notification，不触碰或削弱固定亲和性和丢失唤醒闭环。
+3. 在 RDIF owner 引入真实 DMA 双槽。 两个独立的 ToDevice backing 分别处于 CPU-owned 准备态与 Prepared/InFlight 状态，准备槽执行有界编码、聚合、DMA 填充及 cache publish；提交时把该槽 move 进 SdioCard::submit_write_dma，完成后仅在 host 确认设备停止访问后回收并成为下一准备槽。PreparedDma/InFlightDma 阶段绝不提供 CPU 可写访问。读路径继续使用原有 RX 所有权，避免将 TX 试验扩展为不必要的双向 DMA 池。
+4. 为动态批次长度建立安全 DMA 前缀契约。 当前 CpuDmaBuffer::prepare_for_device() 与 PreparedDma::len() 覆盖整个 backing，SdioCard::submit_write_dma 按 buffer 长度确定 CMD53 长度，不能把最大容量直接提交为实际较短聚合。优先在 memory/dma-api/src/owned.rs 增加安全、move-only 的活动前缀状态转换（例如 prepare_prefix(len)），并贯通 PreparedDma/CompletedDma、drivers/blk/sdmmc-protocol/src/sdio/io/transfer.rs、sdmmc-host、sdhci-host ADMA2 形状校验和 descriptor 长度：在 API 内检查 0 < len <= capacity、块对齐、地址范围、缓存同步范围及完成后恢复完整 CPU-owned backing。提交拒绝必须原样归还 Prepared backing；若任何 host 层无法无损表达活动长度或 cache 范围，则该 host 明确拒绝该能力，而不能超长传输或缩窄成不健全的 unsafe 调用约定。
+5. 保留唯一 commit/优先级裁决点。 Staged -> Submitted 才重新检查权威 credit、命令保留量、当前 TX 聚合上限及取消/停止状态，之后才消费 credit 和转移 DMA 所有权。信用快照不得在准备时预留。Host completion、错误、CARD_INT、mailbox/control confirmation/indication、内部 EAPOL 与 RX 扫描都先于普通 staged TX 提交；完成与 CARD_INT 同时到达时沿现有 acknowledge/latch 顺序先记录两者，再由 owner 决策。保持至多一个 host transaction 在飞。
+6. 明确失败、取消和关闭生命周期。 在提交前取消：丢弃 staged/prepared 内容并只归还其 token 一次，Prepared DMA 可通过“从未交给设备”的安全回收 API 返回。提交拒绝：取得原始 Prepared backing 和批次所有权，按可重试/终止错误策略处理。提交后取消或停机：先停止新准备，按现有 host abort/quiesce 协议终结在飞事务；仅在 CompletedDma 可安全恢复的证明成立后复用 backing，否则隔离/quarantine；最终对 staged 与 in-flight token 分别且恰好完成/归还一次。shutdown/初始化失败不能在设备仍可能访问时 drop 或复用 DMA。
+7. 同步正式架构文档。 更新 docs/design/unified-sdio-aic8800.md 的事务所有权、双槽阶段、commit 门控、IRQ 和取消/关闭语义；不把工作树的探针过程、个人文件或未经测量的收益写进正式文档。高风险 DMA/并发变更在实现完成前需要独立领域审查认可。
+
+关键文件
+
+- 驱动状态机与准备/提交：drivers/net/aic8800/src/device/owner.rs、device/model.rs、device/data_plane.rs、device/progress.rs。
+- 单 owner 调度、DMA 槽和失败回收：drivers/net/aic8800/src/rdif/owner/progress.rs、rdif/owner/operation.rs、rdif/owner/output.rs、rdif/device/endpoints/startup.rs。
+- DMA 活动前缀公共契约及消费者迁移：memory/dma-api/src/owned.rs、drivers/blk/sdmmc-protocol/src/sdio/io/transfer.rs 与必要的 SD/MMC host、SDHCI ADMA2 路径。
+- TX 到达唤醒如需调整：net/ax-net/src/queue_runtime/executor/mod.rs，复用 queue_runtime/state.rs 与 notify.rs 的固定 owner/sticky notification 机制。
+- 正式架构：docs/design/unified-sdio-aic8800.md。
+- 以 drivers/net/aic8800/src/device/data_plane.rs 现有批次/credit/cancel 用例、DMA API 测试、drivers/blk/sdmmc-protocol SDIO 生命周期测试作为测试增强入口。
+
+验证与验收
+
+- 确定性状态机/host 契约测试覆盖：A 在飞时只能准备 B 且绝不第二次 submit；B ready 时 A 完成；completion 与 CARD_INT 同时到达；credit 被 mailbox 或已完成写改变后重新裁决；聚合前缀/块对齐长度正确；准备槽无数据时的 miss；提交拒绝返还同一 DMA backing；提交前取消；提交后 abort/quiesce 后才回收；host 无法证明 quiesce 时 quarantine；所有 TX token 与 DMA backing 守恒；RX、控制和内部 EAPOL 不被普通 TX 越过。用可控 fake host 证明协议顺序，不将其描述为真实中断/缓存验证。
+- DMA API 从安全入口测试容量、有效前缀、对齐/同步范围、设备完成后容量恢复、拒绝与取消回滚；新增 unsafe 边界需要逐项安全证明和独立审查。
+- 执行 cargo fmt；按受影响 crate 执行项目命令 cargo xtask clippy --package aic8800、--package dma-api（如支持）、--package sdmmc-protocol、--package sdhci-host、--package ax-net；修改在 scripts/test/std_crates.csv 白名单中的包后通过 cargo xtask test --since dev 验证。最终命令需以 cargo xtask clippy --help/任务工具实际支持的 package 名确认，不使用原生 cargo clippy/test 替代项目入口。
+- 构建与板测使用现有 cargo xtask starry 流程和已校验固件缓存；交付镜像到 /mnt/c/Users/Asta/Desktop/build，板测日志从 /mnt/c/Users/Asta/Desktop/logs 读取。板上以同一内核、同一健康热点会话、固定姿态与代理关闭做串行/双槽 A/B；检查 staged-ready-at-completion、准备和 DMA 时间、completion-to-commit、credit、RX 事务/吞吐、CARD_INT、mailbox/控制延迟、无停滞，以及 token/DMA 守恒。当前 §9.7 报告的 16.1% credit wait 应先按同会话 aic,tx-credit-wait-us=0 对照单独归因；不能把它和双缓冲效果混作一个变量。跨会话吞吐不作为收益证据。
+- 回滚通过保留可编译的串行提交路径/策略及前一可启动镜像；任一状态机、DMA API 或板测门槛失败时不得默认启用双槽。不得自动提交、推送或创建 PR。
+
+验证与验收
+
+- 确定性状态机/host 契约测试覆盖：A 在飞时只能准备 B 且绝不第二次 submit；B ready 时 A 完成；completion 与 CARD_INT 同时到达；credit 被 mailbox 或已完成写改变后重新裁决；聚合前缀/块对齐长度正确；准备槽无数据时的 miss；提交拒绝返还同一 DMA backing；提交前取消；提交后 abort/quiesce 后才回收；host 无法证明 quiesce 时 quarantine；所有 TX token 与 DMA backing 守恒；RX、控制和内部 EAPOL 不被普通 TX 越过。用可控 fake host 证明协议顺序，不将其描述为真实中断/缓存验证。
+- DMA API 从安全入口测试容量、有效前缀、对齐/同步范围、设备完成后容量恢复、拒绝与取消回滚；新增 unsafe 边界需要逐项安全证明和独立审查。
+- 执行 cargo fmt；按受影响 crate 执行项目命令 cargo xtask clippy --package aic8800、--package dma-api（如支持）、--package sdmmc-protocol、--package sdhci-host、--package ax-net；修改在 scripts/test/std_crates.csv 白名单中的包后通过 cargo xtask test --since dev 验证。最终命令需以 cargo xtask clippy --help/任务工具实际支持的 package 名确认，不使用原生 cargo clippy/test 替代项目入口。
+- 构建与板测使用现有 cargo xtask starry 流程和已校验固件缓存；交付镜像到 /mnt/c/Users/Asta/Desktop/build，板测日志从 /mnt/c/Users/Asta/Desktop/logs 读取。板上以同一内核、同一健康热点会话、固定姿态与代理关闭做串行/双槽 A/B；检查 staged-ready-at-completion、准备和 DMA 时间、completion-to-commit、credit、RX 事务/吞吐、CARD_INT、mailbox/控制延迟、无停滞，以及 token/DMA 守恒。当前 §9.7 报告的 16.1% credit wait 应先按同会话 aic,tx-credit-wait-us=0 对照单独归因；不能把它和双缓冲效果混作一个变量。跨会话吞吐不作为收益证据。
+- 回滚通过保留可编译的串行提交路径/策略及前一可启动镜像；任一状态机、DMA API 或板测门槛失败时不得默认启用双槽。不得自动提交、推送或创建 PR。

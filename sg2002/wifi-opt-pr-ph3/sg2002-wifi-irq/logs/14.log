@@ -1,0 +1,286 @@
+[ 12.936200 0:2 ax_runtime:315] runtime console active: serial0, ttyS0
+Boot at 1970-01-01 00:00:12.936235560 UTC
+
+[ 12.936740 0:9 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op ResetAll
+[ 12.937032 0:9 ax_fs_ng::block::runtime::hctx:237] prepared block hctx 0 on CPU 0 with hardware depth 1
+[ 12.937205 0:9 ax_fs_ng::block::runtime::lifecycle::device:325] block device cvsd IRQ source 0 (IrqId { domain: IrqDomainId(7), hwirq: HwIrq(36) }) fixed to CPU 0 for queue mask 0x1
+[ 12.938182 0:10 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op PowerOn
+[ 12.948425 0:10 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op SwitchVoltage(V330)
+[ 12.950175 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit1)
+[ 12.950268 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Identification)
+[ 12.973670 0:10 sdmmc_protocol::sdio::init::state_machine::identify:175] sdio: detected Sd ocr=0xc1ff8000
+[ 12.975477 0:10 sdmmc_protocol::sdio::init::state_machine::identify:340] sdio: CSD capacity_blocks=Some(124735488)
+[ 12.975969 0:10 sdmmc_protocol::sdio::init::state_machine::identify:354] sdio: switch SD bus width to 4-bit
+[ 12.976930 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit4)
+[ 12.977407 0:10 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Default)
+[ 12.981899 0:10 sdmmc_protocol::sdio::init::state_machine::sd:185] sdio: SD speed selected HighSpeed
+[ 12.982394 0:10 sdmmc_protocol::sdio::init::state_machine:237] sdio: init done kind=Sd sd_v2=true high_capacity=true rca=0xaaaa ocr=0xc1ff8000 host_bus_width=Bit4 ext_csd_bus_width=None ext_csd_timing=None
+[ 12.982437 0:10 sdmmc_protocol::rdif::queue:173] sdmmc block init complete: kind=Sd high_capacity=true rca=43690 capacity_blocks=124735488 cache_enabled=false
+[ 12.985146 0:2 ax_fs_ng::root:349]     partition 1 name=None fs=None lba 2048..133120
+[ 12.986579 0:2 ax_fs_ng::root:349]     partition 2 name=None fs=Some(Ext4) lba 133120..4331520
+[ 12.986629 0:2 ax_fs_ng::root:365]   block device 0 (cvsd) has Mbr partition table with 2 partitions
+[ 12.987267 0:2 ax_fs_ng::root:475]   matched root by device path on disk0 partition 2 (<unnamed>, fs=ext4, lba 133120..4331520)
+[ 12.987328 0:2 ax_fs_ng:95] Initialize filesystem subsystem...
+[ 12.987351 0:2 ax_fs_ng:96]   selected root device: disk0 partition 2 (<unnamed>, fs=ext4, lba 133120..4331520)
+[ 13.080617 0:2 ax_fs_ng:108]   filesystem type: "ext4"
+[ 13.105532 0:2 ax_runtime:346] Primary CPU 0 init OK.
+[ 13.105856 0:2 ax_fs_ng::block::runtime::lifecycle::device:418] block device cvsd online with 1 hctxs across 1 CPUs
+[ 13.107651 0:2 ax_runtime::irq:193] registered wlan0-g0-s0 IRQ IrqId { domain: IrqDomainId(7), hwirq: HwIrq(38) } on fixed CPU 0
+[ 13.107841 0:11 aic8800::rdif::device::endpoints::startup:90] [wifi] AIC owner startup timeout armed for 60s
+[ 13.107904 0:11 aic8800::rdif::device::endpoints::startup:98] [wifi] AIC owner startup waiting 1ms for SDIO1 reset settle
+[ 13.108990 0:11 aic8800::rdif::device::endpoints::startup:157] [wifi] AIC owner reset settle complete; starting SDIO card enumeration
+[ 13.109047 0:11 aic8800::rdif::owner::progress:99] [wifi] SDIO completion IRQ enabled; submitting IO-card initialization
+[ 13.147651 0:11 aic8800::rdif::owner::progress:398] [wifi] detected supported AIC SDIO variant Aic8800D80
+[ 13.147694 0:11 aic8800::device::progress:39] [wifi] diag state=Starting pending=None irqs=0 scans=0 rx=0 other=0 tx=0 flow_retry=0
+[ 13.397870 0:11 aic8800::device::startup::firmware:229] [wifi] D80 firmware version 0x06090101
+[ 13.398409 0:11 aic8800::device::startup::firmware:251] [wifi] D80 patch buffer relocated to 0x00179718 (firmware 0x06090101)
+[ 13.405331 0:11 aic8800::device::startup::firmware:382] [wifi] D80 patch config applied (3 entries)
+[ 14.732610 0:2 ax_net::queue_runtime:667] [wifi] secure startup connection entropy prepared
+[ 14.733455 0:11 aic8800::device::mailbox:257] [wifi] stale station association cleared before connect
+[ 15.147667 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=374 scans=374 rx=191488 other=0 tx=0 flow_retry=0
+[ 15.612941 0:11 aic8800::device::data_plane:297] [wifi] association complete; learned firmware vif=0 station=0
+[ 15.636094 0:11 aic8800::device::control:108] [wifi] WPA2 EAPOL frame consumed by handshake state machine
+[ 15.643855 0:11 aic8800::device::control:108] [wifi] WPA2 EAPOL frame consumed by handshake state machine
+[ 15.648097 0:11 aic8800::device::mailbox:284] [wifi] WPA2 keys installed and control port enabled
+
+[ 15.648156 0:11 aic8800::rdif::owner::output:228] [wifi] control result queued for network runtime
+[ 15.648449 0:11 aic8800::rdif::device::endpoints::control:95] [wifi] control result consumed by network runtime
+[ 15.648730 0:2 ax_net:319] Initialize network subsystem...
+[ 15.649694 0:2 ax_net:341]   use NIC 0: "wlan0"
+[ 15.650554 0:2 ax_net:384]   Wi-Fi control for wlan0 is owned by CPU 0
+[ 15.650590 0:2 ax_net:396] wlan0:
+[ 15.650611 0:2 ax_net:397]   id:   2
+[ 15.650632 0:2 ax_net:398]   mac:  38-7a-cc-9b-2c-c8
+[ 15.650667 0:2 ax_net:415]   mode: dhcp
+[ 15.650704 0:2 ax_net:464] Device: lo
+[ 15.650732 0:2 ax_net:464] Device: wlan0
+[ 15.650790 0:2 ax_net::service:529] wlan0: DHCP enabled
+[ 15.711401 0:12 ax_net::service:411] wlan0: DHCP offered address 192.168.137.4 from 192.168.137.1
+[ 15.722245 0:12 ax_net::service:830] wlan0: DHCP acquired address 192.168.137.4/24
+[ 15.722282 0:12 ax_net::service:832] wlan0: DHCP router 192.168.137.1
+[ 15.722386 0:12 ax_net::device::ethernet:252] wlan0: requesting ARP for 192.168.137.1
+[ 15.723279 0:2 ax_tracepoint:327] tracepoint_data_start: 0xffffffff805df4c0, tracepoint_data_end: 0xffffffff805df550
+Welcome to Starry OS!
+[ 15.723341 0:2 ax_tracepoint:370] tracepoint_data_len: 6
+USER=root
+[ 15.723373 0:2 ax_tracepoint:389] tracepoint registered: sched:sched_process_exit
+HOSTNAME=starry
+[ 15.723405 0:2 ax_tracepoint:389] tracepoint registered: sched:sched_process_fork
+SHLVL=1
+[ 15.723433 0:2 ax_tracepoint:389] tracepoint registered: sched:sched_switch
+HOME=/root
+[ 15.723461 0:2 ax_tracepoint:389] tracepoint registered: syscalls:sys_clone
+TERM=xterm-256color
+[ 15.723488 0:2 ax_tracepoint:389] tracepoint registered: syscalls:sys_enter_openat
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+[ 15.724347 0:2 starry_kernel::pseudofs::dev::tty::serial:244] ttyS0 registered: path=/serial@04140000, alias=Some(0), paddr=0x4140000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [44, 4] })))
+PWD=/
+[ 15.732178 0:2 starry_kernel::pseudofs::usbfs:55] usbfs: initializing manager
+
+[ 15.734371 0:2 starry_kernel::dyn_debug:65] debug_init: initializing dynamic debug sites
+Use apk to install packages.
+[ 15.782140 0:2 starry_kernel::task::timer:394] Initialize alarm...
+
+[ 16.093568 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.174025 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.282287 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.457784 0:26 starry_kernel::task::ops:348] Task(26, "busybox") exit with code: 0
+[ 16.473501 0:26 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+root@starry:/root # [ 16.474124 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+
+[ 16.474490 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+root@starry:/root # [ 16.486876 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.487777 0:27 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffeb80
+[ 16.549850 0:27 starry_kernel::task::ops:348] Task(27, "busybox") exit with code: 0
+[ 16.565578 0:27 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 16.566201 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.566632 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 16.579089 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.579866 0:28 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 16.642289 0:28 starry_kernel::task::ops:348] Task(28, "busybox") exit with code: 0
+[ 16.657994 0:28 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 16.658618 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.658984 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 16.671240 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.672016 0:29 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 16.735693 0:29 starry_kernel::task::ops:348] Task(29, "busybox") exit with code: 0
+[ 16.751316 0:29 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 16.751938 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.752301 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 16.764671 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.765444 0:30 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 16.828190 0:30 starry_kernel::task::ops:348] Task(30, "busybox") exit with code: 0
+[ 16.843791 0:30 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 16.844414 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.844780 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 16.857102 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.857873 0:31 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 16.920384 0:31 starry_kernel::task::ops:348] Task(31, "busybox") exit with code: 0
+[ 16.936067 0:31 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 16.936735 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.937100 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 16.949388 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.950169 0:32 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 17.013861 0:32 starry_kernel::task::ops:348] Task(32, "busybox") exit with code: 0
+[ 17.029430 0:32 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 17.030051 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.030415 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 17.042708 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.043481 0:33 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 17.106350 0:33 starry_kernel::task::ops:348] Task(33, "busybox") exit with code: 0
+[ 17.122072 0:33 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 17.122692 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.123057 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 17.135421 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.136196 0:34 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 17.198413 0:34 starry_kernel::task::ops:348] Task(34, "busybox") exit with code: 0
+[ 17.213957 0:34 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 17.214579 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.214946 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 17.227312 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.228084 0:35 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 17.291481 0:35 starry_kernel::task::ops:348] Task(35, "busybox") exit with code: 0
+[ 17.307026 0:35 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 17.307645 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.308007 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 17.326289 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.326759 0:36 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffed40
+[ 17.370725 0:36 starry_kernel::task::ops:348] Task(36, "busybox") exit with code: 0
+[ 17.386192 0:36 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 17.386873 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.387238 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+
+root@starry:/root #
+root@starry:/root #
+root@starry:/root # ip addr
+[ 21.096242 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+[ 21.096701 0:37 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+[ 21.151752 0:37 starry_kernel::task::ops:348] Task(37, "busybox") exit with code: 0
+    inet 127.0.0.1/8 scope host dynamic lo
+[ 21.167696 0:37 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+2: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP qlen 1000
+[ 21.168321 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+    link/ether 38:7a:cc:9b:2c:c8 brd ff:ff:ff:ff:ff:ff
+[ 21.168677 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+    inet 192.168.137.4/24 brd 192.168.137.255 scope global dynamic wlan0
+root@starry:/root #
+root@starry:/root #
+root@starry:/root # ping [ 79.014359 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=396 scans=395 rx=202752 other=0 tx=6 flow_retry=0
+[ 82.014358 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=403 scans=402 rx=206336 other=0 tx=9 flow_retry=0
+
+[100.090845 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+BusyBox v1.37.0 (2025-12-16 14:19:28 UTC)[100.091238 0:38 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+ multi-call binary.
+[100.180839 0:38 starry_kernel::task::ops:348] Task(38, "busybox") exit with code: 256
+
+Usage: [100.197114 0:38 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+ping[100.197811 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+ [100.198166 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+[OPTIONS] HOST
+
+Send ICMP ECHO_REQUESTs to HOST
+
+        -4,-6           Force IP or IPv6 name resolution
+        -c CNT          Send only CNT pings
+        -s SIZE         Send SIZE data bytes in packets (default 56)
+        -i SECS         Interval
+        -A              Ping as soon as reply is received
+        -t TTL          Set TTL
+        -I IFACE/IP     Source interface or IP address
+        -W SEC          Seconds to wait for the first response (default 10)
+                        (after all -c CNT packets are sent)
+        -w SEC          Seconds until ping exits (default:infinite)
+                        (can exit earlier with -c CNT)
+        -q              Quiet, only display output at start/finish
+        -p HEXBYTE      Payload pattern
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root # iperf3 -s 1
+[110.284697 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[110.285091 0:39 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+[112.654785 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=407 scans=406 rx=208384 other=0 tx=11 flow_retry=0
+Accepted connection from 192.168.137.1, port 52728
+[112.717712 0:40 starry_kernel::task::user:71] Enter user space: ip=0x601524d0, sp=0x428af0
+[  5] local 192.168.137.4 port 5201 connected to 192.168.137.1 port 52729
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  0.00 Bytes  0.00 bits/sec
+[114.654817 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=Some(TransmitFlow) irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=1642
+[  5]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec
+[  5]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec
+[116.655575 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=3362
+[  5]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec
+[  5]   4.00-5.00   sec  0.00 Bytes  0.00 bits/sec
+[118.656174 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=5082
+[  5]   5.00-6.00   sec  0.00 Bytes  0.00 bits/sec
+[  5]   6.00-7.00   sec  0.00 Bytes  0.00 bits/sec
+[120.656510 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=6802
+[  5]   7.00-8.00   sec  0.00 Bytes  0.00 bits/sec
+[  5]   8.00-9.00   sec  0.00 Bytes  0.00 bits/sec
+[122.656580 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=8522
+[  5]   9.00-10.00  sec  0.00 Bytes  0.00 bits/sec
+[  5]  10.00-11.00  sec  0.00 Bytes  0.00 bits/sec
+[123.879278 0:14 starry_kernel::task::signal:732] Send signal SIGINT to process group 2
+^C[123.879337 0:14 starry_kernel::task::signal:647] Send signal SIGINT to process 2
+[  5]  11.00-11.17  sec  0.00 Bytes  0.00 bits/sec
+[123.883438 0:39 starry_kernel::task::ops:348] Task(39, "iperf3") exit with code: 0
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[123.883509 0:39 starry_kernel::task::signal:584] Send signal SIGKILL to thread 3
+[ ID] Interval           Transfer     Bitrate
+[123.884529 0:40 starry_kernel::task::ops:348] Task(40, "iperf3") exit with code: 0
+[  5]   0.00-11.17  sec  0.00 Bytes  0.00 bits/sec                  receiver
+[123.908842 0:40 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+iperf3: interrupt - the server has terminated by signal Interrupt(2)
+[123.910865 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+root@starry:/root # [123.911272 0:21 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)
+[124.656671 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=10204
+[126.657142 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=11928
+[128.658183 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=13652
+[130.658539 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=15375
+[132.659606 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=17099
+[134.659648 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=18822
+[136.659860 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=20546
+[138.659922 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=22269
+[140.659925 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=Some(TransmitFlow) irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=23992
+[142.660134 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=25714
+[144.660612 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=27437
+[146.661652 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=29161
+[148.661966 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=30885
+[150.663019 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=32609
+[152.663704 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=34333
+[154.664251 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=36056
+[156.664424 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=37779
+[158.665522 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=39503
+[160.666508 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=41227
+[162.667121 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=42952
+[164.668025 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=44676
+[166.668444 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=46400
+[168.668891 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=48124
+[170.669455 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=49848
+[172.669937 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=51572
+[174.670878 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=53296
+[176.671642 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=55019
+[178.672026 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=56742
+[180.672102 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=58465
+[182.672810 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=60189
+[184.673650 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=61913
+[186.673756 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=63636
+[186.884758 0:12 ax_net::orphan:156] Reaped expired orphan socket #1
+[186.884896 0:12 ax_net::orphan:156] Reaped expired orphan socket #2
+[188.674597 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=65358
+[190.675501 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=67082
+[192.676333 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=68805
+[194.676972 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=70528
+[196.677022 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=72251
+[198.677313 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=73975
+[200.677630 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=75698
+[202.678412 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=77421
+[204.678684 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=79144
+[206.679600 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=80868
+[208.680382 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=82592
+[210.681284 0:11 aic8800::device::progress:39] [wifi] diag state=Ready pending=None irqs=425 scans=425 rx=279552 other=0 tx=23 flow_retry=84316

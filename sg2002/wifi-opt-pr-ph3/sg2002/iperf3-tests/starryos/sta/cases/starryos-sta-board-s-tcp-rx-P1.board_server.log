@@ -1,0 +1,51 @@
+﻿cat /tmp/iperf3_s.log; echo SRVLOG_DONE
+[37m[584.965994 0:42949672989 [37mstarry_kernel::task::user:83] [32mEnter user space: ip=0x6013d7ae, sp=0x3fffff3b0[m[m
+[37m[584.977528 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 64242
+[  6] local 192.168.137.17 port 5201 connected[37m[584.977891 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)[m[m
+ to 192.168.137.1 port 64243
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-1.00   sec  2.00 MBytes  16.8 Mbits/sec                  (omitted)
+[  6]   1.00-2.00   sec  2.62 MBytes  22.0 Mbits/sec                  (omitted)
+[  6]   2.00-3.00[37m[585.005949 0:42949672989 [37mstarry_kernel::task::ops:539] [32mTask(42949672989, "busybox") exit with code: 0[m[m
+   sec  2.38 MBytes  20.0 Mbits/sec                  (omitted)
+[  6]   0.00-1.00   sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]   1.00-2.00   sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]   2.00-3.00   sec  2.50 MBytes  21.0 Mbits[37m[585.006552 0:42949672989 [37mstarry_kernel::task::signal:750] [32mSend signal SIGCHLD to process 1[m[m
+/sec                  
+[  6]   3.00-4.00   sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]   4.00-5.00   sec  2.75 MBytes  23.1 Mbits/sec                  
+[  6]   5.00-6.00   sec  2.12 MBytes  17.8 Mbits/sec                  
+[  6]   6.00-7.0[37m[585.013831 0:4294967320 [37mstarry_kernel::syscall::task::wait:380] [32msys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG | WUNTRACED)[m[m
+0   sec  2.25 MBytes  18.9 Mbits/sec                  
+[  6]   7.00-8.00   sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]   8.00-9.00   sec  2.25 MBytes  18.9 Mbits/sec                  
+[  6]   9.00-10.00  sec  1.62 MBytes  13.6 Mbits/sec                  
+[  6]  10.00-11.00  sec  2.12 MBytes  17.8 Mbits/sec                  
+[  6]  11.00-12.00  sec  2.50 MBytes  20.9 Mbits/sec                  
+[  6]  12.00-13.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]  13.00-14.00  sec  2.62 MBytes  22.1 Mbits/sec                  
+[  6]  14.00-15.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]  15.00-16.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[  6]  16.00-17.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[  6]  17.00-18.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]  18.00-19.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]  19.00-20.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]  20.00-21.00  sec  2.50 MBytes  20.9 Mbits/sec                  
+[  6]  21.00-22.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]  22.00-23.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]  23.00-24.00  sec  2.38 MBytes  19.9 Mbits/sec                  
+[  6]  24.00-25.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[  6]  25.00-26.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[  6]  26.00-27.00  sec  2.25 MBytes  18.9 Mbits/sec                  
+[  6]  27.00-28.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+[  6]  28.00-29.00  sec  2.25 MBytes  18.9 Mbits/sec                  
+[  6]  29.00-30.00  sec  2.50 MBytes  21.0 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-30.01  sec  72.8 MBytes  20.3 Mbits/sec                  receiver
+SRVLOG_DONE
+root@starry:/root # [6n

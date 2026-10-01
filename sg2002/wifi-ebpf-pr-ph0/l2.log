@@ -1,0 +1,93 @@
+root@starry:/root #
+root@starry:/root #
+root@starry:/root # ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host dynamic lo
+2: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP qlen 1000
+    link/ether 38:7a:cc:9b:2c:c8 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.50.1/24 brd 192.168.50.255 scope global dynamic wlan0
+root@starry:/root # ping 192.168.50.2
+PING 192.168.50.2 (192.168.50.2): 56 data bytes
+64 bytes from 192.168.50.2: seq=0 ttl=128 time=4.450 ms
+64 bytes from 192.168.50.2: seq=1 ttl=128 time=2.976 ms
+^C
+--- 192.168.50.2 ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 2.976/3.713/4.450 ms
+root@starry:/root # wifi_monitor 40 & sleep 2
+[ 94.128601 0:43 kbpf_basic::map:272] bpf map type BPF_MAP_TYPE_CPUMAP not implemented
+[ 94.128722 0:43 kbpf_basic::map:272] bpf map type BPF_MAP_TYPE_DEVMAP not implemented
+WIFI_MONITOR: kprobe → _RNvNtNtNtCsbh5HI0F01lx_7aic88004fdrv6thread2tx18enqueue_data_frame
+WIFI_MONITOR: kprobe → _RNvMNtNtNtCsbh5HI0F01lx_7aic88004fdrv4core14sdio_transportNtB2_13SdioTransport10write_fifo
+WIFI_MONITOR: kretprobe → _RNvMNtNtNtCsbh5HI0F01lx_7aic88004fdrv4core14sdio_transportNtB2_13SdioTransport10write_fifo
+WIFI_MONITOR: 探针挂载完成
+WIFI_MONITOR: 采样 40s ...
+root@starry:/root # iperf3 -s -1
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.50.2, port 52138
+[  5] local 192.168.50.1 port 5201 connected to 192.168.50.2 port 52140
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  1.12 MBytes  9.42 Mbits/sec
+[  5]   1.00-2.00   sec  1.12 MBytes  9.45 Mbits/sec
+[  5]   2.00-3.00   sec   256 KBytes  2.10 Mbits/sec
+[  5]   3.00-4.00   sec   512 KBytes  4.19 Mbits/sec
+[  5]   4.00-5.00   sec  1.38 MBytes  11.5 Mbits/sec
+[  5]   5.00-6.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   6.00-7.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   7.00-8.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   8.00-9.00   sec  1.38 MBytes  11.5 Mbits/sec
+[  5]   9.00-10.00  sec  1.38 MBytes  11.5 Mbits/sec
+[  5]  10.00-10.08  sec   128 KBytes  12.6 Mbits/sec
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-10.08  sec  11.8 MBytes  9.77 Mbits/sec                  receiver
+root@starry:/root # === wifi_monitor ===
+TX_ENQUEUE  cnt=3617  bytes=217627
+SDIO_WR      bytes=1851904  err=7234
+SDIO_WR_LAT  3617 0 0 0 0 0 0 0 (total=3617)
+
+[1]+  Done                       wifi_monitor 40
+root@starry:/root #
+root@starry:/root # wifi_monitor 30 &
+root@starry:/root # [178.973563 0:47 kbpf_basic::map:272] bpf map type BPF_MAP_TYPE_CPUMAP not implemented
+[178.973681 0:47 kbpf_basic::map:272] bpf map type BPF_MAP_TYPE_DEVMAP not implemented
+WIFI_MONITOR: kprobe → _RNvNtNtNtCsbh5HI0F01lx_7aic88004fdrv6thread2tx18enqueue_data_frame
+WIFI_MONITOR: kprobe → _RNvMNtNtNtCsbh5HI0F01lx_7aic88004fdrv4core14sdio_transportNtB2_13SdioTransport10write_fifo
+WIFI_MONITOR: kretprobe → _RNvMNtNtNtCsbh5HI0F01lx_7aic88004fdrv4core14sdio_transportNtB2_13SdioTransport10write_fifo
+WIFI_MONITOR: 探针挂载完成
+WIFI_MONITOR: 采样 30s ...
+
+root@starry:/root # sleep 2
+root@starry:/root # iperf3 -s -1
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.50.2, port 52092
+[  5] local 192.168.50.1 port 5201 connected to 192.168.50.2 port 52106
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]   1.00-2.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]   2.00-3.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]   4.00-5.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]   5.00-6.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]   6.00-7.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]   7.00-8.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]   8.00-9.00   sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]   9.00-10.00  sec   128 KBytes  1.05 Mbits/sec    0   0.00 Bytes
+[  5]  10.00-11.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]  11.00-12.00  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+[  5]  12.00-12.71  sec  0.00 Bytes  0.00 bits/sec    0   0.00 Bytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-12.71  sec   128 KBytes  82.5 Kbits/sec    0            sender
+root@starry:/root # === wifi_monitor ===
+TX_ENQUEUE  cnt=331  bytes=476644
+SDIO_WR      bytes=492032  err=662
+SDIO_WR_LAT  17 0 0 0 0 314 0 0 (total=331)
+
+[1]+  Done                       wifi_monitor 30
+root@starry:/root #

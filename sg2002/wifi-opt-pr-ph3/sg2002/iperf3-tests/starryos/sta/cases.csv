@@ -1,0 +1,25 @@
+﻿case,os,mode,role,proto,dir,streams,duration,udp_bw,status,note,result,timestamp
+starryos-sta-board-s-tcp-tx-P1,starryos,sta,board-s,tcp,tx,1,30,0,OK,,board->PC 7.30 Mbits/sec,2026-09-17T16:20:00
+starryos-sta-board-s-tcp-tx-P4,starryos,sta,board-s,tcp,tx,4,30,0,OK,degraded: only 1 of 4 streams active,SUM board->PC 6.74 Mbits/sec,2026-09-17T16:20:00
+starryos-sta-board-s-tcp-rx-P1,starryos,sta,board-s,tcp,rx,1,30,0,OK,,PC->board 20.3 Mbits/sec,2026-09-17T16:21:00
+starryos-sta-board-s-tcp-rx-P4,starryos,sta,board-s,tcp,rx,4,30,0,OK,,SUM PC->board 21.3 Mbits/sec,2026-09-17T16:21:00
+starryos-sta-board-s-tcp-bidir-P1,starryos,sta,board-s,tcp,bidir,1,30,0,OK,,board->PC 3.32 / PC->board 1.85 Mbits/sec,2026-09-17T16:21:00
+starryos-sta-board-s-tcp-bidir-P4,starryos,sta,board-s,tcp,bidir,4,30,0,OK,,board->PC 6.36 / PC->board 6.36 Mbits/sec,2026-09-17T16:21:00
+starryos-sta-board-s-udp-tx-P1,starryos,sta,board-s,udp,tx,1,10,0,SKIP,board server UDP: iperf3 error - unable to start stream listener,,
+starryos-sta-board-s-udp-tx-P4,starryos,sta,board-s,udp,tx,4,30,0,SKIP,board server UDP not supported (same reason),,
+starryos-sta-board-s-udp-rx-P1,starryos,sta,board-s,udp,rx,1,30,0,SKIP,board server UDP not supported,,
+starryos-sta-board-s-udp-rx-P4,starryos,sta,board-s,udp,rx,4,30,0,SKIP,board server UDP not supported,,
+starryos-sta-board-s-udp-bidir-P1,starryos,sta,board-s,udp,bidir,1,30,0,SKIP,board server UDP not supported,,
+starryos-sta-board-s-udp-bidir-P4,starryos,sta,board-s,udp,bidir,4,30,0,SKIP,board server UDP not supported,,
+starryos-sta-board-c-tcp-tx-P1,starryos,sta,board-c,tcp,tx,1,30,0,OK,,board->PC 6.61 Mbits/sec,2026-09-17T16:23:00
+starryos-sta-board-c-tcp-rx-P1,starryos,sta,board-c,tcp,rx,1,30,0,OK,,PC->board 16.0 Mbits/sec,2026-09-17T16:35:00
+starryos-sta-board-c-tcp-bidir-P1,starryos,sta,board-c,tcp,bidir,1,30,0,FAIL,stalls midway (both directions ->0),no final summary,
+starryos-sta-board-c-tcp-tx-P4,starryos,sta,board-c,tcp,tx,4,30,0,SKIP,board client -P4 hangs the board (needs reboot),,
+starryos-sta-board-c-tcp-rx-P4,starryos,sta,board-c,tcp,rx,4,30,0,SKIP,board client -P4 hangs the board,,
+starryos-sta-board-c-tcp-bidir-P4,starryos,sta,board-c,tcp,bidir,4,30,0,SKIP,board client -P4 hangs the board,,
+starryos-sta-board-c-udp-tx-P1,starryos,sta,board-c,udp,tx,1,30,0,SKIP,board client UDP hangs the board,,
+starryos-sta-board-c-udp-rx-P1,starryos,sta,board-c,udp,rx,1,15,0,SKIP,board client UDP hangs the board,,
+starryos-sta-board-c-udp-bidir-P1,starryos,sta,board-c,udp,bidir,1,30,0,SKIP,board client UDP hangs the board,,
+starryos-sta-board-c-udp-tx-P4,starryos,sta,board-c,udp,tx,4,30,0,SKIP,board client UDP not supported,,
+starryos-sta-board-c-udp-rx-P4,starryos,sta,board-c,udp,rx,4,30,0,SKIP,board client UDP not supported,,
+starryos-sta-board-c-udp-bidir-P4,starryos,sta,board-c,udp,bidir,4,30,0,SKIP,board client UDP not supported,,

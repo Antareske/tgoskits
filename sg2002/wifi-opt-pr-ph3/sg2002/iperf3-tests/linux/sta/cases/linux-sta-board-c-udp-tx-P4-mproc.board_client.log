@@ -1,0 +1,181 @@
+﻿echo ===PORT 5201 tx===; cat /tmp/cli_5201.log; echo;echo ===PORT 5202 tx===; 
+cat /tmp/cli_5202.log; echo;echo ===PORT 5203 tx===; cat /tmp/cli_5203.log; echo
+;echo ===PORT 5204 tx===; cat /tmp/cli_5204.log; echo;echo ALLDONE
+===PORT 5201 tx===
+Connecting to host 192.168.137.1, port 5201
+[  5] local 192.168.137.68 port 43179 connected to 192.168.137.1 port 5201
+[ ID] Interval           Transfer     Bitrate         Total Datagrams
+[  5]   0.00-1.00   sec  4.45 MBytes  37.3 Mbits/sec  3220  (omitted)
+[  5]   1.00-2.00   sec  3.41 MBytes  28.6 Mbits/sec  2470  (omitted)
+[  5]   2.00-3.00   sec  1.95 MBytes  16.3 Mbits/sec  1410  (omitted)
+[  5]   0.00-1.00   sec  2.10 MBytes  17.6 Mbits/sec  1520  
+[  5]   1.00-2.00   sec  2.10 MBytes  17.6 Mbits/sec  1520  
+[  5]   2.00-3.00   sec  2.22 MBytes  18.6 Mbits/sec  1610  
+[  5]   3.00-4.00   sec  2.03 MBytes  17.1 Mbits/sec  1470  
+[  5]   4.00-5.00   sec  1.89 MBytes  15.9 Mbits/sec  1370  
+[  5]   5.00-6.00   sec  2.02 MBytes  16.9 Mbits/sec  1460  
+[  5]   6.00-7.00   sec  2.02 MBytes  16.9 Mbits/sec  1460  
+[  5]   7.00-8.00   sec  2.26 MBytes  19.0 Mbits/sec  1640  
+[  5]   8.00-9.00   sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]   9.00-10.00  sec  2.21 MBytes  18.5 Mbits/sec  1600  
+[  5]  10.00-11.00  sec  2.20 MBytes  18.4 Mbits/sec  1590  
+[  5]  11.00-12.00  sec  2.14 MBytes  18.0 Mbits/sec  1550  
+[  5]  12.00-13.00  sec  2.29 MBytes  19.2 Mbits/sec  1660  
+[  5]  13.00-14.00  sec  2.29 MBytes  19.2 Mbits/sec  1660  
+[  5]  14.00-15.00  sec  2.29 MBytes  19.2 Mbits/sec  1660  
+[  5]  15.00-16.00  sec  2.15 MBytes  18.1 Mbits/sec  1560  
+[  5]  16.00-17.00  sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]  17.00-18.00  sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]  18.00-19.00  sec  2.26 MBytes  19.0 Mbits/sec  1640  
+[  5]  19.00-20.00  sec  2.15 MBytes  18.1 Mbits/sec  1560  
+[  5]  20.00-21.00  sec  2.31 MBytes  19.3 Mbits/sec  1670  
+[  5]  21.00-22.00  sec  2.26 MBytes  19.0 Mbits/sec  1640  
+[  5]  22.00-23.00  sec  2.17 MBytes  18.2 Mbits/sec  1570  
+[  5]  23.00-24.00  sec  2.24 MBytes  18.8 Mbits/sec  1620  
+[  5]  24.00-25.00  sec  2.32 MBytes  19.5 Mbits/sec  1680  
+[  5]  25.00-26.00  sec  2.17 MBytes  18.2 Mbits/sec  1570  
+[  5]  26.00-27.00  sec  2.32 MBytes  19.4 Mbits/sec  1680  
+[  5]  27.00-28.00  sec  2.25 MBytes  18.9 Mbits/sec  1630  
+[  5]  28.00-29.00  sec  2.29 MBytes  19.3 Mbits/sec  1660  
+[  5]  29.00-30.00  sec  2.24 MBytes  18.8 Mbits/sec  1620  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  5]   0.00-30.00  sec  66.0 MBytes  18.5 Mbits/sec  0.000 ms  0/47820 (0%)  sender
+[  5]   0.00-30.05  sec  66.2 MBytes  18.5 Mbits/sec  0.397 ms  0/47910 (0%)  receiver
+
+iperf Done.
+
+===PORT 5202 tx===
+Connecting to host 192.168.137.1, port 5202
+[  5] local 192.168.137.68 port 41094 connected to 192.168.137.1 port 5202
+[ ID] Interval           Transfer     Bitrate         Total Datagrams
+[  5]   0.00-1.00   sec  4.43 MBytes  37.1 Mbits/sec  3210  (omitted)
+[  5]   1.00-2.00   sec  3.34 MBytes  28.0 Mbits/sec  2420  (omitted)
+[  5]   2.00-3.00   sec  1.96 MBytes  16.4 Mbits/sec  1420  (omitted)
+[  5]   0.00-1.00   sec  2.07 MBytes  17.4 Mbits/sec  1500  
+[  5]   1.00-2.00   sec  2.09 MBytes  17.5 Mbits/sec  1510  
+[  5]   2.00-3.00   sec  2.20 MBytes  18.5 Mbits/sec  1590  
+[  5]   3.00-4.00   sec  2.04 MBytes  17.1 Mbits/sec  1480  
+[  5]   4.00-5.00   sec  1.88 MBytes  15.7 Mbits/sec  1360  
+[  5]   5.00-6.00   sec  1.99 MBytes  16.7 Mbits/sec  1440  
+[  5]   6.00-7.00   sec  2.00 MBytes  16.8 Mbits/sec  1450  
+[  5]   7.00-8.00   sec  2.25 MBytes  18.9 Mbits/sec  1630  
+[  5]   8.00-9.00   sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]   9.00-10.00  sec  2.21 MBytes  18.5 Mbits/sec  1600  
+[  5]  10.00-11.00  sec  2.15 MBytes  18.1 Mbits/sec  1560  
+[  5]  11.00-12.00  sec  2.17 MBytes  18.2 Mbits/sec  1570  
+[  5]  12.00-13.00  sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]  13.00-14.00  sec  2.31 MBytes  19.3 Mbits/sec  1670  
+[  5]  14.00-15.00  sec  2.26 MBytes  19.0 Mbits/sec  1640  
+[  5]  15.00-16.00  sec  2.14 MBytes  18.0 Mbits/sec  1550  
+[  5]  16.00-17.00  sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]  17.00-18.00  sec  2.24 MBytes  18.8 Mbits/sec  1620  
+[  5]  18.00-19.00  sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]  19.00-20.00  sec  2.14 MBytes  18.0 Mbits/sec  1550  
+[  5]  20.00-21.00  sec  2.29 MBytes  19.2 Mbits/sec  1660  
+[  5]  21.00-22.00  sec  2.25 MBytes  18.8 Mbits/sec  1630  
+[  5]  22.00-23.00  sec  2.15 MBytes  18.1 Mbits/sec  1560  
+[  5]  23.00-24.00  sec  2.22 MBytes  18.6 Mbits/sec  1610  
+[  5]  24.00-25.00  sec  2.32 MBytes  19.5 Mbits/sec  1680  
+[  5]  25.00-26.00  sec  2.15 MBytes  18.1 Mbits/sec  1560  
+[  5]  26.00-27.00  sec  2.31 MBytes  19.3 Mbits/sec  1670  
+[  5]  27.00-28.00  sec  2.24 MBytes  18.8 Mbits/sec  1620  
+[  5]  28.00-29.00  sec  2.25 MBytes  18.9 Mbits/sec  1630  
+[  5]  29.00-30.00  sec  2.22 MBytes  18.7 Mbits/sec  1610  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  5]   0.00-30.00  sec  65.7 MBytes  18.4 Mbits/sec  0.000 ms  0/47550 (0%)  sender
+[  5]   0.00-30.05  sec  65.8 MBytes  18.4 Mbits/sec  0.459 ms  0/47650 (0%)  receiver
+
+iperf Done.
+
+===PORT 5203 tx===
+Connecting to host 192.168.137.1, port 5203
+[  5] local 192.168.137.68 port 53619 connected to 192.168.137.1 port 5203
+[ ID] Interval           Transfer     Bitrate         Total Datagrams
+[  5]   0.00-1.00   sec  1.95 MBytes  16.3 Mbits/sec  1410  (omitted)
+[  5]   1.00-2.00   sec  2.09 MBytes  17.5 Mbits/sec  1510  (omitted)
+[  5]   2.00-3.00   sec  2.14 MBytes  17.9 Mbits/sec  1550  (omitted)
+[  5]   0.00-1.00   sec  2.20 MBytes  18.4 Mbits/sec  1590  
+[  5]   1.00-2.00   sec  2.09 MBytes  17.5 Mbits/sec  1510  
+[  5]   2.00-3.00   sec  1.99 MBytes  16.7 Mbits/sec  1440  
+[  5]   3.00-4.00   sec  2.11 MBytes  17.7 Mbits/sec  1530  
+[  5]   4.00-5.00   sec  1.82 MBytes  15.3 Mbits/sec  1320  
+[  5]   5.00-6.00   sec  2.29 MBytes  19.2 Mbits/sec  1660  
+[  5]   6.00-7.00   sec  2.29 MBytes  19.2 Mbits/sec  1660  
+[  5]   7.00-8.00   sec  2.26 MBytes  19.0 Mbits/sec  1640  
+[  5]   8.00-9.00   sec  2.22 MBytes  18.7 Mbits/sec  1610  
+[  5]   9.00-10.00  sec  2.13 MBytes  17.8 Mbits/sec  1540  
+[  5]  10.00-11.00  sec  2.31 MBytes  19.3 Mbits/sec  1670  
+[  5]  11.00-12.00  sec  2.31 MBytes  19.4 Mbits/sec  1670  
+[  5]  12.00-13.00  sec  2.32 MBytes  19.4 Mbits/sec  1680  
+[  5]  13.00-14.00  sec  2.24 MBytes  18.8 Mbits/sec  1620  
+[  5]  14.00-15.00  sec  2.25 MBytes  18.9 Mbits/sec  1630  
+[  5]  15.00-16.00  sec  2.25 MBytes  18.9 Mbits/sec  1630  
+[  5]  16.00-17.00  sec  2.31 MBytes  19.3 Mbits/sec  1670  
+[  5]  17.00-18.00  sec  2.17 MBytes  18.2 Mbits/sec  1570  
+[  5]  18.00-19.00  sec  2.33 MBytes  19.6 Mbits/sec  1690  
+[  5]  19.00-20.00  sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]  20.00-21.00  sec  2.29 MBytes  19.2 Mbits/sec  1660  
+[  5]  21.00-22.00  sec  2.17 MBytes  18.2 Mbits/sec  1570  
+[  5]  22.00-23.00  sec  2.32 MBytes  19.4 Mbits/sec  1680  
+[  5]  23.00-24.00  sec  2.24 MBytes  18.8 Mbits/sec  1620  
+[  5]  24.00-25.00  sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]  25.00-26.00  sec  2.32 MBytes  19.4 Mbits/sec  1680  
+[  5]  26.00-27.00  sec  2.31 MBytes  19.4 Mbits/sec  1670  
+[  5]  27.00-28.00  sec  2.26 MBytes  19.0 Mbits/sec  1640  
+[  5]  28.00-29.00  sec  3.80 MBytes  31.8 Mbits/sec  2750  
+[  5]  29.00-30.00  sec  4.58 MBytes  38.7 Mbits/sec  3320  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  5]   0.00-30.00  sec  70.7 MBytes  19.8 Mbits/sec  0.000 ms  0/51220 (0%)  sender
+[  5]   0.00-30.07  sec  70.9 MBytes  19.8 Mbits/sec  0.148 ms  4/51380 (0.0078%)  receiver
+
+iperf Done.
+
+===PORT 5204 tx===
+Connecting to host 192.168.137.1, port 5204
+[  5] local 192.168.137.68 port 57128 connected to 192.168.137.1 port 5204
+[ ID] Interval           Transfer     Bitrate         Total Datagrams
+[  5]   0.00-1.00   sec  1.95 MBytes  16.3 Mbits/sec  1410  (omitted)
+[  5]   1.00-2.00   sec  2.10 MBytes  17.6 Mbits/sec  1520  (omitted)
+[  5]   2.00-3.00   sec  2.13 MBytes  17.9 Mbits/sec  1540  (omitted)
+[  5]   0.00-1.00   sec  2.21 MBytes  18.5 Mbits/sec  1600  
+[  5]   1.00-2.00   sec  2.09 MBytes  17.5 Mbits/sec  1510  
+[  5]   2.00-3.00   sec  1.99 MBytes  16.7 Mbits/sec  1440  
+[  5]   3.00-4.00   sec  2.11 MBytes  17.8 Mbits/sec  1530  
+[  5]   4.00-5.00   sec  1.81 MBytes  15.2 Mbits/sec  1310  
+[  5]   5.00-6.00   sec  2.31 MBytes  19.3 Mbits/sec  1670  
+[  5]   6.00-7.00   sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]   7.00-8.00   sec  2.26 MBytes  19.0 Mbits/sec  1640  
+[  5]   8.00-9.00   sec  2.22 MBytes  18.7 Mbits/sec  1610  
+[  5]   9.00-10.00  sec  2.11 MBytes  17.7 Mbits/sec  1530  
+[  5]  10.00-11.00  sec  2.29 MBytes  19.2 Mbits/sec  1660  
+[  5]  11.00-12.00  sec  2.31 MBytes  19.3 Mbits/sec  1670  
+[  5]  12.00-13.00  sec  2.32 MBytes  19.5 Mbits/sec  1680  
+[  5]  13.00-14.00  sec  2.25 MBytes  18.9 Mbits/sec  1630  
+[  5]  14.00-15.00  sec  2.24 MBytes  18.8 Mbits/sec  1620  
+[  5]  15.00-16.00  sec  2.25 MBytes  18.9 Mbits/sec  1630  
+[  5]  16.00-17.00  sec  2.29 MBytes  19.2 Mbits/sec  1660  
+[  5]  17.00-18.00  sec  2.17 MBytes  18.2 Mbits/sec  1570  
+[  5]  18.00-19.00  sec  2.31 MBytes  19.4 Mbits/sec  1670  
+[  5]  19.00-20.00  sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]  20.00-21.00  sec  2.31 MBytes  19.3 Mbits/sec  1670  
+[  5]  21.00-22.00  sec  2.14 MBytes  18.0 Mbits/sec  1550  
+[  5]  22.00-23.00  sec  2.32 MBytes  19.4 Mbits/sec  1680  
+[  5]  23.00-24.00  sec  2.21 MBytes  18.6 Mbits/sec  1600  
+[  5]  24.00-25.00  sec  2.28 MBytes  19.1 Mbits/sec  1650  
+[  5]  25.00-26.00  sec  2.29 MBytes  19.2 Mbits/sec  1660  
+[  5]  26.00-27.00  sec  2.32 MBytes  19.5 Mbits/sec  1680  
+[  5]  27.00-28.00  sec  2.25 MBytes  18.8 Mbits/sec  1630  
+[  5]  28.00-29.00  sec  3.78 MBytes  31.8 Mbits/sec  2740  
+[  5]  29.00-30.00  sec  4.61 MBytes  38.6 Mbits/sec  3340  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  5]   0.00-30.00  sec  70.6 MBytes  19.7 Mbits/sec  0.000 ms  0/51130 (0%)  sender
+[  5]   0.00-30.07  sec  70.8 MBytes  19.8 Mbits/sec  0.358 ms  0/51280 (0%)  receiver
+
+iperf Done.
+
+ALLDONE
+# 

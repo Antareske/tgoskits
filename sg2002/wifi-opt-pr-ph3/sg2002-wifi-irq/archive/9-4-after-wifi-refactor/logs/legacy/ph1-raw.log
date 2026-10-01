@@ -1,0 +1,244 @@
+[ 16.268527 0:2 ax_runtime:357] runtime console active: serial0, ttyS0
+Boot at 1970-01-01 00:00:16.268558160 UTC
+
+[ 16.269192 0:12 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op ResetAll
+[ 16.269380 0:12 ax_fs_ng::block::runtime::hctx:177] block hctx 0 bound to CPU 0 with hardware depth 1
+[ 16.269560 0:12 ax_fs_ng::block::runtime::lifecycle::device:300] block device cvsd IRQ source 0 (IrqId { domain: IrqDomainId(7), hwirq: HwIrq(36) }) fixed to CPU 0 for queue mask 0x1
+[ 16.270958 0:13 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op PowerOn
+[ 16.281324 0:13 sdmmc_protocol::sdio::init::state_machine:102] sdio: submit bus op SwitchVoltage(V330)
+[ 16.283589 0:13 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit1)
+[ 16.283695 0:13 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Identification)
+[ 16.308005 0:13 sdmmc_protocol::sdio::init::state_machine::identify:175] sdio: detected Sd ocr=0xc1ff8000
+[ 16.310111 0:13 sdmmc_protocol::sdio::init::state_machine::identify:340] sdio: CSD capacity_blocks=Some(124735488)
+
+[ 16.310747 0:13 sdmmc_protocol::sdio::init::state_machine::identify:354] sdio: switch SD bus width to 4-bit
+[ 16.311858 0:13 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetBusWidth(Bit4)
+[ 16.312728 0:13 sdmmc_protocol::sdio::init::state_machine:63] sdio: submit bus op SetClock(Default)
+[ 16.316812 0:13 sdmmc_protocol::sdio::init::state_machine::sd:185] sdio: SD speed selected HighSpeed
+[ 16.317268 0:13 sdmmc_protocol::sdio::init::state_machine:237] sdio: init done kind=Sd sd_v2=true high_capacity=true rca=0xaaaa ocr=0xc1ff8000 host_bus_width=Bit4 ext_csd_bus_width=None ext_csd_timing=None
+[ 16.317309 0:13 sdmmc_protocol::rdif::queue:172] sdmmc block init complete: kind=Sd high_capacity=true rca=43690 capacity_blocks=124735488 cache_enabled=false
+[ 16.321840 0:2 ax_fs_ng::root:348]     partition 1 name=None fs=None lba 2048..133120
+[ 16.323466 0:2 ax_fs_ng::root:348]     partition 2 name=None fs=Some(Ext4) lba 133120..4331520
+[ 16.323514 0:2 ax_fs_ng::root:364]   block device 0 (cvsd) has Mbr partition table with 2 partitions
+[ 16.323584 0:2 ax_fs_ng::root:474]   matched root by device path on disk0 partition 2 (<unnamed>, fs=ext4, lba 133120..4331520)
+Welcome to Starry OS!
+[ 16.323635 0:2 ax_fs_ng:103] Initialize filesystem subsystem...
+USER=root
+[ 16.393149 0:2 rsext4::ext4::mount:467]   - block size: 4096 bytes
+HOSTNAME=starry
+[ 16.393169 0:2 rsext4::ext4::mount:468]   - total blocks: 524288
+SHLVL=1
+[ 16.393189 0:2 rsext4::ext4::mount:469]   - free blocks: 78353
+HOME=/root
+[ 16.393208 0:2 rsext4::ext4::mount:470]   - total inodes: 131072
+TERM=xterm-256color
+[ 16.393228 0:2 rsext4::ext4::mount:471]   - free inodes: 125265
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+[ 16.393248 0:2 rsext4::ext4::sync:13] Syncing filesystem...
+PWD=/
+[ 16.446887 0:2 rsext4::ext4::mount:550] Ext4 filesystem mounted
+
+[ 16.447014 0:2 ax_fs_ng:116]   filesystem type: "ext4"
+Use apk to install packages.
+[ 16.518952 0:2 ax_net:190] Initialize network subsystem...
+
+[ 16.519832 0:2 ax_net:202]   No network device found!
+[ 16.521021 0:2 ax_net:641] wlan0: up, mac 38-7a-cc-9b-2c-c8, ip 192.168.50.1/24
+[ 16.521098 0:2 ax_runtime:397] Primary CPU 0 init OK.
+[ 16.521130 0:2 ax_fs_ng::block::runtime::lifecycle::device:369] block device cvsd online with 1 hctxs across 1 CPUs
+[ 16.521396 0:2 ax_tracepoint:389] tracepoint registered: sched:sched_process_fork
+[ 16.521423 0:2 ax_tracepoint:389] tracepoint registered: sched:sched_switch
+[ 16.521450 0:2 ax_tracepoint:389] tracepoint registered: syscalls:sys_clone
+kmod subsystem initialized
+[ 16.521756 0:2 starry_kernel::pseudofs:86] Initialize pseudofs...
+[ 16.522357 0:2 starry_kernel::pseudofs::dev::tty::serial:244] ttyS0 registered: path=/serial@04140000, alias=Some(0), paddr=0x4140000, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 116, cells: [44, 4] })))
+[ 16.523077 0:2 starry_kernel::pseudofs::dev::tty::serial:188] /dev/console bound to runtime console ttyS0
+[ 16.524759 0:2 sg2002_tpu::tpu::device:181] TPU device initialized
+[ 16.524891 0:2 starry_kernel::pseudofs::dev::tpu::device:236] [TPU] TDMA IRQ IrqId { domain: IrqDomainId(7), hwirq: HwIrq(76) } registered and enabled
+[ 16.528212 0:2 starry_kernel::pseudofs::usbfs:55] usbfs: initializing manager
+[ 16.528243 0:2 starry_kernel::pseudofs::usbfs::manager:1486] usbfs: discovered 0 USB host(s)
+[ 16.531927 0:2 starry_kernel::dyn_debug:65] debug_init: initializing dynamic debug sites
+[ 16.533403 0:2 starry_kernel::dyn_debug:68] debug_init: found 215 dynamic debug sites
+[ 16.533489 0:2 starry_kernel::pseudofs::proc:74] Read kallsyms, size: 1441KB
+[ 16.579412 0:2 starry_kernel::task::timer:394] Initialize alarm...
+[ 16.802414 0:25 starry_kernel::task::user:71] Enter user space: ip=0x6015684e, sp=0x3fffff620
+[ 16.842122 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.903568 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.903927 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 16.987314 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 16.987672 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 16.999774 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.179152 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.179510 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 17.444923 0:30 starry_kernel::task::ops:348] Task(30, "busybox") exit with code: 0
+[ 17.460057 0:30 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 17.460932 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.461292 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 17.473169 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+root@starry:/root # [ 17.474312 0:31 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffeb80
+
+[ 17.577739 0:31 starry_kernel::task::ops:348] Task(31, "busybox") exit with code: 0
+root@starry:/root # [ 17.592627 0:31 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 17.593501 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.593859 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 17.605907 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.607052 0:32 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 17.711231 0:32 starry_kernel::task::ops:348] Task(32, "busybox") exit with code: 0
+[ 17.726344 0:32 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 17.727223 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.727579 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 17.739469 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.740610 0:33 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 17.845149 0:33 starry_kernel::task::ops:348] Task(33, "busybox") exit with code: 0
+[ 17.860154 0:33 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 17.861030 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.861384 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 17.873232 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.874365 0:34 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 17.980017 0:34 starry_kernel::task::ops:348] Task(34, "busybox") exit with code: 0
+[ 17.995114 0:34 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 17.996068 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 17.996424 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 18.008250 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.009449 0:35 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 18.112708 0:35 starry_kernel::task::ops:348] Task(35, "busybox") exit with code: 0
+[ 18.127704 0:35 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 18.128581 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.128938 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 18.140847 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.141984 0:36 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 18.246764 0:36 starry_kernel::task::ops:348] Task(36, "busybox") exit with code: 0
+[ 18.261861 0:36 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 18.262737 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.263092 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 18.274936 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.276076 0:37 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 18.381252 0:37 starry_kernel::task::ops:348] Task(37, "busybox") exit with code: 0
+[ 18.396135 0:37 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 18.397009 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.397365 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 18.409322 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.410458 0:38 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 18.514199 0:38 starry_kernel::task::ops:348] Task(38, "busybox") exit with code: 0
+[ 18.529165 0:38 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 18.530042 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.530397 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 18.542238 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.543378 0:39 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffe960
+[ 18.648477 0:39 starry_kernel::task::ops:348] Task(39, "busybox") exit with code: 0
+[ 18.663452 0:39 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 18.664328 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.664684 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+[ 18.686398 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.687150 0:40 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3ffffed40
+[ 18.728259 0:40 starry_kernel::task::ops:348] Task(40, "busybox") exit with code: 0
+[ 18.743681 0:40 starry_kernel::task::signal:647] Send signal SIGCHLD to process 1
+[ 18.744637 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(0x0)
+[ 18.744994 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WNOHANG)
+
+root@starry:/root #
+root@starry:/root #
+root@starry:/root #
+root@starry:/root # [ 25.948956 0:7 aic8800::fdrv::protocol::apm:280] [apm] ME_STA_ADD_CFM: sta_idx=0 status=0
+[ 25.949073 0:7 aic8800::fdrv::thread::ap:155] [wifi-ap] STA [90, de, 80, 92, bc, cd] registered: sta_idx=0, aid=1
+[ 25.949133 0:7 aic8800::fdrv::thread::ap:174] [wifi-ap] Assoc Response queued -> [90, de, 80, 92, bc, cd]
+[ 25.949966 0:7 aic8800::fdrv::thread::ap:192] [wifi-ap] control port OPENED for sta_idx=0
+[ 25.965588 0:14 ax_net::dhcp_server:144] [dhcp-srv] Request from 90-de-80-92-bc-cd -> Ack 192.168.50.2
+[ 26.282506 0:15 ax_net::device::ethernet:490] wlan0: ARP 192.168.50.2 -> 90-de-80-92-bc-cd
+
+root@starry:/root #
+root@starry:/root # [ 28.699237 0:14 ax_net::dhcp_server:144] [dhcp-srv] Request from 90-de-80-92-bc-cd -> Ack 192.168.50.2
+
+root@starry:/root # iperf3 -s 1
+[ 32.575774 0:25 starry_kernel::syscall::task::wait:360] sys_waitpid <= pid: -1, options: WaitPidOptions(WUNTRACED)
+[ 32.576429 0:41 starry_kernel::task::user:71] Enter user space: ip=0x6013d7ae, sp=0x3fffff570
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+[ 36.613596 0:15 ax_net::device::ethernet:490] wlan0: ARP 192.168.50.2 -> 90-de-80-92-bc-cd
+Accepted connection from 192.168.50.2, port 59060
+[  5] local 192.168.50.1 port 5201 connected to 192.168.50.2 port 59062
+[ 39.127453 0:42 starry_kernel::task::user:71] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-1.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   1.00-2.01   sec  1.50 MBytes  12.5 Mbits/sec
+[  5]   2.01-3.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   3.00-4.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   4.00-5.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   5.00-6.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   6.00-7.00   sec  1.62 MBytes  13.7 Mbits/sec
+[  5]   7.00-8.00   sec  1.50 MBytes  12.6 Mbits/sec
+[  5]   8.00-9.00   sec  1.62 MBytes  13.6 Mbits/sec
+[  5]   9.00-10.00  sec  1.50 MBytes  12.6 Mbits/sec
+[ 49.149231 0:42 starry_kernel::task::ops:348] Task(42, "iperf3") exit with code: 0
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  5]   0.00-10.02  sec  15.2 MBytes  12.8 Mbits/sec                  receiver
+-----------------------------------------------------------
+Server listening on 5201 (test #2)
+-----------------------------------------------------------
+Accepted connection from 192.168.50.2, port 59022
+[  5] local 192.168.50.1 port 5201 connected to 192.168.50.2 port 59038
+[ 59.194998 0:43 starry_kernel::task::user:71] Enter user space: ip=0x601524d0, sp=0x428af0
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+[  5]   1.00-2.00   sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+[ 61.716325 0:15 ax_net::device::ethernet:490] wlan0: ARP 192.168.50.2 -> 90-de-80-92-bc-cd
+[  5]   2.00-3.00   sec  1.38 MBytes  11.5 Mbits/sec    0   0.00 Bytes
+[  5]   3.00-4.00   sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+[  5]   4.00-5.00   sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+[  5]   5.00-6.00   sec  1.38 MBytes  11.5 Mbits/sec    0   0.00 Bytes
+[  5]   6.00-7.00   sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+[  5]   7.00-8.00   sec  1.25 MBytes  10.5 Mbits/sec    0   0.00 Bytes
+[  5]   8.00-9.00   sec  1.38 MBytes  11.5 Mbits/sec    0   0.00 Bytes
+[  5]   9.00-9.99   sec  1.25 MBytes  10.7 Mbits/sec    0   0.00 Bytes
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[ 69.244847 0:43 starry_kernel::task::ops:348] Task(43, "iperf3") exit with code: 0
+[  5]   0.00-9.99   sec  12.9 MBytes  10.8 Mbits/sec    0            sender
+-----------------------------------------------------------
+Server listening on 5201 (test #3)
+-----------------------------------------------------------
+Accepted connection from 192.168.50.2, port 59074
+[  5] local 192.168.50.1 port 5201 connected to 192.168.50.2 port 59078
+[ 79.240090 0:44 starry_kernel::task::user:71] Enter user space: ip=0x601524d0, sp=0x448af0
+[  8] local 192.168.50.1 port 5201 connected to 192.168.50.2 port 59088
+[ 79.240643 0:45 starry_kernel::task::user:71] Enter user space: ip=0x601524d0, sp=0x46baf0
+[ ID][Role] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5][RX-S]   0.00-1.00   sec   512 KBytes  4.18 Mbits/sec
+[  8][TX-S]   0.00-1.00   sec   768 KBytes  6.27 Mbits/sec    0   0.00 Bytes
+[  5][RX-S]   1.00-2.00   sec   768 KBytes  6.30 Mbits/sec
+[  8][TX-S]   1.00-2.00   sec   640 KBytes  5.25 Mbits/sec    0   0.00 Bytes
+[  5][RX-S]   2.00-3.00   sec   768 KBytes  6.29 Mbits/sec
+[  8][TX-S]   2.00-3.00   sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes
+[  5][RX-S]   3.00-4.00   sec   640 KBytes  5.23 Mbits/sec
+[  8][TX-S]   3.00-4.00   sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes
+[  5][RX-S]   4.00-5.00   sec   768 KBytes  6.29 Mbits/sec
+[  8][TX-S]   4.00-5.00   sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes
+[  5][RX-S]   5.00-6.00   sec   768 KBytes  6.29 Mbits/sec
+[  8][TX-S]   5.00-6.00   sec   768 KBytes  6.29 Mbits/sec    0   0.00 Bytes
+[  5][RX-S]   6.00-7.00   sec   640 KBytes  5.25 Mbits/sec
+[  8][TX-S]   6.00-7.00   sec   768 KBytes  6.30 Mbits/sec    0   0.00 Bytes
+[ 87.008511 0:15 ax_net::device::ethernet:490] wlan0: ARP 192.168.50.2 -> 90-de-80-92-bc-cd
+[  5][RX-S]   7.00-8.00   sec   768 KBytes  6.28 Mbits/sec
+[  8][TX-S]   7.00-8.00   sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes
+[  5][RX-S]   8.00-9.00   sec   768 KBytes  6.30 Mbits/sec
+[  8][TX-S]   8.00-9.00   sec   640 KBytes  5.24 Mbits/sec    0   0.00 Bytes
+[  5][RX-S]   9.00-10.00  sec   640 KBytes  5.23 Mbits/sec
+[ 89.272625 0:44 starry_kernel::task::ops:348] Task(44, "iperf3") exit with code: 0
+[  8][TX-S]   9.00-10.00  sec   768 KBytes  6.28 Mbits/sec    0   0.00 Bytes
+[ 89.302634 0:45 starry_kernel::task::ops:348] Task(45, "iperf3") exit with code: 0
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID][Role] Interval           Transfer     Bitrate         Retr
+[  5][RX-S]   0.00-10.02  sec  6.88 MBytes  5.75 Mbits/sec                  receiver
+[  8][TX-S]   0.00-10.02  sec  7.12 MBytes  5.96 Mbits/sec    0            sender
+-----------------------------------------------------------
+Server listening on 5201 (test #4)
+-----------------------------------------------------------
+[109.145869 0:14 ax_net::orphan:156] Reaped expired orphan socket #2
+[115.508585 0:15 ax_net::device::ethernet:490] wlan0: ARP 192.168.50.2 -> 90-de-80-92-bc-cd
+[149.274720 0:14 ax_net::orphan:156] Reaped expired orphan socket #3
+[160.517686 0:15 ax_net::device::ethernet:490] wlan0: ARP 192.168.50.2 -> 90-de-80-92-bc-cd
+[167.958255 0:15 ax_net::device::ethernet:490] wlan0: ARP 192.168.50.2 -> 90-de-80-92-bc-cd
+[206.886750 0:15 ax_net::device::ethernet:490] wlan0: ARP 192.168.50.2 -> 90-de-80-92-bc-cd
+[313.943937 0:15 ax_net::device::ethernet:490] wlan0: ARP 192.168.50.2 -> 90-de-80-92-bc-cd

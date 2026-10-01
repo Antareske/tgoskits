@@ -1,0 +1,87 @@
+﻿cat /tmp/iperf3_cli.log; echo CLILOG_DONE
+Connecting to host 192.168.137.1, port 5201
+[  5] local 192.168.137.68 port 58103 connected to 192.168.137.1 port 5201
+[ ID] Interval           Transfer     Bitrate         Total Datagrams
+[  5]   0.00-1.00   sec  8.62 MBytes  72.3 Mbits/sec  6240  (omitted)
+[  5]   1.00-2.00   sec  9.02 MBytes  75.6 Mbits/sec  6530  (omitted)
+[  5]   2.00-3.00   sec  8.70 MBytes  73.0 Mbits/sec  6300  (omitted)
+[  5]   0.00-1.00   sec  9.20 MBytes  77.1 Mbits/sec  6660  
+[  5]   1.00-2.00   sec  9.29 MBytes  78.0 Mbits/sec  6730  
+[  5]   2.00-3.00   sec  9.06 MBytes  76.0 Mbits/sec  6560  
+[  5]   3.00-4.00   sec  8.98 MBytes  75.3 Mbits/sec  6500  
+[  5]   4.00-5.00   sec  9.07 MBytes  76.1 Mbits/sec  6570  
+[  5]   5.00-6.00   sec  8.80 MBytes  73.8 Mbits/sec  6370  
+[  5]   6.00-7.00   sec  8.60 MBytes  72.2 Mbits/sec  6230  
+[  5]   7.00-8.00   sec  9.05 MBytes  75.9 Mbits/sec  6550  
+[  5]   8.00-9.00   sec  9.14 MBytes  76.7 Mbits/sec  6620  
+[  5]   9.00-10.00  sec  8.27 MBytes  69.3 Mbits/sec  5990  
+[  5]  10.00-11.00  sec  8.92 MBytes  74.9 Mbits/sec  6460  
+[  5]  11.00-12.00  sec  7.98 MBytes  66.9 Mbits/sec  5780  
+[  5]  12.00-13.00  sec  8.95 MBytes  75.1 Mbits/sec  6480  
+[  5]  13.00-14.00  sec  8.98 MBytes  75.3 Mbits/sec  6500  
+[  5]  14.00-15.00  sec  8.85 MBytes  74.3 Mbits/sec  6410  
+[  5]  15.00-16.00  sec  8.60 MBytes  72.1 Mbits/sec  6230  
+[  5]  16.00-17.00  sec  7.43 MBytes  62.3 Mbits/sec  5380  
+[  5]  17.00-18.00  sec  8.92 MBytes  74.8 Mbits/sec  6460  
+[  5]  18.00-19.00  sec  8.67 MBytes  72.8 Mbits/sec  6280  
+[  5]  19.00-20.00  sec  8.98 MBytes  75.3 Mbits/sec  6500  
+[  5]  20.00-21.00  sec  8.82 MBytes  74.0 Mbits/sec  6390  
+[  5]  21.00-22.00  sec  8.63 MBytes  72.4 Mbits/sec  6250  
+[  5]  22.00-23.00  sec  8.93 MBytes  74.9 Mbits/sec  6470  
+[  5]  23.00-24.00  sec  8.19 MBytes  68.7 Mbits/sec  5930  
+[  5]  24.00-25.00  sec  9.05 MBytes  75.9 Mbits/sec  6550  
+[  5]  25.00-26.00  sec  9.17 MBytes  76.9 Mbits/sec  6640  
+[  5]  26.00-27.00  sec  9.13 MBytes  76.6 Mbits/sec  6610  
+[  5]  27.00-28.00  sec  9.02 MBytes  75.6 Mbits/sec  6530  
+[  5]  28.00-29.00  sec  8.20 MBytes  68.8 Mbits/sec  5940  
+[  5]  29.00-30.00  sec  9.06 MBytes  76.0 Mbits/sec  6560  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  5]   0.00-30.00  sec   264 MBytes  73.8 Mbits/sec  0.000 ms  0/191130 (0%)  sender
+[  5]   0.00-30.01  sec   260 MBytes  72.7 Mbits/sec  0.131 ms  2840/191223 (1.5%)  receiver
+
+Server output:
+Accepted connection from 192.168.137.68, port 38960
+[  6] local 192.168.137.1 port 5201 connected to 192.168.137.68 port 58103
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  6]   0.00-1.00   sec  8.23 MBytes  68.9 Mbits/sec  0.251 ms  106/6063 (1.7%)  (omitted)
+[  6]   1.00-2.00   sec  8.68 MBytes  72.9 Mbits/sec  0.262 ms  249/6534 (3.8%)  (omitted)
+[  6]   1.00-1.00   sec  8.77 MBytes  36.8 Mbits/sec  0.193 ms  334/12952 (2.6%)  
+[  6]   1.00-2.00   sec  9.30 MBytes  78.0 Mbits/sec  0.309 ms  61/6795 (0.9%)  
+[  6]   2.00-3.00   sec  8.80 MBytes  73.8 Mbits/sec  0.299 ms  130/6499 (2%)  
+[  6]   3.00-4.00   sec  8.89 MBytes  74.5 Mbits/sec  0.179 ms  131/6566 (2%)  
+[  6]   4.00-5.00   sec  8.76 MBytes  73.5 Mbits/sec  0.284 ms  140/6482 (2.2%)  
+[  6]   5.00-6.00   sec  8.75 MBytes  73.4 Mbits/sec  0.138 ms  99/6438 (1.5%)  
+[  6]   6.00-7.00   sec  8.46 MBytes  71.0 Mbits/sec  0.235 ms  41/6169 (0.66%)  
+[  6]   7.00-8.00   sec  9.13 MBytes  76.6 Mbits/sec  0.161 ms  44/6654 (0.66%)  
+[  6]   8.00-9.00   sec  8.96 MBytes  75.2 Mbits/sec  0.123 ms  55/6547 (0.84%)  
+[  6]   9.00-10.00  sec  8.16 MBytes  68.4 Mbits/sec  0.140 ms  129/6037 (2.1%)  
+[  6]  10.00-11.00  sec  8.78 MBytes  73.7 Mbits/sec  0.266 ms  55/6416 (0.86%)  
+[  6]  11.00-12.00  sec  7.90 MBytes  66.2 Mbits/sec  0.151 ms  92/5812 (1.6%)  
+[  6]  12.00-13.00  sec  8.92 MBytes  74.9 Mbits/sec  0.177 ms  44/6506 (0.68%)  
+[  6]  13.00-14.00  sec  8.76 MBytes  73.4 Mbits/sec  0.092 ms  110/6450 (1.7%)  
+[  6]  14.00-15.00  sec  8.81 MBytes  74.0 Mbits/sec  0.100 ms  58/6438 (0.9%)  
+[  6]  15.00-16.00  sec  8.40 MBytes  70.4 Mbits/sec  0.158 ms  90/6171 (1.5%)  
+[  6]  16.00-17.00  sec  7.43 MBytes  62.3 Mbits/sec  0.790 ms  63/5442 (1.2%)  
+[  6]  17.00-18.00  sec  8.77 MBytes  73.6 Mbits/sec  0.178 ms  46/6400 (0.72%)  
+[  6]  18.00-19.00  sec  8.55 MBytes  71.7 Mbits/sec  0.251 ms  80/6271 (1.3%)  
+[  6]  19.00-20.00  sec  8.96 MBytes  75.2 Mbits/sec  0.139 ms  52/6542 (0.79%)  
+[  6]  20.00-21.00  sec  8.73 MBytes  73.3 Mbits/sec  0.183 ms  122/6447 (1.9%)  
+[  6]  21.00-22.00  sec  8.46 MBytes  71.0 Mbits/sec  0.232 ms  84/6213 (1.4%)  
+[  6]  22.00-23.00  sec  8.73 MBytes  73.2 Mbits/sec  0.084 ms  104/6425 (1.6%)  
+[  6]  23.00-24.00  sec  8.07 MBytes  67.7 Mbits/sec  0.405 ms  114/5956 (1.9%)  
+[  6]  24.00-25.00  sec  8.89 MBytes  74.6 Mbits/sec  0.164 ms  159/6599 (2.4%)  
+[  6]  25.00-26.00  sec  9.08 MBytes  76.2 Mbits/sec  0.170 ms  72/6647 (1.1%)  
+[  6]  26.00-27.00  sec  8.91 MBytes  74.7 Mbits/sec  0.162 ms  96/6546 (1.5%)  
+[  6]  27.00-28.00  sec  8.93 MBytes  75.0 Mbits/sec  0.088 ms  53/6521 (0.81%)  
+[  6]  28.00-29.00  sec  7.99 MBytes  67.0 Mbits/sec  0.154 ms  143/5928 (2.4%)  
+[  6]  29.00-30.00  sec  8.96 MBytes  75.1 Mbits/sec  0.235 ms  151/6638 (2.3%)  
+[  6]  30.00-30.01  sec   136 KBytes  92.0 Mbits/sec  0.131 ms  0/96 (0%)  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  6]   0.00-30.01  sec   260 MBytes  72.7 Mbits/sec  0.131 ms  2840/191223 (1.5%)  receiver
+
+
+iperf Done.
+CLILOG_DONE
+# 

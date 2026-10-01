@@ -1,0 +1,43 @@
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 10.187.134.1, port 42134
+[  6] local 10.187.134.2 port 5201 connected to 10.187.134.1 port 40862
+[ ID] Interval           Transfer     Bitrate         Total Datagrams
+[  6]   0.00-1.00   sec  5.37 MBytes  45.0 Mbits/sec  3892  (omitted)
+[  6]   1.00-2.00   sec  5.24 MBytes  43.9 Mbits/sec  3791  (omitted)
+[  6]   2.00-3.00   sec  5.15 MBytes  43.1 Mbits/sec  3727  (omitted)
+[  6]   0.01-0.99   sec  5.11 MBytes  42.9 Mbits/sec  3748  
+[  6]   0.99-1.99   sec  5.28 MBytes  44.3 Mbits/sec  3824  
+[  6]   1.99-2.99   sec  5.86 MBytes  49.2 Mbits/sec  4246  
+[  6]   2.99-3.99   sec  5.17 MBytes  43.4 Mbits/sec  3746  
+[  6]   3.99-4.99   sec  5.02 MBytes  42.1 Mbits/sec  3633  
+[  6]   4.99-5.99   sec  5.29 MBytes  44.4 Mbits/sec  3831  
+[  6]   5.99-6.99   sec  5.15 MBytes  43.2 Mbits/sec  3730  
+[  6]   6.99-7.99   sec  4.72 MBytes  39.6 Mbits/sec  3417  
+[  6]   7.99-8.99   sec  4.95 MBytes  41.5 Mbits/sec  3584  
+[  6]   8.99-9.99   sec  5.12 MBytes  42.9 Mbits/sec  3706  
+[  6]   9.99-10.99  sec  4.72 MBytes  39.6 Mbits/sec  3417  
+[  6]  10.99-12.00  sec  5.27 MBytes  43.9 Mbits/sec  3817  
+[  6]  12.00-12.99  sec  5.21 MBytes  44.1 Mbits/sec  3776  
+[  6]  12.99-13.99  sec  5.13 MBytes  43.0 Mbits/sec  3715  
+[  6]  13.99-14.99  sec  5.26 MBytes  44.1 Mbits/sec  3807  
+[  6]  14.99-15.99  sec  4.93 MBytes  41.3 Mbits/sec  3569  
+[  6]  15.99-16.99  sec  5.20 MBytes  43.7 Mbits/sec  3768  
+[  6]  16.99-17.99  sec  5.09 MBytes  42.7 Mbits/sec  3683  
+[  6]  17.99-18.99  sec  5.19 MBytes  43.6 Mbits/sec  3759  
+[  6]  18.99-19.99  sec  5.26 MBytes  44.1 Mbits/sec  3808  
+[  6]  19.99-20.99  sec  5.26 MBytes  44.1 Mbits/sec  3810  
+[  6]  20.99-21.99  sec  4.92 MBytes  41.3 Mbits/sec  3560  
+[  6]  21.99-22.99  sec  5.23 MBytes  43.8 Mbits/sec  3784  
+[  6]  22.99-23.99  sec  5.13 MBytes  43.0 Mbits/sec  3713  
+[  6]  23.99-24.99  sec  5.19 MBytes  43.6 Mbits/sec  3761  
+[  6]  24.99-25.99  sec  5.05 MBytes  42.4 Mbits/sec  3657  
+[  6]  25.99-26.99  sec  5.13 MBytes  43.0 Mbits/sec  3712  
+[  6]  26.99-27.99  sec  5.05 MBytes  42.4 Mbits/sec  3657  
+[  6]  27.99-28.99  sec  5.08 MBytes  42.6 Mbits/sec  3681  
+[  6]  28.99-29.99  sec  5.11 MBytes  42.8 Mbits/sec  3698  
+[  6]  29.99-29.99  sec  7.07 KBytes  39.6 Mbits/sec  5  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  6]   0.00-29.99  sec   154 MBytes  43.1 Mbits/sec  0.000 ms  0/111577 (0%)  sender

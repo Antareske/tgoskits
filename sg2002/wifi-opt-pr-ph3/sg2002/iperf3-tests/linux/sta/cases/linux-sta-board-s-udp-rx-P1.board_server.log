@@ -1,0 +1,46 @@
+﻿cat /tmp/iperf3_srv_linux-sta-board-s-udp-rx-P1.log; echo SRVLOG_DONE
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 51587
+[  6] local 192.168.137.68 port 5201 connected to 192.168.137.1 port 54942
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  6]   0.00-1.00   sec  7.40 MBytes  62.1 Mbits/sec  0.390 ms  0/5316 (0%)  (omitted)
+[  6]   1.00-2.00   sec  7.57 MBytes  63.5 Mbits/sec  0.294 ms  0/5438 (0%)  (omitted)
+[  6]   2.00-3.00   sec  7.37 MBytes  61.8 Mbits/sec  0.282 ms  0/5293 (0%)  (omitted)
+[  6]   0.00-1.00   sec  7.59 MBytes  63.7 Mbits/sec  0.225 ms  0/5450 (0%)  
+[  6]   1.00-2.00   sec  7.57 MBytes  63.5 Mbits/sec  0.301 ms  0/5440 (0%)  
+[  6]   2.00-3.00   sec  7.51 MBytes  63.0 Mbits/sec  0.313 ms  0/5395 (0%)  
+[  6]   3.00-4.00   sec  7.56 MBytes  63.4 Mbits/sec  0.254 ms  0/5427 (0%)  
+[  6]   4.00-5.00   sec  7.52 MBytes  63.0 Mbits/sec  0.265 ms  0/5398 (0%)  
+[  6]   5.00-6.00   sec  7.54 MBytes  63.3 Mbits/sec  0.277 ms  0/5418 (0%)  
+[  6]   6.00-7.00   sec  6.91 MBytes  58.0 Mbits/sec  0.795 ms  0/4966 (0%)  
+[  6]   7.00-8.00   sec  6.50 MBytes  54.6 Mbits/sec  0.169 ms  0/4671 (0%)  
+[  6]   8.00-9.00   sec  6.61 MBytes  55.4 Mbits/sec  0.233 ms  0/4744 (0%)  
+[  6]   9.00-10.00  sec  7.01 MBytes  58.8 Mbits/sec  0.249 ms  0/5036 (0%)  
+[  6]  10.00-11.00  sec  7.51 MBytes  63.0 Mbits/sec  0.321 ms  0/5395 (0%)  
+[  6]  11.00-12.00  sec  7.31 MBytes  61.4 Mbits/sec  0.287 ms  0/5253 (0%)  
+[  6]  12.00-13.00  sec  7.11 MBytes  59.6 Mbits/sec  0.419 ms  0/5110 (0%)  
+[  6]  13.00-14.00  sec  6.27 MBytes  52.6 Mbits/sec  0.341 ms  0/4505 (0%)  
+[  6]  14.00-15.00  sec  6.36 MBytes  53.3 Mbits/sec  0.336 ms  0/4565 (0%)  
+[  6]  15.00-16.00  sec  6.65 MBytes  55.8 Mbits/sec  0.225 ms  0/4778 (0%)  
+[  6]  16.00-17.00  sec  7.26 MBytes  60.8 Mbits/sec  0.347 ms  0/5212 (0%)  
+[  6]  17.00-18.00  sec  6.93 MBytes  58.2 Mbits/sec  0.197 ms  0/4977 (0%)  
+[  6]  18.00-19.00  sec  6.67 MBytes  55.9 Mbits/sec  0.522 ms  0/4789 (0%)  
+[  6]  19.00-20.00  sec  6.13 MBytes  51.5 Mbits/sec  0.190 ms  0/4406 (0%)  
+[  6]  20.00-21.00  sec  7.01 MBytes  58.8 Mbits/sec  0.212 ms  0/5032 (0%)  
+[  6]  21.00-22.00  sec  5.95 MBytes  49.9 Mbits/sec  0.270 ms  0/4275 (0%)  
+[  6]  22.00-23.00  sec  7.19 MBytes  60.3 Mbits/sec  0.395 ms  0/5164 (0%)  
+[  6]  23.00-24.00  sec  6.99 MBytes  58.7 Mbits/sec  0.305 ms  0/5023 (0%)  
+[  6]  24.00-25.00  sec  6.84 MBytes  57.4 Mbits/sec  0.246 ms  0/4911 (0%)  
+[  6]  25.00-26.00  sec  6.63 MBytes  55.6 Mbits/sec  0.206 ms  0/4759 (0%)  
+[  6]  26.00-27.00  sec  6.56 MBytes  55.0 Mbits/sec  0.253 ms  0/4709 (0%)  
+[  6]  27.00-28.00  sec  6.89 MBytes  57.8 Mbits/sec  0.261 ms  0/4948 (0%)  
+[  6]  28.00-29.00  sec  6.78 MBytes  56.9 Mbits/sec  0.218 ms  0/4872 (0%)  
+[  6]  29.00-30.00  sec  5.53 MBytes  46.4 Mbits/sec  0.228 ms  0/3971 (0%)  
+[  6]  30.00-30.02  sec   171 KBytes  59.9 Mbits/sec  0.263 ms  0/120 (0%)  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  6]   0.00-30.02  sec   207 MBytes  57.9 Mbits/sec  0.263 ms  0/148719 (0%)  receiver
+SRVLOG_DONE
+# 

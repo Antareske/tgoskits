@@ -1,0 +1,143 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.21s
+     Running `target/debug/tg-xtask starry build -c os/StarryOS/configs/board/licheerv-nano-sg2002-wifi.toml`
+[2026-09-25T08:54:33Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-sg2002-wifi-ebpf
+[2026-09-25T08:54:33Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target
+Using build config: os/StarryOS/configs/board/licheerv-nano-sg2002-wifi.toml
+[2026-09-25T08:54:33Z INFO  axbuild::build::config_file] Found build config at os/StarryOS/configs/board/licheerv-nano-sg2002-wifi.toml
+[axbuild] starry build package=starryos target=riscv64gc-unknown-none-elf arch=riscv64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/riscv64gc-unknown-none-elf.json config=os/StarryOS/configs/board/licheerv-nano-sg2002-wifi.toml ...
+AX_ARCH=riscv64
+AX_LOG=info
+AX_TARGET=riscv64gc-unknown-none-elf
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+cargo build -p starryos --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target --features ax-driver/aic8800-wifi,ax-driver/cv181x-sdhci,ax-driver/serial,axplat-dyn/thead-mae,legacy-board-init,starry-kernel/sg2002 -Z json-target-spec -Z build-std=core,alloc --config target.riscv64gc-unknown-none-elf.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--no-relax", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+   Compiling ax-cpu v0.10.3 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/axcpu)
+   Compiling typenum v1.20.1
+   Compiling zeroize v1.9.0
+   Compiling untrusted v0.9.0
+   Compiling generic-array v0.14.7
+   Compiling crc32fast v1.5.2
+   Compiling httparse v1.10.1
+   Compiling simd-adler32 v0.3.10
+   Compiling itoa v1.0.18
+   Compiling adler2 v2.0.1
+   Compiling rustls v0.23.45
+   Compiling bytes v1.12.1
+   Compiling base64 v0.23.1
+   Compiling subtle v2.6.1
+   Compiling ring v0.17.14
+   Compiling cpufeatures v0.2.17
+   Compiling utf8-zero v0.8.1
+   Compiling percent-encoding v2.3.2
+   Compiling somehal v0.11.3 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/platforms/somehal)
+   Compiling bytemuck v1.25.2
+   Compiling rustls-pki-types v1.15.1
+   Compiling getrandom v0.2.17
+   Compiling cmov v0.5.4
+   Compiling sdmmc-host v0.1.8 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/blk/sdmmc-host)
+   Compiling miniz_oxide v0.9.1
+   Compiling cpubits v0.1.1
+   Compiling someboot v0.7.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/platforms/someboot)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/ax-driver)
+   Compiling axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/platforms/axplat-dyn)
+   Compiling zerocopy v0.8.57
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axruntime)
+   Compiling serde_core v1.0.229
+   Compiling serde v1.0.229
+   Compiling serde_derive v1.0.229
+   Compiling rdif-display v0.4.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/interface/rdif-display)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/StarryOS/kernel)
+   Compiling starryos v0.5.39 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/StarryOS/starryos)
+   Compiling sdmmc-protocol v0.5.4 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/blk/sdmmc-protocol)
+   Compiling ax-display v0.7.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axdisplay)
+   Compiling starry-vm v0.6.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/StarryOS/vm)
+   Compiling ctutils v0.4.2
+   Compiling webpki-roots v1.0.9
+   Compiling http v1.5.0
+   Compiling flate2 v1.1.10
+   Compiling cpu-local v0.4.3 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/cpu-local)
+   Compiling ax-percpu v0.4.24 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/percpu/percpu)
+   Compiling ax-plat v0.15.0 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/platforms/ax-plat)
+   Compiling scope-local v0.6.5 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/scope-local)
+   Compiling sdhci-host v0.5.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/blk/sdhci-host)
+   Compiling ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/fs/ax-fs-ng)
+   Compiling hybrid-array v0.4.15
+   Compiling ureq-proto v0.6.4
+   Compiling ax-alloc v0.9.2 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/memory/ax-alloc)
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling axklib v0.9.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/components/axklib)
+   Compiling cv181x-sdhci v0.1.8 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/blk/cv181x-sdhci)
+   Compiling sg2002-tpu v0.4.1 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/tpu/sg2002-tpu)
+   Compiling sha2 v0.10.9
+   Compiling crypto-common v0.2.2
+   Compiling block-buffer v0.12.1
+   Compiling inout v0.2.2
+   Compiling digest v0.11.3
+   Compiling cipher v0.5.2
+   Compiling bit-struct v0.3.2
+   Compiling hmac v0.13.0
+   Compiling sha1 v0.11.0
+   Compiling aes v0.9.3
+   Compiling pbkdf2 v0.13.0
+   Compiling aes-kw v0.3.1
+   Compiling rustls-webpki v0.103.15
+   Compiling ppv-lite86 v0.2.21
+   Compiling kernel-elf-parser v0.3.4
+   Compiling sg200x-bsp v0.7.1
+   Compiling rand_chacha v0.3.1
+   Compiling ureq v3.4.2
+   Compiling aic8800 v0.3.3 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/drivers/net/aic8800)
+   Compiling ax-hal v0.8.4 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axhal)
+   Compiling ax-net v0.13.6 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/net/ax-net)
+   Compiling ax-ipi v0.6.5 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axipi)
+   Compiling ax-mm v0.8.4 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/modules/axmm)
+   Compiling ax-api v0.8.6 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/api/arceos_api)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/StarryOS/signal)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/api/arceos_posix_api)
+   Compiling ax-std v0.7.5 (/home/asta/tgoskits/wt-sg2002-wifi-ebpf/os/arceos/ulib/axstd)
+    Finished `release` profile [optimized] target(s) in 1m 07s
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos
+  bin: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+[axbuild] cargo build package=starryos target=scripts/targets/bare/riscv64gc-unknown-none-elf.json config=os/StarryOS/configs/board/licheerv-nano-sg2002-wifi.toml ... done (67.69s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos
+[axbuild] cargo build bin=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release
+[axbuild] starry build package=starryos target=riscv64gc-unknown-none-elf arch=riscv64 ... done (67.69s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos ...
+[axbuild] starry kallsyms symbols=10457
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/.starryos.kallsyms.88880.tmp /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos ... done (365.10ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin ... done (58.77ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin ... done (50.16ms)
+[axbuild] starry uImage arch=riscv64 its=os/StarryOS/configs/board/licheerv-nano-sg2002-wifi.its out=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.uimg ...
+cd /home/asta/tgoskits/wt-sg2002-wifi-ebpf && mkimage -f /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/.starryos.uimage.its.88880.tmp /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.uimg
+FIT description: StarryOS Wi-Fi for LicheeRV Nano SG2002
+Created:         Fri Sep 25 08:55:43 2026
+ Image 0 (kernel)
+  Description:  StarryOS Wi-Fi kernel
+  Created:      Fri Sep 25 08:55:43 2026
+  Type:         Kernel Image
+  Compression:  uncompressed
+  Data Size:    16345440 Bytes = 15962.34 KiB = 15.59 MiB
+  Architecture: RISC-V
+  OS:           Linux
+  Load Address: 0x80200000
+  Entry Point:  0x80200000
+  Hash algo:    sha256
+  Hash value:   e71a069b4c8c7a755b263a5e47185790e303a64c60cdf5c65758d95d0240c4b5
+ Default Configuration: 'config'
+ Configuration 0 (config)
+  Description:  StarryOS SG2002 Wi-Fi
+  Kernel:       kernel
+[axbuild] starry uImage arch=riscv64 its=os/StarryOS/configs/board/licheerv-nano-sg2002-wifi.its out=/home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.uimg ... done (78.63ms)
+[axbuild] validated RISC-V Image header: /home/asta/tgoskits/wt-sg2002-wifi-ebpf/target/riscv64gc-unknown-none-elf/release/starryos.bin
+BOARD_BUILD_EXIT=0

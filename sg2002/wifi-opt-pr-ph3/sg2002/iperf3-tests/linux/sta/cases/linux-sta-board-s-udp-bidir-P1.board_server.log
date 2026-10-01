@@ -1,0 +1,87 @@
+﻿cat /tmp/iperf3_srv_linux-sta-board-s-udp-bidir-P1.log; echo SRVLOG_DONE
+-----------------------------------------------------------
+Server listening on 5201 (test #1)
+-----------------------------------------------------------
+Accepted connection from 192.168.137.1, port 58048
+[  6] local 192.168.137.68 port 5201 connected to 192.168.137.1 port 64989
+[  7] local 192.168.137.68 port 5201 connected to 192.168.137.1 port 64990
+[ ID][Role] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[  6][RX-S]   0.00-1.00   sec   268 KBytes  2.20 Mbits/sec  4.938 ms  0/188 (0%)  (omitted)
+[  7][TX-S]   0.00-1.00   sec  7.95 MBytes  66.7 Mbits/sec            5710  (omitted)
+[  6][RX-S]   1.00-2.00   sec   516 KBytes  4.22 Mbits/sec  15.636 ms  9/371 (2.4%)  (omitted)
+[  7][TX-S]   1.00-2.00   sec  7.57 MBytes  63.4 Mbits/sec            5440  (omitted)
+[  6][RX-S]   2.00-3.00   sec   232 KBytes  1.91 Mbits/sec  1.934 ms  1/164 (0.61%)  (omitted)
+[  7][TX-S]   2.00-3.00   sec  8.51 MBytes  71.5 Mbits/sec            6110  (omitted)
+[  6][RX-S]   0.00-1.00   sec   294 KBytes  2.41 Mbits/sec  0.678 ms  7/213 (3.3%)  
+[  7][TX-S]   0.00-1.00   sec  8.48 MBytes  71.1 Mbits/sec            6090  
+[  6][RX-S]   1.00-2.00   sec  85.5 KBytes   700 Kbits/sec  1.691 ms  0/60 (0%)  
+[  7][TX-S]   1.00-2.00   sec  8.93 MBytes  74.8 Mbits/sec            6410  
+[  6][RX-S]   2.00-3.00   sec   385 KBytes  3.15 Mbits/sec  14.075 ms  10/280 (3.6%)  
+[  7][TX-S]   2.00-3.00   sec  8.09 MBytes  67.8 Mbits/sec            5810  
+[  6][RX-S]   3.00-4.00   sec  0.00 Bytes  0.00 bits/sec  14.075 ms  0/0 (0%)  
+[  7][TX-S]   3.00-4.00   sec  9.19 MBytes  77.1 Mbits/sec            6600  
+[  6][RX-S]   4.00-5.00   sec   346 KBytes  2.83 Mbits/sec  8.255 ms  5/248 (2%)  
+[  7][TX-S]   4.00-5.00   sec  7.37 MBytes  61.7 Mbits/sec            5290  
+[  6][RX-S]   5.00-6.00   sec   192 KBytes  1.58 Mbits/sec  5.496 ms  2/137 (1.5%)  
+[  7][TX-S]   5.00-6.00   sec  8.24 MBytes  69.3 Mbits/sec            5920  
+[  6][RX-S]   6.00-7.00   sec   228 KBytes  1.87 Mbits/sec  10.454 ms  2/162 (1.2%)  
+[  7][TX-S]   6.00-7.00   sec  8.31 MBytes  69.7 Mbits/sec            5970  
+[  6][RX-S]   7.00-8.00   sec   401 KBytes  3.28 Mbits/sec  1.491 ms  6/287 (2.1%)  
+[  7][TX-S]   7.00-8.00   sec  7.80 MBytes  65.3 Mbits/sec            5600  
+[  6][RX-S]   8.00-9.00   sec   385 KBytes  3.16 Mbits/sec  2.117 ms  3/273 (1.1%)  
+[  7][TX-S]   8.00-9.00   sec  7.64 MBytes  64.2 Mbits/sec            5490  
+[  6][RX-S]   9.00-10.00  sec   616 KBytes  5.04 Mbits/sec  1.629 ms  4/436 (0.92%)  
+[  7][TX-S]   9.00-10.00  sec  8.28 MBytes  69.4 Mbits/sec            5950  
+[  6][RX-S]  10.00-11.00  sec   297 KBytes  2.43 Mbits/sec  17.437 ms  5/213 (2.3%)  
+[  7][TX-S]  10.00-11.00  sec  8.20 MBytes  68.7 Mbits/sec            5890  
+[  6][RX-S]  11.00-12.00  sec   279 KBytes  2.29 Mbits/sec  0.824 ms  5/201 (2.5%)  
+[  7][TX-S]  11.00-12.00  sec  8.41 MBytes  70.7 Mbits/sec            6040  
+[  6][RX-S]  12.00-13.00  sec   325 KBytes  2.66 Mbits/sec  0.658 ms  2/230 (0.87%)  
+[  7][TX-S]  12.00-13.00  sec  8.26 MBytes  69.2 Mbits/sec            5930  
+[  6][RX-S]  13.00-14.00  sec   120 KBytes   983 Kbits/sec  11.665 ms  4/88 (4.5%)  
+[  7][TX-S]  13.00-14.00  sec  8.55 MBytes  71.8 Mbits/sec            6140  
+[  6][RX-S]  14.00-15.00  sec   182 KBytes  1.49 Mbits/sec  24.880 ms  2/130 (1.5%)  
+[  7][TX-S]  14.00-15.00  sec  8.33 MBytes  69.8 Mbits/sec            5980  
+[  6][RX-S]  15.00-16.00  sec  85.5 KBytes   700 Kbits/sec  4.075 ms  0/60 (0%)  
+[  7][TX-S]  15.00-16.00  sec  8.81 MBytes  73.9 Mbits/sec            6330  
+[  6][RX-S]  16.00-17.00  sec   472 KBytes  3.87 Mbits/sec  1.519 ms  5/336 (1.5%)  
+[  7][TX-S]  16.00-17.00  sec  7.84 MBytes  65.9 Mbits/sec            5630  
+[  6][RX-S]  17.00-18.00  sec  89.8 KBytes   736 Kbits/sec  18.496 ms  0/63 (0%)  
+[  7][TX-S]  17.00-18.00  sec  8.91 MBytes  74.8 Mbits/sec            6400  
+[  6][RX-S]  18.00-19.00  sec   211 KBytes  1.72 Mbits/sec  8.154 ms  4/152 (2.6%)  
+[  7][TX-S]  18.00-19.00  sec  8.19 MBytes  68.4 Mbits/sec            5880  
+[  6][RX-S]  19.00-20.00  sec   532 KBytes  4.37 Mbits/sec  0.607 ms  6/379 (1.6%)  
+[  7][TX-S]  19.00-20.00  sec  7.35 MBytes  61.8 Mbits/sec            5280  
+[  6][RX-S]  20.00-21.00  sec   409 KBytes  3.36 Mbits/sec  3.003 ms  4/291 (1.4%)  
+[  7][TX-S]  20.00-21.00  sec  7.98 MBytes  67.1 Mbits/sec            5730  
+[  6][RX-S]  21.00-22.00  sec   190 KBytes  1.55 Mbits/sec  2.800 ms  0/133 (0%)  
+[  7][TX-S]  21.00-22.00  sec  8.49 MBytes  71.2 Mbits/sec            6100  
+[  6][RX-S]  22.00-23.00  sec   262 KBytes  2.15 Mbits/sec  4.862 ms  6/190 (3.2%)  
+[  7][TX-S]  22.00-23.00  sec  8.31 MBytes  69.6 Mbits/sec            5970  
+[  6][RX-S]  23.00-24.00  sec   797 KBytes  6.54 Mbits/sec  1.062 ms  3/562 (0.53%)  
+[  7][TX-S]  23.00-24.00  sec  7.83 MBytes  65.7 Mbits/sec            5620  
+[  6][RX-S]  24.00-25.00  sec   342 KBytes  2.80 Mbits/sec  3.656 ms  8/248 (3.2%)  
+[  7][TX-S]  24.00-25.00  sec  7.89 MBytes  66.2 Mbits/sec            5670  
+[  6][RX-S]  25.00-26.00  sec   365 KBytes  2.99 Mbits/sec  4.884 ms  1/257 (0.39%)  
+[  7][TX-S]  25.00-26.00  sec  7.06 MBytes  59.1 Mbits/sec            5070  
+[  6][RX-S]  26.00-27.00  sec   369 KBytes  3.03 Mbits/sec  6.478 ms  3/262 (1.1%)  
+[  7][TX-S]  26.00-27.00  sec  7.73 MBytes  64.8 Mbits/sec            5550  
+[  6][RX-S]  27.00-28.00  sec   192 KBytes  1.58 Mbits/sec  27.077 ms  3/138 (2.2%)  
+[  7][TX-S]  27.00-28.00  sec  8.41 MBytes  70.6 Mbits/sec            6040  
+[  6][RX-S]  28.00-29.00  sec   279 KBytes  2.29 Mbits/sec  11.636 ms  6/202 (3%)  
+[  7][TX-S]  28.00-29.00  sec  8.02 MBytes  67.3 Mbits/sec            5760  
+[  6][RX-S]  29.00-30.00  sec   362 KBytes  2.97 Mbits/sec  2.311 ms  4/258 (1.6%)  
+[  7][TX-S]  29.00-30.00  sec  8.38 MBytes  70.3 Mbits/sec            6020  
+[  6][RX-S]  30.00-31.00  sec   107 KBytes   876 Kbits/sec  1.105 ms  2/77 (2.6%)  
+[  7][TX-S]  30.00-31.00  sec  9.02 MBytes  75.7 Mbits/sec            6480  
+[  6][RX-S]  31.00-32.00  sec  0.00 Bytes  0.00 bits/sec  1.105 ms  0/0 (0%)  
+[  7][TX-S]  31.00-32.00  sec  8.88 MBytes  74.6 Mbits/sec            6380  
+[  6][RX-S]  32.00-32.62  sec  0.00 Bytes  0.00 bits/sec  1.105 ms  0/0 (0%)  
+[  7][TX-S]  32.00-32.62  sec  5.42 MBytes  73.5 Mbits/sec            3890  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID][Role] Interval           Transfer     Bitrate         Jitter    Lost/Total Datagrams
+[SUM][RX-S]  0.0-32.6 sec  8 datagrams received out-of-order
+[  6][RX-S]   0.00-32.62  sec  8.99 MBytes  2.31 Mbits/sec  1.105 ms  112/6566 (1.7%)  receiver
+[  7][TX-S]   0.00-32.62  sec   269 MBytes  69.1 Mbits/sec  0.000 ms  0/192910 (0%)  sender
+SRVLOG_DONE
+# 

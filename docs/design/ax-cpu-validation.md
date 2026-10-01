@@ -75,9 +75,9 @@ cycle counter 只计入 EL0 执行，并触发真实溢出 PPI。回调断言 pr
 
 ### 4.4 无故障内核拷贝
 
-2026-09-30 `user-entry/src/kernel_access.rs` 通过 `ax_cpu::kernel_access::copy_from_kernel_nofault` 验证三类结果：两个已映射区间整段拷贝成功且内容一致；装入空用户页表后，源为未映射地址时不复制任何字节、目的地保持原内容并返回 `Fault`；目的地为未映射地址时同样返回 `Fault`。空页表与 TTBR0 的保存恢复由该用例目录的 `empty_user_table.rs` 提供，`fixup.rs` 的既有缺页恢复断言改用同一守卫，两处共用一份窗口管理。
+`user-entry/src/kernel_access.rs` 通过 `ax_cpu::kernel_access::copy_from_kernel_nofault` 验证三类结果：两个已映射区间整段拷贝成功且内容一致；源不可访问时不复制任何字节、目的地保持原内容并返回 `Fault`；目的地不可访问时同样返回 `Fault`。不可访问地址按架构取得：AArch64 装入空用户页表使整个用户地址段无映射，空页表与 TTBR0 的保存恢复由该用例目录的 `empty_user_table.rs` 提供，`fixup.rs` 的既有缺页恢复断言改用同一守卫，两处共用一份窗口管理；RISC-V 没有可清空的用户地址段寄存器，内核运行在被探查的页表上，因此改用对 Sv39、Sv48、Sv57 均非规范的地址。
 
-同日在四核 AArch64 QEMU 执行 `cpu` 组，9/9 通过；该用例输出 `CPU_KERNEL_ACCESS_OK`，位于既有用户 PMU 用例之前。该结果证明恢复分支在真实翻译故障下生效，不覆盖 x86_64 因非规范地址产生的 `#GP` 恢复分支，也不替代实体板卡执行。
+2026-09-30 在四核 AArch64 QEMU 执行 `cpu` 组，9/9 通过；该用例输出 `CPU_KERNEL_ACCESS_OK`，位于既有用户 PMU 用例之前。2026-10-01 为该用例补上 RISC-V 配置后执行四核 RISC-V QEMU `cpu` 组，7/7 通过。RISC-V 侧此前只覆盖拷贝的成功路径，这一次的断言只有在汇编恢复标签确实被跳到时才成立，恢复分支因此在 RISC-V 上也有运行证据。两项结果都不覆盖 x86_64 因非规范地址产生的 `#GP` 恢复分支，也不替代实体板卡执行。
 
 
 ## 5. 启动与映射生命周期补充

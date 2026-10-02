@@ -31,12 +31,9 @@ fn pin_to(cpu: usize) {
 #[unsafe(no_mangle)]
 fn main() {
     #[cfg(target_arch = "aarch64")]
-    {
-        fixup::run();
-        kernel_access::run();
-        aarch64::run();
-    }
-    #[cfg(target_arch = "riscv64")]
+    fixup::run();
     kernel_access::run();
+    #[cfg(target_arch = "aarch64")]
+    aarch64::run();
     std::process::exit(0);
 }

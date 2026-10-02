@@ -48,7 +48,9 @@ x86 的 `paging/src/tlb.rs` 创建两个私有内核别名，预热真实 TLB，
 
 `user-entry/src/kernel_access.rs` 调用 `ax_cpu::kernel_access::copy_from_kernel_nofault`，验证两个已映射区间整段拷贝成功且内容一致，以及任一侧不可访问时返回 `KernelAccessError::Fault`：源不可访问时不复制任何字节，目的地保持原内容。
 
-不可访问地址按架构取得。AArch64 在真实 EL1 下装入空用户页表，使整个用户地址段无映射，探查期间由 `user-entry/src/empty_user_table.rs` 持有该表并在释放之前恢复 TTBR0，`user-entry/src/fixup.rs` 的既有缺页恢复断言改用同一守卫。RISC-V 没有可清空的用户地址段寄存器，内核运行在被探查的页表上，因此取一个对 Sv39、Sv48、Sv57 均非规范的地址；硬件对非规范地址一律产生页错误，与当前表映射了什么无关。
+不可访问地址取位 63:57 不是位 56 符号扩展的地址：任何翻译宽度都不覆盖它，各架构据此产生各自的故障类别（AArch64 地址长度故障、LoongArch 访存地址错误、RISC-V 页错误），与当前页表映射了什么无关。
+
+AArch64 另做一次翻译故障探测：在真实 EL1 下装入空用户页表，使整个用户地址段无映射，探查期间由 `user-entry/src/empty_user_table.rs` 持有该表并在释放之前恢复 TTBR0，`user-entry/src/fixup.rs` 的既有缺页恢复断言改用同一守卫。
 
 ### 1.7 x86 控制区生命周期
 

@@ -29,8 +29,13 @@ use rd_net::{
 use self::{executor::*, notify::QueueNotification, spsc::*, state::PollGroupState};
 pub use self::{
     observe::{
-        QueuePollObserver, QueuePollOutcome, QueuePollReport, install_queue_poll_observer,
-        publish_queue_poll_gate,
+        QueueBackpressureObserver, QueueBackpressureReason, QueueBackpressureReport,
+        QueueBackpressureStage, QueuePollObserver, QueuePollOutcome, QueuePollReport,
+        QueueRearmObserver, QueueRearmOutcome, QueueRearmReport, RxPublishObserver,
+        RxPublishReport, TxSubmitObserver, TxSubmitReport, install_queue_backpressure_observer,
+        install_queue_poll_observer, install_queue_rearm_observer, install_rx_publish_observer,
+        install_tx_submit_observer, publish_queue_backpressure_gate, publish_queue_poll_gate,
+        publish_queue_rearm_gate, publish_rx_publish_gate, publish_tx_submit_gate,
     },
     state::{NetQueueIdentity, NetQueueStats},
 };

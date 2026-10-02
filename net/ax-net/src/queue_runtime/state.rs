@@ -6,6 +6,7 @@ use rd_net::NetPollGroupId;
 use super::{
     QueueNotification, STATE_DISABLED, STATE_IDLE, STATE_MASK, STATE_MISSED, STATE_POLLING,
     STATE_SCHEDULED,
+    observe::{QueueRearmOutcome, QueueRearmReport, report_queue_rearm},
 };
 
 /// Immutable identity of one poll group.
@@ -306,6 +307,15 @@ impl PollGroupState {
                     .compare_exchange(old, STATE_SCHEDULED, Ordering::AcqRel, Ordering::Acquire)
                     .is_ok()
                 {
+                    // An IRQ arrived while the round was polling: the group
+                    // goes straight back to scheduled and the hardware rearm
+                    // is skipped.  This is the only place the race outcome is
+                    // observable, so the event is reported from the
+                    // transition itself.
+                    report_queue_rearm(QueueRearmReport {
+                        identity: self.identity,
+                        outcome: QueueRearmOutcome::Race,
+                    });
                     return false;
                 }
                 continue;

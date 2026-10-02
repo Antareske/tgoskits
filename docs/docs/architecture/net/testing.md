@@ -277,11 +277,14 @@ cargo xtask starry test qemu --arch x86_64 -c qemu/system/net-queue
 
 ### 3.7 网络事件出口
 
-`qemu/system/net-events` 读取 `/sys/kernel/debug/tracing/events/net/queue_poll_round/`：`id` 必须可读，
-`format` 必须声明事件的六个字段；启用后向 QEMU 用户态网络网关发送数据报驱动真实队列轮询（loopback
-流量不经过物理队列，不能用），`trace` 缓冲里必须出现 `queue_poll_round` 记录且记录自洽（结果码在取值
-范围内、工作量不超过预算、owner CPU 落在在线集合内）；关闭、清空缓冲并对同样流量等待同样长的时间后，
-不得再出现新记录。事件的触发与字段契约见[网络事件](events.md)。
+`qemu/system/net-events` 读取 `/sys/kernel/debug/tracing/events/net/` 下的五个事件目录：每个事件的
+`id` 必须可读、`format` 必须声明文档化字段；启用后向 QEMU 用户态网络网关发送数据报驱动真实队列轮询
+（loopback 流量不经过物理队列，不能用），流量驱动的三个事件（`queue_poll_round`、`tx_submit`、
+`rx_publish`）必须在 `trace` 缓冲里出现自洽记录（结果码在取值范围内、工作量不超过预算、owner CPU 落在
+在线集合内、帧长非零）；关闭、清空缓冲并对同样流量等待同样长的时间后，五个事件都不得再出现新记录。
+`queue_rearm` 的非空闲结局与 `queue_backpressure` 需要设备真的竞态或真的忙，QEMU 下不保证触发，
+这两个事件在本用例中只验证可发现、`format` 与关闭后无记录，语义由 `ax-net` 单元测试覆盖。
+事件的触发与字段契约见[网络事件](events.md)。
 
 ```bash
 cargo xtask starry test qemu --arch x86_64 -c qemu/system/net-events

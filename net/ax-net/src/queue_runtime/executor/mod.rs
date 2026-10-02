@@ -12,7 +12,12 @@ use super::{
     PollGroupState, QUEUE_BUDGET, QueueNotification, STATE_MASK, STATE_MISSED, STATE_POLLING,
     STATE_SCHEDULED, STATUS_EMPTY, STATUS_FAILED, STATUS_PENDING, STATUS_READY, SpscConsumer,
     SpscProducer, TxQueueDiscipline,
-    observe::{QueuePollOutcome, QueuePollReport, report_queue_poll},
+    observe::{
+        QueueBackpressureReason, QueueBackpressureReport, QueueBackpressureStage, QueuePollOutcome,
+        QueuePollReport, QueueRearmOutcome, QueueRearmReport, RxPublishReport, TxSubmitReport,
+        report_queue_backpressure, report_queue_poll, report_queue_rearm, report_rx_publish,
+        report_tx_submit,
+    },
 };
 use crate::device::{
     ETH_ZLEN, EthernetFramePort, NetDeviceError, NetDeviceResult, ProtocolEthernetFrame,
@@ -414,6 +419,17 @@ pub(super) const fn waits_for_hardware_event(reason: &NetError) -> bool {
     matches!(reason, NetError::Retry | NetError::LinkDown)
 }
 
+/// Maps a retryable device outcome to its reported reason code.
+///
+/// Only outcomes admitted by [`waits_for_hardware_event`] reach this mapping;
+/// any other error takes the permanent-failure path instead.
+const fn backpressure_reason(reason: &NetError) -> u32 {
+    match reason {
+        NetError::Retry => QueueBackpressureReason::Retry as u32,
+        _ => QueueBackpressureReason::LinkDown as u32,
+    }
+}
+
 pub(super) const fn rx_refill_retry_outcome(work: usize, received: usize) -> GroupPollOutcome {
     if received == 0 {
         hardware_retry_outcome(work)
@@ -612,6 +628,9 @@ impl QueueGroupExecutor {
                 Some(request) => request,
                 None => break,
             };
+            // The protocol sets the buffer length to the frame length before
+            // queueing the request, so this is what the driver receives.
+            let frame_len = request.buffer.len();
             match self
                 .group
                 .tx
@@ -620,10 +639,19 @@ impl QueueGroupExecutor {
                 Ok(()) => {
                     submitted += 1;
                     work += 1;
+                    report_tx_submit(TxSubmitReport {
+                        identity: self.shared.identity,
+                        len: frame_len,
+                    });
                 }
                 Err(error) => {
                     let (buffer, reason) = error.into_parts();
                     if waits_for_hardware_event(&reason) {
+                        report_queue_backpressure(QueueBackpressureReport {
+                            identity: self.shared.identity,
+                            stage: QueueBackpressureStage::TxSubmit,
+                            reason: backpressure_reason(&reason),
+                        });
                         self.pending_tx = Some(TxRequest {
                             buffer,
                             options: request.options,
@@ -648,8 +676,15 @@ impl QueueGroupExecutor {
         }
 
         if let Some(completion) = self.pending_rx.take() {
+            let len = completion.packet_len;
             match self.rx_ready.push(completion) {
-                Ok(()) => crate::request_poll(),
+                Ok(()) => {
+                    report_rx_publish(RxPublishReport {
+                        identity: self.shared.identity,
+                        len,
+                    });
+                    crate::request_poll();
+                }
                 Err(completion) => {
                     self.pending_rx = Some(completion);
                     return GroupPollOutcome::Blocked(work);
@@ -675,10 +710,15 @@ impl QueueGroupExecutor {
                     Ok(()) => {
                         work += 1;
                         if let Some(completion) = pending.completion {
+                            let len = completion.packet_len;
                             if let Err(completion) = self.rx_ready.push(completion) {
                                 self.pending_rx = Some(completion);
                                 return GroupPollOutcome::Blocked(work);
                             }
+                            report_rx_publish(RxPublishReport {
+                                identity: self.shared.identity,
+                                len,
+                            });
                             crate::request_poll();
                         }
                     }
@@ -692,6 +732,12 @@ impl QueueGroupExecutor {
                             self.disable_after_error("RX refill", &reason);
                             return GroupPollOutcome::Failed(work);
                         }
+                        // The device asked to wait; the token stays retained.
+                        report_queue_backpressure(QueueBackpressureReport {
+                            identity: self.shared.identity,
+                            stage: QueueBackpressureStage::RxRefill,
+                            reason: QueueBackpressureReason::Retry as u32,
+                        });
                         rx_refill_blocked = true;
                     }
                 }
@@ -755,6 +801,9 @@ impl QueueGroupExecutor {
 
     fn finish_idle(&mut self) {
         if !self.shared.begin_rearm() {
+            // The plain case (the group left polling, or an IRQ arrived during
+            // the round) is not reported: `begin_rearm` reports the race from
+            // the transition itself.
             return;
         }
         match self
@@ -766,11 +815,25 @@ impl QueueGroupExecutor {
             Ok(NetRearmResult::WorkPending(_)) => {
                 self.shared.stats.rearm_race.fetch_add(1, Ordering::Relaxed);
                 self.shared.schedule_task();
+                report_queue_rearm(QueueRearmReport {
+                    identity: self.shared.identity,
+                    outcome: QueueRearmOutcome::WorkPending,
+                });
             }
             Ok(NetRearmResult::RetryAt { deadline_nanos }) => {
                 self.retry_at = Some(deadline_nanos);
+                report_queue_rearm(QueueRearmReport {
+                    identity: self.shared.identity,
+                    outcome: QueueRearmOutcome::RetryAt,
+                });
             }
-            Err(error) => self.disable_after_error("IRQ rearm", &error),
+            Err(error) => {
+                self.disable_after_error("IRQ rearm", &error);
+                report_queue_rearm(QueueRearmReport {
+                    identity: self.shared.identity,
+                    outcome: QueueRearmOutcome::Failed,
+                });
+            }
         }
     }
 

@@ -15,8 +15,10 @@ use rd_net::{
 
 use super::*;
 use crate::queue_runtime::{
-    NetQueueIdentity, install_queue_poll_observer, publish_queue_poll_gate, spsc_ring,
-    tests::TEST_DMA,
+    NetQueueIdentity, install_queue_backpressure_observer, install_queue_poll_observer,
+    install_queue_rearm_observer, install_rx_publish_observer, install_tx_submit_observer,
+    publish_queue_backpressure_gate, publish_queue_poll_gate, publish_queue_rearm_gate,
+    publish_rx_publish_gate, publish_tx_submit_gate, spsc_ring, tests::TEST_DMA,
 };
 
 type Trace = Arc<Mutex<Vec<&'static str>>>;
@@ -916,7 +918,7 @@ impl IRxQueue for HardFailingRx {
     }
 }
 
-struct HardFailingRxDevice(Trace);
+struct HardFailingRxDevice(Trace, usize);
 
 impl rd_net::DriverGeneric for HardFailingRxDevice {
     fn name(&self) -> &str {
@@ -937,7 +939,7 @@ impl NetDevice for HardFailingRxDevice {
                     rx: Box::new(HardFailingRx {
                         trace: self.0,
                         completions: VecDeque::new(),
-                        initial: 1,
+                        initial: self.1,
                     }),
                 },
                 irq_control: Box::new(TestIrq),
@@ -953,10 +955,123 @@ impl NetDevice for HardFailingRxDevice {
 
 /// Builds an executor whose RX queue rejects replacements permanently, under
 /// its own identity so its reports can be told apart from concurrent tests.
+/// TX queue that refuses the next submission with a scripted outcome.
+struct ScriptedTx {
+    trace: Trace,
+    refusal: Option<NetError>,
+}
+
+impl ITxQueue for ScriptedTx {
+    fn id(&self) -> NetQueueId {
+        NetQueueId::new(0)
+    }
+    fn config(&self) -> QueueConfig {
+        queue_config()
+    }
+    fn submit(&mut self, buffer: DmaBuffer) -> Result<(), SubmitError> {
+        self.trace.lock().unwrap().push("tx");
+        match self.refusal.take() {
+            Some(reason) => Err(SubmitError::new(buffer, reason)),
+            None => Ok(()),
+        }
+    }
+    fn flush(&mut self) {
+        self.trace.lock().unwrap().push("flush");
+    }
+    fn reclaim(&mut self) -> Option<DmaBuffer> {
+        None
+    }
+}
+
+/// IRQ control that replays one scripted rearm result, then reports idle.
+struct ScriptedIrq {
+    rearm: Option<NetRearmResult>,
+    fail: bool,
+}
+
+impl NetHardIrqHandler for ScriptedIrq {
+    fn handle_irq(&mut self) -> NetHardIrqResult {
+        NetHardIrqResult::Spurious
+    }
+}
+
+impl NetPollIrqControl for ScriptedIrq {
+    fn quiesce(&mut self) -> Result<(), NetError> {
+        Ok(())
+    }
+    fn shutdown(&mut self) -> Result<(), NetError> {
+        Ok(())
+    }
+    fn rearm_and_check(&mut self, _now_nanos: u64) -> Result<NetRearmResult, NetError> {
+        if self.fail {
+            return Err(NetError::DeviceNotPresent);
+        }
+        Ok(self.rearm.take().unwrap_or(NetRearmResult::Idle))
+    }
+}
+
+/// Device whose TX queue refuses the first submission with `refusal`.
+struct ScriptedTxDevice {
+    trace: Trace,
+    refusal: NetError,
+}
+
+impl rd_net::DriverGeneric for ScriptedTxDevice {
+    fn name(&self) -> &str {
+        "test-scripted-tx"
+    }
+}
+
+impl NetDevice for ScriptedTxDevice {
+    fn into_parts(self: Box<Self>) -> Result<NetDeviceParts, NetError> {
+        Ok(NetDeviceParts {
+            info: NetDeviceInfo::new("test-scripted-tx", [0; 6]),
+            control: Box::new(FixedNetControl::new([0; 6])),
+            wifi_control: None,
+            poll_groups: vec![NetPollGroupParts {
+                id: NetPollGroupId::new(0),
+                queues: NetQueuePairParts {
+                    tx: Box::new(ScriptedTx {
+                        trace: Arc::clone(&self.trace),
+                        refusal: Some(self.refusal),
+                    }),
+                    rx: Box::new(TestRx {
+                        trace: self.trace,
+                        completions: VecDeque::new(),
+                        initial: 0,
+                        reclaimed: 0,
+                        replacements: Vec::new(),
+                    }),
+                },
+                irq_control: Box::new(ScriptedIrq {
+                    rearm: None,
+                    fail: false,
+                }),
+                owner_startup: None,
+                irq_endpoints: vec![NetHardIrqEndpoint::new(
+                    NetIrqSourceId::new(0),
+                    Box::new(TestIrq),
+                )],
+            }],
+        })
+    }
+}
+
 fn port_test_executor(
     identity: NetQueueIdentity,
     trace: Trace,
     tx_ready: SpscConsumer<TxRequest>,
+) -> QueueGroupExecutor {
+    port_test_executor_with_rx_initial(identity, trace, tx_ready, 1)
+}
+
+/// Builds a port-test executor whose RX queue accepts `rx_initial`
+/// replacements before it starts failing.
+fn port_test_executor_with_rx_initial(
+    identity: NetQueueIdentity,
+    trace: Trace,
+    tx_ready: SpscConsumer<TxRequest>,
+    rx_initial: usize,
 ) -> QueueGroupExecutor {
     let dma = DeviceDma::new(
         DmaDeviceInfo::new(
@@ -966,8 +1081,20 @@ fn port_test_executor(
         ),
         &TEST_DMA,
     );
-    let mut device =
-        rd_net::prepare_device(Box::new(HardFailingRxDevice(Arc::clone(&trace))), dma).unwrap();
+    let device = rd_net::prepare_device(
+        Box::new(HardFailingRxDevice(Arc::clone(&trace), rx_initial)),
+        dma,
+    )
+    .unwrap();
+    port_test_executor_from_device(identity, tx_ready, device)
+}
+
+/// Builds a port-test executor around an already prepared device.
+fn port_test_executor_from_device(
+    identity: NetQueueIdentity,
+    tx_ready: SpscConsumer<TxRequest>,
+    mut device: rd_net::PreparedNetDevice,
+) -> QueueGroupExecutor {
     let mut group = device.poll_groups.pop().unwrap();
     // No initial refill and no queued completions: a plain round neither
     // reclaims nor refills, so its outcome depends only on the test's input.
@@ -1005,33 +1132,158 @@ fn port_test_executor(
 /// function (installing the same function is idempotent, replacing a live one
 /// is not), serialize on one lock, and filter captured reports by their own
 /// identity: other tests in this binary keep polling while the gate is open.
-static POLL_REPORTS: Mutex<Vec<QueuePollReport>> = Mutex::new(Vec::new());
+struct PortCapture {
+    polls: Vec<QueuePollReport>,
+    rearms: Vec<QueueRearmReport>,
+    backpressures: Vec<QueueBackpressureReport>,
+    submits: Vec<TxSubmitReport>,
+    publishes: Vec<RxPublishReport>,
+}
+
+impl PortCapture {
+    const fn new() -> Self {
+        Self {
+            polls: Vec::new(),
+            rearms: Vec::new(),
+            backpressures: Vec::new(),
+            submits: Vec::new(),
+            publishes: Vec::new(),
+        }
+    }
+}
+
+static PORT_CAPTURE: Mutex<PortCapture> = Mutex::new(PortCapture::new());
 static POLL_PORT_LOCK: Mutex<()> = Mutex::new(());
 
 fn capture_poll_report(report: QueuePollReport) {
-    POLL_REPORTS
+    PORT_CAPTURE
         .lock()
         .unwrap_or_else(|error| error.into_inner())
+        .polls
         .push(report);
 }
 
-fn begin_poll_capture(enabled: bool) -> std::sync::MutexGuard<'static, ()> {
+fn capture_rearm_report(report: QueueRearmReport) {
+    PORT_CAPTURE
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
+        .rearms
+        .push(report);
+}
+
+fn capture_backpressure_report(report: QueueBackpressureReport) {
+    PORT_CAPTURE
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
+        .backpressures
+        .push(report);
+}
+
+fn capture_submit_report(report: TxSubmitReport) {
+    PORT_CAPTURE
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
+        .submits
+        .push(report);
+}
+
+fn capture_publish_report(report: RxPublishReport) {
+    PORT_CAPTURE
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
+        .publishes
+        .push(report);
+}
+
+fn install_port_capture() {
+    install_queue_poll_observer(capture_poll_report);
+    install_queue_rearm_observer(capture_rearm_report);
+    install_queue_backpressure_observer(capture_backpressure_report);
+    install_tx_submit_observer(capture_submit_report);
+    install_rx_publish_observer(capture_publish_report);
+}
+
+/// Opens every port and clears the capture, so one test cannot observe another
+/// test's reports or a previous round's leftovers.
+fn begin_port_capture(enabled: bool) -> std::sync::MutexGuard<'static, ()> {
     let guard = POLL_PORT_LOCK
         .lock()
         .unwrap_or_else(|error| error.into_inner());
-    install_queue_poll_observer(capture_poll_report);
+    install_port_capture();
     publish_queue_poll_gate(enabled);
-    POLL_REPORTS
+    publish_queue_rearm_gate(enabled);
+    publish_queue_backpressure_gate(enabled);
+    publish_tx_submit_gate(enabled);
+    publish_rx_publish_gate(enabled);
+    let mut capture = PORT_CAPTURE
         .lock()
-        .unwrap_or_else(|error| error.into_inner())
-        .clear();
+        .unwrap_or_else(|error| error.into_inner());
+    capture.polls.clear();
+    capture.rearms.clear();
+    capture.backpressures.clear();
+    capture.submits.clear();
+    capture.publishes.clear();
+    drop(capture);
     guard
 }
 
+fn close_port_gates() {
+    publish_queue_poll_gate(false);
+    publish_queue_rearm_gate(false);
+    publish_queue_backpressure_gate(false);
+    publish_tx_submit_gate(false);
+    publish_rx_publish_gate(false);
+}
+
 fn reports_of(identity: NetQueueIdentity) -> Vec<QueuePollReport> {
-    POLL_REPORTS
+    PORT_CAPTURE
         .lock()
         .unwrap_or_else(|error| error.into_inner())
+        .polls
+        .iter()
+        .filter(|report| report.identity == identity)
+        .copied()
+        .collect()
+}
+
+fn rearms_of(identity: NetQueueIdentity) -> Vec<QueueRearmOutcome> {
+    PORT_CAPTURE
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
+        .rearms
+        .iter()
+        .filter(|report| report.identity == identity)
+        .map(|report| report.outcome)
+        .collect()
+}
+
+fn backpressures_of(identity: NetQueueIdentity) -> Vec<QueueBackpressureReport> {
+    PORT_CAPTURE
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
+        .backpressures
+        .iter()
+        .filter(|report| report.identity == identity)
+        .copied()
+        .collect()
+}
+
+fn submits_of(identity: NetQueueIdentity) -> Vec<TxSubmitReport> {
+    PORT_CAPTURE
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
+        .submits
+        .iter()
+        .filter(|report| report.identity == identity)
+        .copied()
+        .collect()
+}
+
+fn publishes_of(identity: NetQueueIdentity) -> Vec<RxPublishReport> {
+    PORT_CAPTURE
+        .lock()
+        .unwrap_or_else(|error| error.into_inner())
+        .publishes
         .iter()
         .filter(|report| report.identity == identity)
         .copied()
@@ -1050,7 +1302,7 @@ fn port_identity(tag: usize) -> NetQueueIdentity {
 
 #[test]
 fn queue_poll_reports_exactly_once_per_round_with_its_identity_and_budget() {
-    let _port = begin_poll_capture(true);
+    let _port = begin_port_capture(true);
     let identity = port_identity(1);
     let trace = Arc::new(Mutex::new(Vec::new()));
     let (mut transmit, tx_ready) = spsc_ring(2);
@@ -1105,12 +1357,12 @@ fn queue_poll_reports_exactly_once_per_round_with_its_identity_and_budget() {
     assert_eq!(reports[2].budget, 1);
     assert_eq!(reports[2].work_units, 1);
     assert_eq!(reports[2].outcome, QueuePollOutcome::More);
-    publish_queue_poll_gate(false);
+    close_port_gates();
 }
 
 #[test]
 fn queue_poll_reports_a_blocked_round() {
-    let _port = begin_poll_capture(true);
+    let _port = begin_port_capture(true);
     let identity = port_identity(4);
     let trace = Arc::new(Mutex::new(Vec::new()));
     let (_tx, tx_ready) = spsc_ring(2);
@@ -1142,12 +1394,12 @@ fn queue_poll_reports_a_blocked_round() {
     assert_eq!(reports.len(), 1);
     assert_eq!(reports[0].outcome, QueuePollOutcome::Blocked);
     assert_eq!(reports[0].work_units, 0);
-    publish_queue_poll_gate(false);
+    close_port_gates();
 }
 
 #[test]
 fn queue_poll_reports_the_work_done_before_a_failed_round() {
-    let _port = begin_poll_capture(true);
+    let _port = begin_port_capture(true);
     let identity = port_identity(2);
     let trace = Arc::new(Mutex::new(Vec::new()));
     let (mut transmit, tx_ready) = spsc_ring(2);
@@ -1199,14 +1451,15 @@ fn queue_poll_reports_the_work_done_before_a_failed_round() {
         executor.shared.is_disabled(),
         "a failed round must leave the group disabled"
     );
-    publish_queue_poll_gate(false);
+    close_port_gates();
 }
 
-/// Builds an executor with one frame queued, so a plain round does real work
+/// Queues one frame and polls once, so a compared round moves a frame
 /// instead of returning an empty `Idle(0)`.
-fn executor_with_one_queued_frame(identity: NetQueueIdentity, trace: Trace) -> QueueGroupExecutor {
-    let (mut transmit, tx_ready) = spsc_ring(2);
-    let executor = port_test_executor(identity, trace, tx_ready);
+fn round_with_one_frame(
+    executor: &mut QueueGroupExecutor,
+    transmit: &mut SpscProducer<TxRequest>,
+) -> GroupPollOutcome {
     let buffer = executor.group.tx_pool.allocate(60).unwrap();
     assert!(
         transmit
@@ -1219,20 +1472,20 @@ fn executor_with_one_queued_frame(identity: NetQueueIdentity, trace: Trace) -> Q
             })
             .is_ok()
     );
-    executor
+    executor.poll(256)
 }
 
 #[test]
 fn queue_poll_outcome_is_unchanged_by_the_observation_port() {
     let identity = port_identity(3);
     let trace = Arc::new(Mutex::new(Vec::new()));
-    // Two executors with the same queued work: the comparison has to run on a
-    // round that moves a frame, because two empty rounds agree trivially.
-    let mut closed_executor = executor_with_one_queued_frame(identity, Arc::clone(&trace));
-    let mut open_executor = executor_with_one_queued_frame(identity, Arc::clone(&trace));
+    let (mut transmit, tx_ready) = spsc_ring(2);
+    let mut executor = port_test_executor(identity, Arc::clone(&trace), tx_ready);
 
-    let _port = begin_poll_capture(false);
-    let closed = closed_executor.poll(256);
+    // The same round shape runs twice: the comparison has to cover a round
+    // that moves a frame, because two empty rounds agree trivially.
+    let _port = begin_port_capture(false);
+    let closed = round_with_one_frame(&mut executor, &mut transmit);
     assert!(
         reports_of(identity).is_empty(),
         "a closed gate must not report"
@@ -1243,11 +1496,186 @@ fn queue_poll_outcome_is_unchanged_by_the_observation_port() {
     );
 
     publish_queue_poll_gate(true);
-    let open = open_executor.poll(256);
+    let open = round_with_one_frame(&mut executor, &mut transmit);
     let reports = reports_of(identity);
     assert_eq!(reports.len(), 1);
 
     assert_eq!(closed, open, "observation must not change the poll outcome");
     assert_eq!(reports[0].work_units, open.work());
-    publish_queue_poll_gate(false);
+    close_port_gates();
+}
+
+#[test]
+fn queue_rearm_reports_every_non_idle_outcome() {
+    let _port = begin_port_capture(true);
+    let identity = port_identity(5);
+    let trace = Arc::new(Mutex::new(Vec::new()));
+    let (_tx, tx_ready) = spsc_ring(2);
+    let mut executor = port_test_executor(identity, Arc::clone(&trace), tx_ready);
+
+    // A rearm that ends idle is the plain case and produces no event.
+    executor
+        .shared
+        .state
+        .store(STATE_POLLING, Ordering::Release);
+    executor.finish_idle();
+    assert!(
+        rearms_of(identity).is_empty(),
+        "an idle rearm is not an event"
+    );
+
+    // An IRQ that arrived while the round was polling skips the hardware rearm.
+    executor
+        .shared
+        .state
+        .store(STATE_POLLING | STATE_MISSED, Ordering::Release);
+    executor.finish_idle();
+    assert_eq!(rearms_of(identity), vec![QueueRearmOutcome::Race]);
+
+    // Rearm found work in the window.
+    executor.group.irq_control = Box::new(ScriptedIrq {
+        rearm: Some(NetRearmResult::WorkPending(rd_net::NetIrqSnapshot::RX)),
+        fail: false,
+    });
+    executor
+        .shared
+        .state
+        .store(STATE_POLLING, Ordering::Release);
+    executor.finish_idle();
+    assert_eq!(
+        rearms_of(identity).last(),
+        Some(&QueueRearmOutcome::WorkPending)
+    );
+
+    // The device asked for a deferred retry.
+    executor.group.irq_control = Box::new(ScriptedIrq {
+        rearm: Some(NetRearmResult::RetryAt { deadline_nanos: 1 }),
+        fail: false,
+    });
+    executor
+        .shared
+        .state
+        .store(STATE_POLLING, Ordering::Release);
+    executor.finish_idle();
+    assert_eq!(
+        rearms_of(identity).last(),
+        Some(&QueueRearmOutcome::RetryAt)
+    );
+    assert!(executor.retry_at.is_some());
+
+    // A failed rearm disables the group.
+    executor.group.irq_control = Box::new(ScriptedIrq {
+        rearm: None,
+        fail: true,
+    });
+    executor
+        .shared
+        .state
+        .store(STATE_POLLING, Ordering::Release);
+    executor.finish_idle();
+    assert_eq!(rearms_of(identity).last(), Some(&QueueRearmOutcome::Failed));
+    assert!(
+        executor.shared.is_disabled(),
+        "a failed rearm must leave the group disabled"
+    );
+    close_port_gates();
+}
+
+#[test]
+fn tx_submit_reports_accepted_frames_and_backpressure_reports_refusals() {
+    let _port = begin_port_capture(true);
+    let identity = port_identity(6);
+    let trace = Arc::new(Mutex::new(Vec::new()));
+    let (mut transmit, tx_ready) = spsc_ring(2);
+    let mut executor = port_test_executor(identity, Arc::clone(&trace), tx_ready);
+
+    // An accepted frame is a submit event, not backpressure.
+    let buffer = executor.group.tx_pool.allocate(60).unwrap();
+    assert!(
+        transmit
+            .push(TxRequest {
+                buffer,
+                options: TxSubmitOptions {
+                    notify: TxNotify::Deferred,
+                    ..Default::default()
+                },
+            })
+            .is_ok()
+    );
+    assert_eq!(executor.poll(256), GroupPollOutcome::Idle(1));
+    let submits = submits_of(identity);
+    assert_eq!(submits.len(), 1);
+    assert_eq!(submits[0].len, 60);
+    assert!(backpressures_of(identity).is_empty());
+
+    // A device that asks to wait: the frame is retained and the refusal is
+    // reported instead of a submit.
+    let dma = DeviceDma::new(
+        DmaDeviceInfo::new(
+            DmaDomainId::Direct,
+            DmaCoherency::Coherent,
+            DmaConstraints::new(u64::MAX),
+        ),
+        &TEST_DMA,
+    );
+    let device = rd_net::prepare_device(
+        Box::new(ScriptedTxDevice {
+            trace: Arc::clone(&trace),
+            refusal: NetError::Retry,
+        }),
+        dma,
+    )
+    .unwrap();
+    let (mut transmit, tx_ready) = spsc_ring(2);
+    let mut executor = port_test_executor_from_device(identity, tx_ready, device);
+    let buffer = executor.group.tx_pool.allocate(60).unwrap();
+    assert!(
+        transmit
+            .push(TxRequest {
+                buffer,
+                options: TxSubmitOptions {
+                    notify: TxNotify::Deferred,
+                    ..Default::default()
+                },
+            })
+            .is_ok()
+    );
+    let _ = executor.poll(256);
+    let refusals = backpressures_of(identity);
+    assert_eq!(refusals.len(), 1);
+    assert_eq!(refusals[0].stage, QueueBackpressureStage::TxSubmit);
+    assert_eq!(refusals[0].reason, QueueBackpressureReason::Retry as u32);
+    assert_eq!(
+        submits_of(identity).len(),
+        1,
+        "a refused frame must not be reported as submitted"
+    );
+    assert!(
+        executor.pending_tx.is_some(),
+        "a retryable refusal keeps the frame retained"
+    );
+    close_port_gates();
+}
+
+#[test]
+fn rx_publish_reports_frames_handed_to_the_protocol_side() {
+    let _port = begin_port_capture(true);
+    let identity = port_identity(7);
+    let trace = Arc::new(Mutex::new(Vec::new()));
+    let (_tx, tx_ready) = spsc_ring(2);
+    // Two accepted replacements: the reclaimed frame can be reposted, and
+    // publishing happens once its replacement is accepted.
+    let mut executor =
+        port_test_executor_with_rx_initial(identity, Arc::clone(&trace), tx_ready, 2);
+    let replacement = executor.group.rx.allocate_replacement().unwrap();
+    executor.pending_rx_refill.push_back(PendingRxRefill {
+        completion: None,
+        replacement,
+    });
+
+    let _ = executor.poll(256);
+    let published = publishes_of(identity);
+    assert_eq!(published.len(), 1, "the reclaimed frame is published once");
+    assert_eq!(published[0].len, 60);
+    close_port_gates();
 }

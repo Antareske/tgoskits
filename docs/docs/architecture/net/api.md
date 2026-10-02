@@ -265,24 +265,26 @@ let id = InterfaceId::from_linux_ifindex(linux_ifindex).unwrap();
 
 ### 3.2 事件观察端口
 
-队列运行时把每次 poll 调用完成后的事实交给一个窄观察端口：
+队列运行时把队列边界的事实交给一组窄观察端口，每个事件一个端口实例：
 
 ```rust
-pub struct QueuePollReport {
-    pub identity: NetQueueIdentity,
-    pub budget: usize,
-    pub work_units: usize,
-    pub outcome: QueuePollOutcome,
-}
+pub struct QueuePollReport { pub identity: NetQueueIdentity, pub budget: usize,
+                             pub work_units: usize, pub outcome: QueuePollOutcome }
+pub struct QueueRearmReport { pub identity: NetQueueIdentity, pub outcome: QueueRearmOutcome }
+pub struct QueueBackpressureReport { pub identity: NetQueueIdentity,
+                                     pub stage: QueueBackpressureStage, pub reason: u32 }
+pub struct TxSubmitReport { pub identity: NetQueueIdentity, pub len: usize }
+pub struct RxPublishReport { pub identity: NetQueueIdentity, pub len: usize }
 
 pub fn install_queue_poll_observer(observer: QueuePollObserver);
 pub fn publish_queue_poll_gate(enabled: bool);
+// 其余四个事件各自一对 install_<event>_observer / publish_<event>_gate。
 ```
 
-`install_queue_poll_observer()` 每进程安装一次，重复安装同一函数幂等，替换存活消费者是不变量违背；端口不卸载，
-未安装等价于没有消费者。`publish_queue_poll_gate()` 由操作系统适配层写入：启用事实由 `ax-tracepoint` 的门控拥有，
-运行时不维护第二份真相，查询与触发之间的竞争由生成的 `trace_queue_poll_round()` 做最终检查。报告的字段语义、
-结果码与成本口径见[网络事件](events.md)。
+`install_<event>_observer()` 每进程安装一次，重复安装同一函数幂等，替换存活消费者是不变量违背；端口不卸载，
+未安装等价于没有消费者。`publish_<event>_gate()` 由操作系统适配层写入：启用事实由 `ax-tracepoint` 的门控拥有，
+运行时不维护第二份真相，查询与触发之间的竞争由生成的事件函数做最终检查。端口在进入后只读一个已发布标志与一个
+函数指针槽，不分配、不读时钟、不取网络锁。各事件的字段语义、结果码与成本口径见[网络事件](events.md)。
 
 ### 3.3 路由快照
 

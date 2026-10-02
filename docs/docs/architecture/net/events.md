@@ -7,7 +7,7 @@ sidebar_label: "网络事件"
 
 网络事件把队列运行时报成 `net:*` tracepoint，供 tracefs 与 eBPF 消费。事实由网络栈自己的状态所有者产生，`ax-net` 拥有事实与窄观察端口，StarryOS 拥有事件名称、记录格式与启用状态；事件可被关闭或丢弃，因此不能代替 `NetQueueStats`、`net_queue_snapshots()` 或 `/proc/net/dev` 的累计。
 
-事件清单目前只有 `net:queue_poll_round`；其余候选（rearm、IRQ、背压、最终丢弃）按各自准入条件逐项加入，未加入前不对外承诺字段。
+事件清单当前包含五个队列边界事件：`net:queue_poll_round`、`net:queue_rearm`、`net:queue_backpressure`、`net:tx_submit`、`net:rx_publish`。其余候选（IRQ、最终丢弃、协议侧交接边界）按各自准入条件逐项加入，未加入前不对外承诺字段。
 
 ## 1. 观察端口
 
@@ -21,16 +21,18 @@ flowchart LR
     A -->|已有累计| E[NetQueueStats 与 net_queue 快照]
 ```
 
-端口契约：
+每个事件一个端口实例，对外只暴露 `install_<event>_observer()` 与 `publish_<event>_gate()`。端口契约：
 
-- `install_queue_poll_observer()` 每进程安装一次，重复安装同一函数幂等，替换存活消费者是不变量违背；端口不卸载。
+- 每进程安装一次，重复安装同一函数幂等，替换存活消费者是不变量违背；端口不卸载。
 - 报告只读一个已发布标志与一个函数指针槽，不分配、不读时钟、不取网络锁，可在队列执行器线程直接调用。
 - 未安装端口等价于没有消费者：状态转换与结果不变。
 - 安装发生在网络运行时已经运行之后，因此安装前完成的轮次不会被报告；这一段丢事件窗口是端口语义的一部分，不由缓存补偿。
 
-`publish_queue_poll_gate()` 由 StarryOS 写入：启用事实仍由 `ax-tracepoint` 的门控拥有，运行时不维护第二份真相。查询 gate 与真正触发之间允许启停竞争，生成的 `trace_queue_poll_round()` 仍会做最终门控检查。
+`publish_<event>_gate()` 由 StarryOS 写入：启用事实仍由 `ax-tracepoint` 的门控拥有，运行时不维护第二份真相。查询 gate 与真正触发之间允许启停竞争，生成的事件函数仍会做最终门控检查。报告点在进入端口之前会组装报告值（一个 `Copy` 结构），这一步不受门控保护。
 
-## 2. `net:queue_poll_round`
+## 2. 事件清单
+
+### 2.1 `net:queue_poll_round`
 
 一次队列执行器 poll 调用返回时恰好报告一次，包括提前返回。报告的是一次队列轮询调用，不含其后的 IRQ rearm；未成功 `claim()` 因此没有进入 poll 的轮次不产生事件。
 
@@ -54,11 +56,68 @@ flowchart LR
 
 Linux 对照：本事件报告的事实对应 `napi:napi_poll` 的 `work` 与 `budget`。差异是结构性的——Starry 的队列执行器独立于 NAPI（不属于网络栈的软中断预算体系，因此不沿用 NAPI 的命名），`work_units` 是执行器工作单位而不是处理的包数，事件也不预计算耗时，不提供任何 duration 字段。
 
+### 2.2 `net:queue_rearm`
+
+只在 rearm **没有**以正常空闲结束时报告：一次 `finish_idle()` 至多一条，空闲结局不产生记录（它每轮都会发生，报它等于让 `queue_poll_round` 翻倍）。
+
+| 字段 | 类型 | 语义与约束 |
+| --- | --- | --- |
+| `discovery_order`/`group_id`/`owner_cpu` | u32 | 同 2.1 的身份字段。 |
+| `outcome` | u32 | `0` 竞态、`1` 仍有工作、`2` 延迟重试、`3` 失败。 |
+
+结果码语义：
+
+- `Race`：轮询期间到达了新 IRQ，硬件 rearm 被跳过，group 直接回到已调度状态。
+- `WorkPending`：rearm 窗口内发现工作，group 被重新调度；与本 group 的 `rearm_race` 计数同源同义。
+- `RetryAt`：设备要求在某绝对时刻再次轮询。
+- `Failed`：rearm 失败，group 被禁用。
+
+Linux 对照：没有逐字段等价的通用网络事件；rearm 状态机是 Starry 自有边界。
+
+### 2.3 `net:queue_backpressure`
+
+报告设备**明确要求等待**而无法继续的每一次：TX 提交返回可重试（帧被保留）、RX 补投返回可重试（替换缓冲被保留）。协议端口不接受（`Again`）属于轮结局，不是本事件。
+
+| 字段 | 类型 | 语义与约束 |
+| --- | --- | --- |
+| `discovery_order`/`group_id`/`owner_cpu` | u32 | 同 2.1。 |
+| `stage` | u32 | `0` TX 提交、`1` RX 补投。 |
+| `reason` | u32 | `0` 设备要求重试、`1` 链路不可用（帧同样被保留）。 |
+
+每次「可重试的未接纳」一条，不是每帧、不是每轮；重试成功后不会补发记录。设备返回**永久**错误不在此事件内：TX 侧该帧被回收（这是当前的已知口径，见下），RX 侧整轮失败并由 `queue_poll_round` 的 `Failed` 报告。
+
+Linux 对照：`net:net_dev_xmit` 报告发送结果、`napi:dql_stall_detected` 报告停滞，均非直接等价；本事件只报告 Starry 队列执行器观察到的设备层拒绝。
+
+### 2.4 `net:tx_submit`
+
+驱动接纳一帧时报告一次（逐帧事件）。**接纳不等于发出**：不表示硬件已经传输、也不表示 TX 完成；被拒绝的提交由 `queue_backpressure` 报告。
+
+| 字段 | 类型 | 语义与约束 |
+| --- | --- | --- |
+| `discovery_order`/`group_id`/`owner_cpu` | u32 | 同 2.1。 |
+| `frame_len` | u32 | 交给驱动的帧长（字节），已含以太网最小帧填充。 |
+
+Linux 对照：`net:net_dev_start_xmit`/`net:net_dev_xmit` 是相近发送边界；本事件只覆盖「驱动接纳」这一步。
+
+### 2.5 `net:rx_publish`
+
+接收帧被发布到协议侧环时报告一次（逐帧事件）。发布失败（环满）不报告：帧留在执行器侧，下一轮再投。
+
+| 字段 | 类型 | 语义与约束 |
+| --- | --- | --- |
+| `discovery_order`/`group_id`/`owner_cpu` | u32 | 同 2.1。 |
+| `frame_len` | u32 | 帧长（字节）。 |
+
+与将来的 `net:rx_consume` 不承诺逐帧配对（没有跨层帧 ID）；配对需要另有载体，当前不做。
+
+Linux 对照：`net:netif_rx` 是相近的接收交接边界；本事件报告的是队列执行器把帧交给协议侧，不涉及协议分发结果。
+
 ## 3. 启停与成本
 
 - 事件由 `ax-tracepoint` 的每事件门控拥有。`tracefs` 的 `enable` 与 `perf`/BPF 附着都会改变回调集合，StarryOS 在回调集合变化的同一处把结果镜像到运行时的已发布标志。
 - 镜像只在回调集合变化时更新，因此存在三种状态。**无回调**：队列执行器进入端口只付一次已发布标志读取与分支，不构造记录、不读时钟、不做格式化。**有回调且采集已启用**：完整付出记录构造与 `trace_pipe` 管线的成本。**有回调但采集未启用**（perf 附着后未 `enable`，或 `DISABLE` 之后）：镜像仍为真，事件函数照常被调用并遍历回调，最终由每个回调自己的启用位拦下——这一态按“无回调”以外处理，其开销与启用态同量级地走到分发入口。
 - 事实所有者侧在进入端口前会组装报告值（本例是拷贝一个 `Copy` 结构），这一步发生在门控检查之前，编译器可以把它下沉到标志检查之后但不作保证；因此关闭态的准确口径是「一次已发布标志读取加分支，外加一次栈上报告值填充」。
+- 逐帧事件（2.4、2.5）是成本上的主要观察对象：关闭态每帧一次已发布标志读取，启用态每帧一条记录；记录进入固定容量的 ingress 环，高频负载下会丢弃（丢弃由 trace 侧计数，事件不承诺不丢）。
 - 判定成本时区分度量对象：比较“端口已安装且事件关闭”与“事件开启”只能得到含 `trace_pipe` 管线的增量；端口本身的开销需要另一个“未安装端口”的对照构建，该对照列为合入后的板卡测量任务，不作为合入前的门槛。
 
 ## 4. 事件准入
@@ -67,7 +126,8 @@ Linux 对照：本事件报告的事实对应 `napi:napi_poll` 的 `work` 与 `b
 
 ## 5. 验收
 
-- `ax-net` 单元测试覆盖：每次 poll 恰一条报告、提前返回不重复报告、失败轮次报告真实工作量、端口开关与有无消费者都不改变 `GroupPollOutcome`。
-- StarryOS 系统用例 `qemu/system/net-events` 覆盖：事件可发现且 `format` 声明了文档字段、启用后真实队列轮询产生记录且记录自洽、关闭后同样流量不再产生记录。
+- `ax-net` 单元测试覆盖：每次 poll 恰一条报告、提前返回不重复报告、失败轮次报告真实工作量、端口开关与有无消费者都不改变 `GroupPollOutcome`；rearm 只报非空闲结局、背压只在可重试拒绝时出现且被拒帧不报为已提交、`tx_submit`/`rx_publish` 每次接纳/发布恰一条。
+- StarryOS 系统用例 `qemu/system/net-events` 覆盖：五个事件都可发现且 `format` 声明了文档字段、关闭后同样流量不再产生记录；流量驱动的三个事件（`queue_poll_round`、`tx_submit`、`rx_publish`）还要证明启用时真实出现记录。
+- 覆盖边界：`queue_rearm` 的非空闲结局与 `queue_backpressure` 需要设备真的竞态或真的忙，QEMU 环境不保证触发；这两者的语义由 `ax-net` 单元测试覆盖，系统用例只保证装配与格式。
 - eBPF 冒烟只证明 `load → attach → enable → read` 附着链路，不定义事件语义。
 - 板卡测量（合入后）：对照构建比较未安装端口与已安装未启用的吞吐与 CPU，尾延迟指标在出现可靠载体前不列入。

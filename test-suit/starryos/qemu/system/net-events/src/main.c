@@ -1,15 +1,14 @@
 /*
- * Checks the net:queue_poll_round tracepoint end to end:
+ * Checks the net:* queue events end to end:
  *
- *   1. the event is discoverable and its format declares the documented
+ *   1. every event is discoverable and its format declares the documented
  *      fields;
- *   2. enabling it makes real queue rounds readable from the trace buffer,
- *      with an internally consistent record;
- *   3. disabling it stops new records while the same traffic continues.
+ *   2. enabling them makes real queue records readable from the trace buffer,
+ *      with internally consistent values, for the events that traffic drives;
+ *   3. disabling them stops new records while the same traffic continues.
  *
- * The event carries no network semantics beyond the queue runtime's own
- * facts, so the traffic below only has to produce poll rounds, not traffic
- * patterns.
+ * The events carry no network semantics beyond the queue runtime's own facts,
+ * so the traffic below only has to produce queue rounds, not traffic patterns.
  */
 
 #define _GNU_SOURCE
@@ -21,11 +20,12 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define EVENT_DIR "/sys/kernel/debug/tracing/events/net/queue_poll_round"
+#define EVENT_BASE "/sys/kernel/debug/tracing/events/net"
 #define TRACE_FILE "/sys/kernel/debug/tracing/trace"
-/* A rendered record reads `queue_poll_round(discovery_order=0 ... outcome=0)`. */
-#define MARKER "queue_poll_round("
+#define PATH_LEN 160
 #define MAX_TRACE_BYTES (256 * 1024)
+#define MAX_FIELDS 6
+#define MAX_EVENTS 5
 
 /* The QEMU command line this suite runs under uses user-mode networking, whose
  * gateway answers ARP and IP, so a datagram sent to it always leaves the
@@ -48,6 +48,42 @@
  * before the buffer is cleared, so the negative check does not read a record
  * that was produced while the event was still enabled. */
 #define DISABLE_SETTLE_US 50000
+
+struct event_spec {
+    const char *name;
+    int field_count;
+    const char *fields[MAX_FIELDS];
+    /* Whether ordinary send/receive traffic is expected to drive records. */
+    int traffic_driven;
+};
+
+static const struct event_spec EVENTS[] = {
+    { "queue_poll_round",
+      6,
+      { "discovery_order", "group_id", "owner_cpu", "budget", "work_units", "outcome" },
+      1 },
+    /* A rearm race and a busy device need hardware that the QEMU device does
+     * not offer, so these two only prove discovery, format and the disabled
+     * leg here; their semantics are covered by the ax-net unit tests. */
+    { "queue_rearm",
+      4,
+      { "discovery_order", "group_id", "owner_cpu", "outcome" },
+      0 },
+    { "queue_backpressure",
+      5,
+      { "discovery_order", "group_id", "owner_cpu", "stage", "reason" },
+      0 },
+    { "tx_submit",
+      4,
+      { "discovery_order", "group_id", "owner_cpu", "frame_len" },
+      1 },
+    { "rx_publish",
+      4,
+      { "discovery_order", "group_id", "owner_cpu", "frame_len" },
+      1 },
+};
+
+#define EVENT_COUNT (sizeof(EVENTS) / sizeof(EVENTS[0]))
 
 static int failures;
 
@@ -87,13 +123,21 @@ static int write_file(const char *path, const char *text)
     return result;
 }
 
-static int count_markers(const char *text)
+static void event_path(char *path, size_t capacity, const char *name, const char *attribute)
 {
+    snprintf(path, capacity, EVENT_BASE "/%s/%s", name, attribute);
+}
+
+/* A rendered record reads `queue_poll_round(discovery_order=0 ... outcome=0)`. */
+static int count_records(const char *text, const char *name)
+{
+    char marker[64];
+    snprintf(marker, sizeof(marker), "%s(", name);
     int count = 0;
     const char *cursor = text;
-    while ((cursor = strstr(cursor, MARKER)) != NULL) {
+    while ((cursor = strstr(cursor, marker)) != NULL) {
         count++;
-        cursor += sizeof(MARKER) - 1;
+        cursor += strlen(marker);
     }
     return count;
 }
@@ -136,28 +180,104 @@ static int send_traffic(void)
     return sent;
 }
 
-/* Reads the trace buffer, waiting briefly for records to be published. */
-static long read_trace_waiting(char *buffer, size_t capacity, int *markers)
+/* Verifies that one event is present with the documented format. */
+static void check_discovery(const struct event_spec *event)
 {
-    long length = -1;
-    for (int attempt = 0; attempt < RECORD_WAIT_ATTEMPTS; attempt++) {
-        length = read_file(TRACE_FILE, buffer, capacity);
-        if (length < 0) {
-            return -1;
-        }
-        *markers = count_markers(buffer);
-        if (*markers > 0) {
-            break;
-        }
-        usleep(RECORD_WAIT_US);
+    char path[PATH_LEN];
+    static char buffer[8192];
+
+    event_path(path, sizeof(path), event->name, "id");
+    if (read_file(path, buffer, sizeof(buffer)) <= 0 || strtol(buffer, NULL, 10) < 0) {
+        printf("NET_EVENTS_FAIL: net:%s has no readable id\n", event->name);
+        failures++;
     }
-    return length;
+    event_path(path, sizeof(path), event->name, "format");
+    if (read_file(path, buffer, sizeof(buffer)) <= 0) {
+        printf("NET_EVENTS_FAIL: net:%s has no readable format\n", event->name);
+        failures++;
+        return;
+    }
+    for (int index = 0; index < event->field_count; index++) {
+        if (strstr(buffer, event->fields[index]) == NULL) {
+            printf("NET_EVENTS_FAIL: net:%s format lacks field %s\n", event->name,
+                   event->fields[index]);
+            failures++;
+        }
+    }
+    if (strstr(buffer, event->name) == NULL) {
+        printf("NET_EVENTS_FAIL: net:%s format does not describe the event\n", event->name);
+        failures++;
+    }
 }
 
-/* Parses the first record and checks its internal consistency. */
-static void check_record(const char *trace)
+static int set_all_events(const char *value)
 {
-    const char *marker = strstr(trace, MARKER);
+    int failures_seen = 0;
+    for (size_t index = 0; index < EVENT_COUNT; index++) {
+        char path[PATH_LEN];
+        event_path(path, sizeof(path), EVENTS[index].name, "enable");
+        if (write_file(path, value) != 0) {
+            printf("NET_EVENTS_FAIL: net:%s could not be written %s\n", EVENTS[index].name,
+                   value);
+            failures_seen++;
+        }
+    }
+    return failures_seen;
+}
+
+/* Parses the leading identity fields shared by every event. */
+static int parse_identity(const char *record, unsigned *discovery_order, unsigned *group_id,
+                          unsigned *owner_cpu)
+{
+    return sscanf(record, "discovery_order=%u group_id=%u owner_cpu=%u", discovery_order, group_id,
+                  owner_cpu);
+}
+
+static void check_owner_cpu(const char *name, unsigned owner_cpu)
+{
+    long online_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+    if (online_cpus > 0 && owner_cpu >= (unsigned long)online_cpus) {
+        printf("NET_EVENTS_FAIL: net:%s reports an owner CPU outside the online set\n", name);
+        failures++;
+    }
+}
+
+/* Checks the first record of an event whose payload is a single length. */
+static void check_frame_record(const struct event_spec *event, const char *trace)
+{
+    char marker[64];
+    snprintf(marker, sizeof(marker), "%s(", event->name);
+    const char *marker_at = strstr(trace, marker);
+    if (marker_at == NULL) {
+        printf("NET_EVENTS_FAIL: no net:%s record\n", event->name);
+        failures++;
+        return;
+    }
+    const char *record = marker_at + strlen(marker);
+    unsigned discovery_order = 0;
+    unsigned group_id = 0;
+    unsigned owner_cpu = 0;
+    unsigned frame_len = 0;
+    int fields = sscanf(record, "discovery_order=%u group_id=%u owner_cpu=%u frame_len=%u",
+                        &discovery_order, &group_id, &owner_cpu, &frame_len);
+    if (fields != 4) {
+        printf("NET_EVENTS_FAIL: net:%s record does not carry the documented fields\n",
+               event->name);
+        failures++;
+        return;
+    }
+    if (frame_len == 0) {
+        printf("NET_EVENTS_FAIL: net:%s record reports a zero-length frame\n", event->name);
+        failures++;
+    }
+    check_owner_cpu(event->name, owner_cpu);
+    printf("NET_EVENTS_RECORD %s discovery_order=%u group_id=%u owner_cpu=%u frame_len=%u\n",
+           event->name, discovery_order, group_id, owner_cpu, frame_len);
+}
+
+/* Parses the first poll-round record and checks its internal consistency. */
+static void check_poll_record(const char *marker)
+{
     if (marker == NULL) {
         fail("trace buffer holds no queue_poll_round record");
         return;
@@ -168,9 +288,8 @@ static void check_record(const char *trace)
     unsigned budget = 0;
     unsigned work_units = 0;
     unsigned outcome = 0;
-    int fields = sscanf(marker + sizeof(MARKER) - 1,
-                        "discovery_order=%u group_id=%u owner_cpu=%u budget=%u work_units=%u "
-                        "outcome=%u",
+    int fields = sscanf(marker, "discovery_order=%u group_id=%u owner_cpu=%u budget=%u "
+                                "work_units=%u outcome=%u",
                         &discovery_order, &group_id, &owner_cpu, &budget, &work_units, &outcome);
     if (fields != 6) {
         fail("queue_poll_round record does not carry the documented fields");
@@ -182,47 +301,45 @@ static void check_record(const char *trace)
     if (work_units > budget) {
         fail("queue_poll_round record reports more work than its budget");
     }
-    long online_cpus = sysconf(_SC_NPROCESSORS_ONLN);
-    if (online_cpus > 0 && owner_cpu >= (unsigned long)online_cpus) {
-        fail("queue_poll_round record reports an owner CPU outside the online set");
+    if (parse_identity(marker, &discovery_order, &group_id, &owner_cpu) == 3) {
+        check_owner_cpu("queue_poll_round", owner_cpu);
     }
-    printf("NET_EVENTS_RECORD discovery_order=%u group_id=%u owner_cpu=%u budget=%u work_units=%u "
-           "outcome=%u\n",
+    printf("NET_EVENTS_RECORD queue_poll_round discovery_order=%u group_id=%u owner_cpu=%u "
+           "budget=%u work_units=%u outcome=%u\n",
            discovery_order, group_id, owner_cpu, budget, work_units, outcome);
+}
+
+/* Reads the trace buffer, waiting briefly for records to be published. */
+static long read_trace_waiting(const char *event, char *buffer, size_t capacity, int *records)
+{
+    long length = -1;
+    for (int attempt = 0; attempt < RECORD_WAIT_ATTEMPTS; attempt++) {
+        length = read_file(TRACE_FILE, buffer, capacity);
+        if (length < 0) {
+            return -1;
+        }
+        *records = count_records(buffer, event);
+        if (*records > 0) {
+            break;
+        }
+        usleep(RECORD_WAIT_US);
+    }
+    return length;
 }
 
 int main(void)
 {
-    char buffer[MAX_TRACE_BYTES];
-    char format[8192];
+    static char buffer[MAX_TRACE_BYTES];
 
-    long id_length = read_file(EVENT_DIR "/id", buffer, sizeof(buffer));
-    if (id_length <= 0 || strtol(buffer, NULL, 10) < 0) {
-        fail("net:queue_poll_round has no readable id");
-    }
-    if (read_file(EVENT_DIR "/format", format, sizeof(format)) <= 0) {
-        fail("net:queue_poll_round has no readable format");
-    } else {
-        static const char *const fields[] = {
-            "discovery_order", "group_id", "owner_cpu", "budget", "work_units", "outcome",
-        };
-        for (size_t index = 0; index < sizeof(fields) / sizeof(fields[0]); index++) {
-            if (strstr(format, fields[index]) == NULL) {
-                printf("NET_EVENTS_FAIL: format lacks field %s\n", fields[index]);
-                failures++;
-            }
-        }
-        if (strstr(format, "net:queue_poll_round") == NULL &&
-            strstr(format, "queue_poll_round") == NULL) {
-            fail("format does not describe the queue_poll_round event");
-        }
+    for (size_t index = 0; index < EVENT_COUNT; index++) {
+        check_discovery(&EVENTS[index]);
     }
 
     if (write_file(TRACE_FILE, "\n") != 0) {
         fail("trace buffer could not be cleared");
     }
-    if (write_file(EVENT_DIR "/enable", "1") != 0) {
-        fail("net:queue_poll_round could not be enabled");
+    if (set_all_events("1") != 0) {
+        fail("the net:* events could not be enabled");
         printf("NET_EVENTS_FAILED\n");
         return 1;
     }
@@ -232,37 +349,60 @@ int main(void)
         fail("no traffic could be sent to drive queue rounds");
     }
 
-    int markers = 0;
-    long trace_length = read_trace_waiting(buffer, sizeof(buffer), &markers);
+    int records = 0;
+    long trace_length = read_trace_waiting("queue_poll_round", buffer, sizeof(buffer), &records);
     if (trace_length < 0) {
         fail("trace buffer is not readable");
-    } else if (markers == 0) {
-        fail("enabled event recorded no queue poll round");
+    } else if (records == 0) {
+        fail("enabled events recorded no queue poll round");
     } else {
-        printf("NET_EVENTS records=%d\n", markers);
-        check_record(buffer);
+        printf("NET_EVENTS records=%d\n", records);
+        char marker[64];
+        snprintf(marker, sizeof(marker), "queue_poll_round(");
+        check_poll_record(strstr(buffer, marker) + strlen(marker));
+        for (size_t index = 0; index < EVENT_COUNT; index++) {
+            const struct event_spec *event = &EVENTS[index];
+            if (!event->traffic_driven) {
+                continue;
+            }
+            if (strcmp(event->name, "queue_poll_round") == 0) {
+                continue;
+            }
+            if (count_records(buffer, event->name) == 0) {
+                printf("NET_EVENTS_FAIL: no net:%s record under real traffic\n", event->name);
+                failures++;
+                continue;
+            }
+            check_frame_record(event, buffer);
+        }
     }
 
-    if (write_file(EVENT_DIR "/enable", "0") != 0) {
-        fail("net:queue_poll_round could not be disabled");
+    if (set_all_events("0") != 0) {
+        fail("the net:* events could not be disabled");
     }
     /* A round that already passed the gate check may still be on its way to
      * the buffer; let it land before the buffer is cleared, so the negative
-     * check cannot read a record the enabled event produced. */
+     * check cannot read a record the enabled events produced. */
     usleep(DISABLE_SETTLE_US);
     if (write_file(TRACE_FILE, "\n") != 0) {
         fail("trace buffer could not be cleared after disabling");
     }
     sent = send_traffic();
     if (sent <= 0) {
-        fail("no traffic could be sent while the event was disabled");
+        fail("no traffic could be sent while the events were disabled");
     }
     usleep(DISABLED_WAIT_US);
     trace_length = read_file(TRACE_FILE, buffer, sizeof(buffer));
     if (trace_length < 0) {
         fail("trace buffer is not readable after disabling");
-    } else if (count_markers(buffer) != 0) {
-        fail("a disabled event still recorded queue poll rounds");
+    } else {
+        for (size_t index = 0; index < EVENT_COUNT; index++) {
+            if (count_records(buffer, EVENTS[index].name) != 0) {
+                printf("NET_EVENTS_FAIL: a disabled net:%s still recorded rounds\n",
+                       EVENTS[index].name);
+                failures++;
+            }
+        }
     }
 
     fflush(stdout);

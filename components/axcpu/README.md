@@ -42,7 +42,9 @@ AArch64 的 `timer::Timer` 按 `TimerKind` 选择物理、虚拟或 EL2 物理�
 
 ### 1.3 无故障内核访问
 
-启用 `kernel-access` feature 后，`kernel_access::copy_from_kernel_nofault` 在四个架构上把逐字节的 load 与 store 登记进 nofault 异常表，地址不可访问时控制流跳到恢复标签并返回尚未拷贝的字节数。该 feature 启用 `exception-table`。查找在故障到达页错误处理之前完成，因此调用不睡眠、不分配、不取锁；跨越空洞的范围复制空洞之前的字节，之后的部分保持原值。x86_64 上非规范地址产生 `#GP` 而不是 `#PF`，通用保护处理程序因此也在 panic 之前查询同一张表。
+启用 `kernel-access` feature 后，`kernel_access::copy_from_kernel_nofault` 在四个架构上把逐字节的 load 与 store 登记进 nofault 异常表，地址不可访问时控制流跳到恢复标签并返回尚未拷贝的字节数。该 feature 启用 `exception-table`。跨越空洞的范围复制空洞之前的字节，之后的部分保持原值。
+
+不可翻译的地址并不都产生页错误：x86_64 上非规范地址产生 `#GP`，AArch64 上产生地址长度故障，LoongArch 上产生访存地址错误。各架构的缺页路径与这三类故障的入口都在交给运行期处理器或致命路径之前查询同一张表，因此只有登记过恢复项的指令会被恢复。查找是只读段的扫描，调用不睡眠、不分配、不取锁。
 
 ## 2. 运行期装配
 

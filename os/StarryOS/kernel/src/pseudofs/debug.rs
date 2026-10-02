@@ -1322,7 +1322,7 @@ mod tests {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, not(axtest)))]
 mod net_queue_tests {
     use alloc::{string::String, vec::Vec};
 

@@ -285,7 +285,10 @@ macro_rules! define_event_trace{
                 unsafe { $crate::CommonTracePointMeta::new(&[<__ $name>], print_func) }
             };
 
-            #[allow(non_snake_case)]
+            // The generated arity follows the event's field list, so events
+            // with many fields cannot be structured around the argument-count
+            // lint.
+            #[allow(non_snake_case, clippy::too_many_arguments)]
             fn [<trace_default_ $name>]<F:$crate::KernelTraceOps>(tp_compiled_expr: Option<&$crate::tp_lexer::Compiled>, _data:& (dyn core::any::Any+Send+Sync), $($arg:$arg_type),* )
             {
                 let ($([<__ $assign _value>],)*) = ($($value,)*);

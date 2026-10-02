@@ -275,6 +275,24 @@ cargo xtask starry test qemu --arch x86_64 -c qemu/system/net-queue
 四种 QEMU 配置的 virtio-net 环境都报告 `groups=1 interfaces=1`，成功标记为
 `NET_QUEUE_PASSED`。
 
+### 3.7 网络事件出口
+
+`qemu/system/net-events` 读取 `/sys/kernel/debug/tracing/events/net/queue_poll_round/`：`id` 必须可读，
+`format` 必须声明事件的六个字段；启用后向 QEMU 用户态网络网关发送数据报驱动真实队列轮询（loopback
+流量不经过物理队列，不能用），`trace` 缓冲里必须出现 `queue_poll_round` 记录且记录自洽（结果码在取值
+范围内、工作量不超过预算、owner CPU 落在在线集合内）；关闭、清空缓冲并对同样流量等待同样长的时间后，
+不得再出现新记录。事件的触发与字段契约见[网络事件](events.md)。
+
+```bash
+cargo xtask starry test qemu --arch x86_64 -c qemu/system/net-events
+```
+
+四种 QEMU 配置都在真实流量下读到 `queue_poll_round` 记录并通过，成功标记为 `NET_EVENTS_PASSED`；
+每轮读到的记录数取决于该轮触发了几次队列轮询（观察到 2 至 12 条）。
+
+附着链路的 eBPF 冒烟是独立 app `apps/starry/ebpf/net_queue_poll`：它按 `PERF_TYPE_TRACEPOINT` 附着该
+事件并读回记录，只证明 `load → attach → enable → read` 连通，不定义事件语义。
+
 ## 4. 双网卡集成测试
 
 `apps/starry/qemu/dual-net` 是双网卡集成测试，用于验证多设备初始化、双 DHCP、route table、接口绑定、并发收发和较大 APK 下载校验。它是 Starry app 级 QEMU 场景，不属于 `test-suit/starryos` system 分组。

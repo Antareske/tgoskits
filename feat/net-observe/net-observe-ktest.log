@@ -1,0 +1,1047 @@
+    Blocking waiting for file lock on build directory
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 23.77s
+     Running `target/debug/tg-xtask ktest qemu -p starry-kernel --arch x86_64`
+[2026-10-02T09:37:47Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T09:37:47Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+[axtest] execution plan (1 unit(s)):
+  starry-kernel --test axtest_kernel --target x86_64-unknown-none runtime=starry
+[axtest] running package=starry-kernel test=axtest_kernel target=x86_64-unknown-none
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/configs/board/qemu-x86_64.toml
+[2026-10-02T09:37:47Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/configs/board/qemu-x86_64.toml
+[axbuild] cargo build package=starry-kernel target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/configs/board/qemu-x86_64.toml ...
+AX_ARCH=x86_64
+AX_LOG=warn
+AX_TARGET=x86_64-unknown-none
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+cargo build -p starry-kernel --test axtest_kernel --target scripts/targets/bare/x86_64-unknown-none.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,axplat-dyn/efi,axtest -Z json-target-spec -Z build-std=core,alloc --config target.x86_64-unknown-none.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings", "--cfg", "axtest", "--check-cfg", "cfg(axtest)"] --release --message-format json-render-diagnostics
+    Finished `release` profile [optimized] target(s) in 0.39s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] cargo build package=starry-kernel target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/configs/board/qemu-x86_64.toml ... done (617.86ms)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a ...
+[axbuild] starry kallsyms symbols=6603
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/.axtest_kernel-e443b81c6bef9c2a.kallsyms.666979.tmp /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a ... done (147.06ms)
+[axbuild] starry bin refresh skipped: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a.bin does not exist
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img
+[2026-10-02T09:37:52Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel/qemu-x86_64.toml
+[axbuild] qemu run package=starry-kernel target=scripts/targets/bare/x86_64-unknown-none.json ...
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a.bin
+qemu-system-x86_64 -m 512M -nographic -machine q35 -smp 4 -device nvme,drive=disk0,serial=tgoskits,max_ioqpairs=64,msix_qsize=65 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -drive if=pflash,format=raw,unit=0,readonly=on,file=/tmp/ostool/ovmf/x64/code.fd -drive if=pflash,format=raw,unit=1,file=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a.vars.fd -kernel /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/build/starry-kernel/e443b81c6bef9c2a/out/axtest_kernel-e443b81c6bef9c2a.bin
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[8;042;160t0[2J[01;01H[2J[01;01H[8;056;240t0[2J[01;01HUEFI application started.
+UEFI console ok.
+No FDT found in UEFI config tables.
+Found ACPI 1.0 RSDP at address: 0x1f77e000
+Found ACPI 2.0 RSDP at address: 0x1f77e014
+Using ACPI 2 RSDP at address: 0x1f77e014
+UEFI setup.
+Exiting UEFI boot services...
+Exited boot services, memory map obtained.
+VM Load @PA:0x1acac000
+VM Load Offset: 0x9acac000
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  Free   0x00000000900000 - 0x0000001acac000 (419.67 MiB)
+  KImg   0x0000001acac000 - 0x0000001bc00000 (15.33 MiB)
+  Free   0x0000001bc00000 - 0x0000001e93f000 (45.25 MiB)
+  Rsv    0x0000001e93f000 - 0x0000001ea00000 (772 KiB)
+  Free   0x0000001ea00000 - 0x0000001f4ed000 (10.93 MiB)
+  Rsv    0x0000001f4ed000 - 0x0000001f7ff000 (3.07 MiB)
+  Free   0x0000001f7ff000 - 0x0000001fe91000 (6.57 MiB)
+  Rsv    0x0000001fe91000 - 0x0000001fe97000 (24 KiB)
+  Free   0x0000001fe97000 - 0x0000001fedc000 (276 KiB)
+  Rsv    0x0000001fedc000 - 0x00000020000000 (1.14 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+  Rsv    0x0000fd00000000 - 0x00010000000000 (12 GiB)
+Initialize RAM allocator: 0x900000..0x1acac000
+Reserving CPU-local areas
+CPU-local area stride: 0x4b000 bytes
+Total CPU-local allocation: 0x12c000 bytes (4 CPUs)
+Flushed RAM used range to memory map: 0x900000..0xa2c000, current: 0xa2c000
+CPU-local areas allocated at 0x900000 - 0xa2c000
+Free                : [0x0000000000000000, 0x0000000000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Free                : [0xffff800000000000, 0xffff800000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Reserved            : [0x0000000000008000, 0x0000000000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Reserved            : [0xffff800000008000, 0xffff800000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Free                : [0x0000000000009000, 0x00000000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0xffff800000009000, 0xffff8000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0x0000000000100000, 0x0000000000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Free                : [0xffff800000100000, 0xffff800000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Reserved            : [0x0000000000800000, 0x0000000000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Reserved            : [0xffff800000800000, 0xffff800000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Free                : [0x0000000000808000, 0x000000000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Free                : [0xffff800000808000, 0xffff80000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Reserved            : [0x000000000080b000, 0x000000000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Reserved            : [0xffff80000080b000, 0xffff80000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Free                : [0x000000000080c000, 0x0000000000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Free                : [0xffff80000080c000, 0xffff800000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Reserved            : [0x0000000000811000, 0x0000000000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Reserved            : [0xffff800000811000, 0xffff800000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Free                : [0x0000000000a2c000, 0x000000001acac000) -> [0x0000000000a2c000, 0x000000001acac000) (418.5 MiB)
+Free                : [0xffff800000a2c000, 0xffff80001acac000) -> [0x0000000000a2c000, 0x000000001acac000) (418.5 MiB)
+KImage              : [0x000000001acac000, 0x000000001bc00000) -> [0x000000001acac000, 0x000000001bc00000) (15.33 MiB)
+KImage              : [0xffff80001acac000, 0xffff80001bc00000) -> [0x000000001acac000, 0x000000001bc00000) (15.33 MiB)
+Free                : [0x000000001bc00000, 0x000000001e93f000) -> [0x000000001bc00000, 0x000000001e93f000) (45.25 MiB)
+Free                : [0xffff80001bc00000, 0xffff80001e93f000) -> [0x000000001bc00000, 0x000000001e93f000) (45.25 MiB)
+Reserved            : [0x000000001e93f000, 0x000000001ea00000) -> [0x000000001e93f000, 0x000000001ea00000) (772 KiB)
+Reserved            : [0xffff80001e93f000, 0xffff80001ea00000) -> [0x000000001e93f000, 0x000000001ea00000) (772 KiB)
+Free                : [0x000000001ea00000, 0x000000001f4ed000) -> [0x000000001ea00000, 0x000000001f4ed000) (10.93 MiB)
+Free                : [0xffff80001ea00000, 0xffff80001f4ed000) -> [0x000000001ea00000, 0x000000001f4ed000) (10.93 MiB)
+Reserved            : [0x000000001f4ed000, 0x000000001f7ff000) -> [0x000000001f4ed000, 0x000000001f7ff000) (3.07 MiB)
+Reserved            : [0xffff80001f4ed000, 0xffff80001f7ff000) -> [0x000000001f4ed000, 0x000000001f7ff000) (3.07 MiB)
+Free                : [0x000000001f7ff000, 0x000000001fe91000) -> [0x000000001f7ff000, 0x000000001fe91000) (6.57 MiB)
+Free                : [0xffff80001f7ff000, 0xffff80001fe91000) -> [0x000000001f7ff000, 0x000000001fe91000) (6.57 MiB)
+Reserved            : [0x000000001fe91000, 0x000000001fe97000) -> [0x000000001fe91000, 0x000000001fe97000) (24 KiB)
+Reserved            : [0xffff80001fe91000, 0xffff80001fe97000) -> [0x000000001fe91000, 0x000000001fe97000) (24 KiB)
+Free                : [0x000000001fe97000, 0x000000001fedc000) -> [0x000000001fe97000, 0x000000001fedc000) (276 KiB)
+Free                : [0xffff80001fe97000, 0xffff80001fedc000) -> [0x000000001fe97000, 0x000000001fedc000) (276 KiB)
+Reserved            : [0x000000001fedc000, 0x0000000020000000) -> [0x000000001fedc000, 0x0000000020000000) (1.14 MiB)
+Reserved            : [0xffff80001fedc000, 0xffff800020000000) -> [0x000000001fedc000, 0x0000000020000000) (1.14 MiB)
+Reserved            : [0x00000000e0000000, 0x00000000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Reserved            : [0xffff8000e0000000, 0xffff8000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Mmio                : [0x00000000ffc00000, 0x0000000100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Mmio                : [0xffff8000ffc00000, 0xffff800100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Reserved            : [0x000000fd00000000, 0x0000010000000000) -> [0x000000fd00000000, 0x0000010000000000) (12 GiB)
+Reserved            : [0xffff80fd00000000, 0xffff810000000000) -> [0x000000fd00000000, 0x0000010000000000) (12 GiB)
+PerCpu              : [0x0000000000900000, 0x0000000000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+PerCpu              : [0xffff800000900000, 0xffff800000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+LAPIC               : [0x00000000fee00000, 0x00000000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+LAPIC               : [0xffff8000fee00000, 0xffff8000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+KImage              : [0xffffffff80000000, 0xffffffff81000000) -> [0x000000001acac000, 0x000000001bcac000) (16 MiB)
+PerCpu              : [0xffffff0000900000, 0xffffff0000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+x86_64 switching CR3 and resetting relocations before high-half jump
+Trap vector at 0xffffffff80e1f130
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  PerCPU 0x00000000900000 - 0x00000000a2c000 (1.17 MiB)
+  Rsv    0x00000000a2c000 - 0x00000000a6d000 (260 KiB)
+  Free   0x00000000a6d000 - 0x0000001acac000 (418.25 MiB)
+  KImg   0x0000001acac000 - 0x0000001bc00000 (15.33 MiB)
+  Free   0x0000001bc00000 - 0x0000001e93f000 (45.25 MiB)
+  Rsv    0x0000001e93f000 - 0x0000001ea00000 (772 KiB)
+  Free   0x0000001ea00000 - 0x0000001f4ed000 (10.93 MiB)
+  Rsv    0x0000001f4ed000 - 0x0000001f7ff000 (3.07 MiB)
+  Free   0x0000001f7ff000 - 0x0000001fe91000 (6.57 MiB)
+  Rsv    0x0000001fe91000 - 0x0000001fe97000 (24 KiB)
+  Free   0x0000001fe97000 - 0x0000001fedc000 (276 KiB)
+  Rsv    0x0000001fedc000 - 0x00000020000000 (1.14 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+  Rsv    0x0000fd00000000 - 0x00010000000000 (12 GiB)
+Jumping to main entry point at 0xffffffff802dfae0 with SP 0xffffff000094b000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = x86_64
+platform = acpi
+target = x86_64-unknown-none
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 4
+
+Boot at 2026-10-02 09:37:54.077658083 UTC
+
+[37m[  2.169736 0:4294967305 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  2.170142 0:4294967305 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  2.172444 0:4294967296 [37max_net:709] [33m  No vsock device found![m[m
+AXTEST_BEGIN total=212
+KTAP version 1
+1..212
+# Running 212 axtests
+# START axtest_kernel::ipc::shm::tests::rmid_preserves_an_admitted_attach_until_cancelled
+# module: axtest_kernel::ipc::shm::tests
+ok 1 axtest_kernel::ipc::shm::tests::rmid_preserves_an_admitted_attach_until_cancelled
+AXTEST_CASE status=pass module=axtest_kernel::ipc::shm::tests name=rmid_preserves_an_admitted_attach_until_cancelled
+# START axtest_kernel::file::timerfd::tests::dropping_timerfd_unregisters_clock_change_observer
+# module: axtest_kernel::file::timerfd::tests
+ok 2 axtest_kernel::file::timerfd::tests::dropping_timerfd_unregisters_clock_change_observer
+AXTEST_CASE status=pass module=axtest_kernel::file::timerfd::tests name=dropping_timerfd_unregisters_clock_change_observer
+# START axtest_kernel::task::process_ptrace::axtests::inactive_ptrace_syscall_gate_is_lock_free
+# module: axtest_kernel::task::process_ptrace::axtests
+ok 3 axtest_kernel::task::process_ptrace::axtests::inactive_ptrace_syscall_gate_is_lock_free
+AXTEST_CASE status=pass module=axtest_kernel::task::process_ptrace::axtests name=inactive_ptrace_syscall_gate_is_lock_free
+# START axtest_kernel::task::process_ptrace::axtests::syscall_stop_is_fully_classified_when_published
+# module: axtest_kernel::task::process_ptrace::axtests
+ok 4 axtest_kernel::task::process_ptrace::axtests::syscall_stop_is_fully_classified_when_published
+AXTEST_CASE status=pass module=axtest_kernel::task::process_ptrace::axtests name=syscall_stop_is_fully_classified_when_published
+# START axtest_kernel::task::process_ptrace::axtests::inactive_ptrace_pending_event_gate_is_nonblocking
+# module: axtest_kernel::task::process_ptrace::axtests
+ok 5 axtest_kernel::task::process_ptrace::axtests::inactive_ptrace_pending_event_gate_is_nonblocking
+AXTEST_CASE status=pass module=axtest_kernel::task::process_ptrace::axtests name=inactive_ptrace_pending_event_gate_is_nonblocking
+# START axtest_kernel::task::thread::axtests::inactive_one_shot_flag_consumption_is_read_only
+# module: axtest_kernel::task::thread::axtests
+ok 6 axtest_kernel::task::thread::axtests::inactive_one_shot_flag_consumption_is_read_only
+AXTEST_CASE status=pass module=axtest_kernel::task::thread::axtests name=inactive_one_shot_flag_consumption_is_read_only
+# START axtest_kernel::task::thread::axtests::cancelled_thread_releases_tid_before_last_identity
+# module: axtest_kernel::task::thread::axtests
+ok 7 axtest_kernel::task::thread::axtests::cancelled_thread_releases_tid_before_last_identity
+AXTEST_CASE status=pass module=axtest_kernel::task::thread::axtests name=cancelled_thread_releases_tid_before_last_identity
+# START axtest_kernel::task::process::session::tests::duplicate_live_session_identity_is_rejected
+# module: axtest_kernel::task::process::session::tests
+ok 8 axtest_kernel::task::process::session::tests::duplicate_live_session_identity_is_rejected
+AXTEST_CASE status=pass module=axtest_kernel::task::process::session::tests name=duplicate_live_session_identity_is_rejected
+# START axtest_kernel::mm::aspace::backend::shared::page_index::tests::prepared_shared_path_preserves_a_racing_winner
+# module: axtest_kernel::mm::aspace::backend::shared::page_index::tests
+ok 9 axtest_kernel::mm::aspace::backend::shared::page_index::tests::prepared_shared_path_preserves_a_racing_winner
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::shared::page_index::tests name=prepared_shared_path_preserves_a_racing_winner
+# START axtest_kernel::mm::aspace::backend::shared::page_index::tests::prepared_shared_path_retries_after_sibling_publication
+# module: axtest_kernel::mm::aspace::backend::shared::page_index::tests
+ok 10 axtest_kernel::mm::aspace::backend::shared::page_index::tests::prepared_shared_path_retries_after_sibling_publication
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::shared::page_index::tests name=prepared_shared_path_retries_after_sibling_publication
+# START axtest_kernel::task::process::group::tests::duplicate_live_group_identity_reuses_the_session_group
+# module: axtest_kernel::task::process::group::tests
+ok 11 axtest_kernel::task::process::group::tests::duplicate_live_group_identity_reuses_the_session_group
+AXTEST_CASE status=pass module=axtest_kernel::task::process::group::tests name=duplicate_live_group_identity_reuses_the_session_group
+# START axtest_kernel::task::scheduler_task::task_name_allocation_failure_preserves_snapshot
+# module: axtest_kernel::task::scheduler_task
+ok 12 axtest_kernel::task::scheduler_task::task_name_allocation_failure_preserves_snapshot
+AXTEST_CASE status=pass module=axtest_kernel::task::scheduler_task name=task_name_allocation_failure_preserves_snapshot
+# START axtest_kernel::task::scheduler_task::unpublished_extension_allocation_releases_process
+# module: axtest_kernel::task::scheduler_task
+ok 13 axtest_kernel::task::scheduler_task::unpublished_extension_allocation_releases_process
+AXTEST_CASE status=pass module=axtest_kernel::task::scheduler_task name=unpublished_extension_allocation_releases_process
+# START axtest_kernel::task::process::topology::tests::thread_group_uses_a_sleepable_pi_lock
+# module: axtest_kernel::task::process::topology::tests
+ok 14 axtest_kernel::task::process::topology::tests::thread_group_uses_a_sleepable_pi_lock
+AXTEST_CASE status=pass module=axtest_kernel::task::process::topology::tests name=thread_group_uses_a_sleepable_pi_lock
+# START axtest_kernel::task::process::topology::tests::closed_reaper_cannot_accept_new_orphans
+# module: axtest_kernel::task::process::topology::tests
+ok 15 axtest_kernel::task::process::topology::tests::closed_reaper_cannot_accept_new_orphans
+AXTEST_CASE status=pass module=axtest_kernel::task::process::topology::tests name=closed_reaper_cannot_accept_new_orphans
+# START axtest_kernel::task::process::topology::tests::prepared_fork_is_invisible_until_publication
+# module: axtest_kernel::task::process::topology::tests
+ok 16 axtest_kernel::task::process::topology::tests::prepared_fork_is_invisible_until_publication
+AXTEST_CASE status=pass module=axtest_kernel::task::process::topology::tests name=prepared_fork_is_invisible_until_publication
+# START axtest_kernel::task::process::topology::tests::orphan_never_becomes_invisible_while_reparenting
+# module: axtest_kernel::task::process::topology::tests
+ok 17 axtest_kernel::task::process::topology::tests::orphan_never_becomes_invisible_while_reparenting
+AXTEST_CASE status=pass module=axtest_kernel::task::process::topology::tests name=orphan_never_becomes_invisible_while_reparenting
+# START axtest_kernel::task::process::topology::tests::group_move_never_makes_process_temporarily_invisible
+# module: axtest_kernel::task::process::topology::tests
+ok 18 axtest_kernel::task::process::topology::tests::group_move_never_makes_process_temporarily_invisible
+AXTEST_CASE status=pass module=axtest_kernel::task::process::topology::tests name=group_move_never_makes_process_temporarily_invisible
+# START axtest_kernel::task::process::topology::tests::dropping_prepared_fork_leaves_parent_and_group_unchanged
+# module: axtest_kernel::task::process::topology::tests
+ok 19 axtest_kernel::task::process::topology::tests::dropping_prepared_fork_leaves_parent_and_group_unchanged
+AXTEST_CASE status=pass module=axtest_kernel::task::process::topology::tests name=dropping_prepared_fork_leaves_parent_and_group_unchanged
+# START axtest_kernel::task::process::topology::tests::namespace_reaper_shutdown_closes_prepared_child_publication
+# module: axtest_kernel::task::process::topology::tests
+ok 20 axtest_kernel::task::process::topology::tests::namespace_reaper_shutdown_closes_prepared_child_publication
+AXTEST_CASE status=pass module=axtest_kernel::task::process::topology::tests name=namespace_reaper_shutdown_closes_prepared_child_publication
+# START axtest_kernel::task::process::topology::tests::published_fork_rollback_repairs_a_partially_removed_identity
+# module: axtest_kernel::task::process::topology::tests
+ok 21 axtest_kernel::task::process::topology::tests::published_fork_rollback_repairs_a_partially_removed_identity
+AXTEST_CASE status=pass module=axtest_kernel::task::process::topology::tests name=published_fork_rollback_repairs_a_partially_removed_identity
+# START axtest_kernel::syscall::task::wait::axtests::untraced_wait_avoids_root_pid_snapshot
+# module: axtest_kernel::syscall::task::wait::axtests
+ok 22 axtest_kernel::syscall::task::wait::axtests::untraced_wait_avoids_root_pid_snapshot
+AXTEST_CASE status=pass module=axtest_kernel::syscall::task::wait::axtests name=untraced_wait_avoids_root_pid_snapshot
+# START axtest_kernel::syscall::task::wait::axtests::ptrace_wait_status_remains_bound_to_the_selected_stop
+# module: axtest_kernel::syscall::task::wait::axtests
+ok 23 axtest_kernel::syscall::task::wait::axtests::ptrace_wait_status_remains_bound_to_the_selected_stop
+AXTEST_CASE status=pass module=axtest_kernel::syscall::task::wait::axtests name=ptrace_wait_status_remains_bound_to_the_selected_stop
+# START axtest_kernel::task::process_identity::tests::reaping_identity_is_not_publicly_resolvable
+# module: axtest_kernel::task::process_identity::tests
+ok 24 axtest_kernel::task::process_identity::tests::reaping_identity_is_not_publicly_resolvable
+AXTEST_CASE status=pass module=axtest_kernel::task::process_identity::tests name=reaping_identity_is_not_publicly_resolvable
+# START axtest_kernel::task::process_identity::tests::zombie_retains_the_leader_tid_role_until_reap
+# module: axtest_kernel::task::process_identity::tests
+ok 25 axtest_kernel::task::process_identity::tests::zombie_retains_the_leader_tid_role_until_reap
+AXTEST_CASE status=pass module=axtest_kernel::task::process_identity::tests name=zombie_retains_the_leader_tid_role_until_reap
+# START axtest_kernel::task::process_identity::tests::shutdown_wait_covers_exit_after_runtime_detach
+# module: axtest_kernel::task::process_identity::tests
+ok 26 axtest_kernel::task::process_identity::tests::shutdown_wait_covers_exit_after_runtime_detach
+AXTEST_CASE status=pass module=axtest_kernel::task::process_identity::tests name=shutdown_wait_covers_exit_after_runtime_detach
+# START axtest_kernel::task::process_identity::tests::reaped_child_process_handle_retains_its_exact_identity
+# module: axtest_kernel::task::process_identity::tests
+ok 27 axtest_kernel::task::process_identity::tests::reaped_child_process_handle_retains_its_exact_identity
+AXTEST_CASE status=pass module=axtest_kernel::task::process_identity::tests name=reaped_child_process_handle_retains_its_exact_identity
+# START axtest_kernel::task::process_identity::tests::reaping_releases_process_owned_group_and_session_roles
+# module: axtest_kernel::task::process_identity::tests
+ok 28 axtest_kernel::task::process_identity::tests::reaping_releases_process_owned_group_and_session_roles
+AXTEST_CASE status=pass module=axtest_kernel::task::process_identity::tests name=reaping_releases_process_owned_group_and_session_roles
+# START axtest_kernel::task::process_identity::tests::shutdown_wait_covers_the_exit_path_after_runtime_detach
+# module: axtest_kernel::task::process_identity::tests
+ok 29 axtest_kernel::task::process_identity::tests::shutdown_wait_covers_the_exit_path_after_runtime_detach
+AXTEST_CASE status=pass module=axtest_kernel::task::process_identity::tests name=shutdown_wait_covers_the_exit_path_after_runtime_detach
+# START axtest_kernel::mm::aspace::domain::axtests::dropping_multiple_pte_stripes_restores_irq_state
+# module: axtest_kernel::mm::aspace::domain::axtests
+ok 30 axtest_kernel::mm::aspace::domain::axtests::dropping_multiple_pte_stripes_restores_irq_state
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::domain::axtests name=dropping_multiple_pte_stripes_restores_irq_state
+# START axtest_kernel::syscall::fs::pidfd::tests::pidfd_thread_exit_window_matches_linux
+# module: axtest_kernel::syscall::fs::pidfd::tests
+ok 31 axtest_kernel::syscall::fs::pidfd::tests::pidfd_thread_exit_window_matches_linux
+AXTEST_CASE status=pass module=axtest_kernel::syscall::fs::pidfd::tests name=pidfd_thread_exit_window_matches_linux
+# START axtest_kernel::mm::aspace::backend::cow::tests::populate_present_range_is_noop
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 32 axtest_kernel::mm::aspace::backend::cow::tests::populate_present_range_is_noop
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=populate_present_range_is_noop
+# START axtest_kernel::mm::aspace::backend::cow::tests::fault_receipt_records_resident_delta
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 33 axtest_kernel::mm::aspace::backend::cow::tests::fault_receipt_records_resident_delta
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=fault_receipt_records_resident_delta
+# START axtest_kernel::mm::aspace::backend::cow::tests::cow_clone_failure_rollback_rules_hold
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+[37m[  2.338848 0:4294967296 [37maxtest_kernel::mm::aspace:6936] [33maddress space 8 dropped before retire/reclaim; mappings intentionally retained[m[m
+ok 34 axtest_kernel::mm::aspace::backend::cow::tests::cow_clone_failure_rollback_rules_hold
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=cow_clone_failure_rollback_rules_hold
+# START axtest_kernel::mm::aspace::backend::cow::tests::transparent_huge_advice_faults_one_pmd
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 35 axtest_kernel::mm::aspace::backend::cow::tests::transparent_huge_advice_faults_one_pmd
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=transparent_huge_advice_faults_one_pmd
+# START axtest_kernel::mm::aspace::backend::cow::tests::cow_try_clone_publishes_parent_and_child
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 36 axtest_kernel::mm::aspace::backend::cow::tests::cow_try_clone_publishes_parent_and_child
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=cow_try_clone_publishes_parent_and_child
+# START axtest_kernel::mm::aspace::backend::cow::tests::extend_unpublished_commit_restores_vma_end
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 37 axtest_kernel::mm::aspace::backend::cow::tests::extend_unpublished_commit_restores_vma_end
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=extend_unpublished_commit_restores_vma_end
+# START axtest_kernel::mm::aspace::backend::cow::tests::huge_mapping_publishes_a_bound_split_deposit
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 38 axtest_kernel::mm::aspace::backend::cow::tests::huge_mapping_publishes_a_bound_split_deposit
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=huge_mapping_publishes_a_bound_split_deposit
+# START axtest_kernel::mm::aspace::backend::cow::tests::fork_parent_unpublished_commit_restores_write
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 39 axtest_kernel::mm::aspace::backend::cow::tests::fork_parent_unpublished_commit_restores_write
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=fork_parent_unpublished_commit_restores_write
+# START axtest_kernel::mm::aspace::backend::cow::tests::mremap_unpublished_commit_restores_both_ranges
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 40 axtest_kernel::mm::aspace::backend::cow::tests::mremap_unpublished_commit_restores_both_ranges
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=mremap_unpublished_commit_restores_both_ranges
+# START axtest_kernel::mm::aspace::backend::cow::tests::partial_huge_munmap_retires_only_selected_slot
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 41 axtest_kernel::mm::aspace::backend::cow::tests::partial_huge_munmap_retires_only_selected_slot
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=partial_huge_munmap_retires_only_selected_slot
+# START axtest_kernel::mm::aspace::backend::cow::tests::cow_fault_unpublished_commit_failure_rolls_back
+# module: [37m[  2.378942 0:4294967296 [37maxtest_kernel::mm::aspace:6495] [33mpage-fault publication for VA:0x60000000 failed before publish: kernel allocation failed[m[m
+axtest_kernel::mm::aspace::backend::cow::tests
+ok 42 axtest_kernel::mm::aspace::backend::cow::tests::cow_fault_unpublished_commit_failure_rolls_back
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=cow_fault_unpublished_commit_failure_rolls_back
+# START axtest_kernel::mm::aspace::backend::cow::tests::cow_page_index_rejects_overlapping_frame_owners
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 43 axtest_kernel::mm::aspace::backend::cow::tests::cow_page_index_rejects_overlapping_frame_owners
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=cow_page_index_rejects_overlapping_frame_owners
+# START axtest_kernel::mm::aspace::backend::cow::tests::discarded_split_thp_refaults_only_one_base_page
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 44 axtest_kernel::mm::aspace::backend::cow::tests::discarded_split_thp_refaults_only_one_base_page
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=discarded_split_thp_refaults_only_one_base_page
+# START axtest_kernel::mm::aspace::backend::cow::tests::mmap_unpublished_commit_restores_empty_preimage
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 45 axtest_kernel::mm::aspace::backend::cow::tests::mmap_unpublished_commit_restores_empty_preimage
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=mmap_unpublished_commit_restores_empty_preimage
+# START axtest_kernel::mm::aspace::backend::cow::tests::mprotect_unpublished_commit_restores_pte_and_vma
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 46 axtest_kernel::mm::aspace::backend::cow::tests::mprotect_unpublished_commit_restores_pte_and_vma
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=mprotect_unpublished_commit_restores_pte_and_vma
+# START axtest_kernel::mm::aspace::backend::cow::tests::cow_page_index_retired_capacity_does_not_compound
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 47 axtest_kernel::mm::aspace::backend::cow::tests::cow_page_index_retired_capacity_does_not_compound
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=cow_page_index_retired_capacity_does_not_compound
+# START axtest_kernel::mm::aspace::backend::cow::tests::discard_unpublished_commit_restores_resident_page
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 48 axtest_kernel::mm::aspace::backend::cow::tests::discard_unpublished_commit_restores_resident_page
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=discard_unpublished_commit_restores_resident_page
+# START axtest_kernel::mm::aspace::backend::cow::tests::madv_free_uses_page_state_and_write_fault_cancels
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 49 axtest_kernel::mm::aspace::backend::cow::tests::madv_free_uses_page_state_and_write_fault_cancels
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=madv_free_uses_page_state_and_write_fault_cancels
+# START axtest_kernel::mm::aspace::backend::cow::tests::partial_thp_mremap_moves_one_subpage_without_copy
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 50 axtest_kernel::mm::aspace::backend::cow::tests::partial_thp_mremap_moves_one_subpage_without_copy
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=partial_thp_mremap_moves_one_subpage_without_copy
+# START axtest_kernel::mm::aspace::backend::cow::tests::unpublished_huge_unmap_restores_its_split_deposit
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 51 axtest_kernel::mm::aspace::backend::cow::tests::unpublished_huge_unmap_restores_its_split_deposit
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=unpublished_huge_unmap_restores_its_split_deposit
+# START axtest_kernel::mm::aspace::backend::cow::tests::sparse_mapping_mutations_walk_only_occupied_leaves
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 52 axtest_kernel::mm::aspace::backend::cow::tests::sparse_mapping_mutations_walk_only_occupied_leaves
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=sparse_mapping_mutations_walk_only_occupied_leaves
+# START axtest_kernel::mm::aspace::backend::cow::tests::forked_split_thp_write_copies_only_faulting_subpage
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 53 axtest_kernel::mm::aspace::backend::cow::tests::forked_split_thp_write_copies_only_faulting_subpage
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=forked_split_thp_write_copies_only_faulting_subpage
+# START axtest_kernel::mm::aspace::backend::cow::tests::munmap_unpublished_commit_restores_mapping_preimage
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 54 axtest_kernel::mm::aspace::backend::cow::tests::munmap_unpublished_commit_restores_mapping_preimage
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=munmap_unpublished_commit_restores_mapping_preimage
+# START axtest_kernel::mm::aspace::backend::cow::tests::stale_prepared_fault_cannot_reinstall_unmapped_page
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 55 axtest_kernel::mm::aspace::backend::cow::tests::stale_prepared_fault_cannot_reinstall_unmapped_page
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=stale_prepared_fault_cannot_reinstall_unmapped_page
+# START axtest_kernel::mm::aspace::backend::cow::tests::unpublished_loader_abort_is_not_a_published_mutation
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 56 axtest_kernel::mm::aspace::backend::cow::tests::unpublished_loader_abort_is_not_a_published_mutation
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=unpublished_loader_abort_is_not_a_published_mutation
+# START axtest_kernel::mm::aspace::backend::cow::tests::cow_page_index_revalidates_storage_before_publication
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 57 axtest_kernel::mm::aspace::backend::cow::tests::cow_page_index_revalidates_storage_before_publication
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=cow_page_index_revalidates_storage_before_publication
+# START axtest_kernel::mm::aspace::backend::cow::tests::mremap_move_uses_one_receipt_and_preserves_max_rights
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 58 axtest_kernel::mm::aspace::backend::cow::tests::mremap_move_uses_one_receipt_and_preserves_max_rights
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=mremap_move_uses_one_receipt_and_preserves_max_rights
+# START axtest_kernel::mm::aspace::backend::cow::tests::split_exclusive_thp_write_reuses_subpage_without_copy
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 59 axtest_kernel::mm::aspace::backend::cow::tests::split_exclusive_thp_write_reuses_subpage_without_copy
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=split_exclusive_thp_write_reuses_subpage_without_copy
+# START axtest_kernel::mm::aspace::backend::cow::tests::cow_page_index_can_restore_a_missing_preimage_identity
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 60 axtest_kernel::mm::aspace::backend::cow::tests::cow_page_index_can_restore_a_missing_preimage_identity
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=cow_page_index_can_restore_a_missing_preimage_identity
+# START axtest_kernel::mm::aspace::backend::cow::tests::partial_huge_munmap_unpublished_commit_restores_huge_leaf
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 61 axtest_kernel::mm::aspace::backend::cow::tests::partial_huge_munmap_unpublished_commit_restores_huge_leaf
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=partial_huge_munmap_unpublished_commit_restores_huge_leaf
+# START axtest_kernel::mm::aspace::backend::cow::tests::populate_unpublished_commit_restores_nonresident_preimage
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 62 axtest_kernel::mm::aspace::backend::cow::tests::populate_unpublished_commit_restores_nonresident_preimage
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=populate_unpublished_commit_restores_nonresident_preimage
+# START axtest_kernel::mm::aspace::backend::cow::tests::partial_huge_mprotect_splits_slots_without_copying_the_page
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 63 axtest_kernel::mm::aspace::backend::cow::tests::partial_huge_mprotect_splits_slots_without_copying_the_page
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=partial_huge_mprotect_splits_slots_without_copying_the_page
+# START axtest_kernel::mm::aspace::backend::cow::tests::partial_huge_mprotect_unpublished_commit_restores_huge_leaf
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 64 axtest_kernel::mm::aspace::backend::cow::tests::partial_huge_mprotect_unpublished_commit_restores_huge_leaf
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=partial_huge_mprotect_unpublished_commit_restores_huge_leaf
+# START axtest_kernel::mm::aspace::backend::cow::tests::cow_page_index_retires_expired_weak_storage_outside_the_lock
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 65 axtest_kernel::mm::aspace::backend::cow::tests::cow_page_index_retires_expired_weak_storage_outside_the_lock
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=cow_page_index_retires_expired_weak_storage_outside_the_lock
+# START axtest_kernel::mm::aspace::backend::cow::tests::transparent_huge_allocation_falls_back_to_faulting_base_page
+# module: axtest_kernel::mm::aspace::backend::cow::tests
+ok 66 axtest_kernel::mm::aspace::backend::cow::tests::transparent_huge_allocation_falls_back_to_faulting_base_page
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::cow::tests name=transparent_huge_allocation_falls_back_to_faulting_base_page
+# START axtest_kernel::task::process_memory::axtests::memory_owner_snapshot_avoids_irq_lock
+# module: axtest_kernel::task::process_memory::axtests
+ok 67 axtest_kernel::task::process_memory::axtests::memory_owner_snapshot_avoids_irq_lock
+AXTEST_CASE status=pass module=axtest_kernel::task::process_memory::axtests name=memory_owner_snapshot_avoids_irq_lock
+# START axtest_kernel::task::process_memory::axtests::thread_page_table_lease_follows_task_lifetime
+# module: axtest_kernel::task::process_memory::axtests
+ok 68 axtest_kernel::task::process_memory::axtests::thread_page_table_lease_follows_task_lifetime
+AXTEST_CASE status=pass module=axtest_kernel::task::process_memory::axtests name=thread_page_table_lease_follows_task_lifetime
+# START axtest_kernel::task::process_memory::axtests::memory_owner_replacement_preserves_pinned_snapshot
+# module: axtest_kernel::task::process_memory::axtests
+ok 69 axtest_kernel::task::process_memory::axtests::memory_owner_replacement_preserves_pinned_snapshot
+AXTEST_CASE status=pass module=axtest_kernel::task::process_memory::axtests name=memory_owner_replacement_preserves_pinned_snapshot
+# START axtest_kernel::task::timer::rttime::tests::tick_watchdog_rounding_and_shared_threshold_progression
+# module: axtest_kernel::task::timer::rttime::tests
+ok 70 axtest_kernel::task::timer::rttime::tests::tick_watchdog_rounding_and_shared_threshold_progression
+AXTEST_CASE status=pass module=axtest_kernel::task::timer::rttime::tests name=tick_watchdog_rounding_and_shared_threshold_progression
+# START axtest_kernel::syscall::fs::mount::tests::admitted_unmount_rejects_moved_target
+# module: axtest_kernel::syscall::fs::mount::tests
+ok 71 axtest_kernel::syscall::fs::mount::tests::admitted_unmount_rejects_moved_target
+AXTEST_CASE status=pass module=axtest_kernel::syscall::fs::mount::tests name=admitted_unmount_rejects_moved_target
+# START axtest_kernel::syscall::fs::mount::tests::admitted_unmount_rejects_new_child_mount
+# module: axtest_kernel::syscall::fs::mount::tests
+ok 72 axtest_kernel::syscall::fs::mount::tests::admitted_unmount_rejects_new_child_mount
+AXTEST_CASE status=pass module=axtest_kernel::syscall::fs::mount::tests name=admitted_unmount_rejects_new_child_mount
+# START axtest_kernel::syscall::fs::mount::tests::admitted_unmount_rejects_new_propagation_target
+# module: axtest_kernel::syscall::fs::mount::tests
+ok 73 axtest_kernel::syscall::fs::mount::tests::admitted_unmount_rejects_new_propagation_target
+AXTEST_CASE status=pass module=axtest_kernel::syscall::fs::mount::tests name=admitted_unmount_rejects_new_propagation_target
+# START axtest_kernel::syscall::fs::mount::tests::active_use_survives_lazy_detach_and_reattachment
+# module: axtest_kernel::syscall::fs::mount::tests
+ok 74 axtest_kernel::syscall::fs::mount::tests::active_use_survives_lazy_detach_and_reattachment
+AXTEST_CASE status=pass module=axtest_kernel::syscall::fs::mount::tests name=active_use_survives_lazy_detach_and_reattachment
+# START axtest_kernel::syscall::fs::mount::tests::admitted_unmount_survives_unrelated_namespace_clone
+# module: axtest_kernel::syscall::fs::mount::tests
+ok 75 axtest_kernel::syscall::fs::mount::tests::admitted_unmount_survives_unrelated_namespace_clone
+AXTEST_CASE status=pass module=axtest_kernel::syscall::fs::mount::tests name=admitted_unmount_survives_unrelated_namespace_clone
+# START axtest_kernel::syscall::fs::mount::tests::active_use_revalidates_normal_unmount_and_rejects_late_admission
+# module: axtest_kernel::syscall::fs::mount::tests
+ok 76 axtest_kernel::syscall::fs::mount::tests::active_use_revalidates_normal_unmount_and_rejects_late_admission
+AXTEST_CASE status=pass module=axtest_kernel::syscall::fs::mount::tests name=active_use_revalidates_normal_unmount_and_rejects_late_admission
+# START axtest_kernel::block_runtime_axtest::block_runtime_async_double_read
+# module: axtest_kernel::block_runtime_axtest
+ok 77 axtest_kernel::block_runtime_axtest::block_runtime_async_double_read
+AXTEST_CASE status=pass module=axtest_kernel::block_runtime_axtest name=block_runtime_async_double_read
+# START axtest_kernel::block_runtime_axtest::block_runtime_async_mixed_read_write
+# module: axtest_kernel::block_runtime_axtest
+BLOCK_WRITE_TESTS_SKIPPED reason=no eligible scratch device or region on this machine
+ok 78 axtest_kernel::block_runtime_axtest::block_runtime_async_mixed_read_write
+AXTEST_CASE status=pass module=axtest_kernel::block_runtime_axtest name=block_runtime_async_mixed_read_write
+# START axtest_kernel::block_runtime_axtest::block_runtime_multi_block_contiguous_read_write
+# module: axtest_kernel::block_runtime_axtest
+BLOCK_WRITE_TESTS_SKIPPED reason=no eligible scratch device or region on this machine
+ok 79 axtest_kernel::block_runtime_axtest::block_runtime_multi_block_contiguous_read_write
+AXTEST_CASE status=pass module=axtest_kernel::block_runtime_axtest name=block_runtime_multi_block_contiguous_read_write
+# START axtest_kernel::block_runtime_axtest::block_runtime_registration_and_read_consistency
+# module: axtest_kernel::block_runtime_axtest
+BLOCK_DEVICE name=nvme blocks=5144576 logical_block_size=512
+ok 80 axtest_kernel::block_runtime_axtest::block_runtime_registration_and_read_consistency
+AXTEST_CASE status=pass module=axtest_kernel::block_runtime_axtest name=block_runtime_registration_and_read_consistency
+# START axtest_kernel::block_runtime_axtest::block_runtime_single_block_contiguous_read_write
+# module: axtest_kernel::block_runtime_axtest
+BLOCK_WRITE_TESTS_SKIPPED reason=no eligible scratch device or region on this machine
+ok 81 axtest_kernel::block_runtime_axtest::block_runtime_single_block_contiguous_read_write
+AXTEST_CASE status=pass module=axtest_kernel::block_runtime_axtest name=block_runtime_single_block_contiguous_read_write
+# START axtest_kernel::block_runtime_axtest::block_runtime_multi_descriptor_contiguous_read_write
+# module: axtest_kernel::block_runtime_axtest
+BLOCK_WRITE_TESTS_SKIPPED reason=no eligible scratch device or region on this machine
+ok 82 axtest_kernel::block_runtime_axtest::block_runtime_multi_descriptor_contiguous_read_write
+AXTEST_CASE status=pass module=axtest_kernel::block_runtime_axtest name=block_runtime_multi_descriptor_contiguous_read_write
+# START axtest_kernel::task::ops::axtests::kernel_thread_retains_active_mm_membarrier_state
+# module: axtest_kernel::task::ops::axtests
+ok 83 axtest_kernel::task::ops::axtests::kernel_thread_retains_active_mm_membarrier_state
+AXTEST_CASE status=pass module=axtest_kernel::task::ops::axtests name=kernel_thread_retains_active_mm_membarrier_state
+# START axtest_kernel::task::ops::axtests::unchanged_pi_schedule_returns_before_the_owner_rq_transaction
+# module: axtest_kernel::task::ops::axtests
+ok 84 axtest_kernel::task::ops::axtests::unchanged_pi_schedule_returns_before_the_owner_rq_transaction
+AXTEST_CASE status=pass module=axtest_kernel::task::ops::axtests name=unchanged_pi_schedule_returns_before_the_owner_rq_transaction
+# START axtest_kernel::pseudofs::usbfs::wait_tests::usb_activity_publication_and_worker_close_do_not_strand_waiters
+# module: axtest_kernel::pseudofs::usbfs::wait_tests
+ok 85 axtest_kernel::pseudofs::usbfs::wait_tests::usb_activity_publication_and_worker_close_do_not_strand_waiters
+AXTEST_CASE status=pass module=axtest_kernel::pseudofs::usbfs::wait_tests name=usb_activity_publication_and_worker_close_do_not_strand_waiters
+# START axtest_kernel::syscall::sync::futex::tests::futex_wake_completion_is_scheduler_driven
+# module: axtest_kernel::syscall::sync::futex::tests
+ok 86 axtest_kernel::syscall::sync::futex::tests::futex_wake_completion_is_scheduler_driven
+AXTEST_CASE status=pass module=axtest_kernel::syscall::sync::futex::tests name=futex_wake_completion_is_scheduler_driven
+# START axtest_kernel::file::epoll_axtest::tests::concurrent_reverse_add_is_serialized
+# module: axtest_kernel::file::epoll_axtest::tests
+ok 87 axtest_kernel::file::epoll_axtest::tests::concurrent_reverse_add_is_serialized
+AXTEST_CASE status=pass module=axtest_kernel::file::epoll_axtest::tests name=concurrent_reverse_add_is_serialized
+# START axtest_kernel::file::epoll_axtest::tests::epoll_notify_worker_flushes_deferred_wake
+# module: axtest_kernel::file::epoll_axtest::tests
+ok 88 axtest_kernel::file::epoll_axtest::tests::epoll_notify_worker_flushes_deferred_wake
+AXTEST_CASE status=pass module=axtest_kernel::file::epoll_axtest::tests name=epoll_notify_worker_flushes_deferred_wake
+# START axtest_kernel::task::process_cgroup::axtests::task_exit_transaction_holds_membership_lock
+# module: axtest_kernel::task::process_cgroup::axtests
+ok 89 axtest_kernel::task::process_cgroup::axtests::task_exit_transaction_holds_membership_lock
+AXTEST_CASE status=pass module=axtest_kernel::task::process_cgroup::axtests name=task_exit_transaction_holds_membership_lock
+# START axtest_kernel::stop_machine::tests::runs_action_and_sync_on_each_cpu
+# module: axtest_kernel::stop_machine::tests
+ok 90 axtest_kernel::stop_machine::tests::runs_action_and_sync_on_each_cpu
+AXTEST_CASE status=pass module=axtest_kernel::stop_machine::tests name=runs_action_and_sync_on_each_cpu
+# START axtest_kernel::mm::aspace::tests::refault_waits_for_pending_discard_range
+# module: axtest_kernel::mm::aspace::tests
+ok 91 axtest_kernel::mm::aspace::tests::refault_waits_for_pending_discard_range
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::tests name=refault_waits_for_pending_discard_range
+# START axtest_kernel::mm::aspace::tests::fresh_mapping_publication_has_no_tlb_targets
+# module: axtest_kernel::mm::aspace::tests
+ok 92 axtest_kernel::mm::aspace::tests::fresh_mapping_publication_has_no_tlb_targets
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::tests name=fresh_mapping_publication_has_no_tlb_targets
+# START axtest_kernel::mm::aspace::tests::refault_waits_for_pending_discard_full_flush
+# module: axtest_kernel::mm::aspace::tests
+ok 93 axtest_kernel::mm::aspace::tests::refault_waits_for_pending_discard_full_flush
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::tests name=refault_waits_for_pending_discard_full_flush
+# START axtest_kernel::mm::aspace::tests::pending_full_flush_blocks_every_fresh_mapping_range
+# module: axtest_kernel::mm::aspace::tests
+ok 94 axtest_kernel::mm::aspace::tests::pending_full_flush_blocks_every_fresh_mapping_range
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::tests name=pending_full_flush_blocks_every_fresh_mapping_range
+# START axtest_kernel::mm::aspace::tests::page_table_reclaim_waits_for_last_tlb_acknowledgement
+# module: axtest_kernel::mm::aspace::tests
+ok 95 axtest_kernel::mm::aspace::tests::page_table_reclaim_waits_for_last_tlb_acknowledgement
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::tests name=page_table_reclaim_waits_for_last_tlb_acknowledgement
+# START axtest_kernel::mm::aspace::tests::fresh_mapping_cannot_reuse_range_with_pending_shootdown
+# module: axtest_kernel::mm::aspace::tests
+ok 96 axtest_kernel::mm::aspace::tests::fresh_mapping_cannot_reuse_range_with_pending_shootdown
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::tests name=fresh_mapping_cannot_reuse_range_with_pending_shootdown
+# START axtest_kernel::task::process_policy::axtests::resource_limit_read_is_nonblocking
+# module: axtest_kernel::task::process_policy::axtests
+ok 97 axtest_kernel::task::process_policy::axtests::resource_limit_read_is_nonblocking
+AXTEST_CASE status=pass module=axtest_kernel::task::process_policy::axtests name=resource_limit_read_is_nonblocking
+# START axtest_kernel::mm::aspace::mutation::tests::stale_epoch_aborts_without_publication
+# module: axtest_kernel::mm::aspace::mutation::tests
+ok 98 axtest_kernel::mm::aspace::mutation::tests::stale_epoch_aborts_without_publication
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::mutation::tests name=stale_epoch_aborts_without_publication
+# START axtest_kernel::mm::aspace::mutation::tests::quarantine_does_not_retain_local_flushes
+# module: axtest_kernel::mm::aspace::mutation::tests
+ok 99 axtest_kernel::mm::aspace::mutation::tests::quarantine_does_not_retain_local_flushes
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::mutation::tests name=quarantine_does_not_retain_local_flushes
+# START axtest_kernel::mm::aspace::mutation::tests::publish_cannot_retire_before_all_tlb_acks
+# module: axtest_kernel::mm::aspace::mutation::tests
+ok 100 axtest_kernel::mm::aspace::mutation::tests::publish_cannot_retire_before_all_tlb_acks
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::mutation::tests name=publish_cannot_retire_before_all_tlb_acks
+# START axtest_kernel::mm::aspace::mutation::tests::commit_freezes_cpus_activated_after_prepare
+# module: axtest_kernel::mm::aspace::mutation::tests
+ok 101 axtest_kernel::mm::aspace::mutation::tests::commit_freezes_cpus_activated_after_prepare
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::mutation::tests name=commit_freezes_cpus_activated_after_prepare
+# START axtest_kernel::mm::aspace::mutation::tests::gate_retains_pending_receipt_until_last_ack
+# module: axtest_kernel::mm::aspace::mutation::tests
+ok 102 axtest_kernel::mm::aspace::mutation::tests::gate_retains_pending_receipt_until_last_ack
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::mutation::tests name=gate_retains_pending_receipt_until_last_ack
+# START axtest_kernel::mm::aspace::mutation::tests::oversized_tlb_range_batch_falls_back_to_full_flush
+# module: axtest_kernel::mm::aspace::mutation::tests
+ok 103 axtest_kernel::mm::aspace::mutation::tests::oversized_tlb_range_batch_falls_back_to_full_flush
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::mutation::tests name=oversized_tlb_range_batch_falls_back_to_full_flush
+# START axtest_kernel::mm::aspace::mutation::tests::prepared_failure_does_not_publish_or_advance_epoch
+# module: axtest_kernel::mm::aspace::mutation::tests
+ok 104 axtest_kernel::mm::aspace::mutation::tests::prepared_failure_does_not_publish_or_advance_epoch
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::mutation::tests name=prepared_failure_does_not_publish_or_advance_epoch
+# START axtest_kernel::mm::aspace::mutation::tests::quarantine_retry_ignores_unrelated_acknowledgements
+# module: axtest_kernel::mm::aspace::mutation::tests
+ok 105 axtest_kernel::mm::aspace::mutation::tests::quarantine_retry_ignores_unrelated_acknowledgements
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::mutation::tests name=quarantine_retry_ignores_unrelated_acknowledgements
+# START axtest_kernel::mm::aspace::mutation::tests::quarantine_releases_frame_only_after_acknowledgement
+# module: axtest_kernel::mm::aspace::mutation::tests
+ok 106 axtest_kernel::mm::aspace::mutation::tests::quarantine_releases_frame_only_after_acknowledgement
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::mutation::tests name=quarantine_releases_frame_only_after_acknowledgement
+# START axtest_kernel::mm::aspace::lifecycle::tests::activation_and_mutation_share_active_cpu_mask
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 107 axtest_kernel::mm::aspace::lifecycle::tests::activation_and_mutation_share_active_cpu_mask
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=activation_and_mutation_share_active_cpu_mask
+# START axtest_kernel::mm::aspace::lifecycle::tests::tag_allocator_uses_explicit_full_flush_fallback
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 108 axtest_kernel::mm::aspace::lifecycle::tests::tag_allocator_uses_explicit_full_flush_fallback
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=tag_allocator_uses_explicit_full_flush_fallback
+# START axtest_kernel::mm::aspace::lifecycle::tests::failed_direct_reclaim_preserves_repair_ownership
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 109 axtest_kernel::mm::aspace::lifecycle::tests::failed_direct_reclaim_preserves_repair_ownership
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=failed_direct_reclaim_preserves_repair_ownership
+# START axtest_kernel::mm::aspace::lifecycle::tests::tag_allocator_never_wraps_an_exhausted_generation
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 110 axtest_kernel::mm::aspace::lifecycle::tests::tag_allocator_never_wraps_an_exhausted_generation
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=tag_allocator_never_wraps_an_exhausted_generation
+# START axtest_kernel::mm::aspace::lifecycle::tests::lazy_free_reclaim_only_scans_after_a_publication_edge
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 111 axtest_kernel::mm::aspace::lifecycle::tests::lazy_free_reclaim_only_scans_after_a_publication_edge
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=lazy_free_reclaim_only_scans_after_a_publication_edge
+# START axtest_kernel::mm::aspace::lifecycle::tests::mm_pin_services_blocking_discard_before_refault_retry
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 112 axtest_kernel::mm::aspace::lifecycle::tests::mm_pin_services_blocking_discard_before_refault_retry
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=mm_pin_services_blocking_discard_before_refault_retry
+# START axtest_kernel::mm::aspace::lifecycle::tests::last_user_owner_cannot_reclaim_an_active_address_space
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 113 axtest_kernel::mm::aspace::lifecycle::tests::last_user_owner_cannot_reclaim_an_active_address_space
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=last_user_owner_cannot_reclaim_an_active_address_space
+[37m[  2.570218 0:4294967296 [37maxtest_kernel::mm::aspace::lifecycle:1110] [33maddress-space activation for mm 60 cpu 0 dropped before root-switch proof[m[m
+# START axtest_kernel::mm::aspace::lifecycle::tests::abandoned_activation_retains_the_unproved_hardware_root
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 114 axtest_kernel::mm::aspace::lifecycle::tests::abandoned_activation_retains_the_unproved_hardware_root
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=abandoned_activation_retains_the_unproved_hardware_root
+# START axtest_kernel::mm::aspace::lifecycle::tests::tag_allocator_represents_the_complete_sixteen_bit_space
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 115 axtest_kernel::mm::aspace::lifecycle::tests::tag_allocator_represents_the_complete_sixteen_bit_space
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=tag_allocator_represents_the_complete_sixteen_bit_space
+# START axtest_kernel::mm::aspace::lifecycle::tests::lazy_free_batches_advance_the_production_registry_cursor
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 116 axtest_kernel::mm::aspace::lifecycle::tests::lazy_free_batches_advance_the_production_registry_cursor
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=lazy_free_batches_advance_the_production_registry_cursor
+# START axtest_kernel::mm::aspace::lifecycle::tests::pinned_exit_continuation_can_run_while_the_mm_is_retiring
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 117 axtest_kernel::mm::aspace::lifecycle::tests::pinned_exit_continuation_can_run_while_the_mm_is_retiring
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=pinned_exit_continuation_can_run_while_the_mm_is_retiring
+# START axtest_kernel::mm::aspace::lifecycle::tests::tag_allocator_rollover_restarts_at_one_in_a_new_generation
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 118 axtest_kernel::mm::aspace::lifecycle::tests::tag_allocator_rollover_restarts_at_one_in_a_new_generation
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=tag_allocator_rollover_restarts_at_one_in_a_new_generation
+# START axtest_kernel::mm::aspace::lifecycle::tests::completed_root_switch_is_not_frozen_into_a_new_tlb_obligation
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 119 axtest_kernel::mm::aspace::lifecycle::tests::completed_root_switch_is_not_frozen_into_a_new_tlb_obligation
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=completed_root_switch_is_not_frozen_into_a_new_tlb_obligation
+# START axtest_kernel::mm::aspace::lifecycle::tests::retire_permit_revalidates_quiescence_under_the_lifecycle_gate
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 120 axtest_kernel::mm::aspace::lifecycle::tests::retire_permit_revalidates_quiescence_under_the_lifecycle_gate
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=retire_permit_revalidates_quiescence_under_the_lifecycle_gate
+# START axtest_kernel::mm::aspace::lifecycle::tests::mm_pin_fault_prepares_outside_and_publishes_through_the_live_mm
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 121 axtest_kernel::mm::aspace::lifecycle::tests::mm_pin_fault_prepares_outside_and_publishes_through_the_live_mm
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=mm_pin_fault_prepares_outside_and_publishes_through_the_live_mm
+# START axtest_kernel::mm::aspace::lifecycle::tests::faultable_user_copy_retries_pending_tlb_before_reporting_success
+# module: axtest_kernel::mm::aspace::lifecycle::tests
+ok 122 axtest_kernel::mm::aspace::lifecycle::tests::faultable_user_copy_retries_pending_tlb_before_reporting_success
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::lifecycle::tests name=faultable_user_copy_retries_pending_tlb_before_reporting_success
+# START axtest_kernel::syscall::mm::placement::tests::unavailable_hint_restarts_at_the_base
+# module: axtest_kernel::syscall::mm::placement::tests
+ok 123 axtest_kernel::syscall::mm::placement::tests::unavailable_hint_restarts_at_the_base
+AXTEST_CASE status=pass module=axtest_kernel::syscall::mm::placement::tests name=unavailable_hint_restarts_at_the_base
+# START axtest_kernel::syscall::mm::placement::tests::exhausted_address_range_preserves_no_memory
+# module: axtest_kernel::syscall::mm::placement::tests
+ok 124 axtest_kernel::syscall::mm::placement::tests::exhausted_address_range_preserves_no_memory
+AXTEST_CASE status=pass module=axtest_kernel::syscall::mm::placement::tests name=exhausted_address_range_preserves_no_memory
+# START axtest_kernel::syscall::mm::placement::tests::successful_hint_does_not_restart_the_area_search
+# module: axtest_kernel::syscall::mm::placement::tests
+ok 125 axtest_kernel::syscall::mm::placement::tests::successful_hint_does_not_restart_the_area_search
+AXTEST_CASE status=pass module=axtest_kernel::syscall::mm::placement::tests name=successful_hint_does_not_restart_the_area_search
+# START axtest_kernel::mm::access::tests::nofault_user_read_recovers_unmapped_address
+# module: axtest_kernel::mm::access::tests
+ok 126 axtest_kernel::mm::access::tests::nofault_user_read_recovers_unmapped_address
+AXTEST_CASE status=pass module=axtest_kernel::mm::access::tests name=nofault_user_read_recovers_unmapped_address
+# START axtest_kernel::mm::aspace::vma::tests::process_thp_disable_overrides_vma_preference
+# module: axtest_kernel::mm::aspace::vma::tests
+ok 127 axtest_kernel::mm::aspace::vma::tests::process_thp_disable_overrides_vma_preference
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::vma::tests name=process_thp_disable_overrides_vma_preference
+# START axtest_kernel::mm::aspace::vma::tests::huge_page_advice_is_vma_local_and_path_copied
+# module: axtest_kernel::mm::aspace::vma::tests
+ok 128 axtest_kernel::mm::aspace::vma::tests::huge_page_advice_is_vma_local_and_path_copied
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::vma::tests name=huge_page_advice_is_vma_local_and_path_copied
+# START axtest_kernel::mm::aspace::vma::tests::free_area_search_skips_subtrees_with_only_small_gaps
+# module: axtest_kernel::mm::aspace::vma::tests
+ok 129 axtest_kernel::mm::aspace::vma::tests::free_area_search_skips_subtrees_with_only_small_gaps
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::vma::tests name=free_area_search_skips_subtrees_with_only_small_gaps
+# START axtest_kernel::mm::aspace::vma::tests::a_range_lookup_walks_the_search_path_not_the_whole_tree
+# module: axtest_kernel::mm::aspace::vma::tests
+ok 130 axtest_kernel::mm::aspace::vma::tests::a_range_lookup_walks_the_search_path_not_the_whole_tree
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::vma::tests name=a_range_lookup_walks_the_search_path_not_the_whole_tree
+# START axtest_kernel::mm::aspace::vma::tests::a_spanning_lookup_returns_every_intersecting_vma_in_order
+# module: axtest_kernel::mm::aspace::vma::tests
+ok 131 axtest_kernel::mm::aspace::vma::tests::a_spanning_lookup_returns_every_intersecting_vma_in_order
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::vma::tests name=a_spanning_lookup_returns_every_intersecting_vma_in_order
+# START axtest_kernel::mm::aspace::vma::tests::a_lookup_starting_inside_a_vma_still_reaches_its_predecessor
+# module: axtest_kernel::mm::aspace::vma::tests
+ok 132 axtest_kernel::mm::aspace::vma::tests::a_lookup_starting_inside_a_vma_still_reaches_its_predecessor
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::vma::tests name=a_lookup_starting_inside_a_vma_still_reaches_its_predecessor
+# START axtest_kernel::mm::aspace::vma::tests::free_area_search_preserves_first_fit_across_path_copy_mutations
+# module: axtest_kernel::mm::aspace::vma::tests
+ok 133 axtest_kernel::mm::aspace::vma::tests::free_area_search_preserves_first_fit_across_path_copy_mutations
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::vma::tests name=free_area_search_preserves_first_fit_across_path_copy_mutations
+# START axtest_kernel::mm::aspace::objects::tests::lazy_free_page_requeues_after_a_batch_graph_replacement
+# module: axtest_kernel::mm::aspace::objects::tests
+ok 134 axtest_kernel::mm::aspace::objects::tests::lazy_free_page_requeues_after_a_batch_graph_replacement
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::objects::tests name=lazy_free_page_requeues_after_a_batch_graph_replacement
+# START axtest_kernel::mm::aspace::objects::tests::concurrent_mapping_publication_preserves_reserved_capacity
+# module: axtest_kernel::mm::aspace::objects::tests
+ok 135 axtest_kernel::mm::aspace::objects::tests::concurrent_mapping_publication_preserves_reserved_capacity
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::objects::tests name=concurrent_mapping_publication_preserves_reserved_capacity
+# START axtest_kernel::mm::aspace::objects::tests::relocation_replaces_rmap_key_without_changing_mapping_refs
+# module: axtest_kernel::mm::aspace::objects::tests
+ok 136 axtest_kernel::mm::aspace::objects::tests::relocation_replaces_rmap_key_without_changing_mapping_refs
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::objects::tests name=relocation_replaces_rmap_key_without_changing_mapping_refs
+# START axtest_kernel::mm::aspace::objects::tests::lazy_free_page_requeues_when_a_shared_mapping_becomes_exclusive
+# module: axtest_kernel::mm::aspace::objects::tests
+ok 137 axtest_kernel::mm::aspace::objects::tests::lazy_free_page_requeues_when_a_shared_mapping_becomes_exclusive
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::objects::tests name=lazy_free_page_requeues_when_a_shared_mapping_becomes_exclusive
+# START axtest_kernel::mm::aspace::backend::linear::tests::linear_page_object_owns_provider_until_slot_retire
+# module: axtest_kernel::mm::aspace::backend::linear::tests
+ok 138 axtest_kernel::mm::aspace::backend::linear::tests::linear_page_object_owns_provider_until_slot_retire
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::linear::tests name=linear_page_object_owns_provider_until_slot_retire
+# START axtest_kernel::thread_lifecycle_axtest::user_kernel_mm_switch_matrix
+# module: axtest_kernel::thread_lifecycle_axtest
+ok 139 axtest_kernel::thread_lifecycle_axtest::user_kernel_mm_switch_matrix
+AXTEST_CASE status=pass module=axtest_kernel::thread_lifecycle_axtest name=user_kernel_mm_switch_matrix
+# START axtest_kernel::thread_lifecycle_axtest::user_context_heap_failure_rollback
+# module: axtest_kernel::thread_lifecycle_axtest
+ok 140 axtest_kernel::thread_lifecycle_axtest::user_context_heap_failure_rollback
+AXTEST_CASE status=pass module=axtest_kernel::thread_lifecycle_axtest name=user_context_heap_failure_rollback
+# START axtest_kernel::thread_lifecycle_axtest::user_context_resource_failure_rollback
+# module: axtest_kernel::thread_lifecycle_axtest
+ok 141 axtest_kernel::thread_lifecycle_axtest::user_context_resource_failure_rollback
+AXTEST_CASE status=pass module=axtest_kernel::thread_lifecycle_axtest name=user_context_resource_failure_rollback
+# START axtest_kernel::thread_lifecycle_axtest::idle_cpu_cycle_rejection_retains_active_mm
+# module: axtest_kernel::thread_lifecycle_axtest
+[37m[  2.720840 1:4294967307 [37max_runtime::thread::creation_probe:199] [33midle CPU 1 offline rejection: ThreadTarget[m[m
+ok 142 axtest_kernel::thread_lifecycle_axtest::idle_cpu_cycle_rejection_retains_active_mm
+AXTEST_CASE status=pass module=axtest_kernel::thread_lifecycle_axtest name=idle_cpu_cycle_rejection_retains_active_mm
+# START axtest_kernel::task::futex::axtests::nofault_failure_is_transactional
+# module: axtest_kernel::task::futex::axtests
+ok 143 axtest_kernel::task::futex::axtests::nofault_failure_is_transactional
+AXTEST_CASE status=pass module=axtest_kernel::task::futex::axtests name=nofault_failure_is_transactional
+# START axtest_kernel::task::futex::axtests::park_prepare_error_cleans_waiter
+# module: axtest_kernel::task::futex::axtests
+ok 144 axtest_kernel::task::futex::axtests::park_prepare_error_cleans_waiter
+AXTEST_CASE status=pass module=axtest_kernel::task::futex::axtests name=park_prepare_error_cleans_waiter
+# START axtest_kernel::task::futex::axtests::false_wait_condition_short_circuits
+# module: axtest_kernel::task::futex::axtests
+ok 145 axtest_kernel::task::futex::axtests::false_wait_condition_short_circuits
+AXTEST_CASE status=pass module=axtest_kernel::task::futex::axtests name=false_wait_condition_short_circuits
+# START axtest_kernel::task::futex::axtests::keys_follow_mm_and_backing_identity
+# module: axtest_kernel::task::futex::axtests
+ok 146 axtest_kernel::task::futex::axtests::keys_follow_mm_and_backing_identity
+AXTEST_CASE status=pass module=axtest_kernel::task::futex::axtests name=keys_follow_mm_and_backing_identity
+# START axtest_kernel::task::futex::axtests::shared_futex_key_survives_vma_split
+# module: axtest_kernel::task::futex::axtests
+ok 147 axtest_kernel::task::futex::axtests::shared_futex_key_survives_vma_split
+AXTEST_CASE status=pass module=axtest_kernel::task::futex::axtests name=shared_futex_key_survives_vma_split
+# START axtest_kernel::task::futex::axtests::park_notification_rechecks_condition
+# module: axtest_kernel::task::futex::axtests
+ok 148 axtest_kernel::task::futex::axtests::park_notification_rechecks_condition
+AXTEST_CASE status=pass module=axtest_kernel::task::futex::axtests name=park_notification_rechecks_condition
+# START axtest_kernel::task::futex::axtests::empty_wake_op_leaves_fixed_buckets_empty
+# module: axtest_kernel::task::futex::axtests
+ok 149 axtest_kernel::task::futex::axtests::empty_wake_op_leaves_fixed_buckets_empty
+AXTEST_CASE status=pass module=axtest_kernel::task::futex::axtests name=empty_wake_op_leaves_fixed_buckets_empty
+# START axtest_kernel::task::futex::axtests::coalesced_scheduler_wake_still_counts_each_selected_wait
+# module: axtest_kernel::task::futex::axtests
+ok 150 axtest_kernel::task::futex::axtests::coalesced_scheduler_wake_still_counts_each_selected_wait
+AXTEST_CASE status=pass module=axtest_kernel::task::futex::axtests name=coalesced_scheduler_wake_still_counts_each_selected_wait
+# START axtest_kernel::pseudofs::dev::tests::random_write_mixes_entropy
+# module: axtest_kernel::pseudofs::dev::tests
+ok 151 axtest_kernel::pseudofs::dev::tests::random_write_mixes_entropy
+AXTEST_CASE status=pass module=axtest_kernel::pseudofs::dev::tests name=random_write_mixes_entropy
+# START axtest_kernel::mm::aspace::backend::shared::tests::shared_fork_materializes_child_pte
+# module: axtest_kernel::mm::aspace::backend::shared::tests
+ok 152 axtest_kernel::mm::aspace::backend::shared::tests::shared_fork_materializes_child_pte
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::shared::tests name=shared_fork_materializes_child_pte
+# START axtest_kernel::mm::aspace::backend::shared::tests::shared_partial_unmap_keeps_one_page_object
+# module: axtest_kernel::mm::aspace::backend::shared::tests
+ok 153 axtest_kernel::mm::aspace::backend::shared::tests::shared_partial_unmap_keeps_one_page_object
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::shared::tests name=shared_partial_unmap_keeps_one_page_object
+# START axtest_kernel::mm::aspace::backend::shared::tests::shared_object_metadata_tracks_materialized_pages
+# module: axtest_kernel::mm::aspace::backend::shared::tests
+ok 154 axtest_kernel::mm::aspace::backend::shared::tests::shared_object_metadata_tracks_materialized_pages
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::shared::tests name=shared_object_metadata_tracks_materialized_pages
+# START axtest_kernel::mm::aspace::backend::shared::tests::shared_huge_partial_unmap_keeps_the_other_mapping
+# module: axtest_kernel::mm::aspace::backend::shared::tests
+ok 155 axtest_kernel::mm::aspace::backend::shared::tests::shared_huge_partial_unmap_keeps_the_other_mapping
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::shared::tests name=shared_huge_partial_unmap_keeps_the_other_mapping
+# START axtest_kernel::mm::aspace::backend::shared::tests::shared_prot_none_mapping_materializes_only_after_access
+# module: axtest_kernel::mm::aspace::backend::shared::tests
+ok 156 axtest_kernel::mm::aspace::backend::shared::tests::shared_prot_none_mapping_materializes_only_after_access
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::shared::tests name=shared_prot_none_mapping_materializes_only_after_access
+# START axtest_kernel::mm::aspace::backend::shared::tests::shared_fault_releases_the_racing_candidate_after_publication
+# module: axtest_kernel::mm::aspace::backend::shared::tests
+ok 157 axtest_kernel::mm::aspace::backend::shared::tests::shared_fault_releases_the_racing_candidate_after_publication
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::shared::tests name=shared_fault_releases_the_racing_candidate_after_publication
+# START axtest_kernel::task::posix_timer::axtests::posix_timer_active_gate_rules_hold
+# module: axtest_kernel::task::posix_timer::axtests
+ok 158 axtest_kernel::task::posix_timer::axtests::posix_timer_active_gate_rules_hold
+AXTEST_CASE status=pass module=axtest_kernel::task::posix_timer::axtests name=posix_timer_active_gate_rules_hold
+# START axtest_kernel::task::posix_timer::axtests::posix_timer_expiry_batch_rules_hold
+# module: axtest_kernel::task::posix_timer::axtests
+ok 159 axtest_kernel::task::posix_timer::axtests::posix_timer_expiry_batch_rules_hold
+AXTEST_CASE status=pass module=axtest_kernel::task::posix_timer::axtests name=posix_timer_expiry_batch_rules_hold
+# START axtest_kernel::task::posix_timer::axtests::posix_timer_clock_sampling_rules_hold
+# module: axtest_kernel::task::posix_timer::axtests
+ok 160 axtest_kernel::task::posix_timer::axtests::posix_timer_clock_sampling_rules_hold
+AXTEST_CASE status=pass module=axtest_kernel::task::posix_timer::axtests name=posix_timer_clock_sampling_rules_hold
+# START axtest_kernel::task::posix_timer::axtests::posix_timer_saturating_timespec_rules_hold
+# module: axtest_kernel::task::posix_timer::axtests
+ok 161 axtest_kernel::task::posix_timer::axtests::posix_timer_saturating_timespec_rules_hold
+AXTEST_CASE status=pass module=axtest_kernel::task::posix_timer::axtests name=posix_timer_saturating_timespec_rules_hold
+# START axtest_kernel::task::posix_timer::axtests::posix_timer_stale_expiry_signal_is_suppressed
+# module: axtest_kernel::task::posix_timer::axtests
+ok 162 axtest_kernel::task::posix_timer::axtests::posix_timer_stale_expiry_signal_is_suppressed
+AXTEST_CASE status=pass module=axtest_kernel::task::posix_timer::axtests name=posix_timer_stale_expiry_signal_is_suppressed
+# START axtest_kernel::task::process_accounting::tests::tick_gate_source_snapshot_and_publication_are_one_transaction
+# module: axtest_kernel::task::process_accounting::tests
+ok 163 axtest_kernel::task::process_accounting::tests::tick_gate_source_snapshot_and_publication_are_one_transaction
+AXTEST_CASE status=pass module=axtest_kernel::task::process_accounting::tests name=tick_gate_source_snapshot_and_publication_are_one_transaction
+# START axtest_kernel::tracepoint::axtests::callbacks_run_without_raw_guard
+# module: axtest_kernel::tracepoint::axtests
+ok 164 axtest_kernel::tracepoint::axtests::callbacks_run_without_raw_guard
+AXTEST_CASE status=pass module=axtest_kernel::tracepoint::axtests name=callbacks_run_without_raw_guard
+# START axtest_kernel::file::tests::descriptor_lookup_invalidates_after_fd_reuse
+# module: axtest_kernel::file::tests
+ok 165 axtest_kernel::file::tests::descriptor_lookup_invalidates_after_fd_reuse
+AXTEST_CASE status=pass module=axtest_kernel::file::tests name=descriptor_lookup_invalidates_after_fd_reuse
+# START axtest_kernel::file::tests::cloned_table_scope_invalidates_after_fd_reuse
+# module: axtest_kernel::file::tests
+ok 166 axtest_kernel::file::tests::cloned_table_scope_invalidates_after_fd_reuse
+AXTEST_CASE status=pass module=axtest_kernel::file::tests name=cloned_table_scope_invalidates_after_fd_reuse
+# START axtest_kernel::file::tests::prepared_descriptor_stays_hidden_until_install
+# module: axtest_kernel::file::tests
+ok 167 axtest_kernel::file::tests::prepared_descriptor_stays_hidden_until_install
+AXTEST_CASE status=pass module=axtest_kernel::file::tests name=prepared_descriptor_stays_hidden_until_install
+# START axtest_kernel::file::tests::alternating_descriptor_lookup_avoids_cache_thrashing
+# module: axtest_kernel::file::tests
+ok 168 axtest_kernel::file::tests::alternating_descriptor_lookup_avoids_cache_thrashing
+AXTEST_CASE status=pass module=axtest_kernel::file::tests name=alternating_descriptor_lookup_avoids_cache_thrashing
+# START axtest_kernel::file::tests::descriptor_reservation_precedes_fallible_file_creation
+# module: axtest_kernel::file::tests
+ok 169 axtest_kernel::file::tests::descriptor_reservation_precedes_fallible_file_creation
+AXTEST_CASE status=pass module=axtest_kernel::file::tests name=descriptor_reservation_precedes_fallible_file_creation
+# START axtest_kernel::file::tests::stable_descriptor_lookup_avoids_repeated_shared_read_lock
+# module: axtest_kernel::file::tests
+ok 170 axtest_kernel::file::tests::stable_descriptor_lookup_avoids_repeated_shared_read_lock
+AXTEST_CASE status=pass module=axtest_kernel::file::tests name=stable_descriptor_lookup_avoids_repeated_shared_read_lock
+# START axtest_kernel::task::ops::robust_owner_death_preserves_concurrent_waiters
+# module: axtest_kernel::task::ops
+ok 171 axtest_kernel::task::ops::robust_owner_death_preserves_concurrent_waiters
+AXTEST_CASE status=pass module=axtest_kernel::task::ops name=robust_owner_death_preserves_concurrent_waiters
+# START axtest_kernel::task::thread::thread_state_creation_returns_allocation_failure
+# module: axtest_kernel::task::thread
+ok 172 axtest_kernel::task::thread::thread_state_creation_returns_allocation_failure
+AXTEST_CASE status=pass module=axtest_kernel::task::thread name=thread_state_creation_returns_allocation_failure
+# START axtest_kernel::file::pipe::tests::pipe_linux_io_semantics_hold
+# module: axtest_kernel::file::pipe::tests
+ok 173 axtest_kernel::file::pipe::tests::pipe_linux_io_semantics_hold
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=pipe_linux_io_semantics_hold
+# START axtest_kernel::file::pipe::tests::resize_rejects_oversized_pipe
+# module: axtest_kernel::file::pipe::tests
+ok 174 axtest_kernel::file::pipe::tests::resize_rejects_oversized_pipe
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=resize_rejects_oversized_pipe
+# START axtest_kernel::file::pipe::tests::pipe_resize_rounding_and_state_rules_hold
+# module: axtest_kernel::file::pipe::tests
+ok 175 axtest_kernel::file::pipe::tests::pipe_resize_rounding_and_state_rules_hold
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=pipe_resize_rounding_and_state_rules_hold
+# START axtest_kernel::file::pipe::tests::peer_close_with_multiple_readers_is_visible
+# module: axtest_kernel::file::pipe::tests
+ok 176 axtest_kernel::file::pipe::tests::peer_close_with_multiple_readers_is_visible
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=peer_close_with_multiple_readers_is_visible
+# START axtest_kernel::file::pipe::tests::condition_race_preserves_linux_exclusive_handoff
+# module: axtest_kernel::file::pipe::tests
+ok 177 axtest_kernel::file::pipe::tests::condition_race_preserves_linux_exclusive_handoff
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=condition_race_preserves_linux_exclusive_handoff
+# START axtest_kernel::file::pipe::tests::pipe_wait_set_lock_remains_schedulable_like_linux_rt
+# module: axtest_kernel::file::pipe::tests
+ok 178 axtest_kernel::file::pipe::tests::pipe_wait_set_lock_remains_schedulable_like_linux_rt
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=pipe_wait_set_lock_remains_schedulable_like_linux_rt
+# START axtest_kernel::file::pipe::tests::nonempty_pipe_batches_poll_wake_until_write_completion
+# module: axtest_kernel::file::pipe::tests
+ok 179 axtest_kernel::file::pipe::tests::nonempty_pipe_batches_poll_wake_until_write_completion
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=nonempty_pipe_batches_poll_wake_until_write_completion
+# START axtest_kernel::file::pipe::tests::pipe_wait_registration_locks_before_publishing_parking
+# module: axtest_kernel::file::pipe::tests
+ok 180 axtest_kernel::file::pipe::tests::pipe_wait_registration_locks_before_publishing_parking
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=pipe_wait_registration_locks_before_publishing_parking
+# START axtest_kernel::file::pipe::tests::direct_and_epollexclusive_waiters_share_one_wake_budget
+# module: axtest_kernel::file::pipe::tests
+ok 181 axtest_kernel::file::pipe::tests::direct_and_epollexclusive_waiters_share_one_wake_budget
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=direct_and_epollexclusive_waiters_share_one_wake_budget
+# START axtest_kernel::file::pipe::tests::exclusive_pipe_poll_registration_marks_linux_poll_usage
+# module: axtest_kernel::file::pipe::tests
+ok 182 axtest_kernel::file::pipe::tests::exclusive_pipe_poll_registration_marks_linux_poll_usage
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=exclusive_pipe_poll_registration_marks_linux_poll_usage
+# START axtest_kernel::file::pipe::tests::earlier_epollexclusive_waiter_precedes_a_later_direct_waiter
+# module: axtest_kernel::file::pipe::tests
+ok 183 axtest_kernel::file::pipe::tests::earlier_epollexclusive_waiter_precedes_a_later_direct_waiter
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=earlier_epollexclusive_waiter_precedes_a_later_direct_waiter
+# START axtest_kernel::file::pipe::tests::shared_poll_callbacks_precede_exclusive_in_linux_queue_order
+# module: axtest_kernel::file::pipe::tests
+ok 184 axtest_kernel::file::pipe::tests::shared_poll_callbacks_precede_exclusive_in_linux_queue_order
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=shared_poll_callbacks_precede_exclusive_in_linux_queue_order
+# START axtest_kernel::file::pipe::tests::partial_pipe_buffer_cannot_merge_past_its_linux_page_boundary
+# module: axtest_kernel::file::pipe::tests
+ok 185 axtest_kernel::file::pipe::tests::partial_pipe_buffer_cannot_merge_past_its_linux_page_boundary
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=partial_pipe_buffer_cannot_merge_past_its_linux_page_boundary
+# START axtest_kernel::file::pipe::tests::selected_epollexclusive_notification_precedes_registration_drop
+# module: axtest_kernel::file::pipe::tests
+ok 186 axtest_kernel::file::pipe::tests::selected_epollexclusive_notification_precedes_registration_drop
+AXTEST_CASE status=pass module=axtest_kernel::file::pipe::tests name=selected_epollexclusive_notification_precedes_registration_drop
+# START axtest_kernel::perf::sw::tests::group_disable_cannot_split_group_enable
+# module: axtest_kernel::perf::sw::tests
+ok 187 axtest_kernel::perf::sw::tests::group_disable_cannot_split_group_enable
+AXTEST_CASE status=pass module=axtest_kernel::perf::sw::tests name=group_disable_cannot_split_group_enable
+# START axtest_kernel::perf::sw::tests::closed_software_context_rejects_late_installation
+# module: axtest_kernel::perf::sw::tests
+ok 188 axtest_kernel::perf::sw::tests::closed_software_context_rejects_late_installation
+AXTEST_CASE status=pass module=axtest_kernel::perf::sw::tests name=closed_software_context_rejects_late_installation
+# START axtest_kernel::perf::sw::tests::cpu_group_disable_waits_for_member_enable_publication
+# module: axtest_kernel::perf::sw::tests
+ok 189 axtest_kernel::perf::sw::tests::cpu_group_disable_waits_for_member_enable_publication
+AXTEST_CASE status=pass module=axtest_kernel::perf::sw::tests name=cpu_group_disable_waits_for_member_enable_publication
+# START axtest_kernel::perf::sw::tests::reset_clips_event_value_without_discarding_running_time
+# module: axtest_kernel::perf::sw::tests
+ok 190 axtest_kernel::perf::sw::tests::reset_clips_event_value_without_discarding_running_time
+AXTEST_CASE status=pass module=axtest_kernel::perf::sw::tests name=reset_clips_event_value_without_discarding_running_time
+# START axtest_kernel::perf::sw::tests::first_software_context_observation_serializes_switch_publication
+# module: axtest_kernel::perf::sw::tests
+ok 191 axtest_kernel::perf::sw::tests::first_software_context_observation_serializes_switch_publication
+AXTEST_CASE status=pass module=axtest_kernel::perf::sw::tests name=first_software_context_observation_serializes_switch_publication
+# START axtest_kernel::task::pid::axtests::root_namespace_init_owns_shutdown
+# module: axtest_kernel::task::pid::axtests
+ok 192 axtest_kernel::task::pid::axtests::root_namespace_init_owns_shutdown
+AXTEST_CASE status=pass module=axtest_kernel::task::pid::axtests name=root_namespace_init_owns_shutdown
+# START axtest_kernel::task::pid::axtests::pid_identity_state_machine_rules_hold
+# module: axtest_kernel::task::pid::axtests
+ok 193 axtest_kernel::task::pid::axtests::pid_identity_state_machine_rules_hold
+AXTEST_CASE status=pass module=axtest_kernel::task::pid::axtests name=pid_identity_state_machine_rules_hold
+# START axtest_kernel::task::pid::axtests::exit_path_completion_precedes_task_transfer
+# module: axtest_kernel::task::pid::axtests
+ok 194 axtest_kernel::task::pid::axtests::exit_path_completion_precedes_task_transfer
+AXTEST_CASE status=pass module=axtest_kernel::task::pid::axtests name=exit_path_completion_precedes_task_transfer
+[37m[  2.820074 0:4294967296 [37maxtest_kernel::task::pid:1413] [33mPID identity PidIdentityId(67) exit path lease dropped before complete(); exit work remains pending[m[m
+# START axtest_kernel::task::pid::axtests::dropped_exit_path_lease_keeps_unfinished_work_pending
+# module: axtest_kernel::task::pid::axtests
+ok 195 axtest_kernel::task::pid::axtests::dropped_exit_path_lease_keeps_unfinished_work_pending
+AXTEST_CASE status=pass module=axtest_kernel::task::pid::axtests name=dropped_exit_path_lease_keeps_unfinished_work_pending
+# START axtest_kernel::pseudofs::proc::tests::proc_mountinfo_lines_match_linux_layout
+# module: axtest_kernel::pseudofs::proc::tests
+ok 196 axtest_kernel::pseudofs::proc::tests::proc_mountinfo_lines_match_linux_layout
+AXTEST_CASE status=pass module=axtest_kernel::pseudofs::proc::tests name=proc_mountinfo_lines_match_linux_layout
+# START axtest_kernel::syscall::fs::fd_ops::tests::fcntl_setpipe_size_returns_capacity
+# module: axtest_kernel::syscall::fs::fd_ops::tests
+ok 197 axtest_kernel::syscall::fs::fd_ops::tests::fcntl_setpipe_size_returns_capacity
+AXTEST_CASE status=pass module=axtest_kernel::syscall::fs::fd_ops::tests name=fcntl_setpipe_size_returns_capacity
+# START axtest_kernel::syscall::fs::fd_ops::tests::pipe_size_rounding_and_rejection_rules_hold
+# module: axtest_kernel::syscall::fs::fd_ops::tests
+ok 198 axtest_kernel::syscall::fs::fd_ops::tests::pipe_size_rounding_and_rejection_rules_hold
+AXTEST_CASE status=pass module=axtest_kernel::syscall::fs::fd_ops::tests name=pipe_size_rounding_and_rejection_rules_hold
+# START axtest_kernel::syscall::task::clone::axtests::creation_errors_preserve_resource_domain
+# module: axtest_kernel::syscall::task::clone::axtests
+ok 199 axtest_kernel::syscall::task::clone::axtests::creation_errors_preserve_resource_domain
+AXTEST_CASE status=pass module=axtest_kernel::syscall::task::clone::axtests name=creation_errors_preserve_resource_domain
+# START axtest_kernel::syscall::task::clone::axtests::cancelled_process_releases_tgid_before_last_identity
+# module: axtest_kernel::syscall::task::clone::axtests
+ok 200 axtest_kernel::syscall::task::clone::axtests::cancelled_process_releases_tgid_before_last_identity
+AXTEST_CASE status=pass module=axtest_kernel::syscall::task::clone::axtests name=cancelled_process_releases_tgid_before_last_identity
+# START axtest_kernel::syscall::task::clone::axtests::clone_publication_refreshes_security_after_preparation
+# module: axtest_kernel::syscall::task::clone::axtests
+ok 201 axtest_kernel::syscall::task::clone::axtests::clone_publication_refreshes_security_after_preparation
+AXTEST_CASE status=pass module=axtest_kernel::syscall::task::clone::axtests name=clone_publication_refreshes_security_after_preparation
+# START axtest_kernel::syscall::task::clone::axtests::unpublished_process_rollback_releases_identity_and_topology
+# module: axtest_kernel::syscall::task::clone::axtests
+ok 202 axtest_kernel::syscall::task::clone::axtests::unpublished_process_rollback_releases_identity_and_topology
+AXTEST_CASE status=pass module=axtest_kernel::syscall::task::clone::axtests name=unpublished_process_rollback_releases_identity_and_topology
+# START axtest_kernel::perf::tests::control_callback_runs_preemptible
+# module: axtest_kernel::perf::tests
+ok 203 axtest_kernel::perf::tests::control_callback_runs_preemptible
+AXTEST_CASE status=pass module=axtest_kernel::perf::tests name=control_callback_runs_preemptible
+# START axtest_kernel::task::scheduler_identity::axtests::published_scheduler_identity_check_is_read_only
+# module: axtest_kernel::task::scheduler_identity::axtests
+ok 204 axtest_kernel::task::scheduler_identity::axtests::published_scheduler_identity_check_is_read_only
+AXTEST_CASE status=pass module=axtest_kernel::task::scheduler_identity::axtests name=published_scheduler_identity_check_is_read_only
+# START axtest_kernel::task::timer::axtest::alarm_generation_rules_hold
+# module: axtest_kernel::task::timer::axtest
+ok 205 axtest_kernel::task::timer::axtest::alarm_generation_rules_hold
+AXTEST_CASE status=pass module=axtest_kernel::task::timer::axtest name=alarm_generation_rules_hold
+# START axtest_kernel::task::timer::axtest::cpu_interval_timers_avoid_wall_alarms
+# module: axtest_kernel::task::timer::axtest
+ok 206 axtest_kernel::task::timer::axtest::cpu_interval_timers_avoid_wall_alarms
+AXTEST_CASE status=pass module=axtest_kernel::task::timer::axtest name=cpu_interval_timers_avoid_wall_alarms
+# START axtest_kernel::task::timer::axtest::interval_timer_active_gate_rules_hold
+# module: axtest_kernel::task::timer::axtest
+ok 207 axtest_kernel::task::timer::axtest::interval_timer_active_gate_rules_hold
+AXTEST_CASE status=pass module=axtest_kernel::task::timer::axtest name=interval_timer_active_gate_rules_hold
+# START axtest_kernel::task::timer::axtest::interval_timer_arm_uses_current_snapshot
+# module: axtest_kernel::task::timer::axtest
+ok 208 axtest_kernel::task::timer::axtest::interval_timer_arm_uses_current_snapshot
+AXTEST_CASE status=pass module=axtest_kernel::task::timer::axtest name=interval_timer_arm_uses_current_snapshot
+# START axtest_kernel::task::timer::axtest::process_cpu_high_water_preserves_runtime_total
+# module: axtest_kernel::task::timer::axtest
+ok 209 axtest_kernel::task::timer::axtest::process_cpu_high_water_preserves_runtime_total
+AXTEST_CASE status=pass module=axtest_kernel::task::timer::axtest name=process_cpu_high_water_preserves_runtime_total
+# START axtest_kernel::task::timer::axtest::zero_process_cpu_time_delta_avoids_publication
+# module: axtest_kernel::task::timer::axtest
+ok 210 axtest_kernel::task::timer::axtest::zero_process_cpu_time_delta_avoids_publication
+AXTEST_CASE status=pass module=axtest_kernel::task::timer::axtest name=zero_process_cpu_time_delta_avoids_publication
+# START axtest_kernel::mm::aspace::backend::file::tests::independent_file_backends_share_page_object
+# module: axtest_kernel::mm::aspace::backend::file::tests
+ok 211 axtest_kernel::mm::aspace::backend::file::tests::independent_file_backends_share_page_object
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::file::tests name=independent_file_backends_share_page_object
+# START axtest_kernel::mm::aspace::backend::file::tests::evicting_file_page_rejects_publication_as_retry
+# module: axtest_kernel::mm::aspace::backend::file::tests
+ok 212 axtest_kernel::mm::aspace::backend::file::tests::evicting_file_page_rejects_publication_as_retry
+AXTEST_CASE status=pass module=axtest_kernel::mm::aspace::backend::file::tests name=evicting_file_page_rejects_publication_as_retry
+AXTEST_SUMMARY pass=212 fail=0 skip=0 total=212
+AXTEST_SUITE_OK
+[axbuild] qemu run package=starry-kernel target=scripts/targets/bare/x86_64-unknown-none.json ... done (7.92s)
+[axtest] all QEMU execution units passed
+KTEST_EXIT=0

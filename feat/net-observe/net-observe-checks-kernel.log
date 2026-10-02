@@ -1,0 +1,1348 @@
+=== clippy --package starry-kernel ===
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.24s
+     Running `target/debug/tg-xtask clippy --package starry-kernel`
+clippy started at: 2026-10-02 04:33:15 +0000
+running clippy for 1 package(s) with 80 check(s) from /home/asta/tgoskits/wt-feat-net-observe
+[1/80] starry-kernel (base, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+    Checking ax-tracepoint v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-tracepoint)
+    Checking starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.12s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (base, target: aarch64-unknown-none-softfloat)
+[2/80] starry-kernel (feature: axtest, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features axtest --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+    Checking ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling axtest-macros v0.5.16 (/home/asta/tgoskits/wt-feat-net-observe/components/axtest/axtest_macros)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axtest v0.5.16 (/home/asta/tgoskits/wt-feat-net-observe/components/axtest/axtest)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+warning: unused dependency `axtest`
+  --> os/StarryOS/kernel/Cargo.toml:61:1
+   |
+61 | axtest = { workspace = true, optional = true }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `axtest`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.17s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: axtest, target: aarch64-unknown-none-softfloat)
+[3/80] starry-kernel (feature: axtest-coverage, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features axtest-coverage --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axtest v0.5.16 (/home/asta/tgoskits/wt-feat-net-observe/components/axtest/axtest)
+warning: unused dependency `axtest`
+  --> os/StarryOS/kernel/Cargo.toml:61:1
+   |
+61 | axtest = { workspace = true, optional = true }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `axtest`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.77s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: axtest-coverage, target: aarch64-unknown-none-softfloat)
+[4/80] starry-kernel (feature: dev-log, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features dev-log --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.81s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: dev-log, target: aarch64-unknown-none-softfloat)
+[5/80] starry-kernel (feature: dynamic_debug, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features dynamic_debug --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.78s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: dynamic_debug, target: aarch64-unknown-none-softfloat)
+[6/80] starry-kernel (feature: ext4, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features ext4 --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.69s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: ext4, target: aarch64-unknown-none-softfloat)
+[7/80] starry-kernel (feature: fat, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features fat --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.77s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: fat, target: aarch64-unknown-none-softfloat)
+[8/80] starry-kernel (feature: jpeg, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features jpeg --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling rockchip-pm v0.4.10 (/home/asta/tgoskits/wt-feat-net-observe/drivers/soc/rockchip/rockchip-pm)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking rockchip-jpeg v0.2.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/vpu/rockchip-jpeg)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.93s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: jpeg, target: aarch64-unknown-none-softfloat)
+[9/80] starry-kernel (feature: k230-kpu, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features k230-kpu --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+    Checking ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+    Checking someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+    Checking ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+    Checking ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+    Checking scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+    Checking somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.04s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: k230-kpu, target: aarch64-unknown-none-softfloat)
+[10/80] starry-kernel (feature: memtrack, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features memtrack --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.94s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: memtrack, target: aarch64-unknown-none-softfloat)
+[11/80] starry-kernel (feature: qperf-metrics, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features qperf-metrics --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+    Checking ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.11s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: qperf-metrics, target: aarch64-unknown-none-softfloat)
+[12/80] starry-kernel (feature: rdif-pinctrl, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rdif-pinctrl --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.72s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: rdif-pinctrl, target: aarch64-unknown-none-softfloat)
+[13/80] starry-kernel (feature: rga, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rga --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+    Checking rockchip-rga v0.3.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/gpu/rockchip-rga)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+    Checking someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+    Checking ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+    Checking ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+    Checking scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+    Checking somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.00s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: rga, target: aarch64-unknown-none-softfloat)
+[14/80] starry-kernel (feature: rknpu, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rknpu --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling rockchip-npu v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/npu/rockchip-npu)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.14s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: rknpu, target: aarch64-unknown-none-softfloat)
+[15/80] starry-kernel (feature: sg2002, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features sg2002 --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking sg2002-tpu v0.4.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/tpu/sg2002-tpu)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+warning: unused dependency `sg200x-bsp`
+   --> os/StarryOS/kernel/Cargo.toml:166:1
+    |
+166 | sg200x-bsp = { workspace = true, optional = true, features = ["c906", "cv182x-host"] }
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `sg200x-bsp`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.81s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: sg2002, target: aarch64-unknown-none-softfloat)
+[16/80] starry-kernel (feature: sg2002-cvi-usb-camera, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features sg2002-cvi-usb-camera --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking sg200x-jpu v0.1.6 (/home/asta/tgoskits/wt-feat-net-observe/drivers/vpu/sg200x-jpu)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.23s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: sg2002-cvi-usb-camera, target: aarch64-unknown-none-softfloat)
+[17/80] starry-kernel (feature: stack-guard-page, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features stack-guard-page --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.71s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: stack-guard-page, target: aarch64-unknown-none-softfloat)
+[18/80] starry-kernel (feature: stack-protector, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features stack-protector --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.64s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: stack-protector, target: aarch64-unknown-none-softfloat)
+[19/80] starry-kernel (feature: uaccess-lock-regression, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features uaccess-lock-regression --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.64s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: uaccess-lock-regression, target: aarch64-unknown-none-softfloat)
+[20/80] starry-kernel (feature: uvc, target: aarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features uvc --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -Cllvm-args=--max-store-memcpy=16 -D warnings
+    Checking ax-media v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/media/ax-media)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking media-uvc v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/media/uvc)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.20s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+ok: starry-kernel (feature: uvc, target: aarch64-unknown-none-softfloat)
+[21/80] starry-kernel (base, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+   Compiling ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+   Compiling ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+   Compiling rockchip-soc v0.4.8 (/home/asta/tgoskits/wt-feat-net-observe/drivers/soc/rockchip/rockchip-soc)
+   Compiling crab-usb v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/usb/usb-host)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+   Compiling somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+   Compiling axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+   Compiling ax-crate-interface v0.5.8 (/home/asta/tgoskits/wt-feat-net-observe/components/crate_interface)
+   Compiling trait-ffi-macros v0.4.0 (/home/asta/tgoskits/wt-feat-net-observe/components/trait-ffi/trait-ffi-macros)
+   Compiling ax-percpu-macros v0.4.12 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu_macros)
+   Compiling rdrive-macros v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/drivers/rdrive-macros)
+   Compiling ax-plat-macros v0.3.10 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat-macros)
+   Compiling someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+   Compiling somehal-macros v0.1.7 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal-macros)
+   Compiling scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+   Compiling ax-ctor-bare-macros v0.4.10 (/home/asta/tgoskits/wt-feat-net-observe/components/ctor_bare/ctor_bare_macros)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+   Compiling ax-tracepoint v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-tracepoint)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-ctor-bare v0.4.10 (/home/asta/tgoskits/wt-feat-net-observe/components/ctor_bare/ctor_bare)
+    Checking ax-sync v0.6.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axsync)
+    Checking ax-log v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axlog)
+    Checking dma-api v0.10.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/dma-api)
+    Checking rdrive v0.25.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/rdrive)
+    Checking buddy-slab-allocator v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/memory/buddy-slab-allocator)
+    Checking axfs-ng-vfs v0.8.1 (/home/asta/tgoskits/wt-feat-net-observe/fs/axfs-ng-vfs)
+    Checking axpoll-set v0.1.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axpoll-set)
+    Checking ax-cgroup v0.3.0 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-cgroup)
+    Checking rdif-eth v0.6.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-eth)
+    Checking rdif-block v0.13.2 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-block)
+    Checking rdif-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-gpu)
+    Checking rdif-display v0.5.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-display)
+    Checking rd-net v0.3.3 (/home/asta/tgoskits/wt-feat-net-observe/drivers/net/rd-net)
+    Checking trait-ffi v0.3.1 (/home/asta/tgoskits/wt-feat-net-observe/components/trait-ffi/trait-ffi)
+    Checking ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+    Checking ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+    Checking ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.44s
+ok: starry-kernel (base, target: loongarch64-unknown-none-softfloat)
+[22/80] starry-kernel (feature: axtest, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features axtest --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+   Compiling axtest-macros v0.5.16 (/home/asta/tgoskits/wt-feat-net-observe/components/axtest/axtest_macros)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axtest v0.5.16 (/home/asta/tgoskits/wt-feat-net-observe/components/axtest/axtest)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+warning: unused dependency `axtest`
+  --> os/StarryOS/kernel/Cargo.toml:61:1
+   |
+61 | axtest = { workspace = true, optional = true }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `axtest`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.44s
+ok: starry-kernel (feature: axtest, target: loongarch64-unknown-none-softfloat)
+[23/80] starry-kernel (feature: axtest-coverage, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features axtest-coverage --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axtest v0.5.16 (/home/asta/tgoskits/wt-feat-net-observe/components/axtest/axtest)
+warning: unused dependency `axtest`
+  --> os/StarryOS/kernel/Cargo.toml:61:1
+   |
+61 | axtest = { workspace = true, optional = true }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `axtest`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.34s
+ok: starry-kernel (feature: axtest-coverage, target: loongarch64-unknown-none-softfloat)
+[24/80] starry-kernel (feature: dev-log, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features dev-log --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.23s
+ok: starry-kernel (feature: dev-log, target: loongarch64-unknown-none-softfloat)
+[25/80] starry-kernel (feature: dynamic_debug, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features dynamic_debug --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.32s
+ok: starry-kernel (feature: dynamic_debug, target: loongarch64-unknown-none-softfloat)
+[26/80] starry-kernel (feature: ext4, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features ext4 --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.31s
+ok: starry-kernel (feature: ext4, target: loongarch64-unknown-none-softfloat)
+[27/80] starry-kernel (feature: fat, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features fat --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.21s
+ok: starry-kernel (feature: fat, target: loongarch64-unknown-none-softfloat)
+[28/80] starry-kernel (feature: jpeg, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features jpeg --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling rockchip-pm v0.4.10 (/home/asta/tgoskits/wt-feat-net-observe/drivers/soc/rockchip/rockchip-pm)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking rockchip-jpeg v0.2.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/vpu/rockchip-jpeg)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.23s
+ok: starry-kernel (feature: jpeg, target: loongarch64-unknown-none-softfloat)
+[29/80] starry-kernel (feature: k230-kpu, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features k230-kpu --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+    Checking someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+    Checking ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+    Checking ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+    Checking scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+    Checking somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.34s
+ok: starry-kernel (feature: k230-kpu, target: loongarch64-unknown-none-softfloat)
+[30/80] starry-kernel (feature: memtrack, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features memtrack --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.18s
+ok: starry-kernel (feature: memtrack, target: loongarch64-unknown-none-softfloat)
+[31/80] starry-kernel (feature: qperf-metrics, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features qperf-metrics --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.50s
+ok: starry-kernel (feature: qperf-metrics, target: loongarch64-unknown-none-softfloat)
+[32/80] starry-kernel (feature: rdif-pinctrl, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rdif-pinctrl --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.29s
+ok: starry-kernel (feature: rdif-pinctrl, target: loongarch64-unknown-none-softfloat)
+[33/80] starry-kernel (feature: rga, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rga --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+    Checking rockchip-rga v0.3.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/gpu/rockchip-rga)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+    Checking someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+    Checking ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+    Checking ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+    Checking scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+    Checking somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.47s
+ok: starry-kernel (feature: rga, target: loongarch64-unknown-none-softfloat)
+[34/80] starry-kernel (feature: rknpu, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rknpu --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling rockchip-npu v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/npu/rockchip-npu)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.54s
+ok: starry-kernel (feature: rknpu, target: loongarch64-unknown-none-softfloat)
+[35/80] starry-kernel (feature: sg2002, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features sg2002 --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking sg2002-tpu v0.4.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/tpu/sg2002-tpu)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+warning: unused dependency `sg200x-bsp`
+   --> os/StarryOS/kernel/Cargo.toml:166:1
+    |
+166 | sg200x-bsp = { workspace = true, optional = true, features = ["c906", "cv182x-host"] }
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `sg200x-bsp`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.09s
+ok: starry-kernel (feature: sg2002, target: loongarch64-unknown-none-softfloat)
+[36/80] starry-kernel (feature: sg2002-cvi-usb-camera, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features sg2002-cvi-usb-camera --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking sg200x-jpu v0.1.6 (/home/asta/tgoskits/wt-feat-net-observe/drivers/vpu/sg200x-jpu)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.52s
+ok: starry-kernel (feature: sg2002-cvi-usb-camera, target: loongarch64-unknown-none-softfloat)
+[37/80] starry-kernel (feature: stack-guard-page, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features stack-guard-page --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.13s
+ok: starry-kernel (feature: stack-guard-page, target: loongarch64-unknown-none-softfloat)
+[38/80] starry-kernel (feature: stack-protector, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features stack-protector --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.07s
+ok: starry-kernel (feature: stack-protector, target: loongarch64-unknown-none-softfloat)
+[39/80] starry-kernel (feature: uaccess-lock-regression, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features uaccess-lock-regression --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.26s
+ok: starry-kernel (feature: uaccess-lock-regression, target: loongarch64-unknown-none-softfloat)
+[40/80] starry-kernel (feature: uvc, target: loongarch64-unknown-none-softfloat)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features uvc --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking ax-media v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/media/ax-media)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking media-uvc v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/media/uvc)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.85s
+ok: starry-kernel (feature: uvc, target: loongarch64-unknown-none-softfloat)
+[41/80] starry-kernel (base, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+   Compiling ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+   Compiling ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+   Compiling rockchip-soc v0.4.8 (/home/asta/tgoskits/wt-feat-net-observe/drivers/soc/rockchip/rockchip-soc)
+   Compiling crab-usb v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/usb/usb-host)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+   Compiling somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+   Compiling axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-sync v0.6.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axsync)
+    Checking trait-ffi v0.3.1 (/home/asta/tgoskits/wt-feat-net-observe/components/trait-ffi/trait-ffi)
+   Compiling someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+   Compiling scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+    Checking ax-ctor-bare v0.4.10 (/home/asta/tgoskits/wt-feat-net-observe/components/ctor_bare/ctor_bare)
+    Checking ax-log v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axlog)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+   Compiling ax-tracepoint v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-tracepoint)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+    Checking ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking dma-api v0.10.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/dma-api)
+    Checking rdrive v0.25.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/rdrive)
+    Checking buddy-slab-allocator v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/memory/buddy-slab-allocator)
+    Checking axpoll-set v0.1.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axpoll-set)
+    Checking axfs-ng-vfs v0.8.1 (/home/asta/tgoskits/wt-feat-net-observe/fs/axfs-ng-vfs)
+    Checking ax-cgroup v0.3.0 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-cgroup)
+    Checking rdif-block v0.13.2 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-block)
+    Checking rdif-eth v0.6.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-eth)
+    Checking rdif-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-gpu)
+    Checking rdif-display v0.5.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-display)
+    Checking rd-net v0.3.3 (/home/asta/tgoskits/wt-feat-net-observe/drivers/net/rd-net)
+    Checking ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.00s
+ok: starry-kernel (base, target: riscv64gc-unknown-none-elf)
+[42/80] starry-kernel (feature: axtest, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features axtest --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking axtest v0.5.16 (/home/asta/tgoskits/wt-feat-net-observe/components/axtest/axtest)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+warning: unused dependency `axtest`
+  --> os/StarryOS/kernel/Cargo.toml:61:1
+   |
+61 | axtest = { workspace = true, optional = true }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `axtest`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.40s
+ok: starry-kernel (feature: axtest, target: riscv64gc-unknown-none-elf)
+[43/80] starry-kernel (feature: axtest-coverage, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features axtest-coverage --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking axtest v0.5.16 (/home/asta/tgoskits/wt-feat-net-observe/components/axtest/axtest)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+warning: unused dependency `axtest`
+  --> os/StarryOS/kernel/Cargo.toml:61:1
+   |
+61 | axtest = { workspace = true, optional = true }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `axtest`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.03s
+ok: starry-kernel (feature: axtest-coverage, target: riscv64gc-unknown-none-elf)
+[44/80] starry-kernel (feature: dev-log, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features dev-log --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 10.35s
+ok: starry-kernel (feature: dev-log, target: riscv64gc-unknown-none-elf)
+[45/80] starry-kernel (feature: dynamic_debug, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features dynamic_debug --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 12.02s
+ok: starry-kernel (feature: dynamic_debug, target: riscv64gc-unknown-none-elf)
+[46/80] starry-kernel (feature: ext4, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features ext4 --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.10s
+ok: starry-kernel (feature: ext4, target: riscv64gc-unknown-none-elf)
+[47/80] starry-kernel (feature: fat, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features fat --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.43s
+ok: starry-kernel (feature: fat, target: riscv64gc-unknown-none-elf)
+[48/80] starry-kernel (feature: jpeg, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features jpeg --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling rockchip-pm v0.4.10 (/home/asta/tgoskits/wt-feat-net-observe/drivers/soc/rockchip/rockchip-pm)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking rockchip-jpeg v0.2.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/vpu/rockchip-jpeg)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.22s
+ok: starry-kernel (feature: jpeg, target: riscv64gc-unknown-none-elf)
+[49/80] starry-kernel (feature: k230-kpu, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features k230-kpu --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+    Checking someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+    Checking ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+    Checking ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+    Checking scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+    Checking somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.59s
+ok: starry-kernel (feature: k230-kpu, target: riscv64gc-unknown-none-elf)
+[50/80] starry-kernel (feature: memtrack, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features memtrack --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.24s
+ok: starry-kernel (feature: memtrack, target: riscv64gc-unknown-none-elf)
+[51/80] starry-kernel (feature: qperf-metrics, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features qperf-metrics --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.60s
+ok: starry-kernel (feature: qperf-metrics, target: riscv64gc-unknown-none-elf)
+[52/80] starry-kernel (feature: rdif-pinctrl, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rdif-pinctrl --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.20s
+ok: starry-kernel (feature: rdif-pinctrl, target: riscv64gc-unknown-none-elf)
+[53/80] starry-kernel (feature: rga, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rga --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+    Checking rockchip-rga v0.3.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/gpu/rockchip-rga)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+    Checking someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+    Checking ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+    Checking ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+    Checking scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+    Checking somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.54s
+ok: starry-kernel (feature: rga, target: riscv64gc-unknown-none-elf)
+[54/80] starry-kernel (feature: rknpu, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rknpu --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling rockchip-npu v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/npu/rockchip-npu)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.46s
+ok: starry-kernel (feature: rknpu, target: riscv64gc-unknown-none-elf)
+[55/80] starry-kernel (feature: sg2002, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features sg2002 --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking sg2002-tpu v0.4.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/tpu/sg2002-tpu)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+warning: unused dependency `sg200x-bsp`
+   --> os/StarryOS/kernel/Cargo.toml:166:1
+    |
+166 | sg200x-bsp = { workspace = true, optional = true, features = ["c906", "cv182x-host"] }
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `sg200x-bsp`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.28s
+ok: starry-kernel (feature: sg2002, target: riscv64gc-unknown-none-elf)
+[56/80] starry-kernel (feature: sg2002-cvi-usb-camera, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features sg2002-cvi-usb-camera --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking sg200x-jpu v0.1.6 (/home/asta/tgoskits/wt-feat-net-observe/drivers/vpu/sg200x-jpu)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.44s
+ok: starry-kernel (feature: sg2002-cvi-usb-camera, target: riscv64gc-unknown-none-elf)
+[57/80] starry-kernel (feature: stack-guard-page, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features stack-guard-page --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.10s
+ok: starry-kernel (feature: stack-guard-page, target: riscv64gc-unknown-none-elf)
+[58/80] starry-kernel (feature: stack-protector, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features stack-protector --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.13s
+ok: starry-kernel (feature: stack-protector, target: riscv64gc-unknown-none-elf)
+[59/80] starry-kernel (feature: uaccess-lock-regression, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features uaccess-lock-regression --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.16s
+ok: starry-kernel (feature: uaccess-lock-regression, target: riscv64gc-unknown-none-elf)
+[60/80] starry-kernel (feature: uvc, target: riscv64gc-unknown-none-elf)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features uvc --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking ax-media v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/media/ax-media)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking media-uvc v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/media/uvc)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.57s
+ok: starry-kernel (feature: uvc, target: riscv64gc-unknown-none-elf)
+[61/80] starry-kernel (base, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+   Compiling ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+   Compiling ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+   Compiling rockchip-soc v0.4.8 (/home/asta/tgoskits/wt-feat-net-observe/drivers/soc/rockchip/rockchip-soc)
+   Compiling crab-usb v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/usb/usb-host)
+   Compiling somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+   Compiling axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-sync v0.6.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axsync)
+    Checking trait-ffi v0.3.1 (/home/asta/tgoskits/wt-feat-net-observe/components/trait-ffi/trait-ffi)
+   Compiling scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+   Compiling someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+    Checking ax-ctor-bare v0.4.10 (/home/asta/tgoskits/wt-feat-net-observe/components/ctor_bare/ctor_bare)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-log v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axlog)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+    Checking dma-api v0.10.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/dma-api)
+    Checking rdrive v0.25.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/rdrive)
+    Checking buddy-slab-allocator v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/memory/buddy-slab-allocator)
+    Checking ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+    Checking axfs-ng-vfs v0.8.1 (/home/asta/tgoskits/wt-feat-net-observe/fs/axfs-ng-vfs)
+    Checking axpoll-set v0.1.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axpoll-set)
+   Compiling ax-tracepoint v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-tracepoint)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-cgroup v0.3.0 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-cgroup)
+    Checking rdif-eth v0.6.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-eth)
+    Checking rdif-block v0.13.2 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-block)
+    Checking rdif-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-gpu)
+    Checking rdif-display v0.5.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-display)
+    Checking rd-net v0.3.3 (/home/asta/tgoskits/wt-feat-net-observe/drivers/net/rd-net)
+    Checking ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 18.44s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (base, target: x86_64-unknown-none)
+[62/80] starry-kernel (feature: axtest, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features axtest --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking axtest v0.5.16 (/home/asta/tgoskits/wt-feat-net-observe/components/axtest/axtest)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+warning: unused dependency `axtest`
+  --> os/StarryOS/kernel/Cargo.toml:61:1
+   |
+61 | axtest = { workspace = true, optional = true }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `axtest`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.65s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: axtest, target: x86_64-unknown-none)
+[63/80] starry-kernel (feature: axtest-coverage, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features axtest-coverage --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking axtest v0.5.16 (/home/asta/tgoskits/wt-feat-net-observe/components/axtest/axtest)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+warning: unused dependency `axtest`
+  --> os/StarryOS/kernel/Cargo.toml:61:1
+   |
+61 | axtest = { workspace = true, optional = true }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `axtest`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.49s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: axtest-coverage, target: x86_64-unknown-none)
+[64/80] starry-kernel (feature: dev-log, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features dev-log --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.32s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: dev-log, target: x86_64-unknown-none)
+[65/80] starry-kernel (feature: dynamic_debug, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features dynamic_debug --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.39s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: dynamic_debug, target: x86_64-unknown-none)
+[66/80] starry-kernel (feature: ext4, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features ext4 --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.28s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: ext4, target: x86_64-unknown-none)
+[67/80] starry-kernel (feature: fat, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features fat --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.39s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: fat, target: x86_64-unknown-none)
+[68/80] starry-kernel (feature: jpeg, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features jpeg --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling rockchip-pm v0.4.10 (/home/asta/tgoskits/wt-feat-net-observe/drivers/soc/rockchip/rockchip-pm)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking rockchip-jpeg v0.2.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/vpu/rockchip-jpeg)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.30s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: jpeg, target: x86_64-unknown-none)
+[69/80] starry-kernel (feature: k230-kpu, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features k230-kpu --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+    Checking someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+    Checking ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+    Checking ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+    Checking scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+    Checking somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.80s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: k230-kpu, target: x86_64-unknown-none)
+[70/80] starry-kernel (feature: memtrack, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features memtrack --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.43s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: memtrack, target: x86_64-unknown-none)
+[71/80] starry-kernel (feature: qperf-metrics, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features qperf-metrics --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.76s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: qperf-metrics, target: x86_64-unknown-none)
+[72/80] starry-kernel (feature: rdif-pinctrl, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rdif-pinctrl --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.26s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: rdif-pinctrl, target: x86_64-unknown-none)
+[73/80] starry-kernel (feature: rga, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rga --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+    Checking rockchip-rga v0.3.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/gpu/rockchip-rga)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+    Checking someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+    Checking ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+    Checking ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+    Checking scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+    Checking somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+    Checking ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+    Checking ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+    Checking axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.81s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: rga, target: x86_64-unknown-none)
+[74/80] starry-kernel (feature: rknpu, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features rknpu --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling rockchip-npu v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/npu/rockchip-npu)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.53s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: rknpu, target: x86_64-unknown-none)
+[75/80] starry-kernel (feature: sg2002, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features sg2002 --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+    Checking sg2002-tpu v0.4.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/tpu/sg2002-tpu)
+    Checking axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+    Checking ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+    Checking ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+    Checking ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+    Checking ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+    Checking ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+    Checking ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+    Checking ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+warning: unused dependency `sg200x-bsp`
+   --> os/StarryOS/kernel/Cargo.toml:166:1
+    |
+166 | sg200x-bsp = { workspace = true, optional = true, features = ["c906", "cv182x-host"] }
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `cargo::unused_dependencies` is set to `warn` by default
+help: consider removing the dependency on `sg200x-bsp`
+warning: `starry-kernel` (manifest) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.27s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: sg2002, target: x86_64-unknown-none)
+[76/80] starry-kernel (feature: sg2002-cvi-usb-camera, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features sg2002-cvi-usb-camera --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking sg200x-jpu v0.1.6 (/home/asta/tgoskits/wt-feat-net-observe/drivers/vpu/sg200x-jpu)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.40s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: sg2002-cvi-usb-camera, target: x86_64-unknown-none)
+[77/80] starry-kernel (feature: stack-guard-page, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features stack-guard-page --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.01s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: stack-guard-page, target: x86_64-unknown-none)
+[78/80] starry-kernel (feature: stack-protector, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features stack-protector --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+    Checking starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+    Checking ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+    Checking ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.15s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: stack-protector, target: x86_64-unknown-none)
+[79/80] starry-kernel (feature: uaccess-lock-regression, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features uaccess-lock-regression --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.36s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: uaccess-lock-regression, target: x86_64-unknown-none)
+[80/80] starry-kernel (feature: uvc, target: x86_64-unknown-none)
+          cd /home/asta/tgoskits/wt-feat-net-observe && CARGO_UNSTABLE_JSON_TARGET_SPEC=true cargo clippy --no-deps -p starry-kernel --no-default-features --features uvc --target scripts/targets/bare/x86_64-unknown-none.json -Z json-target-spec -Z build-std=core,alloc -- -D warnings
+    Checking ax-media v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/media/ax-media)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+    Checking media-uvc v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/media/uvc)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.81s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+ok: starry-kernel (feature: uvc, target: x86_64-unknown-none)
+clippy summary: 1 package(s), 80 check(s), 1 package(s) passed, 0 package(s) failed, 0 package(s) skipped
+passed checks: 80, failed checks: 0, skipped checks: 0
+clippy finished at: 2026-10-02 04:43:41 +0000
+clippy elapsed: 10m 46s
+all clippy checks passed
+CLIPPY_EXIT=0

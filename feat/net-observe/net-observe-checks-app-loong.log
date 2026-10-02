@@ -1,0 +1,407 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.31s
+     Running `target/debug/tg-xtask starry app qemu -t ebpf/net_queue_poll --arch loongarch64`
+[2026-10-02T05:15:54Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T05:15:54Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+RUN	1/1	ebpf/net_queue_poll	arch=loongarch64
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-loongarch64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-loongarch64-alpine.img
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-kJNoLy/rootfs-loongarch64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+cd /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll && bash /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/prebuild.sh
+net_queue_poll prebuild: installing Rust target loongarch64-unknown-linux-musl for toolchain nightly-2026-09-04-x86_64-unknown-linux-gnu
+info: component rust-std for target loongarch64-unknown-linux-musl is up to date
+net_queue_poll prebuild: building eBPF demo for loongarch64-unknown-linux-musl (CC=loongarch64-linux-musl-gcc)
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll/Cargo.toml:22:8
+   |
+22 - name = "net_queue_poll"
+22 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll` (manifest) generated 1 warning
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll-ebpf/Cargo.toml:15:8
+   |
+15 - name = "net_queue_poll"
+15 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll) ignoring invalid dependency `net_queue_poll-ebpf` which is missing a lib target
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...4ee7aa9fd17/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll/Cargo.toml:22:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 22 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 22 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...4ee7aa9fd17/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll-ebpf/Cargo.toml:15:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 15 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 15 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0:    Compiling proc-macro2 v1.0.107
+warning: net_queue_poll@0.1.0:    Compiling unicode-ident v1.0.26
+warning: net_queue_poll@0.1.0:    Compiling quote v1.0.47
+warning: net_queue_poll@0.1.0:    Compiling serde_core v1.0.229
+warning: net_queue_poll@0.1.0:    Compiling zmij v1.0.23
+warning: net_queue_poll@0.1.0:    Compiling serde_json v1.0.151
+warning: net_queue_poll@0.1.0:    Compiling serde v1.0.229
+warning: net_queue_poll@0.1.0:    Compiling camino v1.2.6
+warning: net_queue_poll@0.1.0:    Compiling libc v0.2.189
+warning: net_queue_poll@0.1.0:    Compiling thiserror v2.0.21
+warning: net_queue_poll@0.1.0:    Compiling anyhow v1.0.104
+warning: net_queue_poll@0.1.0:    Compiling itoa v1.0.18
+warning: net_queue_poll@0.1.0:    Compiling memchr v2.8.3
+warning: net_queue_poll@0.1.0:    Compiling compiler_builtins v0.1.160 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins)
+warning: net_queue_poll@0.1.0:    Compiling rustversion v1.0.23
+warning: net_queue_poll@0.1.0:    Compiling rustix v0.38.44
+warning: net_queue_poll@0.1.0:    Compiling core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
+warning: net_queue_poll@0.1.0:    Compiling bitflags v2.13.2
+warning: net_queue_poll@0.1.0:    Compiling linux-raw-sys v0.4.15
+warning: net_queue_poll@0.1.0:    Compiling home v0.5.12
+warning: net_queue_poll@0.1.0:    Compiling either v1.18.0
+warning: net_queue_poll@0.1.0:    Compiling syn v3.0.6
+warning: net_queue_poll@0.1.0:    Compiling which v8.0.6
+warning: net_queue_poll@0.1.0:    Compiling which v6.0.3
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-ebpf v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-ebpf)
+warning: net_queue_poll@0.1.0:    Compiling semver v1.0.28
+warning: net_queue_poll@0.1.0:    Compiling cargo-platform v0.3.3
+warning: net_queue_poll@0.1.0:    Compiling rustc_version v0.4.1
+warning: net_queue_poll@0.1.0:    Compiling thiserror-impl v2.0.21
+warning: net_queue_poll@0.1.0:    Compiling serde_derive v1.0.229
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf-macros v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling cargo_metadata v0.23.1
+warning: net_queue_poll@0.1.0:    Compiling aya-build v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf-cty v0.3.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf-bindings v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf v0.2.1 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-common v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-common)
+warning: net_queue_poll@0.1.0:     Finished `release` profile [optimized] target(s) in 8.80s
+    Finished `release` profile [optimized] target(s) in 0.09s
+net_queue_poll prebuild: installed net_queue_poll -> /usr/bin/net_queue_poll
+net_queue_poll prebuild: installing loongarch64 musl loader compatibility symlink
+debugfs 1.47.0 (5-Feb-2023)
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-kJNoLy/rootfs-loongarch64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-loongarch64-unknown-none-softfloat.toml
+[2026-10-02T05:16:02Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-loongarch64-unknown-none-softfloat.toml
+[2026-10-02T05:16:02Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/qemu-loongarch64.toml
+  prepare assets: 0ns (pipeline=plain, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/qemu-loongarch64.toml (timeout=240s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-kJNoLy/rootfs-loongarch64-alpine.img
+[axbuild] starry build package=starryos target=loongarch64-unknown-none-softfloat arch=loongarch64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/loongarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-loongarch64-unknown-none-softfloat.toml ...
+AX_ARCH=loongarch64
+AX_LOG=warn
+AX_TARGET=loongarch64-unknown-none-softfloat
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+cargo build -p starryos --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,axplat-dyn/efi -Z json-target-spec -Z build-std=core,alloc --config target.loongarch64-unknown-none-softfloat.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+    Finished `release` profile [optimized] target(s) in 0.40s
+[axbuild] cargo build package=starryos target=scripts/targets/bare/loongarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-loongarch64-unknown-none-softfloat.toml ... done (599.96ms)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release
+[axbuild] starry build package=starryos target=loongarch64-unknown-none-softfloat arch=loongarch64 ... done (600.07ms)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos ...
+[axbuild] starry kallsyms symbols=10879
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/.starryos.kallsyms.415065.tmp /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos ... done (232.79ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.bin ... done (42.42ms)
+[axbuild] qemu run package=starryos target=scripts/targets/bare/loongarch64-unknown-none-softfloat.json ...
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.bin
+Preparing OVMF firmware for architecture: LoongArch64
+qemu-system-loongarch64 -machine virt -cpu la464 -nographic -m 512M -device nvme,drive=disk0,serial=tgoskits,max_ioqpairs=64,msix_qsize=65 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-kJNoLy/rootfs-loongarch64-alpine.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -drive if=pflash,format=raw,unit=0,readonly=on,file=/tmp/ostool/ovmf/loongarch64/code.fd -drive if=pflash,format=raw,unit=1,file=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.vars.fd -drive format=raw,file=fat:rw:/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.esp
+InitializeExceptions,IrqEnabled = 0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03041001 I0
+PROGRESS CODE: V03051005 I0
+PROGRESS CODE: V02010000 I0
+PROGRESS CODE: V02011000 I0
+PROGRESS CODE: V02011001 I0
+PROGRESS CODE: V02010004 I0
+PROGRESS CODE: V02010004 I0
+PROGRESS CODE: V02010004 I0
+PROGRESS CODE: V02010004 I0
+[2J[01;01H[=3h[2J[01;01HPROGRESS CODE: V01040001 I0
+PROGRESS CODE: V02010000 I0
+PROGRESS CODE: V02010004 I0
+PROGRESS CODE: V03051007 I0
+PROGRESS CODE: V03051001 I0
+ERROR: C40000002:V03051002 I0 6D33944A-EC75-4855-A54D-809C75241F6C F2729C0
+BdsDxe: failed to load Boot0001 "UEFI QEMU NVMe Ctrl tgoskits 1" from PciRoot(0x0)/Pci(0x1,0x0)/NVMe(0x1,00-00-00-00-00-00-00-00): Not Found
+PROGRESS CODE: V03051001 I0
+PROGRESS CODE: V03058000 I0
+BdsDxe: loading Boot0002 "UEFI Misc Device" from PciRoot(0x0)/Pci(0x3,0x0)
+PROGRESS CODE: V03058001 I0
+BdsDxe: starting Boot0002 "UEFI Misc Device" from PciRoot(0x0)/Pci(0x3,0x0)
+UEFI application started.
+UEFI console ok.
+No FDT found in UEFI config tables.
+Found ACPI 1.0 RSDP at address: 0xdf7f000
+Found ACPI 2.0 RSDP at address: 0xdf7f014
+Using ACPI 2 RSDP at address: 0xdf7f014
+UEFI setup.
+Kernel LMA: 0xac4c000
+Found Full16550
+  Base address: 0x1fe001e0
+  Baud rate: Some(115200)
+  Clock frequency: None
+Early console initialized at vaddr 0x800000001fe001e0
+Early console setup complete.
+Exiting UEFI boot services...
+PROGRESS CODE: V03101019 I0
+Exited boot services, memory map obtained.
+VM Load @PA:0xac4c000
+VM Load Offset: 0x8ac4c000
+Memory Map:
+  Free   0x00000000000000 - 0x0000000ac4c000 (172.3 MiB)
+  KImg   0x0000000ac4c000 - 0x0000000c000000 (19.7 MiB)
+  Free   0x0000000c000000 - 0x0000000d410000 (20.06 MiB)
+  Rsv    0x0000000d410000 - 0x0000000d420000 (64 KiB)
+  Free   0x0000000d420000 - 0x0000000d990000 (5.44 MiB)
+  Rsv    0x0000000d990000 - 0x0000000dba0000 (2.06 MiB)
+  Free   0x0000000dba0000 - 0x0000000dc00000 (384 KiB)
+  Rsv    0x0000000dc00000 - 0x0000000dd20000 (1.13 MiB)
+  Free   0x0000000dd20000 - 0x0000000dde0000 (768 KiB)
+  Rsv    0x0000000dde0000 - 0x0000000df70000 (1.56 MiB)
+  Free   0x0000000df70000 - 0x0000000df76000 (24 KiB)
+  Rsv    0x0000000df76000 - 0x0000000e160000 (1.91 MiB)
+  Free   0x0000000e160000 - 0x0000000f1e0000 (16.5 MiB)
+  Rsv    0x0000000f1e0000 - 0x0000000f230000 (320 KiB)
+  Free   0x0000000f230000 - 0x00000010000000 (13.81 MiB)
+  MMIO   0x000000100d0000 - 0x000000100d1000 (4 KiB)
+  MMIO   0x000000100e0000 - 0x000000100e1000 (4 KiB)
+  MMIO   0x0000001d000000 - 0x0000001d0c0000 (768 KiB)
+  Free   0x00000080000000 - 0x00000090000000 (256 MiB)
+Initialize RAM allocator: 0x0..0xac4c000
+Reserving CPU-local areas
+CPU-local area stride: 0x41000 bytes
+Total CPU-local allocation: 0x41000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x0..0x1000, current: 0x1000
+Flushed RAM used range to memory map: 0x1000..0x42000, current: 0x42000
+CPU-local areas allocated at 0x1000 - 0x42000
+CPU boot vectors: 0x900000000ac6c000, refill: 0xac62000
+Page table entry flags: PteConfig { read: true, writable: true, executable: true, lower: false, dirty: false, global: false, mem_attr: Normal }
+KImage              : [0xffffffff80000000, 0xffffffff81400000) -> [0x000000000ac4c000, 0x000000000c04c000) (20 MiB)
+Mapping: vaddr=0xffffffff80000000, paddr=0xac4c000, size=0x1400000
+Boot page table at physical address: 0x42000
+MMU Entry point at physical address: 0xb091260
+MMU Entry virtual address: 0xffffffff80445260
+Setting up page table...
+Enabling MMU...
+MMU enabled, jumping to 0xffffffff80445260, sp=0x900000000be24000
+Early console initialized at vaddr 0x800000001fe001e0
+Early console setup complete.
+Trap vector at 0x900000000ac6c000
+Memory Map:
+  Rsv    0x00000000000000 - 0x00000000001000 (4 KiB)
+  PerCPU 0x00000000001000 - 0x00000000042000 (260 KiB)
+  Rsv    0x00000000042000 - 0x0000000004f000 (52 KiB)
+  Free   0x0000000004f000 - 0x0000000ac4c000 (171.99 MiB)
+  KImg   0x0000000ac4c000 - 0x0000000c000000 (19.7 MiB)
+  Free   0x0000000c000000 - 0x0000000d410000 (20.06 MiB)
+  Rsv    0x0000000d410000 - 0x0000000d420000 (64 KiB)
+  Free   0x0000000d420000 - 0x0000000d990000 (5.44 MiB)
+  Rsv    0x0000000d990000 - 0x0000000dba0000 (2.06 MiB)
+  Free   0x0000000dba0000 - 0x0000000dc00000 (384 KiB)
+  Rsv    0x0000000dc00000 - 0x0000000dd20000 (1.13 MiB)
+  Free   0x0000000dd20000 - 0x0000000dde0000 (768 KiB)
+  Rsv    0x0000000dde0000 - 0x0000000df70000 (1.56 MiB)
+  Free   0x0000000df70000 - 0x0000000df76000 (24 KiB)
+  Rsv    0x0000000df76000 - 0x0000000e160000 (1.91 MiB)
+  Free   0x0000000e160000 - 0x0000000f1e0000 (16.5 MiB)
+  Rsv    0x0000000f1e0000 - 0x0000000f230000 (320 KiB)
+  Free   0x0000000f230000 - 0x00000010000000 (13.81 MiB)
+  MMIO   0x000000100d0000 - 0x000000100d1000 (4 KiB)
+  MMIO   0x000000100e0000 - 0x000000100e1000 (4 KiB)
+  MMIO   0x0000001d000000 - 0x0000001d0c0000 (768 KiB)
+  MMIO   0x0000001fe00000 - 0x0000001fe01000 (4 KiB)
+  Free   0x00000080000000 - 0x00000090000000 (256 MiB)
+Jumping to main entry point at 0xffffffff8034f420 with SP 0x9000000000042000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = loongarch64
+platform = acpi
+target = loongarch64-unknown-none-softfloat
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 1
+
+Boot at 2026-10-02 05:16:07.045416110 UTC
+
+[37m[  4.385892 0:4294967305 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  4.386200 0:4294967305 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  4.388074 0:4294967296 [37max_net:697] [33m  No vsock device found![m[m
+Initialized 8 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (loongarch64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+Welcome to Starry OS!
+root@starry:~# [6n/usr/bin/net_queue_poll
+[37m[ 10.597564 0:25769803797 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_BTF_LOAD[m[m
+[37m[ 10.664326 0:25769803797 [37mkbpf_basic::preprocessor:93] [31mrelocation for ty: 0 not implemented, instruction index: 70[m[m
+[37m[ 10.672746 0:25769803797 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_LINK_CREATE[m[m
+NET_QUEUE_POLL: attached net:queue_poll_round, draining 1 cpu buffer(s)
+NET_QUEUE_POLL: discovery_order=0 group_id=0 owner_cpu=0 budget=256 work_units=3 outcome=0
+NET_QUEUE_POLL: total records = 5, inconsistent = 0
+NET_QUEUE_POLL_PASS: 5 records
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/loongarch64-unknown-none-softfloat.json ... done (19.46s)
+APP_loongarch64_EXIT=0

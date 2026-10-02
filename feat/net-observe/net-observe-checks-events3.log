@@ -1,0 +1,880 @@
+=== cargo xtask starry test qemu --arch x86_64 -c qemu/system/net-events ===
+    Blocking waiting for file lock on build directory
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.00s
+     Running `target/debug/tg-xtask starry test qemu --arch x86_64 -c qemu/system/net-events`
+[2026-10-02T04:57:43Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T04:57:43Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+running starry qemu tests for package starryos on arch: x86_64 (target: x86_64-unknown-none)
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml
+[2026-10-02T04:57:43Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml
+AXBUILD_TIMING: scope=starry-qemu phase=prepare-build-groups arch=x86_64 target=x86_64-unknown-none elapsed_s=0.002
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml ...
+AX_ARCH=x86_64
+AX_LOG=warn
+AX_TARGET=x86_64-unknown-none
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+SMP=4
+cargo build -p starryos --target scripts/targets/bare/x86_64-unknown-none.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,ax-driver/xhci-pci,ax-runtime/display -Z json-target-spec -Z build-std=core,alloc --config target.x86_64-unknown-none.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+   Compiling starryos v0.5.39 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/starryos)
+    Finished `release` profile [optimized] target(s) in 1m 08s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml ... done (69.15s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ... done (69.15s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ...
+[axbuild] starry kallsyms symbols=11511
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/.starryos.kallsyms.400052.tmp /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ... done (199.04ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ... done (45.39ms)
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=build elapsed_s=69.413
+[2026-10-02T04:58:50Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-x86_64.toml
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=read-qemu-config elapsed_s=0.054
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=prepare-qemu-config elapsed_s=0.001
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=default rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img elapsed_s=4.514
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-busybox.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=managed rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img elapsed_s=1.380
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-paths rootfs_count=2 elapsed_s=5.894
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=prepare-qemu-cases elapsed_s=5.950
+[1/1] starry qemu system
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=resolve-pipeline elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-layout pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=rootfs-cache-key pipeline=grouped elapsed_s=0.148
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-run-dir pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=copy-shared-rootfs pipeline=grouped cache=miss elapsed_s=2.118
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=reset-layout elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=extract-rootfs elapsed_s=12.190
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-staging-root elapsed_s=0.005
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-musl-loader elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=select-c-subcases elapsed_s=0.000
+STARRY_APK_REGION=us
+apk repositories:
+https://dl-cdn.alpinelinux.org/alpine/v3.23/main
+https://dl-cdn.alpinelinux.org/alpine/v3.23/community
+cd /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system && /usr/bin/qemu-x86_64-static -L /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/400052-0/staging-root /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/400052-0/staging-root/bin/busybox sh -eu /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/prebuild.sh
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prebuild elapsed_s=0.072
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prepare-cross-env elapsed_s=0.015
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=configure-all elapsed_s=1.409
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=build-all subcase_count=1 elapsed_s=0.193
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=install-all elapsed_s=0.005
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=compile-total mode=root-project elapsed_s=1.607
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-c-subcases subcase_count=1 elapsed_s=1.694
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-grouped-runner elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=sync-runtime-deps elapsed_s=0.003
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/400052-0/case-rootfs.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=inject-overlay elapsed_s=0.058
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=pipeline-prepare pipeline=grouped cache=miss elapsed_s=13.951
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=save-rootfs-cache pipeline=grouped cache=miss elapsed_s=11.932
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=prepare-assets pipeline=grouped cache=miss elapsed_s=28.149
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=patch-rootfs elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=apply-dynamic-boot elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=start-host-http elapsed_s=0.000
+  prepare assets: 28.15s (pipeline=grouped, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-x86_64.toml (timeout=1800s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/400052-0/case-rootfs.img
+[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ...
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+Preparing OVMF firmware for architecture: X86_64
+qemu-system-x86_64 -nographic -no-reboot -cpu Haswell,+avx -m 512M -smp 4 -device nvme,serial=deadbeef,drive=nvm,max_ioqpairs=64,msix_qsize=65 -drive id=nvm,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/400052-0/case-rootfs.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -device virtio-gpu-pci -device virtio-keyboard-pci -device virtio-tablet-pci -device nec-usb-xhci,id=xhci,msi=off,msix=off -audiodev none,id=audio0 -device usb-audio,bus=xhci.0,audiodev=audio0 -drive id=usbdisk,if=none,format=raw,snapshot=on,file=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img -device usb-storage,bus=xhci.0,drive=usbdisk,serial=starry-usb-storage -machine q35 -drive if=pflash,format=raw,unit=0,readonly=on,file=/tmp/ostool/ovmf/x64/code.fd -drive if=pflash,format=raw,unit=1,file=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.vars.fd -drive format=raw,file=fat:rw:/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.esp
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[8;042;160t0[2J[01;01H[2J[01;01H[8;056;240t0[2J[01;01HBdsDxe: failed to load Boot0002 "UEFI QEMU NVMe Ctrl deadbeef 1" from PciRoot(0x0)/Pci(0x2,0x0)/NVMe(0x1,00-00-00-00-00-00-00-00): Not Found
+BdsDxe: failed to load Boot0003 "UEFI QEMU QEMU USB HARDDRIVE starry-usb-storage" from PciRoot(0x0)/Pci(0x8,0x0)/USB(0x1,0x0): Not Found
+BdsDxe: loading Boot0004 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+BdsDxe: starting Boot0004 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+UEFI application started.
+UEFI console ok.
+No FDT found in UEFI config tables.
+Found ACPI 1.0 RSDP at address: 0x1fb7e000
+Found ACPI 2.0 RSDP at address: 0x1fb7e014
+Using ACPI 2 RSDP at address: 0x1fb7e014
+UEFI setup.
+Boot entropy source: UEFI RNG
+Exiting UEFI boot services...
+Exited boot services, memory map obtained.
+VM Load @PA:0x1acd0000
+VM Load Offset: 0x9acd0000
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  Free   0x00000000900000 - 0x0000001acd0000 (419.81 MiB)
+  KImg   0x0000001acd0000 - 0x0000001c000000 (19.19 MiB)
+  Free   0x0000001c000000 - 0x0000001ed3f000 (45.25 MiB)
+  Rsv    0x0000001ed3f000 - 0x0000001ee00000 (772 KiB)
+  Free   0x0000001ee00000 - 0x0000001f8ed000 (10.93 MiB)
+  Rsv    0x0000001f8ed000 - 0x0000001fbff000 (3.07 MiB)
+  Free   0x0000001fbff000 - 0x0000001fe91000 (2.57 MiB)
+  Rsv    0x0000001fe91000 - 0x0000001fe97000 (24 KiB)
+  Free   0x0000001fe97000 - 0x0000001fedc000 (276 KiB)
+  Rsv    0x0000001fedc000 - 0x00000020000000 (1.14 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+Initialize RAM allocator: 0x900000..0x1acd0000
+Reserving CPU-local areas
+CPU-local area stride: 0x4b000 bytes
+Total CPU-local allocation: 0x12c000 bytes (4 CPUs)
+Flushed RAM used range to memory map: 0x900000..0xa2c000, current: 0xa2c000
+CPU-local areas allocated at 0x900000 - 0xa2c000
+Free                : [0x0000000000000000, 0x0000000000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Free                : [0xffff800000000000, 0xffff800000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Reserved            : [0x0000000000008000, 0x0000000000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Reserved            : [0xffff800000008000, 0xffff800000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Free                : [0x0000000000009000, 0x00000000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0xffff800000009000, 0xffff8000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0x0000000000100000, 0x0000000000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Free                : [0xffff800000100000, 0xffff800000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Reserved            : [0x0000000000800000, 0x0000000000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Reserved            : [0xffff800000800000, 0xffff800000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Free                : [0x0000000000808000, 0x000000000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Free                : [0xffff800000808000, 0xffff80000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Reserved            : [0x000000000080b000, 0x000000000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Reserved            : [0xffff80000080b000, 0xffff80000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Free                : [0x000000000080c000, 0x0000000000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Free                : [0xffff80000080c000, 0xffff800000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Reserved            : [0x0000000000811000, 0x0000000000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Reserved            : [0xffff800000811000, 0xffff800000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Free                : [0x0000000000a2c000, 0x000000001acd0000) -> [0x0000000000a2c000, 0x000000001acd0000) (418.64 MiB)
+Free                : [0xffff800000a2c000, 0xffff80001acd0000) -> [0x0000000000a2c000, 0x000000001acd0000) (418.64 MiB)
+KImage              : [0x000000001acd0000, 0x000000001c000000) -> [0x000000001acd0000, 0x000000001c000000) (19.19 MiB)
+KImage              : [0xffff80001acd0000, 0xffff80001c000000) -> [0x000000001acd0000, 0x000000001c000000) (19.19 MiB)
+Free                : [0x000000001c000000, 0x000000001ed3f000) -> [0x000000001c000000, 0x000000001ed3f000) (45.25 MiB)
+Free                : [0xffff80001c000000, 0xffff80001ed3f000) -> [0x000000001c000000, 0x000000001ed3f000) (45.25 MiB)
+Reserved            : [0x000000001ed3f000, 0x000000001ee00000) -> [0x000000001ed3f000, 0x000000001ee00000) (772 KiB)
+Reserved            : [0xffff80001ed3f000, 0xffff80001ee00000) -> [0x000000001ed3f000, 0x000000001ee00000) (772 KiB)
+Free                : [0x000000001ee00000, 0x000000001f8ed000) -> [0x000000001ee00000, 0x000000001f8ed000) (10.93 MiB)
+Free                : [0xffff80001ee00000, 0xffff80001f8ed000) -> [0x000000001ee00000, 0x000000001f8ed000) (10.93 MiB)
+Reserved            : [0x000000001f8ed000, 0x000000001fbff000) -> [0x000000001f8ed000, 0x000000001fbff000) (3.07 MiB)
+Reserved            : [0xffff80001f8ed000, 0xffff80001fbff000) -> [0x000000001f8ed000, 0x000000001fbff000) (3.07 MiB)
+Free                : [0x000000001fbff000, 0x000000001fe91000) -> [0x000000001fbff000, 0x000000001fe91000) (2.57 MiB)
+Free                : [0xffff80001fbff000, 0xffff80001fe91000) -> [0x000000001fbff000, 0x000000001fe91000) (2.57 MiB)
+Reserved            : [0x000000001fe91000, 0x000000001fe97000) -> [0x000000001fe91000, 0x000000001fe97000) (24 KiB)
+Reserved            : [0xffff80001fe91000, 0xffff80001fe97000) -> [0x000000001fe91000, 0x000000001fe97000) (24 KiB)
+Free                : [0x000000001fe97000, 0x000000001fedc000) -> [0x000000001fe97000, 0x000000001fedc000) (276 KiB)
+Free                : [0xffff80001fe97000, 0xffff80001fedc000) -> [0x000000001fe97000, 0x000000001fedc000) (276 KiB)
+Reserved            : [0x000000001fedc000, 0x0000000020000000) -> [0x000000001fedc000, 0x0000000020000000) (1.14 MiB)
+Reserved            : [0xffff80001fedc000, 0xffff800020000000) -> [0x000000001fedc000, 0x0000000020000000) (1.14 MiB)
+Reserved            : [0x00000000e0000000, 0x00000000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Reserved            : [0xffff8000e0000000, 0xffff8000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Mmio                : [0x00000000ffc00000, 0x0000000100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Mmio                : [0xffff8000ffc00000, 0xffff800100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+PerCpu              : [0x0000000000900000, 0x0000000000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+PerCpu              : [0xffff800000900000, 0xffff800000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+LAPIC               : [0x00000000fee00000, 0x00000000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+LAPIC               : [0xffff8000fee00000, 0xffff8000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+KImage              : [0xffffffff80000000, 0xffffffff81400000) -> [0x000000001acd0000, 0x000000001c0d0000) (20 MiB)
+PerCpu              : [0xffffff0000900000, 0xffffff0000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+x86_64 switching CR3 and resetting relocations before high-half jump
+Trap vector at 0xffffffff811bb080
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  PerCPU 0x00000000900000 - 0x00000000a2c000 (1.17 MiB)
+  Rsv    0x00000000a2c000 - 0x00000000a55000 (164 KiB)
+  Free   0x00000000a55000 - 0x0000001acd0000 (418.48 MiB)
+  KImg   0x0000001acd0000 - 0x0000001c000000 (19.19 MiB)
+  Free   0x0000001c000000 - 0x0000001ed3f000 (45.25 MiB)
+  Rsv    0x0000001ed3f000 - 0x0000001ee00000 (772 KiB)
+  Free   0x0000001ee00000 - 0x0000001f8ed000 (10.93 MiB)
+  Rsv    0x0000001f8ed000 - 0x0000001fbff000 (3.07 MiB)
+  Free   0x0000001fbff000 - 0x0000001fe91000 (2.57 MiB)
+  Rsv    0x0000001fe91000 - 0x0000001fe97000 (24 KiB)
+  Free   0x0000001fe97000 - 0x0000001fedc000 (276 KiB)
+  Rsv    0x0000001fedc000 - 0x00000020000000 (1.14 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+Jumping to main entry point at 0xffffffff8030e5a0 with SP 0xffffff000094b000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = x86_64
+platform = acpi
+target = x86_64-unknown-none
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 4
+
+Boot at 2026-10-02 04:59:24.112388960 UTC
+
+[37m[  2.700018 0:4294967306 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  2.700381 0:4294967306 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  2.702002 0:4294967296 [37max_net:697] [33m  No vsock device found![m[m
+Initialized 8 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (x86_64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+STARRY_GROUPED_AUTORUN_INIT
+STARRY_GROUPED_TEST_BEGIN: step=1/1 epoch=1790917170 command=exec /usr/bin/starry-run-system-tests
+STARRY_SYSTEM_PHASE_BEGIN: native-c
+STARRY_SYSTEM_TEST_BEGIN: /usr/bin/starry-test-suit/net-events
+NET_EVENTS records=2
+NET_EVENTS_RECORD discovery_order=0 group_id=0 owner_cpu=0 budget=256 work_units=1 outcome=0
+NET_EVENTS_PASSED
+STARRY_SYSTEM_TEST_PASSED: /usr/bin/starry-test-suit/net-events elapsed_s=1.079
+STARRY_SYSTEM_PHASE_END: native-c
+STARRY_SYSTEM_TEST_SUMMARY: total=1 passed=1 failed=0 elapsed_s=1.090
+STARRY_GROUPED_TESTS_PASSED
+STARRY_GROUPED_TEST_PASSED: step=1/1 epoch=1790917171 status=0 command=exec /usr/bin/starry-run-system-tests
+STARRY_GROUPED_TESTS_PASSED
+Welcome to Starry OS!
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ... done (11.05s)
+  qemu run: 11.05s
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=qemu-run elapsed_s=11.051
+ok: system
+
+starry qemu test summary:
+  PASS system (39.40s)
+result: 1/1 case(s) passed
+total: 114.77s
+all starry qemu tests passed
+cargo_EXIT=0
+=== cargo xtask starry test qemu --arch x86_64 -c qemu/system/net-queue ===
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.46s
+     Running `target/debug/tg-xtask starry test qemu --arch x86_64 -c qemu/system/net-queue`
+[2026-10-02T04:59:34Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T04:59:34Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+running starry qemu tests for package starryos on arch: x86_64 (target: x86_64-unknown-none)
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml
+[2026-10-02T04:59:34Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml
+AXBUILD_TIMING: scope=starry-qemu phase=prepare-build-groups arch=x86_64 target=x86_64-unknown-none elapsed_s=0.001
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml ...
+AX_ARCH=x86_64
+AX_LOG=warn
+AX_TARGET=x86_64-unknown-none
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+SMP=4
+cargo build -p starryos --target scripts/targets/bare/x86_64-unknown-none.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,ax-driver/xhci-pci,ax-runtime/display -Z json-target-spec -Z build-std=core,alloc --config target.x86_64-unknown-none.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+    Finished `release` profile [optimized] target(s) in 0.33s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml ... done (556.02ms)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ... done (556.12ms)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ...
+[axbuild] starry kallsyms symbols=11511
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/.starryos.kallsyms.401685.tmp /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ... done (190.32ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ... done (47.27ms)
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=build elapsed_s=0.794
+[2026-10-02T04:59:35Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-x86_64.toml
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=read-qemu-config elapsed_s=0.052
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=prepare-qemu-config elapsed_s=0.000
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=default rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img elapsed_s=4.376
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-busybox.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=managed rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img elapsed_s=1.065
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-paths rootfs_count=2 elapsed_s=5.442
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=prepare-qemu-cases elapsed_s=5.494
+[1/1] starry qemu system
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=resolve-pipeline elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-layout pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=rootfs-cache-key pipeline=grouped elapsed_s=0.107
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-run-dir pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=copy-shared-rootfs pipeline=grouped cache=miss elapsed_s=2.211
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=reset-layout elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=extract-rootfs elapsed_s=11.093
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-staging-root elapsed_s=0.003
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-musl-loader elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=select-c-subcases elapsed_s=0.000
+STARRY_APK_REGION=us
+apk repositories:
+https://dl-cdn.alpinelinux.org/alpine/v3.23/main
+https://dl-cdn.alpinelinux.org/alpine/v3.23/community
+cd /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system && /usr/bin/qemu-x86_64-static -L /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/401685-0/staging-root /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/401685-0/staging-root/bin/busybox sh -eu /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/prebuild.sh
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prebuild elapsed_s=0.071
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prepare-cross-env elapsed_s=0.001
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=configure-all elapsed_s=1.039
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=build-all subcase_count=1 elapsed_s=0.193
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=install-all elapsed_s=0.005
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=compile-total mode=root-project elapsed_s=1.237
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-c-subcases subcase_count=1 elapsed_s=1.309
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-grouped-runner elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=sync-runtime-deps elapsed_s=0.003
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/401685-0/case-rootfs.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=inject-overlay elapsed_s=0.064
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=pipeline-prepare pipeline=grouped cache=miss elapsed_s=12.473
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=save-rootfs-cache pipeline=grouped cache=miss elapsed_s=2.696
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=prepare-assets pipeline=grouped cache=miss elapsed_s=17.488
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=patch-rootfs elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=apply-dynamic-boot elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=start-host-http elapsed_s=0.000
+  prepare assets: 17.49s (pipeline=grouped, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-x86_64.toml (timeout=1800s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/401685-0/case-rootfs.img
+[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ...
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+Preparing OVMF firmware for architecture: X86_64
+qemu-system-x86_64 -nographic -no-reboot -cpu Haswell,+avx -m 512M -smp 4 -device nvme,serial=deadbeef,drive=nvm,max_ioqpairs=64,msix_qsize=65 -drive id=nvm,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/401685-0/case-rootfs.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -device virtio-gpu-pci -device virtio-keyboard-pci -device virtio-tablet-pci -device nec-usb-xhci,id=xhci,msi=off,msix=off -audiodev none,id=audio0 -device usb-audio,bus=xhci.0,audiodev=audio0 -drive id=usbdisk,if=none,format=raw,snapshot=on,file=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img -device usb-storage,bus=xhci.0,drive=usbdisk,serial=starry-usb-storage -machine q35 -drive if=pflash,format=raw,unit=0,readonly=on,file=/tmp/ostool/ovmf/x64/code.fd -drive if=pflash,format=raw,unit=1,file=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.vars.fd -drive format=raw,file=fat:rw:/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.esp
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[8;042;160t0[2J[01;01H[2J[01;01H[8;056;240t0[2J[01;01HBdsDxe: failed to load Boot0002 "UEFI QEMU NVMe Ctrl deadbeef 1" from PciRoot(0x0)/Pci(0x2,0x0)/NVMe(0x1,00-00-00-00-00-00-00-00): Not Found
+BdsDxe: failed to load Boot0003 "UEFI QEMU QEMU USB HARDDRIVE starry-usb-storage" from PciRoot(0x0)/Pci(0x8,0x0)/USB(0x1,0x0): Not Found
+BdsDxe: loading Boot0004 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+BdsDxe: starting Boot0004 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+UEFI application started.
+UEFI console ok.
+No FDT found in UEFI config tables.
+Found ACPI 1.0 RSDP at address: 0x1fb7e000
+Found ACPI 2.0 RSDP at address: 0x1fb7e014
+Using ACPI 2 RSDP at address: 0x1fb7e014
+UEFI setup.
+Boot entropy source: UEFI RNG
+Exiting UEFI boot services...
+Exited boot services, memory map obtained.
+VM Load @PA:0x1acd0000
+VM Load Offset: 0x9acd0000
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  Free   0x00000000900000 - 0x0000001acd0000 (419.81 MiB)
+  KImg   0x0000001acd0000 - 0x0000001c000000 (19.19 MiB)
+  Free   0x0000001c000000 - 0x0000001ed3f000 (45.25 MiB)
+  Rsv    0x0000001ed3f000 - 0x0000001ee00000 (772 KiB)
+  Free   0x0000001ee00000 - 0x0000001f8ed000 (10.93 MiB)
+  Rsv    0x0000001f8ed000 - 0x0000001fbff000 (3.07 MiB)
+  Free   0x0000001fbff000 - 0x0000001fe91000 (2.57 MiB)
+  Rsv    0x0000001fe91000 - 0x0000001fe97000 (24 KiB)
+  Free   0x0000001fe97000 - 0x0000001fedc000 (276 KiB)
+  Rsv    0x0000001fedc000 - 0x00000020000000 (1.14 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+Initialize RAM allocator: 0x900000..0x1acd0000
+Reserving CPU-local areas
+CPU-local area stride: 0x4b000 bytes
+Total CPU-local allocation: 0x12c000 bytes (4 CPUs)
+Flushed RAM used range to memory map: 0x900000..0xa2c000, current: 0xa2c000
+CPU-local areas allocated at 0x900000 - 0xa2c000
+Free                : [0x0000000000000000, 0x0000000000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Free                : [0xffff800000000000, 0xffff800000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Reserved            : [0x0000000000008000, 0x0000000000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Reserved            : [0xffff800000008000, 0xffff800000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Free                : [0x0000000000009000, 0x00000000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0xffff800000009000, 0xffff8000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0x0000000000100000, 0x0000000000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Free                : [0xffff800000100000, 0xffff800000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Reserved            : [0x0000000000800000, 0x0000000000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Reserved            : [0xffff800000800000, 0xffff800000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Free                : [0x0000000000808000, 0x000000000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Free                : [0xffff800000808000, 0xffff80000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Reserved            : [0x000000000080b000, 0x000000000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Reserved            : [0xffff80000080b000, 0xffff80000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Free                : [0x000000000080c000, 0x0000000000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Free                : [0xffff80000080c000, 0xffff800000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Reserved            : [0x0000000000811000, 0x0000000000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Reserved            : [0xffff800000811000, 0xffff800000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Free                : [0x0000000000a2c000, 0x000000001acd0000) -> [0x0000000000a2c000, 0x000000001acd0000) (418.64 MiB)
+Free                : [0xffff800000a2c000, 0xffff80001acd0000) -> [0x0000000000a2c000, 0x000000001acd0000) (418.64 MiB)
+KImage              : [0x000000001acd0000, 0x000000001c000000) -> [0x000000001acd0000, 0x000000001c000000) (19.19 MiB)
+KImage              : [0xffff80001acd0000, 0xffff80001c000000) -> [0x000000001acd0000, 0x000000001c000000) (19.19 MiB)
+Free                : [0x000000001c000000, 0x000000001ed3f000) -> [0x000000001c000000, 0x000000001ed3f000) (45.25 MiB)
+Free                : [0xffff80001c000000, 0xffff80001ed3f000) -> [0x000000001c000000, 0x000000001ed3f000) (45.25 MiB)
+Reserved            : [0x000000001ed3f000, 0x000000001ee00000) -> [0x000000001ed3f000, 0x000000001ee00000) (772 KiB)
+Reserved            : [0xffff80001ed3f000, 0xffff80001ee00000) -> [0x000000001ed3f000, 0x000000001ee00000) (772 KiB)
+Free                : [0x000000001ee00000, 0x000000001f8ed000) -> [0x000000001ee00000, 0x000000001f8ed000) (10.93 MiB)
+Free                : [0xffff80001ee00000, 0xffff80001f8ed000) -> [0x000000001ee00000, 0x000000001f8ed000) (10.93 MiB)
+Reserved            : [0x000000001f8ed000, 0x000000001fbff000) -> [0x000000001f8ed000, 0x000000001fbff000) (3.07 MiB)
+Reserved            : [0xffff80001f8ed000, 0xffff80001fbff000) -> [0x000000001f8ed000, 0x000000001fbff000) (3.07 MiB)
+Free                : [0x000000001fbff000, 0x000000001fe91000) -> [0x000000001fbff000, 0x000000001fe91000) (2.57 MiB)
+Free                : [0xffff80001fbff000, 0xffff80001fe91000) -> [0x000000001fbff000, 0x000000001fe91000) (2.57 MiB)
+Reserved            : [0x000000001fe91000, 0x000000001fe97000) -> [0x000000001fe91000, 0x000000001fe97000) (24 KiB)
+Reserved            : [0xffff80001fe91000, 0xffff80001fe97000) -> [0x000000001fe91000, 0x000000001fe97000) (24 KiB)
+Free                : [0x000000001fe97000, 0x000000001fedc000) -> [0x000000001fe97000, 0x000000001fedc000) (276 KiB)
+Free                : [0xffff80001fe97000, 0xffff80001fedc000) -> [0x000000001fe97000, 0x000000001fedc000) (276 KiB)
+Reserved            : [0x000000001fedc000, 0x0000000020000000) -> [0x000000001fedc000, 0x0000000020000000) (1.14 MiB)
+Reserved            : [0xffff80001fedc000, 0xffff800020000000) -> [0x000000001fedc000, 0x0000000020000000) (1.14 MiB)
+Reserved            : [0x00000000e0000000, 0x00000000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Reserved            : [0xffff8000e0000000, 0xffff8000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Mmio                : [0x00000000ffc00000, 0x0000000100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Mmio                : [0xffff8000ffc00000, 0xffff800100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+PerCpu              : [0x0000000000900000, 0x0000000000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+PerCpu              : [0xffff800000900000, 0xffff800000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+LAPIC               : [0x00000000fee00000, 0x00000000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+LAPIC               : [0xffff8000fee00000, 0xffff8000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+KImage              : [0xffffffff80000000, 0xffffffff81400000) -> [0x000000001acd0000, 0x000000001c0d0000) (20 MiB)
+PerCpu              : [0xffffff0000900000, 0xffffff0000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+x86_64 switching CR3 and resetting relocations before high-half jump
+Trap vector at 0xffffffff811bb080
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  PerCPU 0x00000000900000 - 0x00000000a2c000 (1.17 MiB)
+  Rsv    0x00000000a2c000 - 0x00000000a55000 (164 KiB)
+  Free   0x00000000a55000 - 0x0000001acd0000 (418.48 MiB)
+  KImg   0x0000001acd0000 - 0x0000001c000000 (19.19 MiB)
+  Free   0x0000001c000000 - 0x0000001ed3f000 (45.25 MiB)
+  Rsv    0x0000001ed3f000 - 0x0000001ee00000 (772 KiB)
+  Free   0x0000001ee00000 - 0x0000001f8ed000 (10.93 MiB)
+  Rsv    0x0000001f8ed000 - 0x0000001fbff000 (3.07 MiB)
+  Free   0x0000001fbff000 - 0x0000001fe91000 (2.57 MiB)
+  Rsv    0x0000001fe91000 - 0x0000001fe97000 (24 KiB)
+  Free   0x0000001fe97000 - 0x0000001fedc000 (276 KiB)
+  Rsv    0x0000001fedc000 - 0x00000020000000 (1.14 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+Jumping to main entry point at 0xffffffff8030e5a0 with SP 0xffffff000094b000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = x86_64
+platform = acpi
+target = x86_64-unknown-none
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 4
+
+Boot at 2026-10-02 04:59:59.125299839 UTC
+
+[37m[  2.837017 0:4294967306 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  2.837369 0:4294967306 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  2.839171 0:4294967296 [37max_net:697] [33m  No vsock device found![m[m
+Initialized 8 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (x86_64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+STARRY_GROUPED_AUTORUN_INIT
+STARRY_GROUPED_TEST_BEGIN: step=1/1 epoch=1790917205 command=exec /usr/bin/starry-run-system-tests
+STARRY_SYSTEM_PHASE_BEGIN: native-c
+STARRY_SYSTEM_TEST_BEGIN: /usr/bin/starry-test-suit/net-queue
+NET_QUEUE groups=1 interfaces=1
+NET_QUEUE_PASSED
+STARRY_SYSTEM_TEST_PASSED: /usr/bin/starry-test-suit/net-queue elapsed_s=0.085
+STARRY_SYSTEM_PHASE_END: native-c
+STARRY_SYSTEM_TEST_SUMMARY: total=1 passed=1 failed=0 elapsed_s=0.091
+STARRY_GROUPED_TESTS_PASSED
+STARRY_GROUPED_TEST_PASSED: step=1/1 epoch=1790917205 status=0 command=exec /usr/bin/starry-run-system-tests
+STARRY_GROUPED_TESTS_PASSED
+Welcome to Starry OS!
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ... done (10.36s)
+  qemu run: 10.36s
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=qemu-run elapsed_s=10.359
+ok: system
+
+starry qemu test summary:
+  PASS system (28.04s)
+result: 1/1 case(s) passed
+total: 34.33s
+all starry qemu tests passed
+cargo_EXIT=0
+=== cargo xtask starry app qemu -t ebpf/net_queue_poll --arch x86_64 ===
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.48s
+     Running `target/debug/tg-xtask starry app qemu -t ebpf/net_queue_poll --arch x86_64`
+[2026-10-02T05:00:08Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T05:00:08Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+RUN	1/1	ebpf/net_queue_poll	arch=x86_64
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-fCsBJc/rootfs-x86_64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+cd /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll && bash /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/prebuild.sh
+net_queue_poll prebuild: installing Rust target x86_64-unknown-linux-musl for toolchain nightly-2026-09-04-x86_64-unknown-linux-gnu
+info: downloading component rust-std
+net_queue_poll prebuild: building eBPF demo for x86_64-unknown-linux-musl (CC=x86_64-linux-musl-gcc)
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll/Cargo.toml:22:8
+   |
+22 - name = "net_queue_poll"
+22 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll` (manifest) generated 1 warning
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll-ebpf/Cargo.toml:15:8
+   |
+15 - name = "net_queue_poll"
+15 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+    Updating `rsproxy-sparse` index
+    Updating git repository `https://github.com/aya-rs/aya`
+    Updating git submodule `https://github.com/libbpf/libbpf`
+     Locking 61 packages to highest compatible versions
+      Adding which v6.0.3 (available: v8.0.6)
+warning: net_queue_poll v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll) ignoring invalid dependency `net_queue_poll-ebpf` which is missing a lib target
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.26
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling zmij v1.0.23
+   Compiling anyhow v1.0.104
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.151
+   Compiling camino v1.2.6
+   Compiling thiserror v2.0.21
+   Compiling libc v0.2.189
+   Compiling crc32fast v1.5.2
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.3
+   Compiling foldhash v0.2.0
+   Compiling equivalent v1.0.2
+   Compiling cfg-if v1.0.5
+   Compiling bytes v1.12.1
+   Compiling log v0.4.34
+   Compiling scopeguard v1.2.0
+   Compiling once_cell v1.21.4
+   Compiling assert_matches v1.5.0
+   Compiling bitflags v2.13.2
+   Compiling net_queue_poll-common v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-common)
+   Compiling hashbrown v0.17.1
+   Compiling syn v3.0.6
+   Compiling indexmap v2.14.2
+   Compiling which v8.0.6
+   Compiling object v0.40.0
+   Compiling semver v1.0.28
+   Compiling cargo-platform v0.3.3
+   Compiling rustc_version v0.4.1
+   Compiling thiserror-impl v2.0.21
+   Compiling serde_derive v1.0.229
+   Compiling cargo_metadata v0.23.1
+   Compiling aya-build v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+   Compiling net_queue_poll v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll)
+   Compiling aya-obj v0.3.0 (https://github.com/aya-rs/aya#2a07daa4)
+   Compiling aya v0.14.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll/Cargo.toml:22:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 22 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 22 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll-ebpf/Cargo.toml:15:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 15 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 15 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0:    Compiling proc-macro2 v1.0.107
+warning: net_queue_poll@0.1.0:    Compiling unicode-ident v1.0.26
+warning: net_queue_poll@0.1.0:    Compiling quote v1.0.47
+warning: net_queue_poll@0.1.0:    Compiling serde_core v1.0.229
+warning: net_queue_poll@0.1.0:    Compiling zmij v1.0.23
+warning: net_queue_poll@0.1.0:    Compiling thiserror v2.0.21
+warning: net_queue_poll@0.1.0:    Compiling serde_json v1.0.151
+warning: net_queue_poll@0.1.0:    Compiling camino v1.2.6
+warning: net_queue_poll@0.1.0:    Compiling serde v1.0.229
+warning: net_queue_poll@0.1.0:    Compiling libc v0.2.189
+warning: net_queue_poll@0.1.0:    Compiling memchr v2.8.3
+warning: net_queue_poll@0.1.0:    Compiling anyhow v1.0.104
+warning: net_queue_poll@0.1.0:    Compiling itoa v1.0.18
+warning: net_queue_poll@0.1.0:    Compiling compiler_builtins v0.1.160 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins)
+warning: net_queue_poll@0.1.0:    Compiling rustversion v1.0.23
+warning: net_queue_poll@0.1.0:    Compiling core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
+warning: net_queue_poll@0.1.0:    Compiling rustix v0.38.44
+warning: net_queue_poll@0.1.0:    Compiling linux-raw-sys v0.4.15
+warning: net_queue_poll@0.1.0:    Compiling bitflags v2.13.2
+warning: net_queue_poll@0.1.0:    Compiling home v0.5.12
+warning: net_queue_poll@0.1.0:    Compiling either v1.18.0
+warning: net_queue_poll@0.1.0:    Compiling syn v3.0.6
+warning: net_queue_poll@0.1.0:    Compiling which v8.0.6
+warning: net_queue_poll@0.1.0:    Compiling which v6.0.3
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-ebpf v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-ebpf)
+warning: net_queue_poll@0.1.0:    Compiling semver v1.0.28
+warning: net_queue_poll@0.1.0:    Compiling cargo-platform v0.3.3
+warning: net_queue_poll@0.1.0:    Compiling rustc_version v0.4.1
+warning: net_queue_poll@0.1.0:    Compiling thiserror-impl v2.0.21
+warning: net_queue_poll@0.1.0:    Compiling serde_derive v1.0.229
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf-macros v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling cargo_metadata v0.23.1
+warning: net_queue_poll@0.1.0:    Compiling aya-build v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf-cty v0.3.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf-bindings v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf v0.2.1 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-common v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-common)
+warning: net_queue_poll@0.1.0: warning: unused import: `EbpfContext`
+warning: net_queue_poll@0.1.0:  --> net_queue_poll-ebpf/src/main.rs:5:5
+warning: net_queue_poll@0.1.0:   |
+warning: net_queue_poll@0.1.0: 5 |     EbpfContext,
+warning: net_queue_poll@0.1.0:   |     ^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:   |
+warning: net_queue_poll@0.1.0:   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+warning: net_queue_poll@0.1.0: 
+warning: net_queue_poll@0.1.0: 
+warning: net_queue_poll@0.1.0: error[E0308]: mismatched types
+warning: net_queue_poll@0.1.0:   --> net_queue_poll-ebpf/src/main.rs:33:25
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 33 |     EVENTS.output(&ctx, event, 0);
+warning: net_queue_poll@0.1.0:    |            ------       ^^^^^ expected `&QueuePollEvent`, found `QueuePollEvent`
+warning: net_queue_poll@0.1.0:    |            |
+warning: net_queue_poll@0.1.0:    |            arguments to this method are incorrect
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: note: method defined here
+warning: net_queue_poll@0.1.0:   --> /opt/cargo/git/checkouts/aya-c5ab473414e1dedb/2a07daa/ebpf/aya-ebpf/src/maps/perf/perf_event_array.rs:59:12
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 59 |     pub fn output<C: EbpfContext>(&self, ctx: &C, data: &T, flags: u32) {
+warning: net_queue_poll@0.1.0:    |            ^^^^^^
+warning: net_queue_poll@0.1.0: help: consider borrowing here
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 33 |     EVENTS.output(&ctx, &event, 0);
+warning: net_queue_poll@0.1.0:    |                         +
+warning: net_queue_poll@0.1.0: 
+warning: net_queue_poll@0.1.0: 
+warning: net_queue_poll@0.1.0: For more information about this error, try `rustc --explain E0308`.
+warning: net_queue_poll@0.1.0: 
+warning: net_queue_poll@0.1.0: error: could not compile `net_queue_poll-ebpf` (bin "net_queue_poll") due to 1 previous error; 1 warning emitted
+error: failed to run custom build command for `net_queue_poll v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll)`
+
+Caused by:
+  process didn't exit successfully: `/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/release/build/net_queue_poll/b1392ca0299b289f/out/build_script_build` (exit status: 1)
+  --- stdout
+  cargo:rerun-if-env-changed=AYA_BUILD_SKIP
+  cargo:rerun-if-changed=/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-ebpf
+  cargo:warning=warning: binary `net_queue_poll` should have a kebab-case name
+  cargo:warning=   |
+  cargo:warning= 1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+  cargo:warning=   |                                                             ^^^^^^^^^^^^^^
+  cargo:warning=   |
+  cargo:warning=   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+  cargo:warning=help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  cargo:warning=  --> net_queue_poll/Cargo.toml:22:8
+  cargo:warning=   |
+  cargo:warning=22 - name = "net_queue_poll"
+  cargo:warning=22 + name = "net-queue-poll"
+  cargo:warning=   |
+  cargo:warning=warning: `net_queue_poll` (manifest) generated 1 warning
+  cargo:warning=warning: binary `net_queue_poll` should have a kebab-case name
+  cargo:warning=   |
+  cargo:warning= 1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+  cargo:warning=   |                                                             ^^^^^^^^^^^^^^
+  cargo:warning=   |
+  cargo:warning=   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+  cargo:warning=help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  cargo:warning=  --> net_queue_poll-ebpf/Cargo.toml:15:8
+  cargo:warning=   |
+  cargo:warning=15 - name = "net_queue_poll"
+  cargo:warning=15 + name = "net-queue-poll"
+  cargo:warning=   |
+  cargo:warning=warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+  cargo:warning=   Compiling proc-macro2 v1.0.107
+  cargo:warning=   Compiling unicode-ident v1.0.26
+  cargo:warning=   Compiling quote v1.0.47
+  cargo:warning=   Compiling serde_core v1.0.229
+  cargo:warning=   Compiling zmij v1.0.23
+  cargo:warning=   Compiling thiserror v2.0.21
+  cargo:warning=   Compiling serde_json v1.0.151
+  cargo:warning=   Compiling camino v1.2.6
+  cargo:warning=   Compiling serde v1.0.229
+  cargo:warning=   Compiling libc v0.2.189
+  cargo:warning=   Compiling memchr v2.8.3
+  cargo:warning=   Compiling anyhow v1.0.104
+  cargo:warning=   Compiling itoa v1.0.18
+  cargo:warning=   Compiling compiler_builtins v0.1.160 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins)
+  cargo:warning=   Compiling rustversion v1.0.23
+  cargo:warning=   Compiling core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
+  cargo:warning=   Compiling rustix v0.38.44
+  cargo:warning=   Compiling linux-raw-sys v0.4.15
+  cargo:warning=   Compiling bitflags v2.13.2
+  cargo:warning=   Compiling home v0.5.12
+  cargo:warning=   Compiling either v1.18.0
+  cargo:warning=   Compiling syn v3.0.6
+  cargo:warning=   Compiling which v8.0.6
+  cargo:warning=   Compiling which v6.0.3
+  cargo:warning=   Compiling net_queue_poll-ebpf v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-ebpf)
+  cargo:warning=   Compiling semver v1.0.28
+  cargo:warning=   Compiling cargo-platform v0.3.3
+  cargo:warning=   Compiling rustc_version v0.4.1
+  cargo:warning=   Compiling thiserror-impl v2.0.21
+  cargo:warning=   Compiling serde_derive v1.0.229
+  cargo:warning=   Compiling aya-ebpf-macros v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+  cargo:warning=   Compiling cargo_metadata v0.23.1
+  cargo:warning=   Compiling aya-build v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+  cargo:warning=   Compiling aya-ebpf-cty v0.3.0 (https://github.com/aya-rs/aya#2a07daa4)
+  cargo:warning=   Compiling aya-ebpf-bindings v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+  cargo:warning=   Compiling aya-ebpf v0.2.1 (https://github.com/aya-rs/aya#2a07daa4)
+  cargo:warning=   Compiling net_queue_poll-common v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-common)
+  cargo:warning=warning: unused import: `EbpfContext`
+  cargo:warning= --> net_queue_poll-ebpf/src/main.rs:5:5
+  cargo:warning=  |
+  cargo:warning=5 |     EbpfContext,
+  cargo:warning=  |     ^^^^^^^^^^^
+  cargo:warning=  |
+  cargo:warning=  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+  cargo:warning=
+  cargo:warning=
+  cargo:warning=error[E0308]: mismatched types
+  cargo:warning=  --> net_queue_poll-ebpf/src/main.rs:33:25
+  cargo:warning=   |
+  cargo:warning=33 |     EVENTS.output(&ctx, event, 0);
+  cargo:warning=   |            ------       ^^^^^ expected `&QueuePollEvent`, found `QueuePollEvent`
+  cargo:warning=   |            |
+  cargo:warning=   |            arguments to this method are incorrect
+  cargo:warning=   |
+  cargo:warning=note: method defined here
+  cargo:warning=  --> /opt/cargo/git/checkouts/aya-c5ab473414e1dedb/2a07daa/ebpf/aya-ebpf/src/maps/perf/perf_event_array.rs:59:12
+  cargo:warning=   |
+  cargo:warning=59 |     pub fn output<C: EbpfContext>(&self, ctx: &C, data: &T, flags: u32) {
+  cargo:warning=   |            ^^^^^^
+  cargo:warning=help: consider borrowing here
+  cargo:warning=   |
+  cargo:warning=33 |     EVENTS.output(&ctx, &event, 0);
+  cargo:warning=   |                         +
+  cargo:warning=
+  cargo:warning=
+  cargo:warning=For more information about this error, try `rustc --explain E0308`.
+  cargo:warning=
+  cargo:warning=error: could not compile `net_queue_poll-ebpf` (bin "net_queue_poll") due to 1 previous error; 1 warning emitted
+
+  --- stderr
+  Error: env -u RUSTC -u RUSTC_WORKSPACE_WRAPPER CARGO_ENCODED_RUSTFLAGS="--cfg=bpf_target_arch=\"x86_64\"\u{1f}-Cdebuginfo=2\u{1f}-Clink-arg=--btf" "/home/asta/.cargo/bin/rustup" "run" "nightly-2026-09-04-x86_64-unknown-linux-gnu" "cargo" "build" "--package" "net_queue_poll-ebpf" "--bins" "--message-format=json" "--release" "--target" "bpfel-unknown-none" "-Z" "build-std=core" "--features" "" "--target-dir" "/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/x86_64-unknown-linux-musl/release/build/net_queue_poll/97b021b846aaff7e/out/aya-build/target/net_queue_poll-ebpf" failed: ExitStatus(unix_wait_status(25856))
+Error: failed to run /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/prebuild.sh
+
+Caused by:
+    command exited with status exit status: 101
+cargo_EXIT=1

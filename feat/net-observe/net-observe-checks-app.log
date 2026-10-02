@@ -1,0 +1,130 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.35s
+     Running `target/debug/tg-xtask starry app qemu -t ebpf/net_queue_poll --arch x86_64`
+[2026-10-02T05:01:06Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T05:01:06Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+RUN	1/1	ebpf/net_queue_poll	arch=x86_64
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-j9j29D/rootfs-x86_64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+cd /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll && bash /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/prebuild.sh
+net_queue_poll prebuild: installing Rust target x86_64-unknown-linux-musl for toolchain nightly-2026-09-04-x86_64-unknown-linux-gnu
+info: component rust-std for target x86_64-unknown-linux-musl is up to date
+net_queue_poll prebuild: building eBPF demo for x86_64-unknown-linux-musl (CC=x86_64-linux-musl-gcc)
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll/Cargo.toml:22:8
+   |
+22 - name = "net_queue_poll"
+22 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll` (manifest) generated 1 warning
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll-ebpf/Cargo.toml:15:8
+   |
+15 - name = "net_queue_poll"
+15 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll) ignoring invalid dependency `net_queue_poll-ebpf` which is missing a lib target
+   Compiling net_queue_poll v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll)
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll/Cargo.toml:22:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 22 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 22 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll-ebpf/Cargo.toml:15:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 15 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 15 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-ebpf v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-ebpf)
+warning: net_queue_poll@0.1.0: warning: unused import: `EbpfContext`
+warning: net_queue_poll@0.1.0:  --> net_queue_poll-ebpf/src/main.rs:5:5
+warning: net_queue_poll@0.1.0:   |
+warning: net_queue_poll@0.1.0: 5 |     EbpfContext,
+warning: net_queue_poll@0.1.0:   |     ^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:   |
+warning: net_queue_poll@0.1.0:   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+warning: net_queue_poll@0.1.0: 
+warning: net_queue_poll@0.1.0: 
+warning: net_queue_poll@0.1.0:     Finished `release` profile [optimized] target(s) in 0.79s
+error[E0599]: no method named `open` found for struct `aya::maps::PerfEventArray<T>` in the current scope
+  --> net_queue_poll/src/main.rs:48:29
+   |
+48 |         buffers.push(events.open(cpu, None)?);
+   |                             ^^^^ method not found in `aya::maps::PerfEventArray<MapData>`
+
+For more information about this error, try `rustc --explain E0599`.
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll/Cargo.toml:22:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 22 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 22 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll-ebpf/Cargo.toml:15:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 15 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 15 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-ebpf v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-ebpf)
+warning: net_queue_poll@0.1.0: warning: unused import: `EbpfContext`
+warning: net_queue_poll@0.1.0:  --> net_queue_poll-ebpf/src/main.rs:5:5
+warning: net_queue_poll@0.1.0:   |
+warning: net_queue_poll@0.1.0: 5 |     EbpfContext,
+warning: net_queue_poll@0.1.0:   |     ^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:   |
+warning: net_queue_poll@0.1.0:   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+warning: net_queue_poll@0.1.0: 
+warning: net_queue_poll@0.1.0: 
+warning: net_queue_poll@0.1.0:     Finished `release` profile [optimized] target(s) in 0.79s
+error: could not compile `net_queue_poll` (bin "net_queue_poll") due to 1 previous error
+Error: failed to run /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/prebuild.sh
+
+Caused by:
+    command exited with status exit status: 101
+APP_EXIT=1

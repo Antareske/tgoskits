@@ -1,0 +1,227 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.25s
+     Running `target/debug/tg-xtask starry app qemu -t ebpf/net_queue_poll --arch aarch64`
+[2026-10-02T05:19:44Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T05:19:44Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+RUN	1/1	ebpf/net_queue_poll	arch=aarch64
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-aarch64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-alpine.img
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-saJows/rootfs-aarch64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+cd /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll && bash /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/prebuild.sh
+net_queue_poll prebuild: installing Rust target aarch64-unknown-linux-musl for toolchain nightly-2026-09-04-x86_64-unknown-linux-gnu
+info: component rust-std for target aarch64-unknown-linux-musl is up to date
+net_queue_poll prebuild: building eBPF demo for aarch64-unknown-linux-musl (CC=aarch64-linux-musl-gcc)
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll/Cargo.toml:22:8
+   |
+22 - name = "net_queue_poll"
+22 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll` (manifest) generated 1 warning
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll-ebpf/Cargo.toml:15:8
+   |
+15 - name = "net_queue_poll"
+15 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll) ignoring invalid dependency `net_queue_poll-ebpf` which is missing a lib target
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...cce17f2bb04/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll/Cargo.toml:22:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 22 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 22 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...cce17f2bb04/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll-ebpf/Cargo.toml:15:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 15 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 15 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0:    Compiling proc-macro2 v1.0.107
+warning: net_queue_poll@0.1.0:    Compiling unicode-ident v1.0.26
+warning: net_queue_poll@0.1.0:    Compiling quote v1.0.47
+warning: net_queue_poll@0.1.0:    Compiling serde_core v1.0.229
+warning: net_queue_poll@0.1.0:    Compiling zmij v1.0.23
+warning: net_queue_poll@0.1.0:    Compiling camino v1.2.6
+warning: net_queue_poll@0.1.0:    Compiling thiserror v2.0.21
+warning: net_queue_poll@0.1.0:    Compiling serde_json v1.0.151
+warning: net_queue_poll@0.1.0:    Compiling serde v1.0.229
+warning: net_queue_poll@0.1.0:    Compiling libc v0.2.189
+warning: net_queue_poll@0.1.0:    Compiling anyhow v1.0.104
+warning: net_queue_poll@0.1.0:    Compiling itoa v1.0.18
+warning: net_queue_poll@0.1.0:    Compiling memchr v2.8.3
+warning: net_queue_poll@0.1.0:    Compiling compiler_builtins v0.1.160 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins)
+warning: net_queue_poll@0.1.0:    Compiling rustversion v1.0.23
+warning: net_queue_poll@0.1.0:    Compiling core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
+warning: net_queue_poll@0.1.0:    Compiling rustix v0.38.44
+warning: net_queue_poll@0.1.0:    Compiling bitflags v2.13.2
+warning: net_queue_poll@0.1.0:    Compiling linux-raw-sys v0.4.15
+warning: net_queue_poll@0.1.0:    Compiling home v0.5.12
+warning: net_queue_poll@0.1.0:    Compiling either v1.18.0
+warning: net_queue_poll@0.1.0:    Compiling syn v3.0.6
+warning: net_queue_poll@0.1.0:    Compiling which v8.0.6
+warning: net_queue_poll@0.1.0:    Compiling which v6.0.3
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-ebpf v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-ebpf)
+warning: net_queue_poll@0.1.0:    Compiling semver v1.0.28
+warning: net_queue_poll@0.1.0:    Compiling cargo-platform v0.3.3
+warning: net_queue_poll@0.1.0:    Compiling rustc_version v0.4.1
+warning: net_queue_poll@0.1.0:    Compiling thiserror-impl v2.0.21
+warning: net_queue_poll@0.1.0:    Compiling serde_derive v1.0.229
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf-macros v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling cargo_metadata v0.23.1
+warning: net_queue_poll@0.1.0:    Compiling aya-build v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf-cty v0.3.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf-bindings v0.2.0 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling aya-ebpf v0.2.1 (https://github.com/aya-rs/aya#2a07daa4)
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-common v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-common)
+warning: net_queue_poll@0.1.0:     Finished `release` profile [optimized] target(s) in 9.36s
+    Finished `release` profile [optimized] target(s) in 0.02s
+net_queue_poll prebuild: installed net_queue_poll -> /usr/bin/net_queue_poll
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-saJows/rootfs-aarch64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-aarch64-unknown-none-softfloat.toml
+[2026-10-02T05:19:52Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-aarch64-unknown-none-softfloat.toml
+[2026-10-02T05:19:52Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/qemu-aarch64.toml
+  prepare assets: 0ns (pipeline=plain, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/qemu-aarch64.toml (timeout=240s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-saJows/rootfs-aarch64-alpine.img
+[axbuild] starry build package=starryos target=aarch64-unknown-none-softfloat arch=aarch64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-aarch64-unknown-none-softfloat.toml ...
+AX_ARCH=aarch64
+AX_LOG=warn
+AX_TARGET=aarch64-unknown-none-softfloat
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+cargo build -p starryos --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,ax-runtime/display -Z json-target-spec -Z build-std=core,alloc --config target.aarch64-unknown-none-softfloat.rustflags=["-Cllvm-args=--max-store-memcpy=16", "-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+    Finished `release` profile [optimized] target(s) in 0.48s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] cargo build package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-aarch64-unknown-none-softfloat.toml ... done (755.33ms)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] cargo build bin=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+[axbuild] starry build package=starryos target=aarch64-unknown-none-softfloat arch=aarch64 ... done (1.49s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos ...
+[axbuild] starry kallsyms symbols=11136
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/.starryos.kallsyms.427098.tmp /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos ... done (202.52ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin ... done (52.31ms)
+[axbuild] qemu run package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json ...
+qemu-system-aarch64 -nographic -m 512M -cpu cortex-a53 -device nvme,drive=disk0,serial=tgoskits,max_ioqpairs=64,msix_qsize=65 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-saJows/rootfs-aarch64-alpine.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -machine virt -kernel /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+Boot entropy source: FDT /chosen/rng-seed
+VM Load @PA:0x40200000
+VM Load Offset: 0xc0200000
+Memory Map:
+  Free   0x00000040000000 - 0x00000040200000 (2 MiB)
+  KImg   0x00000040200000 - 0x00000041400000 (18 MiB)
+  Free   0x00000041400000 - 0x00000060000000 (492 MiB)
+Initialize RAM allocator: 0x41400000..0x60000000
+Reserving CPU-local areas
+CPU-local area stride: 0x4b000 bytes
+Total CPU-local allocation: 0x4b000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x41400000..0x41500000, current: 0x41500000
+Flushed RAM used range to memory map: 0x41500000..0x4154b000, current: 0x4154b000
+CPU-local areas allocated at 0x41500000 - 0x4154b000
+EL: 1
+Mapping early memory regions...
+Ram                 : [0xffff000040000000, 0xffff000060000000) -> [0x0000000040000000, 0x0000000060000000) (512 MiB)
+KImage              : [0xffffffff80000000, 0xffffffff81200000) -> [0x0000000040200000, 0x0000000041400000) (18 MiB)
+PerCpu              : [0xffffff0041500000, 0xffffff004154b000) -> [0x0000000041500000, 0x000000004154b000) (300 KiB)
+Debug serial        : [0xffff000009000000, 0xffff000009001000) -> [0x0000000009000000, 0x0000000009001000) (4 KiB)
+Boot page table at physical address: PA:0x4154b000
+Setting up table registers...
+MMU Entry point at physical address: 0x4059887c
+Trap vector at 0xffffffff80005000
+Memory Map:
+  MMIO   0x00000009000000 - 0x00000009001000 (4 KiB)
+  Free   0x00000040000000 - 0x00000040200000 (2 MiB)
+  KImg   0x00000040200000 - 0x00000041400000 (18 MiB)
+  Rsv    0x00000041400000 - 0x00000041500000 (1 MiB)
+  PerCPU 0x00000041500000 - 0x0000004154b000 (300 KiB)
+  Rsv    0x0000004154b000 - 0x00000041555000 (40 KiB)
+  Free   0x00000041555000 - 0x00000060000000 (490.67 MiB)
+Jumping to main entry point at 0xffffffff802ca950 with SP 0xffffff004154b000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = aarch64
+platform = linux,dummy-virt
+target = aarch64-unknown-none-softfloat
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 1
+
+Boot at 2026-10-02 05:19:53.025316048 UTC
+
+[37m[  0.218199 0:4294967296 [37max_gpu:119] [33mNo GPU device found[m[m
+[37m[  0.241779 0:4294967305 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  0.241920 0:4294967305 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  0.243704 0:4294967296 [37max_net:697] [33m  No vsock device found![m[m
+Initialized 8 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (aarch64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+Welcome to Starry OS!
+root@starry:~# [6n/usr/bin/net_queue_poll
+[37m[  6.963981 0:17179869205 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_BTF_LOAD[m[m
+[37m[  7.032214 0:17179869205 [37mkbpf_basic::preprocessor:93] [31mrelocation for ty: 0 not implemented, instruction index: 70[m[m
+[37m[  7.045478 0:17179869205 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_LINK_CREATE[m[m
+NET_QUEUE_POLL: attached net:queue_poll_round, draining 1 cpu buffer(s)
+NET_QUEUE_POLL: discovery_order=0 group_id=0 owner_cpu=0 budget=256 work_units=1 outcome=0
+NET_QUEUE_POLL: total records = 5, inconsistent = 0
+NET_QUEUE_POLL_PASS: 5 records
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json ... done (15.78s)
+APP_aarch64_EXIT=0

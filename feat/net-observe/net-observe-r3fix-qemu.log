@@ -1,0 +1,1736 @@
+=== net-events x86_64 ===
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.24s
+     Running `target/debug/tg-xtask starry test qemu --arch x86_64 -c qemu/system/net-events`
+[2026-10-02T08:20:57Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T08:20:57Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+running starry qemu tests for package starryos on arch: x86_64 (target: x86_64-unknown-none)
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml
+[2026-10-02T08:20:57Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml
+AXBUILD_TIMING: scope=starry-qemu phase=prepare-build-groups arch=x86_64 target=x86_64-unknown-none elapsed_s=0.001
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml ...
+AX_ARCH=x86_64
+AX_LOG=warn
+AX_TARGET=x86_64-unknown-none
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+SMP=4
+cargo build -p starryos --target scripts/targets/bare/x86_64-unknown-none.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,ax-driver/xhci-pci,ax-runtime/display -Z json-target-spec -Z build-std=core,alloc --config target.x86_64-unknown-none.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+   Compiling axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+   Compiling ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+   Compiling ax-tracepoint v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-tracepoint)
+   Compiling ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+   Compiling ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+   Compiling ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+   Compiling ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+   Compiling ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+   Compiling ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+   Compiling starryos v0.5.39 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/starryos)
+    Finished `release` profile [optimized] target(s) in 1m 10s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml ... done (70.87s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ... done (70.87s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ...
+[axbuild] starry kallsyms symbols=11534
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/.starryos.kallsyms.620007.tmp /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ... done (220.80ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ... done (58.49ms)
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=build elapsed_s=71.152
+[2026-10-02T08:22:06Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-x86_64.toml
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=read-qemu-config elapsed_s=0.054
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=prepare-qemu-config elapsed_s=0.000
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=default rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img elapsed_s=4.819
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-busybox.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=managed rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img elapsed_s=1.178
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-paths rootfs_count=2 elapsed_s=5.997
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=prepare-qemu-cases elapsed_s=6.052
+[1/1] starry qemu system
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=resolve-pipeline elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-layout pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=rootfs-cache-key pipeline=grouped elapsed_s=0.154
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-run-dir pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=copy-shared-rootfs pipeline=grouped cache=miss elapsed_s=2.172
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=reset-layout elapsed_s=0.001
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=extract-rootfs elapsed_s=2.512
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-staging-root elapsed_s=0.002
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-musl-loader elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=select-c-subcases elapsed_s=0.000
+STARRY_APK_REGION=us
+apk repositories:
+https://dl-cdn.alpinelinux.org/alpine/v3.23/main
+https://dl-cdn.alpinelinux.org/alpine/v3.23/community
+cd /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system && /usr/bin/qemu-x86_64-static -L /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/620007-0/staging-root /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/620007-0/staging-root/bin/busybox sh -eu /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/prebuild.sh
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prebuild elapsed_s=0.046
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prepare-cross-env elapsed_s=0.008
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=configure-all elapsed_s=2.527
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=build-all subcase_count=1 elapsed_s=0.214
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=install-all elapsed_s=0.006
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=compile-total mode=root-project elapsed_s=2.747
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-c-subcases subcase_count=1 elapsed_s=2.802
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-grouped-runner elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=sync-runtime-deps elapsed_s=0.005
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/620007-0/case-rootfs.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=inject-overlay elapsed_s=0.071
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=pipeline-prepare pipeline=grouped cache=miss elapsed_s=5.394
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=save-rootfs-cache pipeline=grouped cache=miss elapsed_s=2.055
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=prepare-assets pipeline=grouped cache=miss elapsed_s=9.775
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=patch-rootfs elapsed_s=0.126
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=apply-dynamic-boot elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=start-host-http elapsed_s=0.000
+  prepare assets: 9.78s (pipeline=grouped, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-x86_64.toml (timeout=1800s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/620007-0/case-rootfs.img
+[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ...
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+Preparing OVMF firmware for architecture: X86_64
+qemu-system-x86_64 -nographic -no-reboot -cpu Haswell,+avx -m 512M -smp 4 -device nvme,serial=deadbeef,drive=nvm,max_ioqpairs=64,msix_qsize=65 -drive id=nvm,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/620007-0/case-rootfs.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -device virtio-gpu-pci -device virtio-keyboard-pci -device virtio-tablet-pci -device nec-usb-xhci,id=xhci,msi=off,msix=off -audiodev none,id=audio0 -device usb-audio,bus=xhci.0,audiodev=audio0 -drive id=usbdisk,if=none,format=raw,snapshot=on,file=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img -device usb-storage,bus=xhci.0,drive=usbdisk,serial=starry-usb-storage -machine q35 -drive if=pflash,format=raw,unit=0,readonly=on,file=/tmp/ostool/ovmf/x64/code.fd -drive if=pflash,format=raw,unit=1,file=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.vars.fd -drive format=raw,file=fat:rw:/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.esp
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[8;042;160t0[2J[01;01H[2J[01;01H[8;056;240t0[2J[01;01HBdsDxe: failed to load Boot0002 "UEFI QEMU NVMe Ctrl deadbeef 1" from PciRoot(0x0)/Pci(0x2,0x0)/NVMe(0x1,00-00-00-00-00-00-00-00): Not Found
+BdsDxe: failed to load Boot0003 "UEFI QEMU QEMU USB HARDDRIVE starry-usb-storage" from PciRoot(0x0)/Pci(0x8,0x0)/USB(0x1,0x0): Not Found
+BdsDxe: loading Boot0004 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+BdsDxe: starting Boot0004 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+UEFI application started.
+UEFI console ok.
+No FDT found in UEFI config tables.
+Found ACPI 1.0 RSDP at address: 0x1fb7e000
+Found ACPI 2.0 RSDP at address: 0x1fb7e014
+Using ACPI 2 RSDP at address: 0x1fb7e014
+UEFI setup.
+Boot entropy source: UEFI RNG
+Exiting UEFI boot services...
+Exited boot services, memory map obtained.
+VM Load @PA:0x1accd000
+VM Load Offset: 0x9accd000
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  Free   0x00000000900000 - 0x0000001accd000 (419.8 MiB)
+  KImg   0x0000001accd000 - 0x0000001c000000 (19.2 MiB)
+  Free   0x0000001c000000 - 0x0000001ed3f000 (45.25 MiB)
+  Rsv    0x0000001ed3f000 - 0x0000001ee00000 (772 KiB)
+  Free   0x0000001ee00000 - 0x0000001f8ed000 (10.93 MiB)
+  Rsv    0x0000001f8ed000 - 0x0000001fbff000 (3.07 MiB)
+  Free   0x0000001fbff000 - 0x0000001fe91000 (2.57 MiB)
+  Rsv    0x0000001fe91000 - 0x0000001fe97000 (24 KiB)
+  Free   0x0000001fe97000 - 0x0000001fedc000 (276 KiB)
+  Rsv    0x0000001fedc000 - 0x00000020000000 (1.14 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+Initialize RAM allocator: 0x900000..0x1accd000
+Reserving CPU-local areas
+CPU-local area stride: 0x4b000 bytes
+Total CPU-local allocation: 0x12c000 bytes (4 CPUs)
+Flushed RAM used range to memory map: 0x900000..0xa2c000, current: 0xa2c000
+CPU-local areas allocated at 0x900000 - 0xa2c000
+Free                : [0x0000000000000000, 0x0000000000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Free                : [0xffff800000000000, 0xffff800000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Reserved            : [0x0000000000008000, 0x0000000000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Reserved            : [0xffff800000008000, 0xffff800000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Free                : [0x0000000000009000, 0x00000000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0xffff800000009000, 0xffff8000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0x0000000000100000, 0x0000000000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Free                : [0xffff800000100000, 0xffff800000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Reserved            : [0x0000000000800000, 0x0000000000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Reserved            : [0xffff800000800000, 0xffff800000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Free                : [0x0000000000808000, 0x000000000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Free                : [0xffff800000808000, 0xffff80000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Reserved            : [0x000000000080b000, 0x000000000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Reserved            : [0xffff80000080b000, 0xffff80000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Free                : [0x000000000080c000, 0x0000000000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Free                : [0xffff80000080c000, 0xffff800000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Reserved            : [0x0000000000811000, 0x0000000000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Reserved            : [0xffff800000811000, 0xffff800000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Free                : [0x0000000000a2c000, 0x000000001accd000) -> [0x0000000000a2c000, 0x000000001accd000) (418.63 MiB)
+Free                : [0xffff800000a2c000, 0xffff80001accd000) -> [0x0000000000a2c000, 0x000000001accd000) (418.63 MiB)
+KImage              : [0x000000001accd000, 0x000000001c000000) -> [0x000000001accd000, 0x000000001c000000) (19.2 MiB)
+KImage              : [0xffff80001accd000, 0xffff80001c000000) -> [0x000000001accd000, 0x000000001c000000) (19.2 MiB)
+Free                : [0x000000001c000000, 0x000000001ed3f000) -> [0x000000001c000000, 0x000000001ed3f000) (45.25 MiB)
+Free                : [0xffff80001c000000, 0xffff80001ed3f000) -> [0x000000001c000000, 0x000000001ed3f000) (45.25 MiB)
+Reserved            : [0x000000001ed3f000, 0x000000001ee00000) -> [0x000000001ed3f000, 0x000000001ee00000) (772 KiB)
+Reserved            : [0xffff80001ed3f000, 0xffff80001ee00000) -> [0x000000001ed3f000, 0x000000001ee00000) (772 KiB)
+Free                : [0x000000001ee00000, 0x000000001f8ed000) -> [0x000000001ee00000, 0x000000001f8ed000) (10.93 MiB)
+Free                : [0xffff80001ee00000, 0xffff80001f8ed000) -> [0x000000001ee00000, 0x000000001f8ed000) (10.93 MiB)
+Reserved            : [0x000000001f8ed000, 0x000000001fbff000) -> [0x000000001f8ed000, 0x000000001fbff000) (3.07 MiB)
+Reserved            : [0xffff80001f8ed000, 0xffff80001fbff000) -> [0x000000001f8ed000, 0x000000001fbff000) (3.07 MiB)
+Free                : [0x000000001fbff000, 0x000000001fe91000) -> [0x000000001fbff000, 0x000000001fe91000) (2.57 MiB)
+Free                : [0xffff80001fbff000, 0xffff80001fe91000) -> [0x000000001fbff000, 0x000000001fe91000) (2.57 MiB)
+Reserved            : [0x000000001fe91000, 0x000000001fe97000) -> [0x000000001fe91000, 0x000000001fe97000) (24 KiB)
+Reserved            : [0xffff80001fe91000, 0xffff80001fe97000) -> [0x000000001fe91000, 0x000000001fe97000) (24 KiB)
+Free                : [0x000000001fe97000, 0x000000001fedc000) -> [0x000000001fe97000, 0x000000001fedc000) (276 KiB)
+Free                : [0xffff80001fe97000, 0xffff80001fedc000) -> [0x000000001fe97000, 0x000000001fedc000) (276 KiB)
+Reserved            : [0x000000001fedc000, 0x0000000020000000) -> [0x000000001fedc000, 0x0000000020000000) (1.14 MiB)
+Reserved            : [0xffff80001fedc000, 0xffff800020000000) -> [0x000000001fedc000, 0x0000000020000000) (1.14 MiB)
+Reserved            : [0x00000000e0000000, 0x00000000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Reserved            : [0xffff8000e0000000, 0xffff8000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Mmio                : [0x00000000ffc00000, 0x0000000100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Mmio                : [0xffff8000ffc00000, 0xffff800100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+PerCpu              : [0x0000000000900000, 0x0000000000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+PerCpu              : [0xffff800000900000, 0xffff800000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+LAPIC               : [0x00000000fee00000, 0x00000000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+LAPIC               : [0xffff8000fee00000, 0xffff8000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+KImage              : [0xffffffff80000000, 0xffffffff81400000) -> [0x000000001accd000, 0x000000001c0cd000) (20 MiB)
+PerCpu              : [0xffffff0000900000, 0xffffff0000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+x86_64 switching CR3 and resetting relocations before high-half jump
+Trap vector at 0xffffffff811be080
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  PerCPU 0x00000000900000 - 0x00000000a2c000 (1.17 MiB)
+  Rsv    0x00000000a2c000 - 0x00000000a55000 (164 KiB)
+  Free   0x00000000a55000 - 0x0000001accd000 (418.47 MiB)
+  KImg   0x0000001accd000 - 0x0000001c000000 (19.2 MiB)
+  Free   0x0000001c000000 - 0x0000001ed3f000 (45.25 MiB)
+  Rsv    0x0000001ed3f000 - 0x0000001ee00000 (772 KiB)
+  Free   0x0000001ee00000 - 0x0000001f8ed000 (10.93 MiB)
+  Rsv    0x0000001f8ed000 - 0x0000001fbff000 (3.07 MiB)
+  Free   0x0000001fbff000 - 0x0000001fe91000 (2.57 MiB)
+  Rsv    0x0000001fe91000 - 0x0000001fe97000 (24 KiB)
+  Free   0x0000001fe97000 - 0x0000001fedc000 (276 KiB)
+  Rsv    0x0000001fedc000 - 0x00000020000000 (1.14 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+Jumping to main entry point at 0xffffffff8030e280 with SP 0xffffff000094b000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = x86_64
+platform = acpi
+target = x86_64-unknown-none
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 4
+
+Boot at 2026-10-02 08:22:23.129221023 UTC
+
+[37m[  2.997876 0:4294967306 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  2.998310 0:4294967306 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  3.000445 0:4294967296 [37max_net:709] [33m  No vsock device found![m[m
+Initialized 13 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (x86_64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+STARRY_GROUPED_AUTORUN_INIT
+STARRY_GROUPED_TEST_BEGIN: step=1/1 epoch=1790929350 command=exec /usr/bin/starry-run-system-tests
+STARRY_SYSTEM_PHASE_BEGIN: native-c
+STARRY_SYSTEM_TEST_BEGIN: /usr/bin/starry-test-suit/net-events
+NET_EVENTS records=3
+NET_EVENTS_RECORD queue_poll_round discovery_order=0 group_id=0 owner_cpu=0 budget=256 work_units=3 outcome=0
+NET_EVENTS_RECORD tx_submit discovery_order=0 group_id=0 owner_cpu=0 frame_len=60
+NET_EVENTS_RECORD rx_publish discovery_order=0 group_id=0 owner_cpu=0 frame_len=64
+NET_EVENTS_RECORD proto_yield owner_cpu=0 reason=1 work_pending=1
+NET_EVENTS_PASSED
+STARRY_SYSTEM_TEST_PASSED: /usr/bin/starry-test-suit/net-events elapsed_s=1.167
+STARRY_SYSTEM_PHASE_END: native-c
+STARRY_SYSTEM_TEST_SUMMARY: total=1 passed=1 failed=0 elapsed_s=1.175
+STARRY_GROUPED_TESTS_PASSED
+STARRY_GROUPED_TEST_PASSED: step=1/1 epoch=1790929351 status=0 command=exec /usr/bin/starry-run-system-tests
+STARRY_GROUPED_TESTS_PASSED
+Welcome to Starry OS!
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ... done (12.78s)
+  qemu run: 12.79s
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=qemu-run elapsed_s=12.788
+ok: system
+
+starry qemu test summary:
+  PASS system (22.99s)
+result: 1/1 case(s) passed
+total: 100.20s
+all starry qemu tests passed
+EVENTS_x86_64_EXIT=0
+=== net-events aarch64 ===
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.29s
+     Running `target/debug/tg-xtask starry test qemu --arch aarch64 -c qemu/system/net-events`
+[2026-10-02T08:22:34Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T08:22:34Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+running starry qemu tests for package starryos on arch: aarch64 (target: aarch64-unknown-none-softfloat)
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-aarch64-unknown-none-softfloat.toml
+[2026-10-02T08:22:35Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-aarch64-unknown-none-softfloat.toml
+AXBUILD_TIMING: scope=starry-qemu phase=prepare-build-groups arch=aarch64 target=aarch64-unknown-none-softfloat elapsed_s=0.001
+[axbuild] starry build package=starryos target=aarch64-unknown-none-softfloat arch=aarch64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-aarch64-unknown-none-softfloat.toml ...
+AX_ARCH=aarch64
+AX_LOG=warn
+AX_TARGET=aarch64-unknown-none-softfloat
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+SMP=4
+cargo build -p starryos --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/serial,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,ax-driver/xhci-pci,ax-runtime/display,ax-runtime/rtc -Z json-target-spec -Z build-std=core,alloc --config target.aarch64-unknown-none-softfloat.rustflags=["-Cllvm-args=--max-store-memcpy=16", "-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+   Compiling ax-tracepoint v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-tracepoint)
+   Compiling ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+   Compiling ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+   Compiling starryos v0.5.39 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/starryos)
+    Finished `release` profile [optimized] target(s) in 1m 17s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] cargo build package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-aarch64-unknown-none-softfloat.toml ... done (78.24s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] cargo build bin=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+[axbuild] starry build package=starryos target=aarch64-unknown-none-softfloat arch=aarch64 ... done (79.06s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos ...
+[axbuild] starry kallsyms symbols=11718
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/.starryos.kallsyms.620898.tmp /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos ... done (220.41ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin ... done (44.32ms)
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=build elapsed_s=79.322
+[2026-10-02T08:23:51Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-aarch64.toml
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=read-qemu-config elapsed_s=0.055
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=prepare-qemu-config elapsed_s=0.000
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-aarch64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-alpine.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=default rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-alpine.img elapsed_s=4.484
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-aarch64-busybox.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-busybox.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=managed rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-busybox.img elapsed_s=1.134
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-paths rootfs_count=2 elapsed_s=5.619
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=prepare-qemu-cases elapsed_s=5.674
+[1/1] starry qemu system
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=resolve-pipeline elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-layout pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=rootfs-cache-key pipeline=grouped elapsed_s=0.167
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-run-dir pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=copy-shared-rootfs pipeline=grouped cache=miss elapsed_s=3.264
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=reset-layout elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=extract-rootfs elapsed_s=13.985
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-staging-root elapsed_s=0.006
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-musl-loader elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=select-c-subcases elapsed_s=0.000
+STARRY_APK_REGION=us
+apk repositories:
+https://dl-cdn.alpinelinux.org/alpine/v3.23/main
+https://dl-cdn.alpinelinux.org/alpine/v3.23/community
+cd /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system && /usr/bin/qemu-aarch64-static -L /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/620898-0/staging-root /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/620898-0/staging-root/bin/busybox sh -eu /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/prebuild.sh
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prebuild elapsed_s=0.171
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prepare-cross-env elapsed_s=0.001
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=configure-all elapsed_s=1.542
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=build-all subcase_count=1 elapsed_s=0.214
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=install-all elapsed_s=0.005
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=compile-total mode=root-project elapsed_s=1.761
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-c-subcases subcase_count=1 elapsed_s=1.932
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-grouped-runner elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=sync-runtime-deps elapsed_s=0.004
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/620898-0/case-rootfs.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=inject-overlay elapsed_s=0.063
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=pipeline-prepare pipeline=grouped cache=miss elapsed_s=15.991
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=save-rootfs-cache pipeline=grouped cache=miss elapsed_s=11.654
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=prepare-assets pipeline=grouped cache=miss elapsed_s=31.078
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=patch-rootfs elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=apply-dynamic-boot elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=start-host-http elapsed_s=0.000
+  prepare assets: 31.08s (pipeline=grouped, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-aarch64.toml (timeout=1800s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/620898-0/case-rootfs.img
+[axbuild] qemu run package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json ...
+qemu-system-aarch64 -nographic -machine virt,gic-version=3,its=on -m 512M -cpu cortex-a53,pmu=on -smp 4 -device nvme,serial=deadbeef,drive=nvm,max_ioqpairs=64,msix_qsize=65 -drive id=nvm,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/620898-0/case-rootfs.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -device virtio-gpu-pci -device virtio-keyboard-pci -device virtio-tablet-pci -device nec-usb-xhci,id=xhci,msi=off,msix=off -audiodev none,id=audio0 -device usb-audio,bus=xhci.0,audiodev=audio0 -drive id=usbdisk,if=none,format=raw,snapshot=on,file=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-busybox.img -device usb-storage,bus=xhci.0,drive=usbdisk,serial=starry-usb-storage -kernel /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+Boot entropy source: FDT /chosen/rng-seed
+VM Load @PA:0x40200000
+VM Load Offset: 0xc0200000
+Memory Map:
+  Free   0x00000040000000 - 0x00000040200000 (2 MiB)
+  KImg   0x00000040200000 - 0x00000041400000 (18 MiB)
+  Free   0x00000041400000 - 0x00000060000000 (492 MiB)
+Initialize RAM allocator: 0x41400000..0x60000000
+Reserving CPU-local areas
+CPU-local area stride: 0x4b000 bytes
+Total CPU-local allocation: 0x12c000 bytes (4 CPUs)
+Flushed RAM used range to memory map: 0x41400000..0x41500000, current: 0x41500000
+Flushed RAM used range to memory map: 0x41500000..0x4162c000, current: 0x4162c000
+CPU-local areas allocated at 0x41500000 - 0x4162c000
+EL: 1
+Mapping early memory regions...
+Ram                 : [0xffff000040000000, 0xffff000060000000) -> [0x0000000040000000, 0x0000000060000000) (512 MiB)
+KImage              : [0xffffffff80000000, 0xffffffff81200000) -> [0x0000000040200000, 0x0000000041400000) (18 MiB)
+PerCpu              : [0xffffff0041500000, 0xffffff004162c000) -> [0x0000000041500000, 0x000000004162c000) (1.17 MiB)
+Debug serial        : [0xffff000009000000, 0xffff000009001000) -> [0x0000000009000000, 0x0000000009001000) (4 KiB)
+Boot page table at physical address: PA:0x4162c000
+Setting up table registers...
+MMU Entry point at physical address: 0x405dc984
+Trap vector at 0xffffffff80005000
+Memory Map:
+  MMIO   0x00000009000000 - 0x00000009001000 (4 KiB)
+  Free   0x00000040000000 - 0x00000040200000 (2 MiB)
+  KImg   0x00000040200000 - 0x00000041400000 (18 MiB)
+  Rsv    0x00000041400000 - 0x00000041500000 (1 MiB)
+  PerCPU 0x00000041500000 - 0x0000004162c000 (1.17 MiB)
+  Rsv    0x0000004162c000 - 0x00000041637000 (44 KiB)
+  Free   0x00000041637000 - 0x00000060000000 (489.79 MiB)
+Jumping to main entry point at 0xffffffff802cb5a4 with SP 0xffffff004154b000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = aarch64
+platform = linux,dummy-virt
+target = aarch64-unknown-none-softfloat
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 4
+
+Boot at 2026-10-02 08:24:27.067716208 UTC
+
+[37m[  0.352586 0:4294967306 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  0.352975 0:4294967306 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  0.355821 0:4294967296 [37max_net:709] [33m  No vsock device found![m[m
+Initialized 13 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (aarch64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+STARRY_GROUPED_AUTORUN_INIT
+STARRY_GROUPED_TEST_BEGIN: step=1/1 epoch=1790929474 command=exec /usr/bin/starry-run-system-tests
+STARRY_SYSTEM_PHASE_BEGIN: native-c
+STARRY_SYSTEM_TEST_BEGIN: /usr/bin/starry-test-suit/net-events
+NET_EVENTS records=2
+NET_EVENTS_RECORD queue_poll_round discovery_order=0 group_id=0 owner_cpu=0 budget=256 work_units=3 outcome=0
+NET_EVENTS_RECORD tx_submit discovery_order=0 group_id=0 owner_cpu=0 frame_len=60
+NET_EVENTS_RECORD rx_publish discovery_order=0 group_id=0 owner_cpu=0 frame_len=64
+NET_EVENTS_RECORD proto_yield owner_cpu=0 reason=1 work_pending=1
+NET_EVENTS_PASSED
+STARRY_SYSTEM_TEST_PASSED: /usr/bin/starry-test-suit/net-events elapsed_s=1.182
+STARRY_SYSTEM_PHASE_END: native-c
+STARRY_SYSTEM_TEST_SUMMARY: total=1 passed=1 failed=0 elapsed_s=1.202
+STARRY_GROUPED_TESTS_PASSED
+STARRY_GROUPED_TEST_PASSED: step=1/1 epoch=1790929476 status=0 command=exec /usr/bin/starry-run-system-tests
+STARRY_GROUPED_TESTS_PASSED
+Welcome to Starry OS!
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json ... done (10.05s)
+  qemu run: 10.06s
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=qemu-run elapsed_s=10.058
+ok: system
+
+starry qemu test summary:
+  PASS system (41.41s)
+result: 1/1 case(s) passed
+total: 126.41s
+all starry qemu tests passed
+EVENTS_aarch64_EXIT=0
+=== net-events riscv64 ===
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.24s
+     Running `target/debug/tg-xtask starry test qemu --arch riscv64 -c qemu/system/net-events`
+[2026-10-02T08:24:37Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T08:24:37Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+running starry qemu tests for package starryos on arch: riscv64 (target: riscv64gc-unknown-none-elf)
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-riscv64gc-unknown-none-elf.toml
+[2026-10-02T08:24:37Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-riscv64gc-unknown-none-elf.toml
+AXBUILD_TIMING: scope=starry-qemu phase=prepare-build-groups arch=riscv64 target=riscv64gc-unknown-none-elf elapsed_s=0.001
+[axbuild] starry build package=starryos target=riscv64gc-unknown-none-elf arch=riscv64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/riscv64gc-unknown-none-elf.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-riscv64gc-unknown-none-elf.toml ...
+AX_ARCH=riscv64
+AX_LOG=warn
+AX_TARGET=riscv64gc-unknown-none-elf
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+SMP=4
+cargo build -p starryos --target scripts/targets/bare/riscv64gc-unknown-none-elf.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/serial,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,ax-driver/xhci-pci,ax-runtime/display,ax-runtime/rtc -Z json-target-spec -Z build-std=core,alloc --config target.riscv64gc-unknown-none-elf.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--no-relax", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+   Compiling ax-tracepoint v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-tracepoint)
+   Compiling ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+   Compiling ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+   Compiling starryos v0.5.39 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/starryos)
+    Finished `release` profile [optimized] target(s) in 1m 07s
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos.bin
+[axbuild] cargo build package=starryos target=scripts/targets/bare/riscv64gc-unknown-none-elf.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-riscv64gc-unknown-none-elf.toml ... done (68.15s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos
+[axbuild] cargo build bin=/home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos.bin
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release
+[axbuild] starry build package=starryos target=riscv64gc-unknown-none-elf arch=riscv64 ... done (68.16s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos ...
+[axbuild] starry kallsyms symbols=11347
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/.starryos.kallsyms.621746.tmp /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos ... done (469.96ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos.bin ... done (57.87ms)
+[axbuild] validated RISC-V Image header: /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos.bin
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=build elapsed_s=68.685
+[2026-10-02T08:25:43Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-riscv64.toml
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=read-qemu-config elapsed_s=0.053
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=prepare-qemu-config elapsed_s=0.000
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-riscv64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-riscv64-alpine.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=default rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-riscv64-alpine.img elapsed_s=4.925
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-riscv64-busybox.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-riscv64-busybox.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=managed rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-riscv64-busybox.img elapsed_s=1.087
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-paths rootfs_count=2 elapsed_s=6.012
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=prepare-qemu-cases elapsed_s=6.065
+[1/1] starry qemu system
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=resolve-pipeline elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-layout pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=rootfs-cache-key pipeline=grouped elapsed_s=0.155
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-run-dir pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=copy-shared-rootfs pipeline=grouped cache=miss elapsed_s=2.290
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=reset-layout elapsed_s=0.001
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=extract-rootfs elapsed_s=12.247
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-staging-root elapsed_s=0.004
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-musl-loader elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=select-c-subcases elapsed_s=0.000
+STARRY_APK_REGION=us
+apk repositories:
+https://dl-cdn.alpinelinux.org/alpine/v3.23/main
+https://dl-cdn.alpinelinux.org/alpine/v3.23/community
+cd /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system && /usr/bin/qemu-riscv64-static -L /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/qemu-cases/qemu/system/runs/621746-0/staging-root /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/qemu-cases/qemu/system/runs/621746-0/staging-root/bin/busybox sh -eu /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/prebuild.sh
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prebuild elapsed_s=0.046
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prepare-cross-env elapsed_s=0.001
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=configure-all elapsed_s=0.989
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=build-all subcase_count=1 elapsed_s=0.210
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=install-all elapsed_s=0.005
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=compile-total mode=root-project elapsed_s=1.204
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-c-subcases subcase_count=1 elapsed_s=1.252
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-grouped-runner elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=sync-runtime-deps elapsed_s=0.003
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/qemu-cases/qemu/system/runs/621746-0/case-rootfs.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=inject-overlay elapsed_s=0.055
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=pipeline-prepare pipeline=grouped cache=miss elapsed_s=13.562
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=save-rootfs-cache pipeline=grouped cache=miss elapsed_s=2.147
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=prepare-assets pipeline=grouped cache=miss elapsed_s=18.154
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=patch-rootfs elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=apply-dynamic-boot elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=start-host-http elapsed_s=0.000
+  prepare assets: 18.15s (pipeline=grouped, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-riscv64.toml (timeout=1800s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/qemu-cases/qemu/system/runs/621746-0/case-rootfs.img
+[axbuild] qemu run package=starryos target=scripts/targets/bare/riscv64gc-unknown-none-elf.json ...
+qemu-system-riscv64 -nographic -m 512M -cpu rv64 -smp 4 -device nvme,serial=deadbeef,drive=nvm,max_ioqpairs=64,msix_qsize=65 -drive id=nvm,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/qemu-cases/qemu/system/runs/621746-0/case-rootfs.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -device virtio-gpu-pci -device virtio-keyboard-pci -device virtio-tablet-pci -device nec-usb-xhci,id=xhci,msi=off,msix=off -audiodev none,id=audio0 -device usb-audio,bus=xhci.0,audiodev=audio0 -drive id=usbdisk,if=none,format=raw,snapshot=on,file=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-riscv64-busybox.img -device usb-storage,bus=xhci.0,drive=usbdisk,serial=starry-usb-storage -machine virt -kernel /home/asta/tgoskits/wt-feat-net-observe/target/riscv64gc-unknown-none-elf/release/starryos.bin
+
+OpenSBI v1.8.1
+   ____                    _____ ____ _____
+  / __ \                  / ____|  _ \_   _|
+ | |  | |_ __   ___ _ __ | (___ | |_) || |
+ | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
+ | |__| | |_) |  __/ | | |____) | |_) || |_
+  \____/| .__/ \___|_| |_|_____/|____/_____|
+        | |
+        |_|
+
+Platform Name               : riscv-virtio,qemu
+Platform Features           : medeleg
+Platform HART Count         : 4
+Platform HART Protection    : pmp
+Platform IPI Device         : aclint-mswi
+Platform Timer Device       : aclint-mtimer @ 10000000Hz
+Platform Console Device     : uart8250
+Platform HSM Device         : ---
+Platform PMU Device         : ---
+Platform Reboot Device      : syscon-reboot
+Platform Shutdown Device    : syscon-poweroff
+Platform Suspend Device     : ---
+Platform CPPC Device        : ---
+Firmware Base               : 0x80000000
+Firmware Size               : 357 KB
+Firmware RW Offset          : 0x40000
+Firmware RW Size            : 101 KB
+Firmware Heap Offset        : 0x4d000
+Firmware Heap Size          : 49 KB (total), 0 KB (reserved), 12 KB (used), 35 KB (free)
+Firmware Scratch Size       : 4096 B (total), 1464 B (used), 2632 B (free)
+Runtime SBI Version         : 3.0
+Standard SBI Extensions     : time,rfnc,ipi,base,hsm,srst,pmu,dbcn,fwft,legacy,dbtr,sse
+Experimental SBI Extensions : none
+
+Domain0 Name                : root
+Domain0 Boot HART           : 0
+Domain0 HARTs               : 0*,1*,2*,3*
+Domain0 Region00            : 0x0000000080040000-0x000000008005ffff M: (F,R,W) S/U: ()
+Domain0 Region01            : 0x0000000080000000-0x000000008003ffff M: (F,R,X) S/U: ()
+Domain0 Region02            : 0x0000000000100000-0x0000000000100fff M: (I,R,W) S/U: (R,W)
+Domain0 Region03            : 0x0000000010000000-0x0000000010000fff M: (I,R,W) S/U: (R,W)
+Domain0 Region04            : 0x0000000002000000-0x000000000200ffff M: (I,R,W) S/U: ()
+Domain0 Region05            : 0x000000000c400000-0x000000000c5fffff M: (I,R,W) S/U: (R,W)
+Domain0 Region06            : 0x000000000c000000-0x000000000c3fffff M: (I,R,W) S/U: (R,W)
+Domain0 Region07            : 0x0000000000000000-0xffffffffffffffff M: () S/U: (R,W,X)
+Domain0 Next Address        : 0x0000000080200000
+Domain0 Next Arg1           : 0x000000009fe00000
+Domain0 Next Mode           : S-mode
+Domain0 SysReset            : yes
+Domain0 SysSuspend          : yes
+
+Boot HART ID                : 0
+Boot HART Domain            : root
+Boot HART Priv Version      : v1.12
+Boot HART Base ISA          : rv64imafdch
+Boot HART ISA Extensions    : sstc,zicntr,zihpm,zicboz,zicbom,sdtrig,svadu
+Boot HART PMP Count         : 16
+Boot HART PMP Granularity   : 2 bits
+Boot HART PMP Address Bits  : 54
+Boot HART MHPM Info         : 16 (0x0007fff8)
+Boot HART Debug Triggers    : 2 triggers
+Boot HART MIDELEG           : 0x0000000000001666
+Boot HART MEDELEG           : 0x0000000000f4b509
+RISC-V64 SBI kernel entry.
+Boot entropy source: FDT /chosen/rng-seed
+VM Load @PA:0x80200000
+VM Load Offset: 0x100200000
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080060000 (384 KiB)
+  Free   0x00000080060000 - 0x00000080200000 (1.63 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Free   0x00000081200000 - 0x000000a0000000 (494 MiB)
+Initialize RAM allocator: 0x81200000..0xa0000000
+Reserving CPU-local areas
+CPU-local area stride: 0x41000 bytes
+Total CPU-local allocation: 0x104000 bytes (4 CPUs)
+Flushed RAM used range to memory map: 0x81200000..0x81204000, current: 0x81204000
+Flushed RAM used range to memory map: 0x81204000..0x81308000, current: 0x81308000
+CPU-local areas allocated at 0x81204000 - 0x81308000
+Mapping early memory regions...
+Ram                 : [0x0000000080000000, 0x00000000a0000000) -> [0x0000000080000000, 0x00000000a0000000) (512 MiB)
+Ram                 : [0xffffffc080000000, 0xffffffc0a0000000) -> [0x0000000080000000, 0x00000000a0000000) (512 MiB)
+KImage              : [0xffffffff80000000, 0xffffffff81000000) -> [0x0000000080200000, 0x0000000081200000) (16 MiB)
+PerCpu              : [0xffffffe081204000, 0xffffffe081308000) -> [0x0000000081204000, 0x0000000081308000) (1.02 MiB)
+Boot page table at physical address: 0x81308000
+MMU Entry point at physical address: 0x80204180
+Enabling MMU...
+MMU enabled, jumping to 0xffffffff80004180, sp=0xffffffe081245000
+Trap vector at 0xffffffff80003e08
+Memory Map:
+  Rsv    0x00000080000000 - 0x00000080060000 (384 KiB)
+  Free   0x00000080060000 - 0x00000080200000 (1.63 MiB)
+  KImg   0x00000080200000 - 0x00000081200000 (16 MiB)
+  Rsv    0x00000081200000 - 0x00000081204000 (16 KiB)
+  PerCPU 0x00000081204000 - 0x00000081308000 (1.02 MiB)
+  Rsv    0x00000081308000 - 0x00000081516000 (2.05 MiB)
+  Free   0x00000081516000 - 0x000000a0000000 (490.91 MiB)
+Jumping to main entry point at 0xffffffff80268712 with SP 0xffffffe081245000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = riscv64
+platform = riscv-virtio,qemu
+target = riscv64gc-unknown-none-elf
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 4
+
+Boot at 2026-10-02 08:26:07.082376400 UTC
+
+[37m[  0.416567 0:4294967306 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  0.419004 0:4294967306 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  0.421243 0:4294967296 [37max_net:709] [33m  No vsock device found![m[m
+Initialized 13 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (riscv64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+STARRY_GROUPED_AUTORUN_INIT
+STARRY_GROUPED_TEST_BEGIN: step=1/1 epoch=1790929575 command=exec /usr/bin/starry-run-system-tests
+STARRY_SYSTEM_PHASE_BEGIN: native-c
+STARRY_SYSTEM_TEST_BEGIN: /usr/bin/starry-test-suit/net-events
+NET_EVENTS records=7
+NET_EVENTS_RECORD queue_poll_round discovery_order=0 group_id=0 owner_cpu=0 budget=256 work_units=3 outcome=0
+NET_EVENTS_RECORD tx_submit discovery_order=0 group_id=0 owner_cpu=0 frame_len=60
+NET_EVENTS_RECORD rx_publish discovery_order=0 group_id=0 owner_cpu=0 frame_len=64
+NET_EVENTS_RECORD proto_yield owner_cpu=0 reason=1 work_pending=1
+NET_EVENTS_PASSED
+STARRY_SYSTEM_TEST_PASSED: /usr/bin/starry-test-suit/net-events elapsed_s=1.244
+STARRY_SYSTEM_PHASE_END: native-c
+STARRY_SYSTEM_TEST_SUMMARY: total=1 passed=1 failed=0 elapsed_s=1.259
+STARRY_GROUPED_TESTS_PASSED
+STARRY_GROUPED_TEST_PASSED: step=1/1 epoch=1790929577 status=0 command=exec /usr/bin/starry-run-system-tests
+STARRY_GROUPED_TESTS_PASSED
+Welcome to Starry OS!
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/riscv64gc-unknown-none-elf.json ... done (11.32s)
+  qemu run: 11.33s
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=qemu-run elapsed_s=11.327
+ok: system
+
+starry qemu test summary:
+  PASS system (29.68s)
+result: 1/1 case(s) passed
+total: 104.44s
+all starry qemu tests passed
+EVENTS_riscv64_EXIT=0
+=== net-events loongarch64 ===
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.30s
+     Running `target/debug/tg-xtask starry test qemu --arch loongarch64 -c qemu/system/net-events`
+[2026-10-02T08:26:17Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T08:26:17Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+running starry qemu tests for package starryos on arch: loongarch64 (target: loongarch64-unknown-none-softfloat)
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-loongarch64-unknown-none-softfloat.toml
+[2026-10-02T08:26:17Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-loongarch64-unknown-none-softfloat.toml
+AXBUILD_TIMING: scope=starry-qemu phase=prepare-build-groups arch=loongarch64 target=loongarch64-unknown-none-softfloat elapsed_s=0.001
+[axbuild] starry build package=starryos target=loongarch64-unknown-none-softfloat arch=loongarch64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/loongarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-loongarch64-unknown-none-softfloat.toml ...
+AX_ARCH=loongarch64
+AX_LOG=warn
+AX_TARGET=loongarch64-unknown-none-softfloat
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+SMP=4
+cargo build -p starryos --target scripts/targets/bare/loongarch64-unknown-none-softfloat.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,ax-runtime/display -Z json-target-spec -Z build-std=core,alloc --config target.loongarch64-unknown-none-softfloat.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+   Compiling ax-tracepoint v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-tracepoint)
+   Compiling ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+   Compiling ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+   Compiling starryos v0.5.39 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/starryos)
+    Finished `release` profile [optimized] target(s) in 1m 01s
+[axbuild] cargo build package=starryos target=scripts/targets/bare/loongarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-loongarch64-unknown-none-softfloat.toml ... done (61.53s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release
+[axbuild] starry build package=starryos target=loongarch64-unknown-none-softfloat arch=loongarch64 ... done (61.53s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos ...
+[axbuild] starry kallsyms symbols=10919
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/.starryos.kallsyms.622546.tmp /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos ... done (262.84ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.bin ... done (44.96ms)
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=build elapsed_s=61.837
+[2026-10-02T08:27:18Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-loongarch64.toml
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=read-qemu-config elapsed_s=0.054
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=prepare-qemu-config elapsed_s=0.000
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-loongarch64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-loongarch64-alpine.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=default rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-loongarch64-alpine.img elapsed_s=4.494
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-paths rootfs_count=1 elapsed_s=4.494
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=prepare-qemu-cases elapsed_s=4.549
+[1/1] starry qemu system
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=resolve-pipeline elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-layout pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=rootfs-cache-key pipeline=grouped elapsed_s=0.146
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-run-dir pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=copy-shared-rootfs pipeline=grouped cache=miss elapsed_s=8.535
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=reset-layout elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=extract-rootfs elapsed_s=6.428
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-staging-root elapsed_s=0.004
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-musl-loader elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=select-c-subcases elapsed_s=0.000
+STARRY_APK_REGION=us
+apk repositories:
+https://dl-cdn.alpinelinux.org/alpine/v3.23/main
+https://dl-cdn.alpinelinux.org/alpine/v3.23/community
+cd /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system && /usr/bin/qemu-loongarch64-static -L /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/622546-0/staging-root /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/622546-0/staging-root/bin/busybox sh -eu /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/prebuild.sh
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prebuild elapsed_s=0.032
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prepare-cross-env elapsed_s=0.001
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=configure-all elapsed_s=0.618
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=build-all subcase_count=1 elapsed_s=0.200
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=install-all elapsed_s=0.005
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=compile-total mode=root-project elapsed_s=0.823
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-c-subcases subcase_count=1 elapsed_s=0.855
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-grouped-runner elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=sync-runtime-deps elapsed_s=0.003
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/622546-0/case-rootfs.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=inject-overlay elapsed_s=0.061
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=pipeline-prepare pipeline=grouped cache=miss elapsed_s=7.362
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=save-rootfs-cache pipeline=grouped cache=miss elapsed_s=2.270
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=prepare-assets pipeline=grouped cache=miss elapsed_s=18.315
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=patch-rootfs elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=apply-dynamic-boot elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=start-host-http elapsed_s=0.000
+  prepare assets: 18.31s (pipeline=grouped, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-loongarch64.toml (timeout=1800s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/622546-0/case-rootfs.img
+[axbuild] qemu run package=starryos target=scripts/targets/bare/loongarch64-unknown-none-softfloat.json ...
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.bin
+Preparing OVMF firmware for architecture: LoongArch64
+qemu-system-loongarch64 -machine virt -cpu la464 -nographic -m 2G -smp 4 -device nvme,drive=disk0,serial=tgoskits,max_ioqpairs=64,msix_qsize=65 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/622546-0/case-rootfs.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -device virtio-gpu-pci -device virtio-keyboard-pci -device virtio-tablet-pci -drive if=pflash,format=raw,unit=0,readonly=on,file=/tmp/ostool/ovmf/loongarch64/code.fd -drive if=pflash,format=raw,unit=1,file=/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.vars.fd -drive format=raw,file=fat:rw:/home/asta/tgoskits/wt-feat-net-observe/target/loongarch64-unknown-none-softfloat/release/starryos.esp
+InitializeExceptions,IrqEnabled = 0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03040002 I0
+PROGRESS CODE: V03040003 I0
+PROGRESS CODE: V03041001 I0
+PROGRESS CODE: V03051005 I0
+PROGRESS CODE: V02010000 I0
+PROGRESS CODE: V02011000 I0
+PROGRESS CODE: V02011001 I0
+PROGRESS CODE: V02010004 I0
+PROGRESS CODE: V02010004 I0
+PROGRESS CODE: V02010004 I0
+PROGRESS CODE: V02010004 I0
+PROGRESS CODE: V02010004 I0
+PROGRESS CODE: V02010004 I0
+PROGRESS CODE: V02010004 I0
+[2J[01;01H[=3h[2J[01;01HPROGRESS CODE: V01040001 I0
+PROGRESS CODE: V02010000 I0
+PROGRESS CODE: V02010004 I0
+PROGRESS CODE: V03051007 I0
+PROGRESS CODE: V03051001 I0
+ERROR: C40000002:V03051002 I0 6D33944A-EC75-4855-A54D-809C75241F6C F2719C0
+BdsDxe: failed to load Boot0001 "UEFI QEMU NVMe Ctrl tgoskits 1" from PciRoot(0x0)/Pci(0x1,0x0)/NVMe(0x1,00-00-00-00-00-00-00-00): Not Found
+PROGRESS CODE: V03051001 I0
+PROGRESS CODE: V03058000 I0
+BdsDxe: loading Boot0002 "UEFI Misc Device" from PciRoot(0x0)/Pci(0x6,0x0)
+PROGRESS CODE: V03058001 I0
+BdsDxe: starting Boot0002 "UEFI Misc Device" from PciRoot(0x0)/Pci(0x6,0x0)
+UEFI application started.
+UEFI console ok.
+No FDT found in UEFI config tables.
+Found ACPI 1.0 RSDP at address: 0xdf7f000
+Found ACPI 2.0 RSDP at address: 0xdf7f014
+Using ACPI 2 RSDP at address: 0xdf7f014
+UEFI setup.
+Kernel LMA: 0xa848000
+Found Full16550
+  Base address: 0x1fe001e0
+  Baud rate: Some(115200)
+  Clock frequency: None
+Early console initialized at vaddr 0x800000001fe001e0
+Early console setup complete.
+Exiting UEFI boot services...
+PROGRESS CODE: V03101019 I0
+Exited boot services, memory map obtained.
+VM Load @PA:0xa848000
+VM Load Offset: 0x8a848000
+Memory Map:
+  Free   0x00000000000000 - 0x0000000a848000 (168.28 MiB)
+  KImg   0x0000000a848000 - 0x0000000bc00000 (19.72 MiB)
+  Free   0x0000000bc00000 - 0x0000000d410000 (24.06 MiB)
+  Rsv    0x0000000d410000 - 0x0000000d420000 (64 KiB)
+  Free   0x0000000d420000 - 0x0000000d990000 (5.44 MiB)
+  Rsv    0x0000000d990000 - 0x0000000dba0000 (2.06 MiB)
+  Free   0x0000000dba0000 - 0x0000000dc00000 (384 KiB)
+  Rsv    0x0000000dc00000 - 0x0000000dd20000 (1.13 MiB)
+  Free   0x0000000dd20000 - 0x0000000dde0000 (768 KiB)
+  Rsv    0x0000000dde0000 - 0x0000000df70000 (1.56 MiB)
+  Free   0x0000000df70000 - 0x0000000df75000 (20 KiB)
+  Rsv    0x0000000df75000 - 0x0000000e160000 (1.92 MiB)
+  Free   0x0000000e160000 - 0x0000000f1e0000 (16.5 MiB)
+  Rsv    0x0000000f1e0000 - 0x0000000f230000 (320 KiB)
+  Free   0x0000000f230000 - 0x00000010000000 (13.81 MiB)
+  MMIO   0x000000100d0000 - 0x000000100d1000 (4 KiB)
+  MMIO   0x000000100e0000 - 0x000000100e1000 (4 KiB)
+  MMIO   0x0000001d000000 - 0x0000001d0c0000 (768 KiB)
+  Free   0x00000080000000 - 0x000000f0000000 (1.75 GiB)
+Initialize RAM allocator: 0x0..0xa848000
+Reserving CPU-local areas
+CPU-local area stride: 0x41000 bytes
+Total CPU-local allocation: 0x104000 bytes (4 CPUs)
+Flushed RAM used range to memory map: 0x0..0x1000, current: 0x1000
+Flushed RAM used range to memory map: 0x1000..0x105000, current: 0x105000
+CPU-local areas allocated at 0x1000 - 0x105000
+CPU boot vectors: 0x900000000a868000, refill: 0xa85e000
+Page table entry flags: PteConfig { read: true, writable: true, executable: true, lower: false, dirty: false, global: false, mem_attr: Normal }
+KImage              : [0xffffffff80000000, 0xffffffff81400000) -> [0x000000000a848000, 0x000000000bc48000) (20 MiB)
+Mapping: vaddr=0xffffffff80000000, paddr=0xa848000, size=0x1400000
+Boot page table at physical address: 0x105000
+MMU Entry point at physical address: 0xac93de0
+MMU Entry virtual address: 0xffffffff8044bde0
+Setting up page table...
+Enabling MMU...
+MMU enabled, jumping to 0xffffffff8044bde0, sp=0x900000000ba2e000
+Early console initialized at vaddr 0x800000001fe001e0
+Early console setup complete.
+Trap vector at 0x900000000a868000
+Memory Map:
+  Rsv    0x00000000000000 - 0x00000000001000 (4 KiB)
+  PerCPU 0x00000000001000 - 0x00000000105000 (1.02 MiB)
+  Rsv    0x00000000105000 - 0x00000000112000 (52 KiB)
+  Free   0x00000000112000 - 0x0000000a848000 (167.21 MiB)
+  KImg   0x0000000a848000 - 0x0000000bc00000 (19.72 MiB)
+  Free   0x0000000bc00000 - 0x0000000d410000 (24.06 MiB)
+  Rsv    0x0000000d410000 - 0x0000000d420000 (64 KiB)
+  Free   0x0000000d420000 - 0x0000000d990000 (5.44 MiB)
+  Rsv    0x0000000d990000 - 0x0000000dba0000 (2.06 MiB)
+  Free   0x0000000dba0000 - 0x0000000dc00000 (384 KiB)
+  Rsv    0x0000000dc00000 - 0x0000000dd20000 (1.13 MiB)
+  Free   0x0000000dd20000 - 0x0000000dde0000 (768 KiB)
+  Rsv    0x0000000dde0000 - 0x0000000df70000 (1.56 MiB)
+  Free   0x0000000df70000 - 0x0000000df75000 (20 KiB)
+  Rsv    0x0000000df75000 - 0x0000000e160000 (1.92 MiB)
+  Free   0x0000000e160000 - 0x0000000f1e0000 (16.5 MiB)
+  Rsv    0x0000000f1e0000 - 0x0000000f230000 (320 KiB)
+  Free   0x0000000f230000 - 0x00000010000000 (13.81 MiB)
+  MMIO   0x000000100d0000 - 0x000000100d1000 (4 KiB)
+  MMIO   0x000000100e0000 - 0x000000100e1000 (4 KiB)
+  MMIO   0x0000001d000000 - 0x0000001d0c0000 (768 KiB)
+  MMIO   0x0000001fe00000 - 0x0000001fe01000 (4 KiB)
+  Free   0x00000080000000 - 0x000000f0000000 (1.75 GiB)
+Jumping to main entry point at 0xffffffff803565a0 with SP 0x9000000000042000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = loongarch64
+platform = acpi
+target = loongarch64-unknown-none-softfloat
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 4
+
+Boot at 2026-10-02 08:27:45.082586670 UTC
+
+[37m[  4.702558 0:4294967306 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  4.702945 0:4294967306 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  4.704909 0:4294967296 [37max_net:709] [33m  No vsock device found![m[m
+Initialized 13 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (loongarch64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+STARRY_GROUPED_AUTORUN_INIT
+STARRY_GROUPED_TEST_BEGIN: step=1/1 epoch=1790929670 command=exec /usr/bin/starry-run-system-tests --capture-failures
+STARRY_SYSTEM_PHASE_BEGIN: native-c
+STARRY_SYSTEM_TEST_BEGIN: /usr/bin/starry-test-suit/net-events
+STARRY_SYSTEM_TEST_PASSED: /usr/bin/starry-test-suit/net-events elapsed_s=1.201
+STARRY_SYSTEM_PHASE_END: native-c
+STARRY_SYSTEM_TEST_SUMMARY: total=1 passed=1 failed=0 elapsed_s=1.210
+STARRY_GROUPED_TESTS_PASSED
+STARRY_GROUPED_TEST_PASSED: step=1/1 epoch=1790929672 status=0 command=exec /usr/bin/starry-run-system-tests --capture-failures
+STARRY_GROUPED_TESTS_PASSED
+Welcome to Starry OS!
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/loongarch64-unknown-none-softfloat.json ... done (12.97s)
+  qemu run: 12.99s
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=qemu-run elapsed_s=12.986
+ok: system
+
+starry qemu test summary:
+  PASS system (31.50s)
+result: 1/1 case(s) passed
+total: 97.89s
+all starry qemu tests passed
+EVENTS_loongarch64_EXIT=0
+=== net-queue x86_64 (regression) ===
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.37s
+     Running `target/debug/tg-xtask starry test qemu --arch x86_64 -c qemu/system/net-queue`
+[2026-10-02T08:27:52Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T08:27:52Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+running starry qemu tests for package starryos on arch: x86_64 (target: x86_64-unknown-none)
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml
+[2026-10-02T08:27:53Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml
+AXBUILD_TIMING: scope=starry-qemu phase=prepare-build-groups arch=x86_64 target=x86_64-unknown-none elapsed_s=0.001
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml ...
+AX_ARCH=x86_64
+AX_LOG=warn
+AX_TARGET=x86_64-unknown-none
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+SMP=4
+cargo build -p starryos --target scripts/targets/bare/x86_64-unknown-none.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,ax-driver/xhci-pci,ax-runtime/display -Z json-target-spec -Z build-std=core,alloc --config target.x86_64-unknown-none.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+    Finished `release` profile [optimized] target(s) in 0.46s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-x86_64-unknown-none.toml ... done (701.96ms)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ... done (702.07ms)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ...
+[axbuild] starry kallsyms symbols=11534
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/.starryos.kallsyms.623269.tmp /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ... done (194.85ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ... done (42.68ms)
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=build elapsed_s=0.940
+[2026-10-02T08:27:54Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-x86_64.toml
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=read-qemu-config elapsed_s=0.056
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=prepare-qemu-config elapsed_s=0.000
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=default rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img elapsed_s=4.592
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-busybox.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=managed rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img elapsed_s=1.233
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-paths rootfs_count=2 elapsed_s=5.825
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=prepare-qemu-cases elapsed_s=5.881
+[1/1] starry qemu system
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=resolve-pipeline elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-layout pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=rootfs-cache-key pipeline=grouped elapsed_s=0.162
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-run-dir pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=copy-shared-rootfs pipeline=grouped cache=miss elapsed_s=22.183
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=reset-layout elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=extract-rootfs elapsed_s=2.691
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-staging-root elapsed_s=0.023
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-musl-loader elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=select-c-subcases elapsed_s=0.000
+STARRY_APK_REGION=us
+apk repositories:
+https://dl-cdn.alpinelinux.org/alpine/v3.23/main
+https://dl-cdn.alpinelinux.org/alpine/v3.23/community
+cd /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system && /usr/bin/qemu-x86_64-static -L /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/623269-0/staging-root /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/623269-0/staging-root/bin/busybox sh -eu /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/prebuild.sh
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prebuild elapsed_s=0.025
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prepare-cross-env elapsed_s=0.008
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=configure-all elapsed_s=0.572
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=build-all subcase_count=1 elapsed_s=0.205
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=install-all elapsed_s=0.005
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=compile-total mode=root-project elapsed_s=0.783
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-c-subcases subcase_count=1 elapsed_s=0.815
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-grouped-runner elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=sync-runtime-deps elapsed_s=0.003
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/623269-0/case-rootfs.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=inject-overlay elapsed_s=0.058
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=pipeline-prepare pipeline=grouped cache=miss elapsed_s=3.592
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=save-rootfs-cache pipeline=grouped cache=miss elapsed_s=21.215
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=prepare-assets pipeline=grouped cache=miss elapsed_s=47.152
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=patch-rootfs elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=apply-dynamic-boot elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=start-host-http elapsed_s=0.000
+  prepare assets: 47.15s (pipeline=grouped, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-x86_64.toml (timeout=1800s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/623269-0/case-rootfs.img
+[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ...
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+Preparing OVMF firmware for architecture: X86_64
+qemu-system-x86_64 -nographic -no-reboot -cpu Haswell,+avx -m 512M -smp 4 -device nvme,serial=deadbeef,drive=nvm,max_ioqpairs=64,msix_qsize=65 -drive id=nvm,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/qemu-cases/qemu/system/runs/623269-0/case-rootfs.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -device virtio-gpu-pci -device virtio-keyboard-pci -device virtio-tablet-pci -device nec-usb-xhci,id=xhci,msi=off,msix=off -audiodev none,id=audio0 -device usb-audio,bus=xhci.0,audiodev=audio0 -drive id=usbdisk,if=none,format=raw,snapshot=on,file=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-busybox.img -device usb-storage,bus=xhci.0,drive=usbdisk,serial=starry-usb-storage -machine q35 -drive if=pflash,format=raw,unit=0,readonly=on,file=/tmp/ostool/ovmf/x64/code.fd -drive if=pflash,format=raw,unit=1,file=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.vars.fd -drive format=raw,file=fat:rw:/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.esp
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.pcid [bit 17]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=01h].ECX.tsc-deadline [bit 24]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.hle [bit 4]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.invpcid [bit 10]
+qemu-system-x86_64: warning: TCG doesn't support requested feature: CPUID[eax=07h,ecx=00h].EBX.rtm [bit 11]
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[8;042;160t0[2J[01;01H[2J[01;01H[8;056;240t0[2J[01;01HBdsDxe: failed to load Boot0002 "UEFI QEMU NVMe Ctrl deadbeef 1" from PciRoot(0x0)/Pci(0x2,0x0)/NVMe(0x1,00-00-00-00-00-00-00-00): Not Found
+BdsDxe: failed to load Boot0003 "UEFI QEMU QEMU USB HARDDRIVE starry-usb-storage" from PciRoot(0x0)/Pci(0x8,0x0)/USB(0x1,0x0): Not Found
+BdsDxe: loading Boot0004 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+BdsDxe: starting Boot0004 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+UEFI application started.
+UEFI console ok.
+No FDT found in UEFI config tables.
+Found ACPI 1.0 RSDP at address: 0x1fb7e000
+Found ACPI 2.0 RSDP at address: 0x1fb7e014
+Using ACPI 2 RSDP at address: 0x1fb7e014
+UEFI setup.
+Boot entropy source: UEFI RNG
+Exiting UEFI boot services...
+Exited boot services, memory map obtained.
+VM Load @PA:0x1accd000
+VM Load Offset: 0x9accd000
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  Free   0x00000000900000 - 0x0000001accd000 (419.8 MiB)
+  KImg   0x0000001accd000 - 0x0000001c000000 (19.2 MiB)
+  Free   0x0000001c000000 - 0x0000001ed3f000 (45.25 MiB)
+  Rsv    0x0000001ed3f000 - 0x0000001ee00000 (772 KiB)
+  Free   0x0000001ee00000 - 0x0000001f8ed000 (10.93 MiB)
+  Rsv    0x0000001f8ed000 - 0x0000001fbff000 (3.07 MiB)
+  Free   0x0000001fbff000 - 0x0000001fe91000 (2.57 MiB)
+  Rsv    0x0000001fe91000 - 0x0000001fe97000 (24 KiB)
+  Free   0x0000001fe97000 - 0x0000001fedc000 (276 KiB)
+  Rsv    0x0000001fedc000 - 0x00000020000000 (1.14 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+Initialize RAM allocator: 0x900000..0x1accd000
+Reserving CPU-local areas
+CPU-local area stride: 0x4b000 bytes
+Total CPU-local allocation: 0x12c000 bytes (4 CPUs)
+Flushed RAM used range to memory map: 0x900000..0xa2c000, current: 0xa2c000
+CPU-local areas allocated at 0x900000 - 0xa2c000
+Free                : [0x0000000000000000, 0x0000000000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Free                : [0xffff800000000000, 0xffff800000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Reserved            : [0x0000000000008000, 0x0000000000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Reserved            : [0xffff800000008000, 0xffff800000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Free                : [0x0000000000009000, 0x00000000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0xffff800000009000, 0xffff8000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0x0000000000100000, 0x0000000000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Free                : [0xffff800000100000, 0xffff800000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Reserved            : [0x0000000000800000, 0x0000000000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Reserved            : [0xffff800000800000, 0xffff800000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Free                : [0x0000000000808000, 0x000000000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Free                : [0xffff800000808000, 0xffff80000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Reserved            : [0x000000000080b000, 0x000000000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Reserved            : [0xffff80000080b000, 0xffff80000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Free                : [0x000000000080c000, 0x0000000000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Free                : [0xffff80000080c000, 0xffff800000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Reserved            : [0x0000000000811000, 0x0000000000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Reserved            : [0xffff800000811000, 0xffff800000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Free                : [0x0000000000a2c000, 0x000000001accd000) -> [0x0000000000a2c000, 0x000000001accd000) (418.63 MiB)
+Free                : [0xffff800000a2c000, 0xffff80001accd000) -> [0x0000000000a2c000, 0x000000001accd000) (418.63 MiB)
+KImage              : [0x000000001accd000, 0x000000001c000000) -> [0x000000001accd000, 0x000000001c000000) (19.2 MiB)
+KImage              : [0xffff80001accd000, 0xffff80001c000000) -> [0x000000001accd000, 0x000000001c000000) (19.2 MiB)
+Free                : [0x000000001c000000, 0x000000001ed3f000) -> [0x000000001c000000, 0x000000001ed3f000) (45.25 MiB)
+Free                : [0xffff80001c000000, 0xffff80001ed3f000) -> [0x000000001c000000, 0x000000001ed3f000) (45.25 MiB)
+Reserved            : [0x000000001ed3f000, 0x000000001ee00000) -> [0x000000001ed3f000, 0x000000001ee00000) (772 KiB)
+Reserved            : [0xffff80001ed3f000, 0xffff80001ee00000) -> [0x000000001ed3f000, 0x000000001ee00000) (772 KiB)
+Free                : [0x000000001ee00000, 0x000000001f8ed000) -> [0x000000001ee00000, 0x000000001f8ed000) (10.93 MiB)
+Free                : [0xffff80001ee00000, 0xffff80001f8ed000) -> [0x000000001ee00000, 0x000000001f8ed000) (10.93 MiB)
+Reserved            : [0x000000001f8ed000, 0x000000001fbff000) -> [0x000000001f8ed000, 0x000000001fbff000) (3.07 MiB)
+Reserved            : [0xffff80001f8ed000, 0xffff80001fbff000) -> [0x000000001f8ed000, 0x000000001fbff000) (3.07 MiB)
+Free                : [0x000000001fbff000, 0x000000001fe91000) -> [0x000000001fbff000, 0x000000001fe91000) (2.57 MiB)
+Free                : [0xffff80001fbff000, 0xffff80001fe91000) -> [0x000000001fbff000, 0x000000001fe91000) (2.57 MiB)
+Reserved            : [0x000000001fe91000, 0x000000001fe97000) -> [0x000000001fe91000, 0x000000001fe97000) (24 KiB)
+Reserved            : [0xffff80001fe91000, 0xffff80001fe97000) -> [0x000000001fe91000, 0x000000001fe97000) (24 KiB)
+Free                : [0x000000001fe97000, 0x000000001fedc000) -> [0x000000001fe97000, 0x000000001fedc000) (276 KiB)
+Free                : [0xffff80001fe97000, 0xffff80001fedc000) -> [0x000000001fe97000, 0x000000001fedc000) (276 KiB)
+Reserved            : [0x000000001fedc000, 0x0000000020000000) -> [0x000000001fedc000, 0x0000000020000000) (1.14 MiB)
+Reserved            : [0xffff80001fedc000, 0xffff800020000000) -> [0x000000001fedc000, 0x0000000020000000) (1.14 MiB)
+Reserved            : [0x00000000e0000000, 0x00000000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Reserved            : [0xffff8000e0000000, 0xffff8000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Mmio                : [0x00000000ffc00000, 0x0000000100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Mmio                : [0xffff8000ffc00000, 0xffff800100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+PerCpu              : [0x0000000000900000, 0x0000000000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+PerCpu              : [0xffff800000900000, 0xffff800000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+LAPIC               : [0x00000000fee00000, 0x00000000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+LAPIC               : [0xffff8000fee00000, 0xffff8000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+KImage              : [0xffffffff80000000, 0xffffffff81400000) -> [0x000000001accd000, 0x000000001c0cd000) (20 MiB)
+PerCpu              : [0xffffff0000900000, 0xffffff0000a2c000) -> [0x0000000000900000, 0x0000000000a2c000) (1.17 MiB)
+x86_64 switching CR3 and resetting relocations before high-half jump
+Trap vector at 0xffffffff811be080
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  PerCPU 0x00000000900000 - 0x00000000a2c000 (1.17 MiB)
+  Rsv    0x00000000a2c000 - 0x00000000a55000 (164 KiB)
+  Free   0x00000000a55000 - 0x0000001accd000 (418.47 MiB)
+  KImg   0x0000001accd000 - 0x0000001c000000 (19.2 MiB)
+  Free   0x0000001c000000 - 0x0000001ed3f000 (45.25 MiB)
+  Rsv    0x0000001ed3f000 - 0x0000001ee00000 (772 KiB)
+  Free   0x0000001ee00000 - 0x0000001f8ed000 (10.93 MiB)
+  Rsv    0x0000001f8ed000 - 0x0000001fbff000 (3.07 MiB)
+  Free   0x0000001fbff000 - 0x0000001fe91000 (2.57 MiB)
+  Rsv    0x0000001fe91000 - 0x0000001fe97000 (24 KiB)
+  Free   0x0000001fe97000 - 0x0000001fedc000 (276 KiB)
+  Rsv    0x0000001fedc000 - 0x00000020000000 (1.14 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+Jumping to main entry point at 0xffffffff8030e280 with SP 0xffffff000094b000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = x86_64
+platform = acpi
+target = x86_64-unknown-none
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 4
+
+Boot at 2026-10-02 08:28:47.128460675 UTC
+
+[37m[  2.845891 0:4294967306 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  2.846323 0:4294967306 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  2.848282 0:4294967296 [37max_net:709] [33m  No vsock device found![m[m
+Initialized 13 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (x86_64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+STARRY_GROUPED_AUTORUN_INIT
+STARRY_GROUPED_TEST_BEGIN: step=1/1 epoch=1790929734 command=exec /usr/bin/starry-run-system-tests
+STARRY_SYSTEM_PHASE_BEGIN: native-c
+STARRY_SYSTEM_TEST_BEGIN: /usr/bin/starry-test-suit/net-queue
+NET_QUEUE groups=1 interfaces=1
+NET_QUEUE_PASSED
+STARRY_SYSTEM_TEST_PASSED: /usr/bin/starry-test-suit/net-queue elapsed_s=0.111
+STARRY_SYSTEM_PHASE_END: native-c
+STARRY_SYSTEM_TEST_SUMMARY: total=1 passed=1 failed=0 elapsed_s=0.121
+STARRY_GROUPED_TESTS_PASSED
+STARRY_GROUPED_TEST_PASSED: step=1/1 epoch=1790929734 status=0 command=exec /usr/bin/starry-run-system-tests
+STARRY_GROUPED_TESTS_PASSED
+Welcome to Starry OS!
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ... done (10.66s)
+  qemu run: 10.68s
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=qemu-run elapsed_s=10.684
+ok: system
+
+starry qemu test summary:
+  PASS system (58.05s)
+result: 1/1 case(s) passed
+total: 64.87s
+all starry qemu tests passed
+QUEUE_EXIT=0
+=== ebpf app x86_64 (attach path) ===
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.27s
+     Running `target/debug/tg-xtask starry app qemu -t ebpf/net_queue_poll --arch x86_64`
+[2026-10-02T08:28:56Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T08:28:56Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+RUN	1/1	ebpf/net_queue_poll	arch=x86_64
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-Z6myTR/rootfs-x86_64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+cd /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll && bash /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/prebuild.sh
+net_queue_poll prebuild: installing Rust target x86_64-unknown-linux-musl for toolchain nightly-2026-09-04-x86_64-unknown-linux-gnu
+info: component rust-std for target x86_64-unknown-linux-musl is up to date
+net_queue_poll prebuild: building eBPF demo for x86_64-unknown-linux-musl (CC=x86_64-linux-musl-gcc)
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll/Cargo.toml:22:8
+   |
+22 - name = "net_queue_poll"
+22 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll` (manifest) generated 1 warning
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll-ebpf/Cargo.toml:15:8
+   |
+15 - name = "net_queue_poll"
+15 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll) ignoring invalid dependency `net_queue_poll-ebpf` which is missing a lib target
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll/Cargo.toml:22:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 22 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 22 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll-ebpf/Cargo.toml:15:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 15 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 15 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-common v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-common)
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-ebpf v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-ebpf)
+warning: net_queue_poll@0.1.0:     Finished `release` profile [optimized] target(s) in 0.82s
+    Finished `release` profile [optimized] target(s) in 0.10s
+net_queue_poll prebuild: installed net_queue_poll -> /usr/bin/net_queue_poll
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-Z6myTR/rootfs-x86_64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml
+[2026-10-02T08:29:14Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml
+[2026-10-02T08:29:14Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/qemu-x86_64.toml
+  prepare assets: 0ns (pipeline=plain, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/qemu-x86_64.toml (timeout=240s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-Z6myTR/rootfs-x86_64-alpine.img
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml ...
+AX_ARCH=x86_64
+AX_LOG=warn
+AX_TARGET=x86_64-unknown-none
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+cargo build -p starryos --target scripts/targets/bare/x86_64-unknown-none.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket -Z json-target-spec -Z build-std=core,alloc --config target.x86_64-unknown-none.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+   Compiling axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+   Compiling ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+   Compiling ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+   Compiling ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+   Compiling ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+   Compiling ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+   Compiling ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+   Compiling ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+   Compiling starryos v0.5.39 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/starryos)
+    Finished `release` profile [optimized] target(s) in 1m 06s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml ... done (67.00s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ... done (67.00s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ...
+[axbuild] starry kallsyms symbols=10987
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/.starryos.kallsyms.623748.tmp /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ... done (194.88ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ... done (47.82ms)
+[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ...
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+Preparing OVMF firmware for architecture: X86_64
+qemu-system-x86_64 -nographic -m 512M -device nvme,drive=disk0,serial=tgoskits,max_ioqpairs=64,msix_qsize=65 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-Z6myTR/rootfs-x86_64-alpine.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -machine q35 -drive if=pflash,format=raw,unit=0,readonly=on,file=/tmp/ostool/ovmf/x64/code.fd -drive if=pflash,format=raw,unit=1,file=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.vars.fd -drive format=raw,file=fat:rw:/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.esp
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[8;042;160t0[2J[01;01H[2J[01;01H[8;056;240t0[2J[01;01HBdsDxe: failed to load Boot0002 "UEFI QEMU NVMe Ctrl tgoskits 1" from PciRoot(0x0)/Pci(0x2,0x0)/NVMe(0x1,00-00-00-00-00-00-00-00): Not Found
+BdsDxe: loading Boot0003 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+BdsDxe: starting Boot0003 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+UEFI application started.
+UEFI console ok.
+No FDT found in UEFI config tables.
+Found ACPI 1.0 RSDP at address: 0x1f77e000
+Found ACPI 2.0 RSDP at address: 0x1f77e014
+Using ACPI 2 RSDP at address: 0x1f77e014
+UEFI setup.
+Exiting UEFI boot services...
+Exited boot services, memory map obtained.
+VM Load @PA:0x1bbb9000
+VM Load Offset: 0x9bbb9000
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  Free   0x00000000900000 - 0x0000001bbb9000 (434.72 MiB)
+  KImg   0x0000001bbb9000 - 0x0000001ce00000 (18.28 MiB)
+  Free   0x0000001ce00000 - 0x0000001e93f000 (27.25 MiB)
+  Rsv    0x0000001e93f000 - 0x0000001ea00000 (772 KiB)
+  Free   0x0000001ea00000 - 0x0000001f4ed000 (10.93 MiB)
+  Rsv    0x0000001f4ed000 - 0x0000001f7ff000 (3.07 MiB)
+  Free   0x0000001f7ff000 - 0x0000001fec1000 (6.76 MiB)
+  Rsv    0x0000001fec1000 - 0x0000001fec7000 (24 KiB)
+  Free   0x0000001fec7000 - 0x0000001fef4000 (180 KiB)
+  Rsv    0x0000001fef4000 - 0x00000020000000 (1.05 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+  Rsv    0x0000fd00000000 - 0x00010000000000 (12 GiB)
+Initialize RAM allocator: 0x900000..0x1bbb9000
+Reserving CPU-local areas
+CPU-local area stride: 0x4b000 bytes
+Total CPU-local allocation: 0x4b000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x900000..0x94b000, current: 0x94b000
+CPU-local areas allocated at 0x900000 - 0x94b000
+Free                : [0x0000000000000000, 0x0000000000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Free                : [0xffff800000000000, 0xffff800000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Reserved            : [0x0000000000008000, 0x0000000000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Reserved            : [0xffff800000008000, 0xffff800000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Free                : [0x0000000000009000, 0x00000000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0xffff800000009000, 0xffff8000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0x0000000000100000, 0x0000000000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Free                : [0xffff800000100000, 0xffff800000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Reserved            : [0x0000000000800000, 0x0000000000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Reserved            : [0xffff800000800000, 0xffff800000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Free                : [0x0000000000808000, 0x000000000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Free                : [0xffff800000808000, 0xffff80000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Reserved            : [0x000000000080b000, 0x000000000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Reserved            : [0xffff80000080b000, 0xffff80000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Free                : [0x000000000080c000, 0x0000000000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Free                : [0xffff80000080c000, 0xffff800000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Reserved            : [0x0000000000811000, 0x0000000000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Reserved            : [0xffff800000811000, 0xffff800000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Free                : [0x000000000094b000, 0x000000001bbb9000) -> [0x000000000094b000, 0x000000001bbb9000) (434.43 MiB)
+Free                : [0xffff80000094b000, 0xffff80001bbb9000) -> [0x000000000094b000, 0x000000001bbb9000) (434.43 MiB)
+KImage              : [0x000000001bbb9000, 0x000000001ce00000) -> [0x000000001bbb9000, 0x000000001ce00000) (18.28 MiB)
+KImage              : [0xffff80001bbb9000, 0xffff80001ce00000) -> [0x000000001bbb9000, 0x000000001ce00000) (18.28 MiB)
+Free                : [0x000000001ce00000, 0x000000001e93f000) -> [0x000000001ce00000, 0x000000001e93f000) (27.25 MiB)
+Free                : [0xffff80001ce00000, 0xffff80001e93f000) -> [0x000000001ce00000, 0x000000001e93f000) (27.25 MiB)
+Reserved            : [0x000000001e93f000, 0x000000001ea00000) -> [0x000000001e93f000, 0x000000001ea00000) (772 KiB)
+Reserved            : [0xffff80001e93f000, 0xffff80001ea00000) -> [0x000000001e93f000, 0x000000001ea00000) (772 KiB)
+Free                : [0x000000001ea00000, 0x000000001f4ed000) -> [0x000000001ea00000, 0x000000001f4ed000) (10.93 MiB)
+Free                : [0xffff80001ea00000, 0xffff80001f4ed000) -> [0x000000001ea00000, 0x000000001f4ed000) (10.93 MiB)
+Reserved            : [0x000000001f4ed000, 0x000000001f7ff000) -> [0x000000001f4ed000, 0x000000001f7ff000) (3.07 MiB)
+Reserved            : [0xffff80001f4ed000, 0xffff80001f7ff000) -> [0x000000001f4ed000, 0x000000001f7ff000) (3.07 MiB)
+Free                : [0x000000001f7ff000, 0x000000001fec1000) -> [0x000000001f7ff000, 0x000000001fec1000) (6.76 MiB)
+Free                : [0xffff80001f7ff000, 0xffff80001fec1000) -> [0x000000001f7ff000, 0x000000001fec1000) (6.76 MiB)
+Reserved            : [0x000000001fec1000, 0x000000001fec7000) -> [0x000000001fec1000, 0x000000001fec7000) (24 KiB)
+Reserved            : [0xffff80001fec1000, 0xffff80001fec7000) -> [0x000000001fec1000, 0x000000001fec7000) (24 KiB)
+Free                : [0x000000001fec7000, 0x000000001fef4000) -> [0x000000001fec7000, 0x000000001fef4000) (180 KiB)
+Free                : [0xffff80001fec7000, 0xffff80001fef4000) -> [0x000000001fec7000, 0x000000001fef4000) (180 KiB)
+Reserved            : [0x000000001fef4000, 0x0000000020000000) -> [0x000000001fef4000, 0x0000000020000000) (1.05 MiB)
+Reserved            : [0xffff80001fef4000, 0xffff800020000000) -> [0x000000001fef4000, 0x0000000020000000) (1.05 MiB)
+Reserved            : [0x00000000e0000000, 0x00000000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Reserved            : [0xffff8000e0000000, 0xffff8000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Mmio                : [0x00000000ffc00000, 0x0000000100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Mmio                : [0xffff8000ffc00000, 0xffff800100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Reserved            : [0x000000fd00000000, 0x0000010000000000) -> [0x000000fd00000000, 0x0000010000000000) (12 GiB)
+Reserved            : [0xffff80fd00000000, 0xffff810000000000) -> [0x000000fd00000000, 0x0000010000000000) (12 GiB)
+PerCpu              : [0x0000000000900000, 0x000000000094b000) -> [0x0000000000900000, 0x000000000094b000) (300 KiB)
+PerCpu              : [0xffff800000900000, 0xffff80000094b000) -> [0x0000000000900000, 0x000000000094b000) (300 KiB)
+LAPIC               : [0x00000000fee00000, 0x00000000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+LAPIC               : [0xffff8000fee00000, 0xffff8000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+KImage              : [0xffffffff80000000, 0xffffffff81400000) -> [0x000000001bbb9000, 0x000000001cfb9000) (20 MiB)
+PerCpu              : [0xffffff0000900000, 0xffffff000094b000) -> [0x0000000000900000, 0x000000000094b000) (300 KiB)
+x86_64 switching CR3 and resetting relocations before high-half jump
+Trap vector at 0xffffffff81151080
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  PerCPU 0x00000000900000 - 0x0000000094b000 (300 KiB)
+  Rsv    0x0000000094b000 - 0x0000000098b000 (256 KiB)
+  Free   0x0000000098b000 - 0x0000001bbb9000 (434.18 MiB)
+  KImg   0x0000001bbb9000 - 0x0000001ce00000 (18.28 MiB)
+  Free   0x0000001ce00000 - 0x0000001e93f000 (27.25 MiB)
+  Rsv    0x0000001e93f000 - 0x0000001ea00000 (772 KiB)
+  Free   0x0000001ea00000 - 0x0000001f4ed000 (10.93 MiB)
+  Rsv    0x0000001f4ed000 - 0x0000001f7ff000 (3.07 MiB)
+  Free   0x0000001f7ff000 - 0x0000001fec1000 (6.76 MiB)
+  Rsv    0x0000001fec1000 - 0x0000001fec7000 (24 KiB)
+  Free   0x0000001fec7000 - 0x0000001fef4000 (180 KiB)
+  Rsv    0x0000001fef4000 - 0x00000020000000 (1.05 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+  Rsv    0x0000fd00000000 - 0x00010000000000 (12 GiB)
+Jumping to main entry point at 0xffffffff80304150 with SP 0xffffff000094b000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = x86_64
+platform = acpi
+target = x86_64-unknown-none
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 1
+
+Boot at 2026-10-02 08:30:20.078337028 UTC
+
+[37m[  2.222505 0:4294967305 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  2.222899 0:4294967305 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  2.224389 0:4294967296 [37max_net:709] [33m  No vsock device found![m[m
+Initialized 13 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (x86_64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+Welcome to Starry OS!
+root@starry:~# [6n/usr/bin/net_queue_poll
+[37m[  9.456126 0:25769803797 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_BTF_LOAD[m[m
+[37m[  9.553173 0:25769803797 [37mkbpf_basic::preprocessor:93] [31mrelocation for ty: 0 not implemented, instruction index: 70[m[m
+[37m[  9.568873 0:25769803797 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_LINK_CREATE[m[m
+NET_QUEUE_POLL: attached net:queue_poll_round, draining 1 cpu buffer(s)
+NET_QUEUE_POLL: discovery_order=0 group_id=0 owner_cpu=0 budget=256 work_units=3 outcome=0
+NET_QUEUE_POLL: total records = 7, inconsistent = 0
+NET_QUEUE_POLL_PASS: 7 records
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ... done (18.59s)
+APP_EXIT=0

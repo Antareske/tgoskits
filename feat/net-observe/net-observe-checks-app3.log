@@ -1,0 +1,278 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.34s
+     Running `target/debug/tg-xtask starry app qemu -t ebpf/net_queue_poll --arch x86_64`
+[2026-10-02T05:05:36Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T05:05:36Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+RUN	1/1	ebpf/net_queue_poll	arch=x86_64
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-toFyz1/rootfs-x86_64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+cd /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll && bash /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/prebuild.sh
+net_queue_poll prebuild: installing Rust target x86_64-unknown-linux-musl for toolchain nightly-2026-09-04-x86_64-unknown-linux-gnu
+info: component rust-std for target x86_64-unknown-linux-musl is up to date
+net_queue_poll prebuild: building eBPF demo for x86_64-unknown-linux-musl (CC=x86_64-linux-musl-gcc)
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll/Cargo.toml:22:8
+   |
+22 - name = "net_queue_poll"
+22 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll` (manifest) generated 1 warning
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll-ebpf/Cargo.toml:15:8
+   |
+15 - name = "net_queue_poll"
+15 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll) ignoring invalid dependency `net_queue_poll-ebpf` which is missing a lib target
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll/Cargo.toml:22:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 22 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 22 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll-ebpf/Cargo.toml:15:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 15 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 15 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-ebpf v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-ebpf)
+warning: net_queue_poll@0.1.0:     Finished `release` profile [optimized] target(s) in 0.65s
+    Finished `release` profile [optimized] target(s) in 0.05s
+net_queue_poll prebuild: installed net_queue_poll -> /usr/bin/net_queue_poll
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-toFyz1/rootfs-x86_64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml
+[2026-10-02T05:05:49Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml
+[2026-10-02T05:05:49Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/qemu-x86_64.toml
+  prepare assets: 0ns (pipeline=plain, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/qemu-x86_64.toml (timeout=240s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-toFyz1/rootfs-x86_64-alpine.img
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml ...
+AX_ARCH=x86_64
+AX_LOG=warn
+AX_TARGET=x86_64-unknown-none
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+cargo build -p starryos --target scripts/targets/bare/x86_64-unknown-none.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket -Z json-target-spec -Z build-std=core,alloc --config target.x86_64-unknown-none.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+    Blocking waiting for file lock on build directory
+    Finished `release` profile [optimized] target(s) in 20.39s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml ... done (20.64s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ... done (20.64s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ...
+[axbuild] starry kallsyms symbols=10964
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/.starryos.kallsyms.407393.tmp /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ... done (198.68ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ... done (46.88ms)
+[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ...
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+Preparing OVMF firmware for architecture: X86_64
+qemu-system-x86_64 -nographic -m 512M -device nvme,drive=disk0,serial=tgoskits,max_ioqpairs=64,msix_qsize=65 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-toFyz1/rootfs-x86_64-alpine.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -machine q35 -drive if=pflash,format=raw,unit=0,readonly=on,file=/tmp/ostool/ovmf/x64/code.fd -drive if=pflash,format=raw,unit=1,file=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.vars.fd -drive format=raw,file=fat:rw:/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.esp
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[8;042;160t0[2J[01;01H[2J[01;01H[8;056;240t0[2J[01;01HBdsDxe: failed to load Boot0002 "UEFI QEMU NVMe Ctrl tgoskits 1" from PciRoot(0x0)/Pci(0x2,0x0)/NVMe(0x1,00-00-00-00-00-00-00-00): Not Found
+BdsDxe: loading Boot0003 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+BdsDxe: starting Boot0003 "UEFI QEMU HARDDISK QM00001 " from PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)
+UEFI application started.
+UEFI console ok.
+No FDT found in UEFI config tables.
+Found ACPI 1.0 RSDP at address: 0x1f77e000
+Found ACPI 2.0 RSDP at address: 0x1f77e014
+Using ACPI 2 RSDP at address: 0x1f77e014
+UEFI setup.
+Exiting UEFI boot services...
+Exited boot services, memory map obtained.
+VM Load @PA:0x1bbbf000
+VM Load Offset: 0x9bbbf000
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  Free   0x00000000900000 - 0x0000001bbbf000 (434.75 MiB)
+  KImg   0x0000001bbbf000 - 0x0000001ce00000 (18.25 MiB)
+  Free   0x0000001ce00000 - 0x0000001e93f000 (27.25 MiB)
+  Rsv    0x0000001e93f000 - 0x0000001ea00000 (772 KiB)
+  Free   0x0000001ea00000 - 0x0000001f4ed000 (10.93 MiB)
+  Rsv    0x0000001f4ed000 - 0x0000001f7ff000 (3.07 MiB)
+  Free   0x0000001f7ff000 - 0x0000001fec1000 (6.76 MiB)
+  Rsv    0x0000001fec1000 - 0x0000001fec7000 (24 KiB)
+  Free   0x0000001fec7000 - 0x0000001fef4000 (180 KiB)
+  Rsv    0x0000001fef4000 - 0x00000020000000 (1.05 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+  Rsv    0x0000fd00000000 - 0x00010000000000 (12 GiB)
+Initialize RAM allocator: 0x900000..0x1bbbf000
+Reserving CPU-local areas
+CPU-local area stride: 0x4b000 bytes
+Total CPU-local allocation: 0x4b000 bytes (1 CPUs)
+Flushed RAM used range to memory map: 0x900000..0x94b000, current: 0x94b000
+CPU-local areas allocated at 0x900000 - 0x94b000
+Free                : [0x0000000000000000, 0x0000000000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Free                : [0xffff800000000000, 0xffff800000008000) -> [0x0000000000000000, 0x0000000000008000) (32 KiB)
+Reserved            : [0x0000000000008000, 0x0000000000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Reserved            : [0xffff800000008000, 0xffff800000009000) -> [0x0000000000008000, 0x0000000000009000) (4 KiB)
+Free                : [0x0000000000009000, 0x00000000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0xffff800000009000, 0xffff8000000a0000) -> [0x0000000000009000, 0x00000000000a0000) (604 KiB)
+Free                : [0x0000000000100000, 0x0000000000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Free                : [0xffff800000100000, 0xffff800000800000) -> [0x0000000000100000, 0x0000000000800000) (7 MiB)
+Reserved            : [0x0000000000800000, 0x0000000000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Reserved            : [0xffff800000800000, 0xffff800000808000) -> [0x0000000000800000, 0x0000000000808000) (32 KiB)
+Free                : [0x0000000000808000, 0x000000000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Free                : [0xffff800000808000, 0xffff80000080b000) -> [0x0000000000808000, 0x000000000080b000) (12 KiB)
+Reserved            : [0x000000000080b000, 0x000000000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Reserved            : [0xffff80000080b000, 0xffff80000080c000) -> [0x000000000080b000, 0x000000000080c000) (4 KiB)
+Free                : [0x000000000080c000, 0x0000000000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Free                : [0xffff80000080c000, 0xffff800000811000) -> [0x000000000080c000, 0x0000000000811000) (20 KiB)
+Reserved            : [0x0000000000811000, 0x0000000000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Reserved            : [0xffff800000811000, 0xffff800000900000) -> [0x0000000000811000, 0x0000000000900000) (956 KiB)
+Free                : [0x000000000094b000, 0x000000001bbbf000) -> [0x000000000094b000, 0x000000001bbbf000) (434.45 MiB)
+Free                : [0xffff80000094b000, 0xffff80001bbbf000) -> [0x000000000094b000, 0x000000001bbbf000) (434.45 MiB)
+KImage              : [0x000000001bbbf000, 0x000000001ce00000) -> [0x000000001bbbf000, 0x000000001ce00000) (18.25 MiB)
+KImage              : [0xffff80001bbbf000, 0xffff80001ce00000) -> [0x000000001bbbf000, 0x000000001ce00000) (18.25 MiB)
+Free                : [0x000000001ce00000, 0x000000001e93f000) -> [0x000000001ce00000, 0x000000001e93f000) (27.25 MiB)
+Free                : [0xffff80001ce00000, 0xffff80001e93f000) -> [0x000000001ce00000, 0x000000001e93f000) (27.25 MiB)
+Reserved            : [0x000000001e93f000, 0x000000001ea00000) -> [0x000000001e93f000, 0x000000001ea00000) (772 KiB)
+Reserved            : [0xffff80001e93f000, 0xffff80001ea00000) -> [0x000000001e93f000, 0x000000001ea00000) (772 KiB)
+Free                : [0x000000001ea00000, 0x000000001f4ed000) -> [0x000000001ea00000, 0x000000001f4ed000) (10.93 MiB)
+Free                : [0xffff80001ea00000, 0xffff80001f4ed000) -> [0x000000001ea00000, 0x000000001f4ed000) (10.93 MiB)
+Reserved            : [0x000000001f4ed000, 0x000000001f7ff000) -> [0x000000001f4ed000, 0x000000001f7ff000) (3.07 MiB)
+Reserved            : [0xffff80001f4ed000, 0xffff80001f7ff000) -> [0x000000001f4ed000, 0x000000001f7ff000) (3.07 MiB)
+Free                : [0x000000001f7ff000, 0x000000001fec1000) -> [0x000000001f7ff000, 0x000000001fec1000) (6.76 MiB)
+Free                : [0xffff80001f7ff000, 0xffff80001fec1000) -> [0x000000001f7ff000, 0x000000001fec1000) (6.76 MiB)
+Reserved            : [0x000000001fec1000, 0x000000001fec7000) -> [0x000000001fec1000, 0x000000001fec7000) (24 KiB)
+Reserved            : [0xffff80001fec1000, 0xffff80001fec7000) -> [0x000000001fec1000, 0x000000001fec7000) (24 KiB)
+Free                : [0x000000001fec7000, 0x000000001fef4000) -> [0x000000001fec7000, 0x000000001fef4000) (180 KiB)
+Free                : [0xffff80001fec7000, 0xffff80001fef4000) -> [0x000000001fec7000, 0x000000001fef4000) (180 KiB)
+Reserved            : [0x000000001fef4000, 0x0000000020000000) -> [0x000000001fef4000, 0x0000000020000000) (1.05 MiB)
+Reserved            : [0xffff80001fef4000, 0xffff800020000000) -> [0x000000001fef4000, 0x0000000020000000) (1.05 MiB)
+Reserved            : [0x00000000e0000000, 0x00000000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Reserved            : [0xffff8000e0000000, 0xffff8000f0000000) -> [0x00000000e0000000, 0x00000000f0000000) (256 MiB)
+Mmio                : [0x00000000ffc00000, 0x0000000100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Mmio                : [0xffff8000ffc00000, 0xffff800100000000) -> [0x00000000ffc00000, 0x0000000100000000) (4 MiB)
+Reserved            : [0x000000fd00000000, 0x0000010000000000) -> [0x000000fd00000000, 0x0000010000000000) (12 GiB)
+Reserved            : [0xffff80fd00000000, 0xffff810000000000) -> [0x000000fd00000000, 0x0000010000000000) (12 GiB)
+PerCpu              : [0x0000000000900000, 0x000000000094b000) -> [0x0000000000900000, 0x000000000094b000) (300 KiB)
+PerCpu              : [0xffff800000900000, 0xffff80000094b000) -> [0x0000000000900000, 0x000000000094b000) (300 KiB)
+LAPIC               : [0x00000000fee00000, 0x00000000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+LAPIC               : [0xffff8000fee00000, 0xffff8000fee01000) -> [0x00000000fee00000, 0x00000000fee01000) (4 KiB)
+KImage              : [0xffffffff80000000, 0xffffffff81400000) -> [0x000000001bbbf000, 0x000000001cfbf000) (20 MiB)
+PerCpu              : [0xffffff0000900000, 0xffffff000094b000) -> [0x0000000000900000, 0x000000000094b000) (300 KiB)
+x86_64 switching CR3 and resetting relocations before high-half jump
+Trap vector at 0xffffffff8114e080
+Memory Map:
+  Free   0x00000000000000 - 0x00000000008000 (32 KiB)
+  Rsv    0x00000000008000 - 0x00000000009000 (4 KiB)
+  Free   0x00000000009000 - 0x000000000a0000 (604 KiB)
+  Free   0x00000000100000 - 0x00000000800000 (7 MiB)
+  Rsv    0x00000000800000 - 0x00000000808000 (32 KiB)
+  Free   0x00000000808000 - 0x0000000080b000 (12 KiB)
+  Rsv    0x0000000080b000 - 0x0000000080c000 (4 KiB)
+  Free   0x0000000080c000 - 0x00000000811000 (20 KiB)
+  Rsv    0x00000000811000 - 0x00000000900000 (956 KiB)
+  PerCPU 0x00000000900000 - 0x0000000094b000 (300 KiB)
+  Rsv    0x0000000094b000 - 0x0000000098b000 (256 KiB)
+  Free   0x0000000098b000 - 0x0000001bbbf000 (434.2 MiB)
+  KImg   0x0000001bbbf000 - 0x0000001ce00000 (18.25 MiB)
+  Free   0x0000001ce00000 - 0x0000001e93f000 (27.25 MiB)
+  Rsv    0x0000001e93f000 - 0x0000001ea00000 (772 KiB)
+  Free   0x0000001ea00000 - 0x0000001f4ed000 (10.93 MiB)
+  Rsv    0x0000001f4ed000 - 0x0000001f7ff000 (3.07 MiB)
+  Free   0x0000001f7ff000 - 0x0000001fec1000 (6.76 MiB)
+  Rsv    0x0000001fec1000 - 0x0000001fec7000 (24 KiB)
+  Free   0x0000001fec7000 - 0x0000001fef4000 (180 KiB)
+  Rsv    0x0000001fef4000 - 0x00000020000000 (1.05 MiB)
+  Rsv    0x000000e0000000 - 0x000000f0000000 (256 MiB)
+  MMIO   0x000000ffc00000 - 0x00000100000000 (4 MiB)
+  Rsv    0x0000fd00000000 - 0x00010000000000 (12 GiB)
+Jumping to main entry point at 0xffffffff80304180 with SP 0xffffff000094b000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = x86_64
+platform = acpi
+target = x86_64-unknown-none
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 1
+
+Boot at 2026-10-02 05:06:11.086835989 UTC
+
+[37m[  2.099194 0:4294967305 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  2.099540 0:4294967305 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  2.100946 0:4294967296 [37max_net:697] [33m  No vsock device found![m[m
+Initialized 8 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (x86_64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+Welcome to Starry OS!
+root@starry:~# [6n/usr/bin/net_queue_poll
+[37m[ 13.811110 0:17179869204 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_BTF_LOAD[m[m
+[37m[ 14.032511 0:17179869204 [37mkbpf_basic::preprocessor:93] [31mrelocation for ty: 0 not implemented, instruction index: 70[m[m
+[37m[ 14.047975 0:17179869204 [37mstarry_kernel::ebpf:268] [33mbpf: unsupported command BPF_LINK_CREATE[m[m
+NET_QUEUE_POLL: attached net:queue_poll_round, draining 1 cpu buffer(s)
+NET_QUEUE_POLL: discovery_order=0 group_id=0 owner_cpu=0 budget=256 work_units=1 outcome=0
+NET_QUEUE_POLL: total records = 5, inconsistent = 0
+NET_QUEUE_POLL_PASS: 5 records
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ... done (23.16s)
+APP_EXIT=0

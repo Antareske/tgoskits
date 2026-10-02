@@ -1,0 +1,127 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.23s
+     Running `target/debug/tg-xtask starry app qemu -t ebpf/net_queue_poll --arch x86_64`
+[2026-10-02T05:02:39Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T05:02:39Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+RUN	1/1	ebpf/net_queue_poll	arch=x86_64
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+file already exists and passed checksum verification
+image archive verified at /tmp/tgosimages/rootfs-x86_64-alpine.img.tar.xz
+image archive is unchanged; keeping rootfs at /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-x86_64-alpine.img
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-0KU81z/rootfs-x86_64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+cd /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll && bash /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/prebuild.sh
+net_queue_poll prebuild: installing Rust target x86_64-unknown-linux-musl for toolchain nightly-2026-09-04-x86_64-unknown-linux-gnu
+info: component rust-std for target x86_64-unknown-linux-musl is up to date
+net_queue_poll prebuild: building eBPF demo for x86_64-unknown-linux-musl (CC=x86_64-linux-musl-gcc)
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll/Cargo.toml:22:8
+   |
+22 - name = "net_queue_poll"
+22 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll` (manifest) generated 1 warning
+warning: binary `net_queue_poll` should have a kebab-case name
+   |
+ 1 | /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/target/.../net_queue_poll
+   |                                                                                    ^^^^^^^^^^^^^^
+   |
+   = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+help: to change the binary name to `net-queue-poll`, convert `bin.name`
+  --> net_queue_poll-ebpf/Cargo.toml:15:8
+   |
+15 - name = "net_queue_poll"
+15 + name = "net-queue-poll"
+   |
+warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll) ignoring invalid dependency `net_queue_poll-ebpf` which is missing a lib target
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll/Cargo.toml:22:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 22 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 22 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0: warning: binary `net_queue_poll` should have a kebab-case name
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:  1 | ...1b846aaff7e/out/aya-build/target/net_queue_poll-ebpf/.../net_queue_poll
+warning: net_queue_poll@0.1.0:    |                                                             ^^^^^^^^^^^^^^
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0:    = note: `cargo::non_kebab_case_bins` is set to `warn` by default
+warning: net_queue_poll@0.1.0: help: to change the binary name to `net-queue-poll`, convert `bin.name`
+warning: net_queue_poll@0.1.0:   --> net_queue_poll-ebpf/Cargo.toml:15:8
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: 15 - name = "net_queue_poll"
+warning: net_queue_poll@0.1.0: 15 + name = "net-queue-poll"
+warning: net_queue_poll@0.1.0:    |
+warning: net_queue_poll@0.1.0: warning: `net_queue_poll-ebpf` (manifest) generated 1 warning
+warning: net_queue_poll@0.1.0:    Compiling net_queue_poll-ebpf v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/net_queue_poll-ebpf)
+warning: net_queue_poll@0.1.0:     Finished `release` profile [optimized] target(s) in 0.65s
+    Finished `release` profile [optimized] target(s) in 0.03s
+net_queue_poll prebuild: installed net_queue_poll -> /usr/bin/net_queue_poll
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-0KU81z/rootfs-x86_64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml
+[2026-10-02T05:02:59Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml
+[2026-10-02T05:02:59Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/qemu-x86_64.toml
+  prepare assets: 0ns (pipeline=plain, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/net_queue_poll/qemu-x86_64.toml (timeout=240s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-0KU81z/rootfs-x86_64-alpine.img
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml ...
+AX_ARCH=x86_64
+AX_LOG=warn
+AX_TARGET=x86_64-unknown-none
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+cargo build -p starryos --target scripts/targets/bare/x86_64-unknown-none.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket -Z json-target-spec -Z build-std=core,alloc --config target.x86_64-unknown-none.rustflags=["-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+    Blocking waiting for file lock on build directory
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+   Compiling axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+   Compiling ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+   Compiling ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+   Compiling ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+   Compiling ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+   Compiling ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+   Compiling ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+   Compiling ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+   Compiling starryos v0.5.39 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/starryos)
+    Finished `release` profile [optimized] target(s) in 2m 17s
+warning: the following packages contain code that will be rejected by a future version of Rust: bitmaps v3.2.1, chacha20 v0.10.2, core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 2`
+[axbuild] cargo build package=starryos target=scripts/targets/bare/x86_64-unknown-none.json config=/home/asta/tgoskits/wt-feat-net-observe/apps/starry/ebpf/build-x86_64-unknown-none.toml ... done (138.06s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release
+[axbuild] starry build package=starryos target=x86_64-unknown-none arch=x86_64 ... done (138.06s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ...
+[axbuild] starry kallsyms symbols=10964
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/.starryos.kallsyms.405590.tmp /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos ... done (182.08ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos.bin ... done (40.84ms)
+[axbuild] qemu run package=starryos target=scripts/targets/bare/x86_64-unknown-none.json ...
+qemu-system-x86_64 -nographic -m 512M -device nvme,drive=disk0,serial=tgoskits,max_ioqpairs=64,msix_qsize=65 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-0KU81z/rootfs-x86_64-alpine.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -machine q35 -kernel /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+qemu-system-x86_64: Error loading uncompressed kernel without PVH ELF Note
+Error: QEMU stopped without matching a configured success regex; transcript tail:
+qemu-system-x86_64 -nographic -m 512M -device nvme,drive=disk0,serial=tgoskits,max_ioqpairs=64,msix_qsize=65 -drive id=disk0,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/tmp/axbuild/starry-app/ebpf/net_queue_poll/runs/rootfs-0KU81z/rootfs-x86_64-alpine.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -machine q35 -kernel /home/asta/tgoskits/wt-feat-net-observe/target/x86_64-unknown-none/release/starryos
+qemu-system-x86_64: Error loading uncompressed kernel without PVH ELF Note
+
+APP_EXIT=1

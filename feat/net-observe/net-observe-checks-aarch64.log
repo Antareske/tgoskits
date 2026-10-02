@@ -1,0 +1,421 @@
+=== qemu net-queue (aarch64) ===
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.51s
+     Running `target/debug/tg-xtask starry test qemu --arch aarch64 -c qemu/system/net-queue`
+[2026-10-02T03:15:01Z INFO  axbuild::context] Workspace root: /home/asta/tgoskits/wt-feat-net-observe
+[2026-10-02T03:15:01Z INFO  axbuild::context] Cargo target directory: /home/asta/tgoskits/wt-feat-net-observe/target
+running starry qemu tests for package starryos on arch: aarch64 (target: aarch64-unknown-none-softfloat)
+Using build config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-aarch64-unknown-none-softfloat.toml
+[2026-10-02T03:15:01Z INFO  axbuild::build::config_file] Found build config at /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-aarch64-unknown-none-softfloat.toml
+AXBUILD_TIMING: scope=starry-qemu phase=prepare-build-groups arch=aarch64 target=aarch64-unknown-none-softfloat elapsed_s=0.001
+[axbuild] starry build package=starryos target=aarch64-unknown-none-softfloat arch=aarch64 ...
+[axbuild] cargo build package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-aarch64-unknown-none-softfloat.toml ...
+AX_ARCH=aarch64
+AX_LOG=warn
+AX_TARGET=aarch64-unknown-none-softfloat
+CARGO_UNSTABLE_JSON_TARGET_SPEC=true
+SMP=4
+cargo build -p starryos --target scripts/targets/bare/aarch64-unknown-none-softfloat.json -Z unstable-options --target-dir /home/asta/tgoskits/wt-feat-net-observe/target --features ax-driver/nvme,ax-driver/serial,ax-driver/virtio-gpu,ax-driver/virtio-input,ax-driver/virtio-net,ax-driver/virtio-socket,ax-driver/xhci-pci,ax-runtime/display,ax-runtime/rtc -Z json-target-spec -Z build-std=core,alloc --config target.aarch64-unknown-none-softfloat.rustflags=["-Cllvm-args=--max-store-memcpy=16", "-Crelocation-model=pic", "-Clink-args=-pie", "-Clink-args=--gc-sections", "-Clink-args=-znorelro", "-Clink-args=-znostart-stop-gc", "-Clink-args=-Tlinker.x", "-Clink-args=-u _head", "-D", "warnings"] --bin starryos --release --message-format json-render-diagnostics
+   Compiling compiler_builtins v0.1.160 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/compiler-builtins/compiler-builtins)
+   Compiling core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core)
+   Compiling ax-cpu v0.10.3 (/home/asta/tgoskits/wt-feat-net-observe/components/axcpu)
+   Compiling thiserror v2.0.21
+   Compiling heapless v0.9.3
+   Compiling crossbeam-utils v0.8.23
+   Compiling cpu-local v0.4.3 (/home/asta/tgoskits/wt-feat-net-observe/components/cpu-local)
+   Compiling zerocopy v0.8.59
+   Compiling ax-percpu v0.4.24 (/home/asta/tgoskits/wt-feat-net-observe/components/percpu/percpu)
+   Compiling anyhow v1.0.104
+   Compiling crossbeam-epoch v0.9.21
+   Compiling rust_decimal v1.43.0
+   Compiling ax-alloc v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/ax-alloc)
+   Compiling crab-usb v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/usb/usb-host)
+   Compiling rockchip-soc v0.4.8 (/home/asta/tgoskits/wt-feat-net-observe/drivers/soc/rockchip/rockchip-soc)
+   Compiling somehal v0.11.3 (/home/asta/tgoskits/wt-feat-net-observe/platforms/somehal)
+   Compiling ax-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/ax-driver)
+   Compiling num-traits v0.2.19
+   Compiling axplat-dyn v0.10.4 (/home/asta/tgoskits/wt-feat-net-observe/platforms/axplat-dyn)
+   Compiling libc v0.2.189
+   Compiling memoffset v0.9.1
+   Compiling smoltcp v0.13.1
+   Compiling scope-local v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/components/scope-local)
+   Compiling syscalls v0.8.1
+   Compiling axerrno v0.2.2
+   Compiling ax-hal v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axhal)
+   Compiling starry-signal v0.10.5 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/signal)
+   Compiling ax-tracepoint v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-tracepoint)
+   Compiling starry-kernel v0.12.1 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/kernel)
+   Compiling starryos v0.5.39 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/starryos)
+   Compiling ax-runtime v0.13.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axruntime)
+   Compiling ax-errno v0.6.3
+   Compiling someboot v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/platforms/someboot)
+   Compiling ax-posix-api v0.6.8 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_posix_api)
+   Compiling lwprintf-rs v0.3.3
+   Compiling alloc v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc)
+   Compiling log v0.4.34
+   Compiling bitflags v2.13.2
+   Compiling as-any v0.3.2
+   Compiling cfg-if v1.0.5
+   Compiling tock-registers v0.10.1
+   Compiling byteorder v1.5.0
+   Compiling stable_deref_trait v1.2.1
+   Compiling derive_more v2.1.1
+   Compiling ax-sync v0.6.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axsync)
+   Compiling scopeguard v1.2.0
+   Compiling bit_field v0.10.3
+   Compiling tock-registers v0.9.0
+   Compiling trait-ffi v0.3.1 (/home/asta/tgoskits/wt-feat-net-observe/components/trait-ffi/trait-ffi)
+   Compiling ax-lazyinit v0.5.1 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-lazyinit)
+   Compiling mbarrier v0.1.3
+   Compiling ax-memory-addr v0.7.1 (/home/asta/tgoskits/wt-feat-net-observe/memory/memory_addr)
+   Compiling num-align v0.1.0
+   Compiling bytemuck v1.25.2
+   Compiling pin-project-lite v0.2.17
+   Compiling futures-core v0.3.34
+   Compiling slab v0.4.12
+   Compiling futures-sink v0.3.34
+   Compiling strum v0.27.2
+   Compiling futures-task v0.3.34
+   Compiling futures-io v0.3.34
+   Compiling arrayvec v0.7.8
+   Compiling rdif-def v0.4.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-def)
+   Compiling lock_api v0.4.14
+   Compiling aarch64-cpu v11.2.0
+   Compiling irq-framework v0.5.0 (/home/asta/tgoskits/wt-feat-net-observe/components/irq-framework)
+   Compiling uguid v2.2.1
+   Compiling num_enum v0.7.6
+   Compiling ucs2 v0.3.3
+   Compiling ptr_meta v0.3.2
+   Compiling const-str v1.1.0
+   Compiling aarch64-cpu v10.0.0
+   Compiling mmio-api v0.3.1 (/home/asta/tgoskits/wt-feat-net-observe/memory/mmio-api)
+   Compiling pci_types v0.10.1
+   Compiling rdif-serial v0.10.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-serial)
+   Compiling const-default v1.0.0
+   Compiling buddy-slab-allocator v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/memory/buddy-slab-allocator)
+   Compiling accessor v0.3.3
+   Compiling hash32 v0.3.1
+   Compiling futures-channel v0.3.34
+   Compiling rdif-base v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-base)
+   Compiling utf8-width v0.1.9
+   Compiling zeroize v1.9.0
+   Compiling foldhash v0.2.0
+   Compiling futures-util v0.3.34
+   Compiling uefi-raw v0.14.0
+   Compiling rlsf v0.2.3
+   Compiling smccc v0.2.3
+   Compiling nb v1.1.0
+   Compiling axpanic v0.1.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axpanic)
+   Compiling allocator-api2 v0.2.21
+   Compiling equivalent v1.0.2
+   Compiling fdt-parser v0.4.19
+   Compiling ax-linked-list-r4l v0.5.7 (/home/asta/tgoskits/wt-feat-net-observe/components/linked_list_r4l)
+   Compiling rdif-clk v0.5.7 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-clk)
+   Compiling rdif-reset v0.2.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-reset)
+   Compiling rdif-iommu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-iommu)
+   Compiling rdif-power v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-power)
+   Compiling rdif-pwm v0.2.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-pwm)
+   Compiling rdif-input v0.3.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-input)
+   Compiling rdif-vsock v0.3.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-vsock)
+   Compiling axbacktrace v0.4.12 (/home/asta/tgoskits/wt-feat-net-observe/components/axbacktrace)
+   Compiling linux-raw-sys v0.12.1
+   Compiling crossbeam-queue v0.3.14
+   Compiling rdif-msi v0.3.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-msi)
+   Compiling rdif-pcie v0.3.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-pcie)
+   Compiling rdif-intc v0.16.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-intc)
+   Compiling rockchip-pwm v0.2.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/pwm/rockchip-pwm)
+   Compiling sg200x-pwm v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/pwm/sg200x-pwm)
+   Compiling cv181x-clock v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/soc/cv181x-clock)
+   Compiling spinning_top v0.3.0
+   Compiling ax-sched v0.5.11 (/home/asta/tgoskits/wt-feat-net-observe/components/axsched)
+   Compiling memchr v2.8.3
+   Compiling event-listener v5.4.2
+   Compiling concurrent-queue v2.5.0
+   Compiling managed v0.8.0
+   Compiling smallvec v1.16.2
+   Compiling acpi v6.1.1
+   Compiling adler2 v2.0.1
+   Compiling rand_core v0.6.4
+   Compiling bitflags v1.3.2
+   Compiling rsext4 v0.9.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/rsext4)
+   Compiling ringbuf v0.4.8
+   Compiling ax-memory-set v0.8.0 (/home/asta/tgoskits/wt-feat-net-observe/memory/memory_set)
+   Compiling ax-task v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-task)
+   Compiling intrusive-collections v0.9.7
+   Compiling miniz_oxide v0.9.1
+   Compiling atomic-waker v1.1.2
+   Compiling ax-log v0.6.1 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axlog)
+   Compiling ax-ctor-bare v0.4.10 (/home/asta/tgoskits/wt-feat-net-observe/components/ctor_bare/ctor_bare)
+   Compiling bitmaps v3.2.1
+   Compiling pcie v0.7.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/pci/pcie)
+   Compiling crossbeam-skiplist v0.1.3
+   Compiling crossbeam v0.8.5
+   Compiling event-listener-strategy v0.5.4
+   Compiling hashbrown v0.16.1
+   Compiling hashbrown v0.17.1
+   Compiling kbindings v0.3.0
+   Compiling either v1.18.0
+   Compiling async-channel v2.5.0
+   Compiling plain v0.2.3
+   Compiling rand_core v0.10.1
+   Compiling chrono v0.4.45
+   Compiling xhci v0.9.2
+   Compiling zero v0.1.3
+   Compiling scroll v0.13.0
+   Compiling itertools v0.14.0
+   Compiling combine v4.6.8
+   Compiling starry-vm v0.6.0 (/home/asta/tgoskits/wt-feat-net-observe/os/StarryOS/vm)
+   Compiling chacha20 v0.10.2
+   Compiling xmas-elf v0.9.1
+   Compiling static_assertions v1.1.0
+   Compiling aliasable v0.1.3
+   Compiling function_name v0.3.0
+   Compiling tp-lexer v0.5.5
+   Compiling static-keys v0.8.2
+   Compiling goblin v0.10.7
+   Compiling rand v0.10.3
+   Compiling ouroboros v0.18.5
+   Compiling kprobe v0.6.0
+   Compiling uluru v3.1.0
+   Compiling ax-cpumask v0.4.1 (/home/asta/tgoskits/wt-feat-net-observe/components/cpumask)
+   Compiling flatten_objects v0.2.4
+   Compiling ddebug v0.5.5
+   Compiling ax-cgroup v0.3.0 (/home/asta/tgoskits/wt-feat-net-observe/components/ax-cgroup)
+   Compiling axhvc v0.5.1 (/home/asta/tgoskits/wt-feat-net-observe/virtualization/axhvc)
+   Compiling page-table-generic v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/memory/page-table-generic)
+   Compiling fdt-raw v0.3.0
+   Compiling ranges-ext v0.6.4 (/home/asta/tgoskits/wt-feat-net-observe/memory/ranges-ext)
+   Compiling some-serial v0.7.8 (/home/asta/tgoskits/wt-feat-net-observe/drivers/serial/some-serial)
+   Compiling ax-io v0.7.2 (/home/asta/tgoskits/wt-feat-net-observe/components/axio)
+   Compiling kernutil v0.3.1 (/home/asta/tgoskits/wt-feat-net-observe/components/kernutil)
+   Compiling byte-unit v5.2.6
+   Compiling axivc v0.1.1 (/home/asta/tgoskits/wt-feat-net-observe/virtualization/axivc)
+   Compiling downcast-rs v2.0.2
+   Compiling strum v0.28.0
+   Compiling ksym v0.6.0
+   Compiling lru v0.16.4
+   Compiling lru v0.18.5
+   Compiling fdt-edit v0.2.3
+   Compiling ax-arm-pl031 v0.4.7 (/home/asta/tgoskits/wt-feat-net-observe/drivers/rtc/arm_pl031)
+   Compiling axpoll v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/components/axpoll)
+   Compiling rdif-pinctrl v0.2.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-pinctrl)
+   Compiling axfs-ng-vfs v0.8.1 (/home/asta/tgoskits/wt-feat-net-observe/fs/axfs-ng-vfs)
+   Compiling axpoll-set v0.1.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axpoll-set)
+   Compiling printf-compat v0.4.0
+   Compiling rdrive v0.25.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/rdrive)
+   Compiling kbpf-basic v0.6.0
+   Compiling aarch64-cpu-ext v0.1.4
+   Compiling dma-api v0.10.2 (/home/asta/tgoskits/wt-feat-net-observe/memory/dma-api)
+   Compiling futures v0.3.34
+   Compiling usb-if v0.8.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/usb/usb-if)
+   Compiling rdif-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-gpu)
+   Compiling rdif-block v0.13.2 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-block)
+   Compiling rdif-eth v0.6.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-eth)
+   Compiling rdif-display v0.5.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/interface/rdif-display)
+   Compiling rd-net v0.3.3 (/home/asta/tgoskits/wt-feat-net-observe/drivers/net/rd-net)
+   Compiling uefi v0.37.0
+   Compiling nvme-driver v0.8.2 (/home/asta/tgoskits/wt-feat-net-observe/drivers/blk/nvme-driver)
+   Compiling usb-serial v0.1.4 (/home/asta/tgoskits/wt-feat-net-observe/drivers/usb/usb-serial)
+   Compiling arm-gic-driver v0.18.1 (/home/asta/tgoskits/wt-feat-net-observe/drivers/intc/arm-gic-driver)
+   Compiling kmod-tools v0.3.0
+   Compiling kapi v0.3.0
+   Compiling kmod-loader v0.3.1
+   Compiling ax-plat v0.15.0 (/home/asta/tgoskits/wt-feat-net-observe/platforms/ax-plat)
+   Compiling axklib v0.9.1 (/home/asta/tgoskits/wt-feat-net-observe/components/axklib)
+   Compiling safe-mmio v0.3.2
+   Compiling ppv-lite86 v0.2.21
+   Compiling kernel-elf-parser v0.3.4
+   Compiling host-boot-abi v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/components/host-boot-abi)
+   Compiling rand_chacha v0.3.1
+   Compiling virtio-drivers v0.13.0
+   Compiling ax-fs-ng v0.11.2 (/home/asta/tgoskits/wt-feat-net-observe/fs/ax-fs-ng)
+   Compiling ax-input v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axinput)
+   Compiling rbpf v0.4.1
+   Compiling virtio-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/drivers/gpu/virtio-gpu)
+   Compiling ax-gpu v0.1.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axgpu)
+   Compiling ax-net v0.13.6 (/home/asta/tgoskits/wt-feat-net-observe/net/ax-net)
+   Compiling ax-ipi v0.6.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axipi)
+   Compiling ax-mm v0.8.4 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axmm)
+   Compiling ax-display v0.7.0 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/modules/axdisplay)
+   Compiling ax-api v0.8.6 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/api/arceos_api)
+   Compiling ax-std v0.7.5 (/home/asta/tgoskits/wt-feat-net-observe/os/arceos/ulib/axstd)
+    Finished `release` profile [optimized] target(s) in 1m 36s
+warning: the following packages contain code that will be rejected by a future version of Rust: core v0.0.0 (/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core), memchr v2.8.3
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+Converting ELF to BIN format...
+  elf: /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+  bin: /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+/opt/rustup/toolchains/nightly-2026-09-04-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/bin/llvm-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] cargo build package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json config=/home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/build-aarch64-unknown-none-softfloat.toml ... done (97.07s)
+[axbuild] cargo build elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] cargo build bin=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] cargo build artifact_dir=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release
+[axbuild] accepted known upstream Rust #134375 future-incompatibility for core@0.0.0, memchr@2.8.3
+[axbuild] starry build package=starryos target=aarch64-unknown-none-softfloat arch=aarch64 ... done (97.85s)
+[axbuild] starry artifact elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos ...
+[axbuild] starry kallsyms symbols=11661
+rust-objcopy --update-section .kallsyms=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/.starryos.kallsyms.160094.tmp /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos
+[axbuild] starry kallsyms elf=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos ... done (217.18ms)
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin ...
+rust-objcopy --strip-all -O binary /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+[axbuild] starry bin refresh /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin ... done (42.86ms)
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=build elapsed_s=98.111
+[2026-10-02T03:16:36Z INFO  ostool::run::qemu] Using QEMU config file: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-aarch64.toml
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=read-qemu-config elapsed_s=0.163
+AXBUILD_TIMING: scope=starry-qemu case=qemu/system phase=prepare-qemu-config elapsed_s=0.000
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+image archive verified at /tmp/tgosimages/rootfs-aarch64-alpine.img.tar.xz
+image extracted to /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-alpine.img
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-alpine.img
+debugfs 1.47.0 (5-Feb-2023)
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/.tmpCaaFEQ/rootfs.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=default rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-alpine.img elapsed_s=73.705
+syncing image registry from https://raw.githubusercontent.com/rcore-os/tgosimages/refs/heads/main/registry/default.toml...
+image archive verified at /tmp/tgosimages/rootfs-aarch64-busybox.img.tar.xz
+image extracted to /home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-busybox.img
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-path rootfs_kind=managed rootfs=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-busybox.img elapsed_s=5.290
+AXBUILD_TIMING: scope=starry-qemu phase=ensure-rootfs-paths rootfs_count=2 elapsed_s=78.995
+AXBUILD_TIMING: scope=starry-qemu build_group=qemu phase=prepare-qemu-cases elapsed_s=79.159
+[1/1] starry qemu system
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=resolve-pipeline elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-layout pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=rootfs-cache-key pipeline=grouped elapsed_s=0.156
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=create-run-dir pipeline=grouped elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=copy-shared-rootfs pipeline=grouped cache=miss elapsed_s=2.014
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=reset-layout elapsed_s=0.001
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=extract-rootfs elapsed_s=14.510
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-staging-root elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-musl-loader elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=select-c-subcases elapsed_s=0.000
+STARRY_APK_REGION=us
+apk repositories:
+https://dl-cdn.alpinelinux.org/alpine/v3.23/main
+https://dl-cdn.alpinelinux.org/alpine/v3.23/community
+cd /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system && /usr/bin/qemu-aarch64-static -L /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/160094-0/staging-root /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/160094-0/staging-root/bin/busybox sh -eu /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/prebuild.sh
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prebuild elapsed_s=0.030
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=prepare-cross-env elapsed_s=0.001
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=configure-all elapsed_s=0.406
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=build-all subcase_count=1 elapsed_s=0.195
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=install-all elapsed_s=0.005
+AXBUILD_TIMING: scope=grouped-c case=qemu/system phase=compile-total mode=root-project elapsed_s=0.606
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=prepare-c-subcases subcase_count=1 elapsed_s=0.637
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=write-grouped-runner elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=sync-runtime-deps elapsed_s=0.004
+debugfs -w /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/160094-0/case-rootfs.img
+debugfs 1.47.0 (5-Feb-2023)
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+rm: File not found by ext2_lookup while trying to resolve filename
+AXBUILD_TIMING: scope=qemu-asset-grouped case=qemu/system phase=inject-overlay elapsed_s=0.043
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=pipeline-prepare pipeline=grouped cache=miss elapsed_s=15.195
+AXBUILD_TIMING: scope=qemu-asset case=qemu/system phase=save-rootfs-cache pipeline=grouped cache=miss elapsed_s=12.181
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=prepare-assets pipeline=grouped cache=miss elapsed_s=29.548
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=patch-rootfs elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=apply-dynamic-boot elapsed_s=0.000
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=start-host-http elapsed_s=0.000
+  prepare assets: 29.55s (pipeline=grouped, cache=miss)
+  qemu config: /home/asta/tgoskits/wt-feat-net-observe/test-suit/starryos/qemu/system/qemu-aarch64.toml (timeout=1800s)
+  rootfs: /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/160094-0/case-rootfs.img
+[axbuild] qemu run package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json ...
+qemu-system-aarch64 -nographic -machine virt,gic-version=3,its=on -m 512M -cpu cortex-a53,pmu=on -smp 4 -device nvme,serial=deadbeef,drive=nvm,max_ioqpairs=64,msix_qsize=65 -drive id=nvm,if=none,format=raw,file=/home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/qemu-cases/qemu/system/runs/160094-0/case-rootfs.img,snapshot=on -device virtio-net-pci,netdev=net0 -netdev user,id=net0 -device virtio-gpu-pci -device virtio-keyboard-pci -device virtio-tablet-pci -device nec-usb-xhci,id=xhci,msi=off,msix=off -audiodev none,id=audio0 -device usb-audio,bus=xhci.0,audiodev=audio0 -drive id=usbdisk,if=none,format=raw,snapshot=on,file=/home/asta/tgoskits/wt-feat-net-observe/target/axbuild/rootfs/rootfs-aarch64-busybox.img -device usb-storage,bus=xhci.0,drive=usbdisk,serial=starry-usb-storage -kernel /home/asta/tgoskits/wt-feat-net-observe/target/aarch64-unknown-none-softfloat/release/starryos.bin
+Boot entropy source: FDT /chosen/rng-seed
+VM Load @PA:0x40200000
+VM Load Offset: 0xc0200000
+Memory Map:
+  Free   0x00000040000000 - 0x00000040200000 (2 MiB)
+  KImg   0x00000040200000 - 0x00000041400000 (18 MiB)
+  Free   0x00000041400000 - 0x00000060000000 (492 MiB)
+Initialize RAM allocator: 0x41400000..0x60000000
+Reserving CPU-local areas
+CPU-local area stride: 0x4b000 bytes
+Total CPU-local allocation: 0x12c000 bytes (4 CPUs)
+Flushed RAM used range to memory map: 0x41400000..0x41500000, current: 0x41500000
+Flushed RAM used range to memory map: 0x41500000..0x4162c000, current: 0x4162c000
+CPU-local areas allocated at 0x41500000 - 0x4162c000
+EL: 1
+Mapping early memory regions...
+Ram                 : [0xffff000040000000, 0xffff000060000000) -> [0x0000000040000000, 0x0000000060000000) (512 MiB)
+KImage              : [0xffffffff80000000, 0xffffffff81200000) -> [0x0000000040200000, 0x0000000041400000) (18 MiB)
+PerCpu              : [0xffffff0041500000, 0xffffff004162c000) -> [0x0000000041500000, 0x000000004162c000) (1.17 MiB)
+Debug serial        : [0xffff000009000000, 0xffff000009001000) -> [0x0000000009000000, 0x0000000009001000) (4 KiB)
+Boot page table at physical address: PA:0x4162c000
+Setting up table registers...
+MMU Entry point at physical address: 0x405dc2c0
+Trap vector at 0xffffffff80005000
+Memory Map:
+  MMIO   0x00000009000000 - 0x00000009001000 (4 KiB)
+  Free   0x00000040000000 - 0x00000040200000 (2 MiB)
+  KImg   0x00000040200000 - 0x00000041400000 (18 MiB)
+  Rsv    0x00000041400000 - 0x00000041500000 (1 MiB)
+  PerCPU 0x00000041500000 - 0x0000004162c000 (1.17 MiB)
+  Rsv    0x0000004162c000 - 0x00000041637000 (44 KiB)
+  Free   0x00000041637000 - 0x00000060000000 (489.79 MiB)
+Jumping to main entry point at 0xffffffff802cb240 with SP 0xffffff004154b000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = aarch64
+platform = linux,dummy-virt
+target = aarch64-unknown-none-softfloat
+build_mode = 
+log_level = warn
+backtrace = false
+smp = 4
+
+Boot at 2026-10-02 03:18:23.063549856 UTC
+
+[37m[  0.343127 0:4294967306 [37max_net::service:1099] [33meth0: DHCP acquired address 10.0.2.15/24[m[m
+[37m[  0.343532 0:4294967306 [37max_net::service:1101] [33meth0: DHCP router 10.0.2.2[m[m
+[37m[  0.345802 0:4294967296 [37max_net:696] [33m  No vsock device found![m[m
+Initialized 7 tracepoints
+kmod subsystem initialized
+
+   OpenRC 0.63 is starting up Linux 10.0.0 (aarch64)
+
+ * /proc is already mounted
+ * Mounting /run ... [ ok ]
+ * /run/openrc: creating directory
+ * /run/lock: creating directory
+ * /run/lock: correcting owner
+ * Caching service dependencies ... [ ok ]
+ * Preparing Starry runtime ... [ ok ]
+STARRY_GROUPED_AUTORUN_INIT
+STARRY_GROUPED_TEST_BEGIN: step=1/1 epoch=1790911110 command=exec /usr/bin/starry-run-system-tests
+STARRY_SYSTEM_PHASE_BEGIN: native-c
+STARRY_SYSTEM_TEST_BEGIN: /usr/bin/starry-test-suit/net-queue
+NET_QUEUE groups=1 interfaces=1
+NET_QUEUE_PASSED
+STARRY_SYSTEM_TEST_PASSED: /usr/bin/starry-test-suit/net-queue elapsed_s=0.052
+STARRY_SYSTEM_PHASE_END: native-c
+STARRY_SYSTEM_TEST_SUMMARY: total=1 passed=1 failed=0 elapsed_s=0.065
+STARRY_GROUPED_TESTS_PASSED
+STARRY_GROUPED_TEST_PASSED: step=1/1 epoch=1790911110 status=0 command=exec /usr/bin/starry-run-system-tests
+STARRY_GROUPED_TESTS_PASSED
+Welcome to Starry OS!
+root@starry:~# [6n[axbuild] qemu run package=starryos target=scripts/targets/bare/aarch64-unknown-none-softfloat.json ... done (8.17s)
+  qemu run: 8.17s
+AXBUILD_TIMING: scope=qemu-case case=qemu/system phase=qemu-run elapsed_s=8.174
+ok: system
+
+starry qemu test summary:
+  PASS system (37.86s)
+result: 1/1 case(s) passed
+total: 215.13s
+all starry qemu tests passed
+QEMU_AARCH64_EXIT=0

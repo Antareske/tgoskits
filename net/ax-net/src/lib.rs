@@ -26,6 +26,7 @@
 //!
 //! - `service`: owns the smoltcp interface and control plane.
 //! - `poll_runtime`: owns generation-based protocol scheduling.
+//! - `observe`: owns the narrow observation ports the events are reported on.
 //! - `queue_runtime`: owns IRQ affinity domains and queue executors.
 //! - `router`: aggregates protocol ports, route lookup, and loopback.
 //! - `socket`, `tcp`, `udp`, `raw`: POSIX-like IP socket surface.
@@ -51,6 +52,7 @@ mod error;
 mod general;
 mod ip_tos;
 mod listen_table;
+mod observe;
 /// Socket option types and the [`Configurable`](options::Configurable) trait.
 pub mod options;
 mod orphan;
@@ -116,6 +118,10 @@ pub use self::{
     device::{
         ArpEntry, EthernetFramePort, EthernetFramePortList, NetDeviceError, NetDeviceResult,
         TunShared,
+    },
+    observe::{
+        ProtoYieldObserver, ProtoYieldReason, ProtoYieldReport, install_proto_yield_observer,
+        publish_proto_yield_gate,
     },
     queue_runtime::{
         NetQueueIdentity, NetQueueSnapshot, NetQueueStats, NetworkDeviceInput, NetworkQueueRuntime,
@@ -717,7 +723,14 @@ pub fn init_vsock(
 fn poll_protocol_until_idle(budget: &mut ProtocolPollBudget) {
     loop {
         let more = get_service().poll(&mut SOCKET_SET.inner.lock());
-        if budget.consume(ax_hal::time::monotonic_time_nanos()) {
+        if let Some(reason) = budget.consume(ax_hal::time::monotonic_time_nanos()) {
+            // The protocol executor runs on the protocol owner CPU, and the
+            // executor thread is pinned there, so the current CPU is its owner.
+            observe::report_proto_yield(observe::ProtoYieldReport {
+                owner_cpu: ax_hal::percpu::this_cpu_id(),
+                reason,
+                work_pending: more,
+            });
             // Device owners share this CPU with the protocol executor. Deliver
             // readiness and release CPU ownership with all network locks dropped.
             drain_deferred_poll_wakes();

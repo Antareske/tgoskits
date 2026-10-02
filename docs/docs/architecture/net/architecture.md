@@ -189,6 +189,8 @@ sequenceDiagram
 
 这个模型避免多个线程同时推进协议栈，也保证 TCP 重传、keepalive、DHCP 和设备收包不会依赖某个应用线程继续运行。新 request 与 completion 竞争时，worker 在清除 scheduled 后再次比较 generation，确保至少再执行一轮。
 
+worker 连续轮询受预算约束（轮询次数与经过时间两个上限，先到者生效）：预算耗尽时它投递延迟唤醒、释放 CPU 所有权并重置预算，让同 CPU 上的设备所有者能继续运行。这次让出是协议执行器可见的调度转移，经窄观察端口报成 `net:proto_yield`（字段与判读口径见[网络事件](events.md)）。
+
 ![调用者、协议核心与设备线程的所有权边界](images/runtime-ownership.svg)
 
 实线表示 packet 或状态访问，虚线表示 generation 请求。同步 flush 只是等待 completion，不再是第二种 poll owner；queue executor 也永远不进入 smoltcp。

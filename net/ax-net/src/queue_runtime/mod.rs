@@ -6,7 +6,6 @@
 
 mod executor;
 mod notify;
-mod observe;
 mod spsc;
 mod state;
 #[cfg(test)]
@@ -26,18 +25,16 @@ use rd_net::{
     WifiLinkPolicy, WifiTransaction,
 };
 
+pub use self::state::{NetQueueIdentity, NetQueueStats};
 use self::{executor::*, notify::QueueNotification, spsc::*, state::PollGroupState};
-pub use self::{
-    observe::{
-        QueueBackpressureObserver, QueueBackpressureReason, QueueBackpressureReport,
-        QueueBackpressureStage, QueuePollObserver, QueuePollOutcome, QueuePollReport,
-        QueueRearmObserver, QueueRearmOutcome, QueueRearmReport, RxPublishObserver,
-        RxPublishReport, TxSubmitObserver, TxSubmitReport, install_queue_backpressure_observer,
-        install_queue_poll_observer, install_queue_rearm_observer, install_rx_publish_observer,
-        install_tx_submit_observer, publish_queue_backpressure_gate, publish_queue_poll_gate,
-        publish_queue_rearm_gate, publish_rx_publish_gate, publish_tx_submit_gate,
-    },
-    state::{NetQueueIdentity, NetQueueStats},
+pub use crate::observe::{
+    QueueBackpressureObserver, QueueBackpressureReason, QueueBackpressureReport,
+    QueueBackpressureStage, QueuePollObserver, QueuePollOutcome, QueuePollReport,
+    QueueRearmObserver, QueueRearmOutcome, QueueRearmReport, RxPublishObserver, RxPublishReport,
+    TxSubmitObserver, TxSubmitReport, install_queue_backpressure_observer,
+    install_queue_poll_observer, install_queue_rearm_observer, install_rx_publish_observer,
+    install_tx_submit_observer, publish_queue_backpressure_gate, publish_queue_poll_gate,
+    publish_queue_rearm_gate, publish_rx_publish_gate, publish_tx_submit_gate,
 };
 use crate::{
     config::InterfaceId,

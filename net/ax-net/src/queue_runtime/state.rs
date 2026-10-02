@@ -6,8 +6,8 @@ use rd_net::NetPollGroupId;
 use super::{
     QueueNotification, STATE_DISABLED, STATE_IDLE, STATE_MASK, STATE_MISSED, STATE_POLLING,
     STATE_SCHEDULED,
-    observe::{QueueRearmOutcome, QueueRearmReport, report_queue_rearm},
 };
+use crate::observe::{QueueRearmOutcome, QueueRearmReport, report_queue_rearm};
 
 /// Immutable identity of one poll group.
 ///

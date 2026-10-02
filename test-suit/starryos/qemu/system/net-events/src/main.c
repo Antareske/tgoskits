@@ -1,14 +1,15 @@
 /*
- * Checks the net:* queue events end to end:
+ * Checks the net:* events end to end:
  *
  *   1. every event is discoverable and its format declares the documented
  *      fields;
- *   2. enabling them makes real queue records readable from the trace buffer,
- *      with internally consistent values, for the events that traffic drives;
+ *   2. enabling them makes real records readable from the trace buffer, with
+ *      internally consistent values, for the events that traffic drives;
  *   3. disabling them stops new records while the same traffic continues.
  *
- * The events carry no network semantics beyond the queue runtime's own facts,
- * so the traffic below only has to produce queue rounds, not traffic patterns.
+ * The events carry no network semantics beyond the runtime's own facts, so the
+ * traffic below only has to produce queue rounds and protocol activity, not
+ * traffic patterns.
  */
 
 #define _GNU_SOURCE
@@ -25,7 +26,7 @@
 #define PATH_LEN 160
 #define MAX_TRACE_BYTES (256 * 1024)
 #define MAX_FIELDS 6
-#define MAX_EVENTS 5
+#define MAX_EVENTS 6
 
 /* The QEMU command line this suite runs under uses user-mode networking, whose
  * gateway answers ARP and IP, so a datagram sent to it always leaves the
@@ -49,38 +50,54 @@
  * that was produced while the event was still enabled. */
 #define DISABLE_SETTLE_US 50000
 
+/* How a record of one event is checked once real traffic has produced one. */
+enum record_shape {
+    /* The QEMU device cannot drive this event, so only discovery, format and
+     * the disabled leg are checked here; its semantics are covered by the
+     * ax-net unit tests. */
+    SHAPE_UNDRIVEN,
+    /* A queue poll round: budget, work units and outcome. */
+    SHAPE_POLL,
+    /* A frame length on top of the shared queue identity fields. */
+    SHAPE_FRAME,
+    /* A protocol executor yield: owner CPU, reason and pending work. */
+    SHAPE_YIELD,
+};
+
 struct event_spec {
     const char *name;
     int field_count;
     const char *fields[MAX_FIELDS];
-    /* Whether ordinary send/receive traffic is expected to drive records. */
-    int traffic_driven;
+    enum record_shape shape;
 };
 
 static const struct event_spec EVENTS[] = {
     { "queue_poll_round",
       6,
       { "discovery_order", "group_id", "owner_cpu", "budget", "work_units", "outcome" },
-      1 },
+      SHAPE_POLL },
     /* A rearm race and a busy device need hardware that the QEMU device does
-     * not offer, so these two only prove discovery, format and the disabled
-     * leg here; their semantics are covered by the ax-net unit tests. */
+     * not offer. */
     { "queue_rearm",
       4,
       { "discovery_order", "group_id", "owner_cpu", "outcome" },
-      0 },
+      SHAPE_UNDRIVEN },
     { "queue_backpressure",
       5,
       { "discovery_order", "group_id", "owner_cpu", "stage", "reason" },
-      0 },
+      SHAPE_UNDRIVEN },
     { "tx_submit",
       4,
       { "discovery_order", "group_id", "owner_cpu", "frame_len" },
-      1 },
+      SHAPE_FRAME },
     { "rx_publish",
       4,
       { "discovery_order", "group_id", "owner_cpu", "frame_len" },
-      1 },
+      SHAPE_FRAME },
+    { "proto_yield",
+      3,
+      { "owner_cpu", "reason", "work_pending" },
+      SHAPE_YIELD },
 };
 
 #define EVENT_COUNT (sizeof(EVENTS) / sizeof(EVENTS[0]))
@@ -309,6 +326,36 @@ static void check_poll_record(const char *marker)
            discovery_order, group_id, owner_cpu, budget, work_units, outcome);
 }
 
+/* Parses the first protocol yield record and checks its internal consistency. */
+static void check_yield_record(const char *trace)
+{
+    static const char marker[] = "proto_yield(";
+    const char *record = strstr(trace, marker);
+    if (record == NULL) {
+        fail("trace buffer holds no proto_yield record");
+        return;
+    }
+    record += sizeof(marker) - 1;
+    unsigned owner_cpu = 0;
+    unsigned reason = 0;
+    unsigned work_pending = 0;
+    int fields =
+        sscanf(record, "owner_cpu=%u reason=%u work_pending=%u", &owner_cpu, &reason, &work_pending);
+    if (fields != 3) {
+        fail("proto_yield record does not carry the documented fields");
+        return;
+    }
+    if (reason > 2) {
+        fail("proto_yield record reports an unknown yield reason");
+    }
+    if (work_pending > 1) {
+        fail("proto_yield record reports an unknown pending-work code");
+    }
+    check_owner_cpu("proto_yield", owner_cpu);
+    printf("NET_EVENTS_RECORD proto_yield owner_cpu=%u reason=%u work_pending=%u\n", owner_cpu,
+           reason, work_pending);
+}
+
 /* Reads the trace buffer, waiting briefly for records to be published. */
 static long read_trace_waiting(const char *event, char *buffer, size_t capacity, int *records)
 {
@@ -362,10 +409,7 @@ int main(void)
         check_poll_record(strstr(buffer, marker) + strlen(marker));
         for (size_t index = 0; index < EVENT_COUNT; index++) {
             const struct event_spec *event = &EVENTS[index];
-            if (!event->traffic_driven) {
-                continue;
-            }
-            if (strcmp(event->name, "queue_poll_round") == 0) {
+            if (event->shape == SHAPE_UNDRIVEN || event->shape == SHAPE_POLL) {
                 continue;
             }
             if (count_records(buffer, event->name) == 0) {
@@ -373,7 +417,11 @@ int main(void)
                 failures++;
                 continue;
             }
-            check_frame_record(event, buffer);
+            if (event->shape == SHAPE_FRAME) {
+                check_frame_record(event, buffer);
+            } else {
+                check_yield_record(buffer);
+            }
         }
     }
 

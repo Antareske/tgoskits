@@ -12,16 +12,18 @@ use super::{
     PollGroupState, QUEUE_BUDGET, QueueNotification, STATE_MASK, STATE_MISSED, STATE_POLLING,
     STATE_SCHEDULED, STATUS_EMPTY, STATUS_FAILED, STATUS_PENDING, STATUS_READY, SpscConsumer,
     SpscProducer, TxQueueDiscipline,
+};
+use crate::{
+    device::{
+        ETH_ZLEN, EthernetFramePort, NetDeviceError, NetDeviceResult, ProtocolEthernetFrame,
+        ProtocolRxFrame, RxBufferRecycler,
+    },
     observe::{
         QueueBackpressureReason, QueueBackpressureReport, QueueBackpressureStage, QueuePollOutcome,
         QueuePollReport, QueueRearmOutcome, QueueRearmReport, RxPublishReport, TxSubmitReport,
         report_queue_backpressure, report_queue_poll, report_queue_rearm, report_rx_publish,
         report_tx_submit,
     },
-};
-use crate::device::{
-    ETH_ZLEN, EthernetFramePort, NetDeviceError, NetDeviceResult, ProtocolEthernetFrame,
-    ProtocolRxFrame, RxBufferRecycler,
 };
 
 mod wifi;

@@ -1,23 +1,24 @@
-//! Narrow observation port for queue runtime events.
+//! Narrow observation ports for network events.
 //!
 //! One [`ObservationPort`] is one typed function-pointer slot installed by the
 //! OS adapter and never replaced or removed.  Entering it costs one
 //! published-flag load while no consumer is active, and the slot load plus the
 //! call when one is; it never allocates, reads a clock or takes a network lock,
-//! so it is safe on the queue executor path.  The caller assembles the report
-//! value before entering, which the compiler may sink behind the flag check but
-//! which the port itself does not guarantee.
+//! so it is safe on the queue executor and protocol executor paths.  The caller
+//! assembles the report value before entering, which the compiler may sink
+//! behind the flag check but which the port itself does not guarantee.
 //!
 //! Every event owns one port instance and exposes it to the OS adapter through
 //! `install_<event>_observer` / `publish_<event>_gate`, so the adapter never
-//! touches the slot or the flag directly.
+//! touches the slot or the flag directly.  The module holds the ports of both
+//! executors: the queue runtime's events and the protocol executor's.
 
 use core::{
     marker::PhantomData,
     sync::atomic::{AtomicBool, AtomicPtr, Ordering},
 };
 
-use super::NetQueueIdentity;
+use crate::queue_runtime::NetQueueIdentity;
 
 /// Result of one queue executor poll round.
 ///
@@ -166,6 +167,46 @@ pub struct RxPublishReport {
     pub len: usize,
 }
 
+/// Why the protocol executor's poll budget asked it to give up the CPU.
+///
+/// The discriminants are the reported codes and are part of the event
+/// contract: they must not be reordered.  The assertion below pins them.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[repr(u32)]
+pub enum ProtoYieldReason {
+    /// The poll-count limit was reached.
+    PollCount = 0,
+    /// The elapsed-time limit was reached.
+    Deadline  = 1,
+    /// Both limits were reached at the same check.
+    Both      = 2,
+}
+
+const _: () = assert!(
+    ProtoYieldReason::PollCount as u32 == 0
+        && ProtoYieldReason::Deadline as u32 == 1
+        && ProtoYieldReason::Both as u32 == 2,
+    "the reported yield reasons are part of the event contract"
+);
+
+/// One protocol executor yield.
+///
+/// The yield is a transition of the executor's own scheduling loop, not a
+/// protocol poll round: the executor releases CPU ownership because its budget
+/// asked for it, and it yields again on the next budget exhaustion whether or
+/// not the previous work finished.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct ProtoYieldReport {
+    /// CPU the protocol executor runs on.  The executor is pinned to the
+    /// protocol owner CPU, so this is its fixed owner rather than a CPU
+    /// sampled at report time.
+    pub owner_cpu: usize,
+    pub reason: ProtoYieldReason,
+    /// Whether protocol work was still pending when the budget asked for the
+    /// yield.
+    pub work_pending: bool,
+}
+
 /// Consumer of completed queue poll rounds.
 pub type QueuePollObserver = fn(QueuePollReport);
 
@@ -180,6 +221,9 @@ pub type TxSubmitObserver = fn(TxSubmitReport);
 
 /// Consumer of published RX frames.
 pub type RxPublishObserver = fn(RxPublishReport);
+
+/// Consumer of protocol executor yields.
+pub type ProtoYieldObserver = fn(ProtoYieldReport);
 
 /// One event's observation port: a typed callback slot plus a published gate.
 ///
@@ -251,6 +295,7 @@ static QUEUE_REARM_PORT: ObservationPort<QueueRearmReport> = ObservationPort::ne
 static QUEUE_BACKPRESSURE_PORT: ObservationPort<QueueBackpressureReport> = ObservationPort::new();
 static TX_SUBMIT_PORT: ObservationPort<TxSubmitReport> = ObservationPort::new();
 static RX_PUBLISH_PORT: ObservationPort<RxPublishReport> = ObservationPort::new();
+static PROTO_YIELD_PORT: ObservationPort<ProtoYieldReport> = ObservationPort::new();
 
 /// Installs the process-wide queue poll consumer.
 pub fn install_queue_poll_observer(observer: QueuePollObserver) {
@@ -320,4 +365,18 @@ pub(super) fn report_tx_submit(report: TxSubmitReport) {
 
 pub(super) fn report_rx_publish(report: RxPublishReport) {
     RX_PUBLISH_PORT.report(report);
+}
+
+/// Installs the process-wide protocol yield consumer.
+pub fn install_proto_yield_observer(observer: ProtoYieldObserver) {
+    PROTO_YIELD_PORT.install(observer);
+}
+
+/// Publishes whether the protocol yield event has active consumers.
+pub fn publish_proto_yield_gate(enabled: bool) {
+    PROTO_YIELD_PORT.publish_gate(enabled);
+}
+
+pub(crate) fn report_proto_yield(report: ProtoYieldReport) {
+    PROTO_YIELD_PORT.report(report);
 }

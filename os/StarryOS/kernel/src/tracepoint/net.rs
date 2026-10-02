@@ -1,12 +1,13 @@
-//! Network queue event adapters.
+//! Network event adapters.
 //!
-//! The queue runtime owns the network facts and reports them through a narrow
-//! observation port; this module owns the `net:*` tracepoint name, the record
-//! layout and the published gate that lets the runtime skip reports while no
+//! The network runtime owns the facts and reports them through narrow
+//! observation ports; this module owns the `net:*` tracepoint names, the record
+//! layouts and the published gates that let the runtime skip reports while no
 //! consumer is attached.
 
 use ax_net::{
-    QueueBackpressureReport, QueuePollReport, QueueRearmReport, RxPublishReport, TxSubmitReport,
+    ProtoYieldReport, QueueBackpressureReport, QueuePollReport, QueueRearmReport, RxPublishReport,
+    TxSubmitReport,
 };
 
 /// Converts a runtime value to its recorded width.
@@ -257,6 +258,45 @@ fn on_rx_publish(report: RxPublishReport) {
     );
 }
 
+ax_tracepoint::define_event_trace!(
+    proto_yield,
+    TP_kops(crate::tracepoint::KernelTraceAux),
+    TP_system(net),
+    TP_PROTO(
+        owner_cpu: u32,
+        reason: u32,
+        work_pending: u32,
+    ),
+    TP_STRUCT__entry {
+        owner_cpu: u32,
+        reason: u32,
+        work_pending: u32,
+    },
+    TP_fast_assign {
+        owner_cpu: owner_cpu,
+        reason: reason,
+        work_pending: work_pending,
+    },
+    TP_ident(__entry),
+    TP_printk({
+        alloc::format!(
+            "owner_cpu={} reason={} work_pending={}",
+            __entry.owner_cpu,
+            __entry.reason,
+            __entry.work_pending,
+        )
+    })
+);
+
+/// Reports one protocol executor yield.
+fn on_proto_yield(report: ProtoYieldReport) {
+    trace_proto_yield(
+        field(report.owner_cpu),
+        report.reason as u32,
+        u32::from(report.work_pending),
+    );
+}
+
 /// Installs the observation ports and publishes their initial gates.
 ///
 /// The network runtime is already running here, so rounds that completed
@@ -276,4 +316,6 @@ pub(super) fn install() {
     super::gate::register(&__tx_submit, ax_net::publish_tx_submit_gate);
     ax_net::install_rx_publish_observer(on_rx_publish);
     super::gate::register(&__rx_publish, ax_net::publish_rx_publish_gate);
+    ax_net::install_proto_yield_observer(on_proto_yield);
+    super::gate::register(&__proto_yield, ax_net::publish_proto_yield_gate);
 }

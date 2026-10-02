@@ -17,6 +17,10 @@ pub use self::{
         RouteInfo, StaticIpConfig,
     },
     device::{ArpEntry, EthernetFramePort, EthernetFramePortList, NetDeviceError, NetDeviceResult},
+    observe::{
+        ProtoYieldObserver, ProtoYieldReason, ProtoYieldReport, install_proto_yield_observer,
+        publish_proto_yield_gate,
+    },
     queue_runtime::{
         NetQueueIdentity, NetQueueSnapshot, NetQueueStats, NetworkDeviceInput,
         NetworkQueueRuntime, NetworkRuntimeBuilder, NetworkRuntimeError,
@@ -265,7 +269,7 @@ let id = InterfaceId::from_linux_ifindex(linux_ifindex).unwrap();
 
 ### 3.2 事件观察端口
 
-队列运行时把队列边界的事实交给一组窄观察端口，每个事件一个端口实例：
+网络运行时把状态转移的事实交给一组窄观察端口，每个事件一个端口实例：
 
 ```rust
 pub struct QueuePollReport { pub identity: NetQueueIdentity, pub budget: usize,
@@ -275,12 +279,15 @@ pub struct QueueBackpressureReport { pub identity: NetQueueIdentity,
                                      pub stage: QueueBackpressureStage, pub reason: u32 }
 pub struct TxSubmitReport { pub identity: NetQueueIdentity, pub len: usize }
 pub struct RxPublishReport { pub identity: NetQueueIdentity, pub len: usize }
+pub struct ProtoYieldReport { pub owner_cpu: usize, pub reason: ProtoYieldReason,
+                              pub work_pending: bool }
 
 pub fn install_queue_poll_observer(observer: QueuePollObserver);
 pub fn publish_queue_poll_gate(enabled: bool);
-// 其余四个事件各自一对 install_<event>_observer / publish_<event>_gate。
+// 其余五个事件各自一对 install_<event>_observer / publish_<event>_gate。
 ```
 
+队列边界的事实由队列运行时报告，协议执行器的让出由协议执行器报告；端口类型与契约对两者相同。
 `install_<event>_observer()` 每进程安装一次，重复安装同一函数幂等，替换存活消费者是不变量违背；端口不卸载，
 未安装等价于没有消费者。`publish_<event>_gate()` 由操作系统适配层写入：启用事实由 `ax-tracepoint` 的门控拥有，
 运行时不维护第二份真相，查询与触发之间的竞争由生成的事件函数做最终检查。端口在进入后只读一个已发布标志与一个

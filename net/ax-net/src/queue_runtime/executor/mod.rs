@@ -417,18 +417,16 @@ pub(super) const fn hardware_retry_outcome(work: usize) -> GroupPollOutcome {
     GroupPollOutcome::Idle(work)
 }
 
-pub(super) const fn waits_for_hardware_event(reason: &NetError) -> bool {
-    matches!(reason, NetError::Retry | NetError::LinkDown)
-}
-
-/// Maps a retryable device outcome to its reported reason code.
+/// Classifies a device refusal as a backpressure reason, if it is retryable.
 ///
-/// Only outcomes admitted by [`waits_for_hardware_event`] reach this mapping;
-/// any other error takes the permanent-failure path instead.
-const fn backpressure_reason(reason: &NetError) -> u32 {
+/// This is the single decision behind both the admission check and the
+/// reported reason code: an outcome that is not classified here takes the
+/// permanent-failure path and is never reported as backpressure.
+pub(super) const fn backpressure_reason(reason: &NetError) -> Option<QueueBackpressureReason> {
     match reason {
-        NetError::Retry => QueueBackpressureReason::Retry as u32,
-        _ => QueueBackpressureReason::LinkDown as u32,
+        NetError::Retry => Some(QueueBackpressureReason::Retry),
+        NetError::LinkDown => Some(QueueBackpressureReason::LinkDown),
+        _ => None,
     }
 }
 
@@ -648,11 +646,11 @@ impl QueueGroupExecutor {
                 }
                 Err(error) => {
                     let (buffer, reason) = error.into_parts();
-                    if waits_for_hardware_event(&reason) {
+                    if let Some(reported) = backpressure_reason(&reason) {
                         report_queue_backpressure(QueueBackpressureReport {
                             identity: self.shared.identity,
                             stage: QueueBackpressureStage::TxSubmit,
-                            reason: backpressure_reason(&reason),
+                            reason: reported,
                         });
                         self.pending_tx = Some(TxRequest {
                             buffer,
@@ -735,10 +733,12 @@ impl QueueGroupExecutor {
                             return GroupPollOutcome::Failed(work);
                         }
                         // The device asked to wait; the token stays retained.
+                        // Only a retry is retryable here: a link-down during
+                        // RX refill fails the round above instead.
                         report_queue_backpressure(QueueBackpressureReport {
                             identity: self.shared.identity,
                             stage: QueueBackpressureStage::RxRefill,
-                            reason: QueueBackpressureReason::Retry as u32,
+                            reason: QueueBackpressureReason::Retry,
                         });
                         rx_refill_blocked = true;
                     }
@@ -803,9 +803,10 @@ impl QueueGroupExecutor {
 
     fn finish_idle(&mut self) {
         if !self.shared.begin_rearm() {
-            // The plain case (the group left polling, or an IRQ arrived during
-            // the round) is not reported: `begin_rearm` reports the race from
-            // the transition itself.
+            // No rearm happens here, so this path reports nothing: the group
+            // left polling, or an IRQ arrived during the round and
+            // `begin_rearm` already reported the race from the transition
+            // itself.
             return;
         }
         match self

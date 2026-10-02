@@ -953,8 +953,46 @@ impl NetDevice for HardFailingRxDevice {
     }
 }
 
-/// Builds an executor whose RX queue rejects replacements permanently, under
-/// its own identity so its reports can be told apart from concurrent tests.
+/// Device whose RX queue refuses replacement buffers with a retry until two
+/// completions have been reclaimed, like a software queue that needs
+/// completion-ring space before it accepts buffers.
+struct RxRetryDevice(Trace);
+
+impl rd_net::DriverGeneric for RxRetryDevice {
+    fn name(&self) -> &str {
+        "test-rx-retry"
+    }
+}
+
+impl NetDevice for RxRetryDevice {
+    fn into_parts(self: Box<Self>) -> Result<NetDeviceParts, NetError> {
+        Ok(NetDeviceParts {
+            info: NetDeviceInfo::new("test-rx-retry", [0; 6]),
+            control: Box::new(FixedNetControl::new([0; 6])),
+            wifi_control: None,
+            poll_groups: vec![NetPollGroupParts {
+                id: NetPollGroupId::new(0),
+                queues: NetQueuePairParts {
+                    tx: Box::new(TestTx(Arc::clone(&self.0))),
+                    rx: Box::new(TestRx {
+                        trace: self.0,
+                        completions: VecDeque::new(),
+                        initial: 0,
+                        reclaimed: 0,
+                        replacements: Vec::new(),
+                    }),
+                },
+                irq_control: Box::new(TestIrq),
+                owner_startup: None,
+                irq_endpoints: vec![NetHardIrqEndpoint::new(
+                    NetIrqSourceId::new(0),
+                    Box::new(TestIrq),
+                )],
+            }],
+        })
+    }
+}
+
 /// TX queue that refuses the next submission with a scripted outcome.
 struct ScriptedTx {
     trace: Trace,
@@ -1066,7 +1104,8 @@ fn port_test_executor(
 }
 
 /// Builds a port-test executor whose RX queue accepts `rx_initial`
-/// replacements before it starts failing.
+/// replacements before it starts failing permanently, under its own identity
+/// so its reports can be told apart from concurrent tests.
 fn port_test_executor_with_rx_initial(
     identity: NetQueueIdentity,
     trace: Trace,
@@ -1394,6 +1433,31 @@ fn queue_poll_reports_a_blocked_round() {
     assert_eq!(reports.len(), 1);
     assert_eq!(reports[0].outcome, QueuePollOutcome::Blocked);
     assert_eq!(reports[0].work_units, 0);
+    assert!(
+        publishes_of(identity).is_empty(),
+        "a refused publish must not be reported"
+    );
+    close_port_gates();
+}
+
+#[test]
+fn rx_publish_reports_a_frame_retained_by_a_blocked_round() {
+    let _port = begin_port_capture(true);
+    let identity = port_identity(14);
+    let trace = Arc::new(Mutex::new(Vec::new()));
+    let (_tx, tx_ready) = spsc_ring(2);
+    let mut executor = port_test_executor(identity, Arc::clone(&trace), tx_ready);
+    let buffer = executor.group.rx.allocate_replacement().unwrap();
+    executor.pending_rx = Some(RxCompletion {
+        buffer,
+        packet_len: 60,
+    });
+
+    let outcome = executor.poll(256);
+    assert_eq!(outcome, GroupPollOutcome::Idle(0));
+    let published = publishes_of(identity);
+    assert_eq!(published.len(), 1, "the retained frame is published once");
+    assert_eq!(published[0].len, 60);
     close_port_gates();
 }
 
@@ -1543,8 +1607,9 @@ fn queue_rearm_reports_every_non_idle_outcome() {
         .store(STATE_POLLING, Ordering::Release);
     executor.finish_idle();
     assert_eq!(
-        rearms_of(identity).last(),
-        Some(&QueueRearmOutcome::WorkPending)
+        rearms_of(identity),
+        vec![QueueRearmOutcome::Race, QueueRearmOutcome::WorkPending],
+        "one rearm reports one outcome"
     );
 
     // The device asked for a deferred retry.
@@ -1558,8 +1623,13 @@ fn queue_rearm_reports_every_non_idle_outcome() {
         .store(STATE_POLLING, Ordering::Release);
     executor.finish_idle();
     assert_eq!(
-        rearms_of(identity).last(),
-        Some(&QueueRearmOutcome::RetryAt)
+        rearms_of(identity),
+        vec![
+            QueueRearmOutcome::Race,
+            QueueRearmOutcome::WorkPending,
+            QueueRearmOutcome::RetryAt,
+        ],
+        "one rearm reports one outcome"
     );
     assert!(executor.retry_at.is_some());
 
@@ -1573,7 +1643,16 @@ fn queue_rearm_reports_every_non_idle_outcome() {
         .state
         .store(STATE_POLLING, Ordering::Release);
     executor.finish_idle();
-    assert_eq!(rearms_of(identity).last(), Some(&QueueRearmOutcome::Failed));
+    assert_eq!(
+        rearms_of(identity),
+        vec![
+            QueueRearmOutcome::Race,
+            QueueRearmOutcome::WorkPending,
+            QueueRearmOutcome::RetryAt,
+            QueueRearmOutcome::Failed,
+        ],
+        "one rearm reports one outcome"
+    );
     assert!(
         executor.shared.is_disabled(),
         "a failed rearm must leave the group disabled"
@@ -1644,7 +1723,7 @@ fn tx_submit_reports_accepted_frames_and_backpressure_reports_refusals() {
     let refusals = backpressures_of(identity);
     assert_eq!(refusals.len(), 1);
     assert_eq!(refusals[0].stage, QueueBackpressureStage::TxSubmit);
-    assert_eq!(refusals[0].reason, QueueBackpressureReason::Retry as u32);
+    assert_eq!(refusals[0].reason, QueueBackpressureReason::Retry);
     assert_eq!(
         submits_of(identity).len(),
         1,
@@ -1654,6 +1733,166 @@ fn tx_submit_reports_accepted_frames_and_backpressure_reports_refusals() {
         executor.pending_tx.is_some(),
         "a retryable refusal keeps the frame retained"
     );
+
+    // A link-down is retryable on the TX side too: the frame stays retained
+    // and the report carries the classified reason.
+    let device = rd_net::prepare_device(
+        Box::new(ScriptedTxDevice {
+            trace: Arc::clone(&trace),
+            refusal: NetError::LinkDown,
+        }),
+        DeviceDma::new(
+            DmaDeviceInfo::new(
+                DmaDomainId::Direct,
+                DmaCoherency::Coherent,
+                DmaConstraints::new(u64::MAX),
+            ),
+            &TEST_DMA,
+        ),
+    )
+    .unwrap();
+    let (mut transmit, tx_ready) = spsc_ring(2);
+    let link_down_identity = port_identity(11);
+    let mut executor = port_test_executor_from_device(link_down_identity, tx_ready, device);
+    let buffer = executor.group.tx_pool.allocate(60).unwrap();
+    assert!(
+        transmit
+            .push(TxRequest {
+                buffer,
+                options: TxSubmitOptions {
+                    notify: TxNotify::Deferred,
+                    ..Default::default()
+                },
+            })
+            .is_ok()
+    );
+    let _ = executor.poll(256);
+    let refusals = backpressures_of(link_down_identity);
+    assert_eq!(refusals.len(), 1);
+    assert_eq!(refusals[0].stage, QueueBackpressureStage::TxSubmit);
+    assert_eq!(refusals[0].reason, QueueBackpressureReason::LinkDown);
+    assert!(submits_of(link_down_identity).is_empty());
+    assert!(
+        executor.pending_tx.is_some(),
+        "a link-down keeps the frame retained as well"
+    );
+    close_port_gates();
+}
+
+#[test]
+fn a_permanent_refusal_is_reported_as_neither_a_submit_nor_backpressure() {
+    let _port = begin_port_capture(true);
+    let identity = port_identity(12);
+    let trace = Arc::new(Mutex::new(Vec::new()));
+    let dma = DeviceDma::new(
+        DmaDeviceInfo::new(
+            DmaDomainId::Direct,
+            DmaCoherency::Coherent,
+            DmaConstraints::new(u64::MAX),
+        ),
+        &TEST_DMA,
+    );
+    let device = rd_net::prepare_device(
+        Box::new(ScriptedTxDevice {
+            trace: Arc::clone(&trace),
+            refusal: NetError::NotSupported,
+        }),
+        dma,
+    )
+    .unwrap();
+    let (mut transmit, tx_ready) = spsc_ring(2);
+    let mut executor = port_test_executor_from_device(identity, tx_ready, device);
+    let buffer = executor.group.tx_pool.allocate(60).unwrap();
+    assert!(
+        transmit
+            .push(TxRequest {
+                buffer,
+                options: TxSubmitOptions {
+                    notify: TxNotify::Deferred,
+                    ..Default::default()
+                },
+            })
+            .is_ok()
+    );
+
+    let _ = executor.poll(256);
+    assert!(
+        submits_of(identity).is_empty(),
+        "a refused frame is not accepted"
+    );
+    assert!(
+        backpressures_of(identity).is_empty(),
+        "a permanent refusal is not backpressure"
+    );
+    assert!(
+        executor.pending_tx.is_none(),
+        "a permanent refusal drops the frame instead of retaining it"
+    );
+    close_port_gates();
+}
+
+#[test]
+fn rx_refill_backpressure_reports_the_retry_and_keeps_the_replacement() {
+    let _port = begin_port_capture(true);
+    let identity = port_identity(13);
+    let trace = Arc::new(Mutex::new(Vec::new()));
+    let (_tx, tx_ready) = spsc_ring(2);
+    let dma = DeviceDma::new(
+        DmaDeviceInfo::new(
+            DmaDomainId::Direct,
+            DmaCoherency::Coherent,
+            DmaConstraints::new(u64::MAX),
+        ),
+        &TEST_DMA,
+    );
+    let device = rd_net::prepare_device(Box::new(RxRetryDevice(Arc::clone(&trace))), dma).unwrap();
+    let mut executor = port_test_executor_from_device(identity, tx_ready, device);
+    let replacement = executor.group.rx.allocate_replacement().unwrap();
+    executor.pending_rx_refill.push_back(PendingRxRefill {
+        completion: None,
+        replacement,
+    });
+
+    let _ = executor.poll(256);
+    let refusals = backpressures_of(identity);
+    assert_eq!(refusals.len(), 1);
+    assert_eq!(refusals[0].stage, QueueBackpressureStage::RxRefill);
+    assert_eq!(refusals[0].reason, QueueBackpressureReason::Retry);
+    assert_eq!(
+        executor.pending_rx_refill.len(),
+        1,
+        "the refused replacement stays retained"
+    );
+    assert!(
+        !executor.shared.is_disabled(),
+        "a retryable refill refusal does not fail the round"
+    );
+    close_port_gates();
+}
+
+#[test]
+fn a_link_down_during_rx_refill_fails_the_round_instead_of_reporting_backpressure() {
+    let _port = begin_port_capture(true);
+    let identity = port_identity(15);
+    let trace = Arc::new(Mutex::new(Vec::new()));
+    let (_tx, tx_ready) = spsc_ring(2);
+    // This RX queue refuses replacements permanently, so the refusal is a
+    // link-down: `(RxRefill, LinkDown)` is not a reachable report.
+    let mut executor =
+        port_test_executor_with_rx_initial(identity, Arc::clone(&trace), tx_ready, 0);
+    let replacement = executor.group.rx.allocate_replacement().unwrap();
+    executor.pending_rx_refill.push_back(PendingRxRefill {
+        completion: None,
+        replacement,
+    });
+
+    let outcome = executor.poll(256);
+    assert!(matches!(outcome, GroupPollOutcome::Failed(_)));
+    assert!(
+        backpressures_of(identity).is_empty(),
+        "a link-down during RX refill is a round failure, not backpressure"
+    );
+    assert!(executor.shared.is_disabled());
     close_port_gates();
 }
 

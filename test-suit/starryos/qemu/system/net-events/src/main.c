@@ -26,7 +26,6 @@
 #define PATH_LEN 160
 #define MAX_TRACE_BYTES (256 * 1024)
 #define MAX_FIELDS 6
-#define MAX_EVENTS 6
 
 /* The QEMU command line this suite runs under uses user-mode networking, whose
  * gateway answers ARP and IP, so a datagram sent to it always leaves the
@@ -52,9 +51,10 @@
 
 /* How a record of one event is checked once real traffic has produced one. */
 enum record_shape {
-    /* The QEMU device cannot drive this event, so only discovery, format and
-     * the disabled leg are checked here; its semantics are covered by the
-     * ax-net unit tests. */
+    /* This case does not assert this event's semantics: the outcome needs the
+     * device to race or to be busy, which this case's traffic does not
+     * guarantee.  Only discovery, format and the disabled leg are checked
+     * here; the semantics are covered by the ax-net unit tests. */
     SHAPE_UNDRIVEN,
     /* A queue poll round: budget, work units and outcome. */
     SHAPE_POLL,
@@ -76,8 +76,8 @@ static const struct event_spec EVENTS[] = {
       6,
       { "discovery_order", "group_id", "owner_cpu", "budget", "work_units", "outcome" },
       SHAPE_POLL },
-    /* A rearm race and a busy device need hardware that the QEMU device does
-     * not offer. */
+    /* A rearm race and a busy device are reachable in the driver but not
+     * guaranteed under this case's traffic. */
     { "queue_rearm",
       4,
       { "discovery_order", "group_id", "owner_cpu", "outcome" },
@@ -204,8 +204,12 @@ static void check_discovery(const struct event_spec *event)
     static char buffer[8192];
 
     event_path(path, sizeof(path), event->name, "id");
-    if (read_file(path, buffer, sizeof(buffer)) <= 0 || strtol(buffer, NULL, 10) < 0) {
+    char *id_end = NULL;
+    if (read_file(path, buffer, sizeof(buffer)) <= 0) {
         printf("NET_EVENTS_FAIL: net:%s has no readable id\n", event->name);
+        failures++;
+    } else if (strtol(buffer, &id_end, 10) < 0 || id_end == buffer) {
+        printf("NET_EVENTS_FAIL: net:%s reports a non-numeric id\n", event->name);
         failures++;
     }
     event_path(path, sizeof(path), event->name, "format");
@@ -240,14 +244,6 @@ static int set_all_events(const char *value)
         }
     }
     return failures_seen;
-}
-
-/* Parses the leading identity fields shared by every event. */
-static int parse_identity(const char *record, unsigned *discovery_order, unsigned *group_id,
-                          unsigned *owner_cpu)
-{
-    return sscanf(record, "discovery_order=%u group_id=%u owner_cpu=%u", discovery_order, group_id,
-                  owner_cpu);
 }
 
 static void check_owner_cpu(const char *name, unsigned owner_cpu)
@@ -293,19 +289,22 @@ static void check_frame_record(const struct event_spec *event, const char *trace
 }
 
 /* Parses the first poll-round record and checks its internal consistency. */
-static void check_poll_record(const char *marker)
+static void check_poll_record(const char *trace)
 {
-    if (marker == NULL) {
+    static const char marker[] = "queue_poll_round(";
+    const char *marker_at = strstr(trace, marker);
+    if (marker_at == NULL) {
         fail("trace buffer holds no queue_poll_round record");
         return;
     }
+    const char *record = marker_at + sizeof(marker) - 1;
     unsigned discovery_order = 0;
     unsigned group_id = 0;
     unsigned owner_cpu = 0;
     unsigned budget = 0;
     unsigned work_units = 0;
     unsigned outcome = 0;
-    int fields = sscanf(marker, "discovery_order=%u group_id=%u owner_cpu=%u budget=%u "
+    int fields = sscanf(record, "discovery_order=%u group_id=%u owner_cpu=%u budget=%u "
                                 "work_units=%u outcome=%u",
                         &discovery_order, &group_id, &owner_cpu, &budget, &work_units, &outcome);
     if (fields != 6) {
@@ -318,9 +317,7 @@ static void check_poll_record(const char *marker)
     if (work_units > budget) {
         fail("queue_poll_round record reports more work than its budget");
     }
-    if (parse_identity(marker, &discovery_order, &group_id, &owner_cpu) == 3) {
-        check_owner_cpu("queue_poll_round", owner_cpu);
-    }
+    check_owner_cpu("queue_poll_round", owner_cpu);
     printf("NET_EVENTS_RECORD queue_poll_round discovery_order=%u group_id=%u owner_cpu=%u "
            "budget=%u work_units=%u outcome=%u\n",
            discovery_order, group_id, owner_cpu, budget, work_units, outcome);
@@ -356,8 +353,28 @@ static void check_yield_record(const char *trace)
            reason, work_pending);
 }
 
-/* Reads the trace buffer, waiting briefly for records to be published. */
-static long read_trace_waiting(const char *event, char *buffer, size_t capacity, int *records)
+/* Whether every event this case expects traffic to drive has a record. */
+static int all_traffic_events_recorded(const char *trace)
+{
+    for (size_t index = 0; index < EVENT_COUNT; index++) {
+        const struct event_spec *event = &EVENTS[index];
+        if (event->shape == SHAPE_UNDRIVEN) {
+            continue;
+        }
+        if (count_records(trace, event->name) == 0) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+/* Reads the trace buffer, waiting briefly for records to be published.
+ *
+ * Each traffic-driven event is produced by a different boundary (a queue
+ * round, a driver acceptance, a protocol-side publish, a protocol executor
+ * yield), so the wait covers all of them rather than only the first one to
+ * appear; a bounded wait keeps a broken event a failure instead of a race. */
+static long read_trace_waiting_for_all(char *buffer, size_t capacity)
 {
     long length = -1;
     for (int attempt = 0; attempt < RECORD_WAIT_ATTEMPTS; attempt++) {
@@ -365,8 +382,7 @@ static long read_trace_waiting(const char *event, char *buffer, size_t capacity,
         if (length < 0) {
             return -1;
         }
-        *records = count_records(buffer, event);
-        if (*records > 0) {
+        if (all_traffic_events_recorded(buffer)) {
             break;
         }
         usleep(RECORD_WAIT_US);
@@ -396,31 +412,31 @@ int main(void)
         fail("no traffic could be sent to drive queue rounds");
     }
 
-    int records = 0;
-    long trace_length = read_trace_waiting("queue_poll_round", buffer, sizeof(buffer), &records);
+    long trace_length = read_trace_waiting_for_all(buffer, sizeof(buffer));
     if (trace_length < 0) {
         fail("trace buffer is not readable");
-    } else if (records == 0) {
-        fail("enabled events recorded no queue poll round");
     } else {
-        printf("NET_EVENTS records=%d\n", records);
-        char marker[64];
-        snprintf(marker, sizeof(marker), "queue_poll_round(");
-        check_poll_record(strstr(buffer, marker) + strlen(marker));
-        for (size_t index = 0; index < EVENT_COUNT; index++) {
-            const struct event_spec *event = &EVENTS[index];
-            if (event->shape == SHAPE_UNDRIVEN || event->shape == SHAPE_POLL) {
-                continue;
-            }
-            if (count_records(buffer, event->name) == 0) {
-                printf("NET_EVENTS_FAIL: no net:%s record under real traffic\n", event->name);
-                failures++;
-                continue;
-            }
-            if (event->shape == SHAPE_FRAME) {
-                check_frame_record(event, buffer);
-            } else {
-                check_yield_record(buffer);
+        int records = count_records(buffer, "queue_poll_round");
+        if (records == 0) {
+            fail("enabled events recorded no queue poll round");
+        } else {
+            printf("NET_EVENTS records=%d\n", records);
+            check_poll_record(buffer);
+            for (size_t index = 0; index < EVENT_COUNT; index++) {
+                const struct event_spec *event = &EVENTS[index];
+                if (event->shape == SHAPE_UNDRIVEN || event->shape == SHAPE_POLL) {
+                    continue;
+                }
+                if (count_records(buffer, event->name) == 0) {
+                    printf("NET_EVENTS_FAIL: no net:%s record under real traffic\n", event->name);
+                    failures++;
+                    continue;
+                }
+                if (event->shape == SHAPE_FRAME) {
+                    check_frame_record(event, buffer);
+                } else {
+                    check_yield_record(buffer);
+                }
             }
         }
     }

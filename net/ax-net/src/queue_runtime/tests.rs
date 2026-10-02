@@ -958,9 +958,16 @@ fn hardware_retry_rearms_instead_of_immediately_rescheduling() {
         hardware_retry_outcome(0),
         GroupPollOutcome::Idle(0)
     ));
-    assert!(waits_for_hardware_event(&NetError::Retry));
-    assert!(waits_for_hardware_event(&NetError::LinkDown));
-    assert!(!waits_for_hardware_event(&NetError::NotSupported));
+    // The admission check and the reported reason come from one classifier.
+    assert_eq!(
+        backpressure_reason(&NetError::Retry),
+        Some(QueueBackpressureReason::Retry)
+    );
+    assert_eq!(
+        backpressure_reason(&NetError::LinkDown),
+        Some(QueueBackpressureReason::LinkDown)
+    );
+    assert_eq!(backpressure_reason(&NetError::NotSupported), None);
     assert!(matches!(
         rx_refill_retry_outcome(0, 0),
         GroupPollOutcome::Idle(0)

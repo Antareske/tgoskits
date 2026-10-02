@@ -12,6 +12,11 @@
 //! `install_<event>_observer` / `publish_<event>_gate`, so the adapter never
 //! touches the slot or the flag directly.  The module holds the ports of both
 //! executors: the queue runtime's events and the protocol executor's.
+//!
+//! Queue reports carry [`crate::queue_runtime::NetQueueIdentity`] and the queue
+//! runtime re-exports these ports, so the two modules refer to each other.  The
+//! cycle is deliberate: one table of ports and report types keeps the event
+//! boundary in a single place, and the identity type stays where it is owned.
 
 use core::{
     marker::PhantomData,
@@ -121,6 +126,9 @@ const _: () = assert!(
 ///
 /// The discriminants are the reported codes and are part of the event
 /// contract: they must not be reordered.  The assertion below pins them.
+/// Not every reason is reachable from every stage: a link-down during RX
+/// refill fails the round instead of retaining the replacement, so
+/// [`QueueBackpressureStage::RxRefill`] only ever reports `Retry`.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[repr(u32)]
 pub enum QueueBackpressureReason {
@@ -142,7 +150,7 @@ const _: () = assert!(
 pub struct QueueBackpressureReport {
     pub identity: NetQueueIdentity,
     pub stage: QueueBackpressureStage,
-    pub reason: u32,
+    pub reason: QueueBackpressureReason,
 }
 
 /// One frame accepted by the device.

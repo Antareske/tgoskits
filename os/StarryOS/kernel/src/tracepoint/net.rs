@@ -166,7 +166,7 @@ fn on_queue_backpressure(report: QueueBackpressureReport) {
         u32::from(report.identity.group_id.get()),
         field(report.identity.owner_cpu),
         report.stage as u32,
-        report.reason,
+        report.reason as u32,
     );
 }
 

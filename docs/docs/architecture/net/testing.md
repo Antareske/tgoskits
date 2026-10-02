@@ -281,10 +281,12 @@ cargo xtask starry test qemu --arch x86_64 -c qemu/system/net-queue
 `id` 必须可读、`format` 必须声明文档化字段；启用后向 QEMU 用户态网络网关发送数据报驱动真实队列轮询与协议
 推进（loopback 流量不经过物理队列，不能用），流量驱动的四个事件（`queue_poll_round`、`tx_submit`、
 `rx_publish`、`proto_yield`）必须在 `trace` 缓冲里出现自洽记录（结果码在取值范围内、工作量不超过预算、
-owner CPU 落在在线集合内、帧长与待办标志取值合法）；关闭、清空缓冲并对同样流量等待同样长的时间后，六个
+owner CPU 落在在线集合内、帧长与待办标志取值合法）。四个事件由不同边界产生，因此等待条件是「全部出现或
+有界超时」，而不是只看最早出现的 `queue_poll_round`；关闭、清空缓冲并对同样流量等待同样长的时间后，六个
 事件都不得再出现新记录。
 `queue_rearm` 的非空闲结局与 `queue_backpressure` 需要设备真的竞态或真的忙，QEMU 下不保证触发，
-这两个事件在本用例中只验证可发现、`format` 与关闭后无记录，语义由 `ax-net` 单元测试覆盖。
+这两个事件在本用例中只验证可发现、`format` 与关闭后无记录；它们的语义由 `ax-net` 单元测试覆盖
+（rearm 的四种结局、背压的 TX 提交重试、TX 提交链路不可用、RX 补投重试，以及永久拒绝不产生记录）。
 事件的触发与字段契约见[网络事件](events.md)。
 
 ```bash

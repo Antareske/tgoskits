@@ -26,7 +26,16 @@ pub use self::{
         NetworkQueueRuntime, NetworkRuntimeBuilder, NetworkRuntimeError,
         PinnedNetIrqAction, PinnedNetIrqError, PinnedNetIrqOutcome,
         PinnedNetIrqRegistrar, PinnedNetIrqRegistration, ResolvedNetIrqSource,
-        TxQueueDiscipline,
+        QueueBackpressureObserver, QueueBackpressureReason, QueueBackpressureReport,
+        QueueBackpressureStage, QueuePollObserver, QueuePollOutcome, QueuePollReport,
+        QueueRearmObserver, QueueRearmOutcome, QueueRearmReport,
+        RxPublishObserver, RxPublishReport, TxQueueDiscipline,
+        TxSubmitObserver, TxSubmitReport,
+        install_queue_backpressure_observer, install_queue_poll_observer,
+        install_queue_rearm_observer, install_rx_publish_observer,
+        install_tx_submit_observer, publish_queue_backpressure_gate,
+        publish_queue_poll_gate, publish_queue_rearm_gate,
+        publish_rx_publish_gate, publish_tx_submit_gate,
     },
     socket::{
         CMsgData, IpCmsg, RecvFlags, RecvOptions, SendFlags, SendOptions,
@@ -276,7 +285,8 @@ pub struct QueuePollReport { pub identity: NetQueueIdentity, pub budget: usize,
                              pub work_units: usize, pub outcome: QueuePollOutcome }
 pub struct QueueRearmReport { pub identity: NetQueueIdentity, pub outcome: QueueRearmOutcome }
 pub struct QueueBackpressureReport { pub identity: NetQueueIdentity,
-                                     pub stage: QueueBackpressureStage, pub reason: u32 }
+                                     pub stage: QueueBackpressureStage,
+                                     pub reason: QueueBackpressureReason }
 pub struct TxSubmitReport { pub identity: NetQueueIdentity, pub len: usize }
 pub struct RxPublishReport { pub identity: NetQueueIdentity, pub len: usize }
 pub struct ProtoYieldReport { pub owner_cpu: usize, pub reason: ProtoYieldReason,

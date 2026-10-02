@@ -16,10 +16,12 @@ unsafe extern "C" {
 ///
 /// Both the load and the store are registered in the nofault exception table,
 /// so an inaccessible address on either side redirects control to a recovery
-/// label instead of entering the OS page-fault path. Every architecture
-/// consults that table before the fault reaches the page-fault handler, and the
-/// lookup is a scan of a read-only linker section, so the call never sleeps,
-/// never allocates and takes no lock.
+/// label instead of entering the OS page-fault path or the fatal path beyond
+/// it. An address that no translation can name does not fail as a page fault
+/// everywhere: AArch64 reports an address size fault and LoongArch a memory
+/// access address error, so those architectures consult the same table for the
+/// exceptions carrying them as well. The lookup is a scan of a read-only linker
+/// section, so the call never sleeps, never allocates and takes no lock.
 ///
 /// A byte range that spans a hole copies the bytes preceding the hole and then
 /// reports [`KernelAccessError::Fault`]; the bytes after the hole keep their

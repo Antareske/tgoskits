@@ -1,12 +1,13 @@
 #![no_std]
 
-/// One `net:queue_poll_round` record. Written by the eBPF program into the
+/// One `net:queue_poll_round` payload. Written by the eBPF program into the
 /// perf event array and read back verbatim by the loader, so the layout is
 /// shared ABI between the two halves: `repr(C)` and a multiple of 8 bytes.
 ///
-/// The fields mirror the event's `format`: the common entry fields
-/// (`common_type`, `common_flags`, `common_preempt_count`, `common_pid`) come
-/// first, then these in declaration order.
+/// This struct holds the event-specific part only: the kernel prepends the
+/// generic trace entry header (`common_type`, `common_flags`,
+/// `common_preempt_count`, `common_pid`), and the fields below follow it in
+/// declaration order.
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct QueuePollEvent {

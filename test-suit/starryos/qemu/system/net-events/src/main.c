@@ -34,13 +34,20 @@
 #define GATEWAY_ADDR "10.0.2.2"
 #define GATEWAY_PORT 9
 #define TRAFFIC_FRAMES 16
-#define TRAFFIC_ATTEMPTS 8
-#define TRAFFIC_RETRY_US 20000
+/* A datagram is refused while the interface still has no routable address
+ * (DHCP can take seconds), so the retry window is generous rather than tuned:
+ * the case may fail for a broken event, not for a slow network. */
+#define TRAFFIC_ATTEMPTS 50
+#define TRAFFIC_RETRY_US 100000
 #define RECORD_WAIT_ATTEMPTS 20
 #define RECORD_WAIT_US 50000
 /* The same budget the record wait above is allowed, so the negative check
  * cannot pass merely by reading the buffer before the rounds finished. */
 #define DISABLED_WAIT_US (RECORD_WAIT_ATTEMPTS * RECORD_WAIT_US)
+/* Time for a round that already passed the gate check to reach the buffer
+ * before the buffer is cleared, so the negative check does not read a record
+ * that was produced while the event was still enabled. */
+#define DISABLE_SETTLE_US 50000
 
 static int failures;
 
@@ -110,8 +117,8 @@ static int send_traffic(void)
     unsigned char payload[32];
     memset(payload, 0x5a, sizeof(payload));
     int sent = 0;
-    /* The first datagram can be refused while the gateway neighbor entry is
-     * being resolved; the retries let that resolution complete. */
+    /* Retried until at least one datagram is accepted, so a not-yet-routable
+     * interface delays the check instead of failing it. */
     for (int attempt = 0; attempt < TRAFFIC_ATTEMPTS && sent == 0; attempt++) {
         for (int index = 0; index < TRAFFIC_FRAMES; index++) {
             payload[0] = (unsigned char)index;
@@ -239,6 +246,10 @@ int main(void)
     if (write_file(EVENT_DIR "/enable", "0") != 0) {
         fail("net:queue_poll_round could not be disabled");
     }
+    /* A round that already passed the gate check may still be on its way to
+     * the buffer; let it land before the buffer is cleared, so the negative
+     * check cannot read a record the enabled event produced. */
+    usleep(DISABLE_SETTLE_US);
     if (write_file(TRACE_FILE, "\n") != 0) {
         fail("trace buffer could not be cleared after disabling");
     }

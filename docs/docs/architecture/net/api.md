@@ -224,27 +224,6 @@ pub fn remove_interface_ipv4(
 
 `NetQueueSnapshot` 按 poll group 返回队列运行状态，是 `NetQueueStats` 的对外视图；列表顺序当前是 group 建立顺序，不构成契约，定位 group 用身份而不是位置。每项由三部分组成：不可变身份 `NetQueueIdentity`（设备发现序索引、驱动分配的 `NetPollGroupId`、owner CPU）、该设备发布成的接口 `InterfaceId`，以及计数 `NetQueueStats`。发现序索引是 group 建立时设备在运行时输入列表中的位置，启动跳过设备后与接口发布序不同，仅用于定位运行时内部设备；接口归属看 `InterfaceId`，同一设备的所有 group 共享它；`group_id` 只在设备内唯一，识别一个 group 需要 `(discovery_order, group_id)` 并用。身份在 build 时固定，接口在 `init_network` 发布接口时绑定，且绑定先于运行时对外可达，因此公开入口只会看到空列表或已经绑定好接口的 group；运行时尚未发布（未配置网络或初始化未完成）时返回空列表。计数按各自原子量逐字段读出，**不保证是同一时刻的一致视图**，只用于诊断定位，不能据此推导跨字段不变量（例如 `irq_to_poll_remote_wake ≤ irq`）；`rx_drops` 是只增不减的累计值；同一批丢弃随后也由设备层折入接口 `rx_dropped`，两处统计的是同一批事件，不可相加。`/sys/kernel/debug/net_queue` 渲染同一份快照，是诊断视图而非 ABI。
 
-### 3.2 事件观察端口
-
-队列运行时把每次 poll 调用完成后的事实交给一个窄观察端口：
-
-```rust
-pub struct QueuePollReport {
-    pub identity: NetQueueIdentity,
-    pub budget: usize,
-    pub work_units: usize,
-    pub outcome: QueuePollOutcome,
-}
-
-pub fn install_queue_poll_observer(observer: QueuePollObserver);
-pub fn publish_queue_poll_gate(enabled: bool);
-```
-
-`install_queue_poll_observer()` 每进程安装一次，重复安装同一函数幂等，替换存活消费者是不变量违背；端口不卸载，
-未安装等价于没有消费者。`publish_queue_poll_gate()` 由操作系统适配层写入：启用事实由 `ax-tracepoint` 的门控拥有，
-运行时不维护第二份真相，查询与触发之间的竞争由生成的 `trace_queue_poll_round()` 做最终检查。报告的字段语义、
-结果码与成本口径见[网络事件](events.md)。
-
 `InterfaceId` 是稳定接口 ID，同时作为 StarryOS/Linux ifindex 来源：
 
 ```rust
@@ -283,6 +262,27 @@ let id = InterfaceId::from_linux_ifindex(linux_ifindex).unwrap();
 ```
 
 示例强调名称只用于查找，跨 ABI 保存和比较应使用 `InterfaceId`。路由快照沿用同一接口身份，使 route dump 可以和 ioctl、AF_PACKET 结果稳定关联。
+
+### 3.2 事件观察端口
+
+队列运行时把每次 poll 调用完成后的事实交给一个窄观察端口：
+
+```rust
+pub struct QueuePollReport {
+    pub identity: NetQueueIdentity,
+    pub budget: usize,
+    pub work_units: usize,
+    pub outcome: QueuePollOutcome,
+}
+
+pub fn install_queue_poll_observer(observer: QueuePollObserver);
+pub fn publish_queue_poll_gate(enabled: bool);
+```
+
+`install_queue_poll_observer()` 每进程安装一次，重复安装同一函数幂等，替换存活消费者是不变量违背；端口不卸载，
+未安装等价于没有消费者。`publish_queue_poll_gate()` 由操作系统适配层写入：启用事实由 `ax-tracepoint` 的门控拥有，
+运行时不维护第二份真相，查询与触发之间的竞争由生成的 `trace_queue_poll_round()` 做最终检查。报告的字段语义、
+结果码与成本口径见[网络事件](events.md)。
 
 ### 3.3 路由快照
 

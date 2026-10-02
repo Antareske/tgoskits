@@ -1083,6 +1083,65 @@ fn queue_poll_reports_exactly_once_per_round_with_its_identity_and_budget() {
     assert_eq!(reports.len(), 2);
     assert_eq!(reports[1].budget, 64);
     assert_eq!(reports[1].work_units, 1);
+
+    // A budget of one unit leaves work behind, so the reported code is the one
+    // that means "there is more to do".
+    let buffer = executor.group.tx_pool.allocate(60).unwrap();
+    assert!(
+        transmit
+            .push(TxRequest {
+                buffer,
+                options: TxSubmitOptions {
+                    notify: TxNotify::Deferred,
+                    ..Default::default()
+                },
+            })
+            .is_ok()
+    );
+    let outcome = executor.poll(1);
+    assert_eq!(outcome, GroupPollOutcome::More(1));
+    let reports = reports_of(identity);
+    assert_eq!(reports.len(), 3);
+    assert_eq!(reports[2].budget, 1);
+    assert_eq!(reports[2].work_units, 1);
+    assert_eq!(reports[2].outcome, QueuePollOutcome::More);
+    publish_queue_poll_gate(false);
+}
+
+#[test]
+fn queue_poll_reports_a_blocked_round() {
+    let _port = begin_poll_capture(true);
+    let identity = port_identity(4);
+    let trace = Arc::new(Mutex::new(Vec::new()));
+    let (_tx, tx_ready) = spsc_ring(2);
+    let mut executor = port_test_executor(identity, Arc::clone(&trace), tx_ready);
+
+    // Fill the protocol-facing RX ring and strand one more completion: the
+    // round stops at the publish step instead of finishing.
+    for _ in 0..2 {
+        let buffer = executor.group.rx.allocate_replacement().unwrap();
+        assert!(
+            executor
+                .rx_ready
+                .push(RxCompletion {
+                    buffer,
+                    packet_len: 60,
+                })
+                .is_ok()
+        );
+    }
+    let buffer = executor.group.rx.allocate_replacement().unwrap();
+    executor.pending_rx = Some(RxCompletion {
+        buffer,
+        packet_len: 60,
+    });
+
+    let outcome = executor.poll(256);
+    assert_eq!(outcome, GroupPollOutcome::Blocked(0));
+    let reports = reports_of(identity);
+    assert_eq!(reports.len(), 1);
+    assert_eq!(reports[0].outcome, QueuePollOutcome::Blocked);
+    assert_eq!(reports[0].work_units, 0);
     publish_queue_poll_gate(false);
 }
 
@@ -1115,40 +1174,80 @@ fn queue_poll_reports_the_work_done_before_a_failed_round() {
     });
 
     let outcome = executor.poll(256);
-    let work = outcome.work();
     assert!(
         matches!(outcome, GroupPollOutcome::Failed(_)),
         "a permanent RX refill error must fail the round"
     );
-    assert!(work > 0, "the round submitted a frame before failing");
+    // The round accepts one submitted frame, one replacement and one reclaimed
+    // completion before the second replacement is rejected, so the expected
+    // work is a constant of this setup rather than a read-back of the value
+    // under test.
+    let expected_work = 3;
+    assert_eq!(
+        outcome.work(),
+        expected_work,
+        "one TX submit, one accepted replacement and one reclaimed frame"
+    );
     let reports = reports_of(identity);
     assert_eq!(reports.len(), 1);
     assert_eq!(reports[0].outcome, QueuePollOutcome::Failed);
     assert_eq!(
-        reports[0].work_units, work,
+        reports[0].work_units, expected_work,
         "a failed round must report the work it completed"
     );
+    assert!(
+        executor.shared.is_disabled(),
+        "a failed round must leave the group disabled"
+    );
     publish_queue_poll_gate(false);
+}
+
+/// Builds an executor with one frame queued, so a plain round does real work
+/// instead of returning an empty `Idle(0)`.
+fn executor_with_one_queued_frame(identity: NetQueueIdentity, trace: Trace) -> QueueGroupExecutor {
+    let (mut transmit, tx_ready) = spsc_ring(2);
+    let executor = port_test_executor(identity, trace, tx_ready);
+    let buffer = executor.group.tx_pool.allocate(60).unwrap();
+    assert!(
+        transmit
+            .push(TxRequest {
+                buffer,
+                options: TxSubmitOptions {
+                    notify: TxNotify::Deferred,
+                    ..Default::default()
+                },
+            })
+            .is_ok()
+    );
+    executor
 }
 
 #[test]
 fn queue_poll_outcome_is_unchanged_by_the_observation_port() {
     let identity = port_identity(3);
     let trace = Arc::new(Mutex::new(Vec::new()));
-    let (_tx, tx_ready) = spsc_ring(2);
-    let mut executor = port_test_executor(identity, Arc::clone(&trace), tx_ready);
+    // Two executors with the same queued work: the comparison has to run on a
+    // round that moves a frame, because two empty rounds agree trivially.
+    let mut closed_executor = executor_with_one_queued_frame(identity, Arc::clone(&trace));
+    let mut open_executor = executor_with_one_queued_frame(identity, Arc::clone(&trace));
 
     let _port = begin_poll_capture(false);
-    let closed = executor.poll(256);
+    let closed = closed_executor.poll(256);
     assert!(
         reports_of(identity).is_empty(),
         "a closed gate must not report"
     );
+    assert!(
+        matches!(closed, GroupPollOutcome::Idle(work) if work > 0),
+        "the compared round must do real work"
+    );
 
     publish_queue_poll_gate(true);
-    let open = executor.poll(256);
-    assert_eq!(reports_of(identity).len(), 1);
+    let open = open_executor.poll(256);
+    let reports = reports_of(identity);
+    assert_eq!(reports.len(), 1);
 
     assert_eq!(closed, open, "observation must not change the poll outcome");
+    assert_eq!(reports[0].work_units, open.work());
     publish_queue_poll_gate(false);
 }

@@ -20,8 +20,11 @@ static EVENTS: PerfEventArray<QueuePollEvent> = PerfEventArray::new(0);
 pub fn net_queue_poll(ctx: TracePointContext) -> u32 {
     const COMMON_LEN: usize = 8;
     let event = QueuePollEvent {
-        // SAFETY: every offset lies inside the entry described by the event's
-        // `format`, which the loader checks before attaching.
+        // SAFETY: the offsets follow the record layout that
+        // `net:queue_poll_round` declares (the generic entry header, then the
+        // fields in declaration order).  The loader attaches by name only and
+        // checks nothing, so changing the event's fields or their order means
+        // updating this program in the same change.
         discovery_order: unsafe { ctx.read_at::<u32>(COMMON_LEN).unwrap_or(0) },
         group_id: unsafe { ctx.read_at::<u32>(COMMON_LEN + 4).unwrap_or(0) },
         owner_cpu: unsafe { ctx.read_at::<u32>(COMMON_LEN + 8).unwrap_or(0) },

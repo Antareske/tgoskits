@@ -1,10 +1,12 @@
 //! Narrow observation port for queue runtime events.
 //!
 //! The port is one typed function-pointer slot installed by the OS adapter and
-//! never replaced or removed.  A report costs one published-flag load when no
-//! consumer is active, and the slot load plus the call when one is; it never
-//! allocates, reads a clock or takes a network lock, so it is safe on the
-//! queue executor path.
+//! never replaced or removed.  Entering it costs one published-flag load while
+//! no consumer is active, and the slot load plus the call when one is; it never
+//! allocates, reads a clock or takes a network lock, so it is safe on the queue
+//! executor path.  The caller assembles the report value before entering, which
+//! the compiler may sink behind the flag check but which the port itself does
+//! not guarantee.
 
 use core::sync::atomic::{AtomicBool, AtomicPtr, Ordering};
 
@@ -13,7 +15,7 @@ use super::NetQueueIdentity;
 /// Result of one queue executor poll round.
 ///
 /// The discriminants are the reported codes and are part of the event
-/// contract: they must not be reordered.
+/// contract: they must not be reordered.  The assertion below pins them.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 #[repr(u32)]
 pub enum QueuePollOutcome {
@@ -21,11 +23,20 @@ pub enum QueuePollOutcome {
     Idle    = 0,
     /// Work remains: a budget was exhausted or retryable RX work is pending.
     More    = 1,
-    /// The round stopped because a ring or replacement buffer was not ready.
+    /// The round stopped because an SPSC ring could not accept a produced
+    /// token.
     Blocked = 2,
     /// The round failed; the group is disabled.
     Failed  = 3,
 }
+
+const _: () = assert!(
+    QueuePollOutcome::Idle as u32 == 0
+        && QueuePollOutcome::More as u32 == 1
+        && QueuePollOutcome::Blocked as u32 == 2
+        && QueuePollOutcome::Failed as u32 == 3,
+    "the reported outcome codes are part of the event contract"
+);
 
 /// One completed queue executor poll round.
 ///

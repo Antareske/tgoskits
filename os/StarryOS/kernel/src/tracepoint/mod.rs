@@ -1,5 +1,6 @@
 //! See Linux Documentation for details: <https://docs.kernel.org/trace/ftrace.html>
 mod control;
+mod gate;
 mod registry;
 mod sched;
 mod sched_filter;

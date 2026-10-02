@@ -1,6 +1,6 @@
 //! See Linux Documentation for details: <https://docs.kernel.org/trace/ftrace.html>
 mod control;
-mod gate;
+pub(crate) mod gate;
 mod net;
 mod registry;
 mod sched;

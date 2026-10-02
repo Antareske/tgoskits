@@ -120,6 +120,10 @@ macro_rules! define_event_trace{
                 entry: [<__ $name _entry>],
             }
 
+            // The generated arity follows the event's field list, so events
+            // with many fields cannot be structured around the argument-count
+            // lint.
+            #[allow(non_snake_case, clippy::too_many_arguments)]
             fn [<encode_ $name _record>](
                 common: $crate::TraceEntry,
                 $($entry: $entry_type),*
@@ -172,7 +176,9 @@ macro_rules! define_event_trace{
             };
 
             #[inline(always)]
-            #[allow(non_snake_case)]
+            // See the note on `encode_<name>_record`: the arity follows the
+            // event's field list.
+            #[allow(non_snake_case, clippy::too_many_arguments)]
             pub fn [<trace_ $name>]( $($arg:$arg_type),* ){
                 let default_handler = |ext_tp: &$crate::ExtTracePoint<$kops>, trace_default_func: &$crate::TraceDefaultFunc |{
                     let func = trace_default_func.erased_func();

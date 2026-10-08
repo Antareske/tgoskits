@@ -475,6 +475,7 @@ dependencies = [
  "ax-alloc",
  "ax-cpu",
  "ax-driver",
+ "ax-fs-ng",
  "ax-hal",
  "ax-memory-addr",
  "ax-mm",

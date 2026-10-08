@@ -108,8 +108,13 @@ pub(super) fn reference_offsets(
         // Empty GPIO/assigned-clock entries occupy one cell without a provider.
         if cells[offset] == 0
             && prefix == 0
-            && (name.starts_with("assigned-clock") || provider_cells == Some("#gpio-cells"))
+            && (name == "next-level-cache"
+                || name.starts_with("assigned-clock")
+                || provider_cells == Some("#gpio-cells"))
         {
+            // A zero next-level-cache is the firmware spelling for a CPU
+            // without a cache provider. Preserve the property, but do not
+            // treat the reserved zero as a source phandle to import.
             cursor += 1;
             continue;
         }

@@ -213,6 +213,34 @@ fn tree_copies_subtree_and_exposes_mutable_inner_tree() {
 }
 
 #[test]
+fn tree_import_accepts_absent_next_level_cache_reference() {
+    let mut source = Fdt::new();
+    let root = source.root_id();
+    let cpus = source.add_node(root, Node::new("cpus"));
+    let cpu = source.add_node(cpus, Node::new("cpu@1"));
+    source
+        .node_mut(cpu)
+        .unwrap()
+        .set_property(prop_u32("next-level-cache", 0));
+
+    let mut dest = FdtTree::new();
+    dest.copy_subtree_from(&source, cpus, dest.inner().root_id(), true)
+        .unwrap();
+
+    let bytes = dest.finish();
+    let reparsed = Fdt::from_bytes(&bytes).unwrap();
+    assert_eq!(
+        reparsed
+            .get_by_path("/cpus/cpu@1")
+            .unwrap()
+            .as_node()
+            .get_property("next-level-cache")
+            .and_then(Property::get_u32),
+        Some(0)
+    );
+}
+
+#[test]
 fn finish_drops_host_header_state_from_guest_dtb() {
     let mut source = Fdt::new();
     source.boot_cpuid_phys = 0x100;

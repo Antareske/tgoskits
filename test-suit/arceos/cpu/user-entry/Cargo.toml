@@ -10,7 +10,7 @@ ax-std = ["dep:ax-std"]
 
 [dependencies]
 ax-alloc = { workspace = true, features = ["global-allocator"] }
-ax-cpu = { workspace = true, features = ["uspace", "pmu", "kernel-access"] }
+ax-cpu = { workspace = true, features = ["uspace", "pmu"] }
 ax-std = { workspace = true, optional = true, default-features = false, features = ["alloc", "paging", "uspace", "ipi", "smp"] }
 
 [package.metadata.docs.rs]

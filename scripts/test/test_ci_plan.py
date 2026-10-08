@@ -1218,6 +1218,35 @@ class CiPlanTests(unittest.TestCase):
             "--board orangepi-5-plus",
         )
 
+    def test_generic_driver_suite_routes_source_and_rejects_missing_cases(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            case = root / "test-suit/arceos/drivers/packet-link"
+            (case / "src").mkdir(parents=True)
+            (case / "build-x86_64-unknown-none.toml").write_text("features = []\n")
+            (case / "qemu-x86_64.toml").write_text("args = []\n")
+            source = "test-suit/arceos/drivers/packet-link/src/main.rs"
+            (root / source).write_text("fn main() {}\n")
+            registration = {"kind": "arceos-qemu", "arch": "x86_64", "group": "drivers"}
+            checks = [{"id": "driver-suite", "name": "drivers", "suite": [registration]}]
+
+            ci_plan._validate_suite_registrations([registration], "synthetic")
+            with self.assertRaisesRegex(ci_plan.PlanError, "unsupported"):
+                ci_plan._validate_suite_registrations(
+                    [{**registration, "group": []}], "synthetic"
+                )
+            ci_plan.validate_suite_catalog(root, checks)
+            selection, = ci_plan.resolve_suite_selections(root, checks, [source])
+            self.assertEqual(selection.template_id, "driver-suite")
+            self.assertEqual(
+                selection.command,
+                "cargo xtask arceos test qemu --arch x86_64 "
+                "--test-group drivers --test-case packet-link",
+            )
+            registration["cases"] = ["missing-endpoint"]
+            with self.assertRaisesRegex(ci_plan.SuiteRouteError, "missing"):
+                ci_plan.validate_suite_catalog(root, checks)
+
     def test_cpu_vmx_suite_routes_to_the_registered_cpu_case(self) -> None:
         path = "test-suit/arceos/cpu/guest-entry/qemu-x86_64-vmx.toml"
         context = ci_plan.PlanContext(

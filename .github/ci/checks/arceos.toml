@@ -136,6 +136,22 @@ arch = "x86_64"
 group = "cpu"
 
 [[check]]
+id = "test-arceos-drivers-x86-64"
+impact_targets = ["arceos:x86_64"]
+name = "QEMU x86_64 · Portable driver contracts"
+runner = "qcs"
+timeout_minutes = 30
+cache_key = ""
+command = '''
+cargo xtask arceos test qemu --arch x86_64 --test-group drivers
+'''
+
+[[check.suite]]
+kind = "arceos-qemu"
+arch = "x86_64"
+group = "drivers"
+
+[[check]]
 id = "test-arceos-cpu-orangepi-5-plus"
 impact_targets = ["arceos:aarch64"]
 name = "Board OrangePi 5 Plus · CPU PMU"

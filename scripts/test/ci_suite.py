@@ -19,6 +19,7 @@ SUPPORTED_SUITE_KINDS = {
     "axvisor-board",
 }
 SUITE_FIELDS = {"kind", "arch", "board", "cases", "group"}
+ARCEOS_GENERIC_QEMU_GROUPS = {"cpu", "drivers"}
 SUITE_ROOTS = {
     "arceos": Path("test-suit/arceos"),
     "starry": Path("test-suit/starryos"),
@@ -113,12 +114,13 @@ def validate_suite_catalog(
             continue
         if kind == "arceos-qemu":
             arch = registration["arch"]
-            if registration.get("group") == "cpu":
-                cases = _discover_runtime_cases(workspace_root / SUITE_ROOTS["arceos"] / "cpu", "arceos")
+            group = registration.get("group")
+            if group in ARCEOS_GENERIC_QEMU_GROUPS:
+                cases = _discover_runtime_cases(workspace_root / SUITE_ROOTS["arceos"] / group, "arceos")
                 present = {case.case for case in cases if case.arch == arch}
                 required = set(registration.get("cases", present))
                 if not required or required - present:
-                    raise SuiteRouteError(f"check '{check['id']}' registers missing CPU cases: {sorted(required - present)}")
+                    raise SuiteRouteError(f"check '{check['id']}' registers missing {group} cases: {sorted(required - present)}")
                 continue
             runtime = (
                 workspace_root / SUITE_ROOTS["arceos"] / "rust" / f"qemu-{arch}.toml"
@@ -216,11 +218,12 @@ def _selections_for_path(
 ) -> list[SuiteSelection]:
     if _is_prefix(path, SUITE_ROOTS["arceos"]):
         relative = path.relative_to(SUITE_ROOTS["arceos"])
-        if relative.parts and relative.parts[0] == "cpu":
-            root = workspace_root / SUITE_ROOTS["arceos"] / "cpu"
+        if relative.parts and relative.parts[0] in ARCEOS_GENERIC_QEMU_GROUPS:
+            group = relative.parts[0]
+            root = workspace_root / SUITE_ROOTS["arceos"] / group
             cases = _discover_runtime_cases(root, "arceos")
             return _runtime_selections(registrations, path,
-                _matching_runtime_cases(cases, workspace_root / path), suite_group="cpu")
+                _matching_runtime_cases(cases, workspace_root / path), suite_group=group)
         if relative.parts and relative.parts[0].startswith("board-"):
             return _discovered_selections(workspace_root, registrations, path, "arceos")
         return _arceos_selections(registrations, path)

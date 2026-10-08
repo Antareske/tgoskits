@@ -21,6 +21,7 @@ from ci_runner_profiles import (
     load_runner_profiles,
 )
 from ci_suite import (
+    ARCEOS_GENERIC_QEMU_GROUPS,
     SUITE_FIELDS,
     SUPPORTED_SUITE_KINDS,
     SuiteRouteError,
@@ -523,7 +524,11 @@ def _validate_suite_registrations(suite: Any, location: str) -> None:
         if kind not in SUPPORTED_SUITE_KINDS:
             raise PlanError(f"{suite_location} has an unsupported kind")
         group = registration.get("group")
-        if group is not None and (kind != "arceos-qemu" or group != "cpu"):
+        if group is not None and (
+            kind != "arceos-qemu"
+            or not isinstance(group, str)
+            or group not in ARCEOS_GENERIC_QEMU_GROUPS
+        ):
             raise PlanError(f"{suite_location} has unsupported ArceOS group")
         is_qemu = kind.endswith("-qemu")
         arch = registration.get("arch")

@@ -126,6 +126,7 @@ members = [
     "test-suit/arceos/cpu/trap-entry",
     "test-suit/arceos/axtest/sg2002-usb-msc",
     "test-suit/arceos/rust",
+    "test-suit/arceos/drivers/acpica-interpreter",
     "apps/arceos/*",
     "benchmarks/axvisor/board-orangepi-5-plus/vcpu-perf/guest",
     "apps/starry/qemu/rust-hello/rust",
@@ -140,6 +141,7 @@ exclude = [
 ]
 
 [workspace.dependencies]
+cc = "1"
 ax-sched = { path = "components/axsched", version = "0.5.11" }
 # Local workspace crates
 # Keep local dependency requirements at major.minor precision so release-plz does not
@@ -222,6 +224,7 @@ x86-apic-driver = { version = "0.2", path = "drivers/intc/x86-apic-driver" }
 eth-intel = { version = "0.2", path = "drivers/net/eth-intel" }
 riscv_vplic = { version = "0.5", path = "virtualization/riscv_vplic" }
 nvme-driver = { version = "0.8", path = "drivers/blk/nvme-driver" }
+acpica-interpreter = { version = "0.1", path = "drivers/firmware/acpica-interpreter" }
 pcie = { version = "0.7", path = "drivers/pci/pcie" }
 rd-net = { version = "0.3", path = "drivers/net/rd-net" }
 rdif-base = { version = "0.9", path = "drivers/interface/rdif-base" }

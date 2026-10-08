@@ -73,6 +73,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "acpica-interpreter"
+version = "0.1.0"
+dependencies = [
+ "cc",
+]
+
+[[package]]
 name = "addr2line"
 version = "0.25.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -466,6 +473,16 @@ dependencies = [
  "ax-runtime",
  "ax-std",
  "rockchip-soc",
+]
+
+[[package]]
+name = "arceos-test-acpica-interpreter"
+version = "0.1.0"
+dependencies = [
+ "acpica-interpreter",
+ "ax-alloc",
+ "ax-hal",
+ "ax-std",
 ]
 
 [[package]]

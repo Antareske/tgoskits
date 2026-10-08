@@ -109,6 +109,14 @@ const VIRTIO_GPU_FEATURE_PROFILES: &[PackageFeatureProfile] = &[PackageFeaturePr
     ],
 }];
 
+const ACPICA_FEATURE_PROFILES: &[PackageFeatureProfile] = &[PackageFeatureProfile {
+    name: "host-test",
+    no_default_features: false,
+    features: &["host-test"],
+    name_filter: None,
+    expected_tests: &["production_interpreter_loads_and_evaluates_authored_aml"],
+}];
+
 const HOST_TEST_FEATURE_PROFILES: &[PackageFeatureProfile] = &[PackageFeatureProfile {
     name: "host-test",
     no_default_features: false,
@@ -567,6 +575,7 @@ fn package_feature_profiles(package: &str) -> Option<&'static [PackageFeaturePro
         "ax-hal" => Some(AX_HAL_FEATURE_PROFILES),
         "ax-driver" => Some(AX_DRIVER_FEATURE_PROFILES),
         "nvme-driver" => Some(NVME_FEATURE_PROFILES),
+        "acpica-interpreter" => Some(ACPICA_FEATURE_PROFILES),
         "sdmmc-protocol" => Some(SDMMC_RDIF_FEATURE_PROFILES),
         "aic8800" => Some(AIC8800_FEATURE_PROFILES),
         "axbuild" => Some(AXBUILD_FEATURE_PROFILES),

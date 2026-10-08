@@ -34,7 +34,7 @@ type SearchCheck<'a> = Option<&'a dyn Fn(&Location) -> VfsResult<()>>;
 pub const SYMLINKS_MAX: usize = 40;
 
 /// Global root filesystem context, initialized once during [`init_filesystems`](crate::init_filesystems).
-pub static ROOT_FS_CONTEXT: OnceLock<FsContext> = OnceLock::new();
+pub static ROOT_FS_CONTEXT: OnceLock<Arc<Mutex<FsContext>>> = OnceLock::new();
 
 /// Registry of all live `FsContext` instances (weak references).
 ///
@@ -52,7 +52,9 @@ fn register_fs_context(ctx: &Arc<Mutex<FsContext>>) {
     let mut registry = FS_REGISTRY.lock();
     // Prune dead weak references so the registry does not grow unboundedly
     // in long-running scenarios where pivot_root is never invoked.
-    registry.retain(|weak| weak.upgrade().is_some());
+    // Inspect the count without temporarily owning a context: releasing its
+    // last strong reference may destroy filesystem state and take other locks.
+    registry.retain(|weak| weak.strong_count() != 0);
     registry.push(Arc::downgrade(ctx));
 }
 
@@ -62,7 +64,7 @@ fn register_fs_context(ctx: &Arc<Mutex<FsContext>>) {
 pub fn is_mount_busy(mp: &Arc<Mountpoint>) -> bool {
     let refs: Vec<Arc<Mutex<FsContext>>> = {
         let mut registry = FS_REGISTRY.lock();
-        registry.retain(|weak| weak.upgrade().is_some());
+        registry.retain(|weak| weak.strong_count() != 0);
         registry.iter().filter_map(|weak| weak.upgrade()).collect()
     };
     for ctx_arc in refs {
@@ -137,6 +139,7 @@ scope_local::scope_local! {
         ROOT_FS_CONTEXT
             .get()
             .expect("Root FS context not initialized")
+            .lock()
             .clone()
             .into_shared()
     );
@@ -196,7 +199,11 @@ impl FsContext {
     pub fn new(root_dir: Location) -> Self {
         #[cfg(feature = "vfs")]
         {
-            let mnt_ns = Arc::new(MountNamespace::new(root_dir.mountpoint().clone()));
+            let mut anchor = root_dir.mountpoint().clone();
+            while let Some(parent) = anchor.location() {
+                anchor = parent.mountpoint().clone();
+            }
+            let mnt_ns = Arc::new(MountNamespace::new(anchor));
             Self::new_in_namespace(mnt_ns, root_dir)
         }
         #[cfg(not(feature = "vfs"))]
@@ -290,7 +297,7 @@ impl FsContext {
             .as_ref()
             .map(Location::absolute_path)
             .transpose()?;
-        let new_root_loc = new_ns.root_mount().root_location();
+        let new_root_loc = new_ns.root_mount().root_location().resolve_mountpoint();
         let resolver = Self::new_in_namespace(new_ns.clone(), new_root_loc);
         let root_dir = resolver.resolve(root_path)?;
         let current_dir = resolver.resolve(current_path)?;
@@ -1467,7 +1474,7 @@ impl FsContext {
         //    release it so we never nest two PI mutex guards.
         let refs: Vec<Arc<Mutex<FsContext>>> = {
             let mut registry = FS_REGISTRY.lock();
-            registry.retain(|weak| weak.upgrade().is_some());
+            registry.retain(|weak| weak.strong_count() != 0);
             registry.iter().filter_map(|weak| weak.upgrade()).collect()
         };
 

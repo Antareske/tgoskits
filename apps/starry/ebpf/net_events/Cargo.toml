@@ -1,0 +1,28 @@
+[workspace]
+resolver = "2"
+members = [
+    "net_events",
+    "net_events-common",
+    "net_events-ebpf",
+]
+default-members = ["net_events", "net_events-common"]
+
+[workspace.package]
+license = "MIT OR Apache-2.0"
+edition = "2024"
+
+# Pinned to the revision the in-tree `net_queue_poll` app is locked to: it
+# attaches tracepoints through the perf event path this kernel implements.
+[workspace.dependencies]
+aya = { git = "https://github.com/aya-rs/aya", rev = "2a07daa48ae467480d7a456710ecd6bc7b1dd6c8", default-features = false }
+aya-build = { git = "https://github.com/aya-rs/aya", rev = "2a07daa48ae467480d7a456710ecd6bc7b1dd6c8", default-features = false }
+aya-ebpf = { git = "https://github.com/aya-rs/aya", rev = "2a07daa48ae467480d7a456710ecd6bc7b1dd6c8", default-features = false }
+
+anyhow = { version = "1", default-features = false }
+cargo_metadata = { version = "0.23.0", default-features = false }
+libc = { version = "0.2.159", default-features = false }
+which = { version = "6.0.0", default-features = false }
+
+[profile.release.package.net_events-ebpf]
+debug = 2
+codegen-units = 1

@@ -5,16 +5,17 @@
 //! whenever one is asked for.  One shell is enough:
 //!
 //! ```text
-//! net-events &          attach, print a baseline, hand the prompt back
+//! net-events &          attach, print reading [1], hand the prompt back
 //! iperf3 -c <peer>      the load, run by hand and timed by hand
-//! kill -USR1 %1         a reading of the window since the baseline
+//! kill -USR1 %1         the next reading: the window since the last one
 //! kill %1               detach and exit
 //! ```
 //!
-//! Every reading describes the window since the previous one: the kernel's
-//! counters are cumulative, so the loader subtracts the values it printed last.
-//! A reading counts what the events reported, not what the interface carried —
-//! a disabled or dropped record is simply absent.
+//! Every print has the same shape, the first one included: reading [1] is the
+//! moment of the attach, and each later reading is the window after the one
+//! before it.  The kernel's counters are cumulative, so the loader subtracts
+//! what it printed last.  A reading counts what the events reported, not what
+//! the interface carried — a disabled or dropped record is simply absent.
 
 use std::{
     io::{BufRead as _, BufReader},
@@ -84,46 +85,23 @@ fn main() -> anyhow::Result<()> {
     install_signal_handlers();
     watch_stdin();
 
-    let pid = std::process::id();
-    println!(
-        "net-events: attached {} net:* tracepoint(s) through the perf/BPF gate",
-        selected.len()
-    );
-    println!("  {}", names(&selected));
-    println!("  enable state read back: {}", gate_states(&selected));
-    println!("  pid {pid}");
-    println!("  ask for a reading: kill -USR1 {pid}   (or press Enter in the foreground)");
-    println!("  this tool never generates traffic: run iperf3 yourself, then ask again");
-    println!();
-    println!("  each reading shows the cumulative count and the window's growth since");
-    println!("  the previous one.  Events can be disabled or dropped, so a reading does");
-    println!("  not replace the counters in /sys/kernel/debug/net_queue or /proc/net/dev.");
-
-    // The baseline is printed here rather than inside the loop: it labels the
-    // moment of the attach, and everything after it is a window.
-    let baseline = read_counters(&counters);
-    print_baseline(&baseline, &selected);
-    let mut previous = baseline;
-    let mut index = 1usize;
+    let mut previous = vec![0u64; COUNTER_SLOTS as usize];
+    let mut index = 0usize;
     let mut mark = Instant::now();
     loop {
         let stopping = STOPPING.load(Ordering::SeqCst);
         let requested = REQUESTED.swap(false, Ordering::SeqCst);
-        if !stopping && !requested {
+        // The first pass prints reading [1] without waiting for a trigger, so
+        // the attach is announced by a reading and nothing else; every later
+        // pass is a trigger.
+        if index > 0 && !stopping && !requested {
             thread::sleep(Duration::from_millis(50));
             continue;
         }
 
         let current = read_counters(&counters);
         index += 1;
-        print_reading(
-            index,
-            mark.elapsed(),
-            &current,
-            &previous,
-            &selected,
-            stopping,
-        );
+        print_reading(index, mark.elapsed(), &current, &previous, &selected);
         previous = current;
         mark = Instant::now();
         if stopping {
@@ -184,14 +162,6 @@ fn known_names() -> String {
         .join(" ")
 }
 
-fn names(events: &[&EventSpec]) -> String {
-    events
-        .iter()
-        .map(|event| event.name)
-        .collect::<Vec<_>>()
-        .join(" ")
-}
-
 /// Check the tracepoint exists and declares the fields the offsets assume, in
 /// the order they are read.
 fn verify_event(spec: &EventSpec) -> anyhow::Result<()> {
@@ -211,23 +181,6 @@ fn verify_event(spec: &EventSpec) -> anyhow::Result<()> {
         cursor = at + field.len();
     }
     Ok(())
-}
-
-/// What the kernel reads back for each event's gate after the attach.  The perf
-/// attach is what flipped it, so this is the enable state the events are really
-/// in rather than a claim the tool makes about itself.
-fn gate_states(events: &[&EventSpec]) -> String {
-    events
-        .iter()
-        .map(|event| {
-            let path = format!("{EVENTS_ROOT}/net/{}/enable", event.name);
-            let state = std::fs::read_to_string(&path)
-                .map(|text| text.trim().to_string())
-                .unwrap_or_else(|_| "?".to_string());
-            format!("{}={state}", event.name)
-        })
-        .collect::<Vec<_>>()
-        .join(" ")
 }
 
 fn install_signal_handlers() {
@@ -295,35 +248,28 @@ fn read_counters(counters: &CounterTable) -> Vec<u64> {
         .collect()
 }
 
-/// Print the reading taken at the moment of the attach.  It is a marker rather
-/// than a measurement: everything after it is a window.
-fn print_baseline(current: &[u64], events: &[&EventSpec]) {
-    println!();
-    println!("[1] baseline — attached, nothing counted yet");
-    let counted: Vec<String> = events
-        .iter()
-        .map(|spec| format!("{}={}", spec.name, current[spec.base as usize]))
-        .collect();
-    println!("  {}", counted.join("  "));
-}
-
 /// Print one reading: the cumulative total with the window's growth beside it,
 /// and the window's own numbers spelled out per event.
+///
+/// Every reading has this shape; the first one carries no window, because
+/// there is nothing before it to measure from.
 fn print_reading(
     index: usize,
     elapsed: Duration,
     current: &[u64],
     previous: &[u64],
     events: &[&EventSpec],
-    stopping: bool,
 ) {
     println!();
-    println!(
-        "[{index}] +{:.1}s since [{}]{}",
-        elapsed.as_secs_f64(),
-        index - 1,
-        if stopping { ", final reading" } else { "" }
-    );
+    if index == 1 {
+        println!("[1]");
+    } else {
+        println!(
+            "[{index}] +{:.1}s since [{}]",
+            elapsed.as_secs_f64(),
+            index - 1
+        );
+    }
 
     for spec in events {
         let base = spec.base as usize;

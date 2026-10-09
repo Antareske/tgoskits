@@ -5,11 +5,13 @@
 ## 用法
 
 ```sh
-net-events &          # 装载六个事件，打印基线，提示符立刻回来
+net-events &          # 装载六个事件，打印第一份读数，提示符立刻回来
 iperf3 -c <对端>      # 你自己敲的命令
-kill -USR1 %1         # 打一份读数：累计值 + 相对上一份的窗口增量
-kill %1               # 分离退出（退出前再打一份终读数）
+kill -USR1 %1         # 打印下一份读数：累计值 + 相对上一份的窗口增量
+kill %1               # 分离退出（退出前再打一份读数）
 ```
+
+屏幕上从头到尾只有读数：装载后打印 `[1]`，之后每次触发打印一份同样形状的读数，没有启动横幅、没有单独的基线块。
 
 前台运行时回车也可触发；板卡场景下 PC 侧打流量、板子控制台按回车出读数即可。
 
@@ -23,43 +25,35 @@ net-events --help
 客户机 x86_64 QEMU（`-smp 4`）的一次运行，流量是客户机里手敲的一轮 `iperf3 -c 10.0.2.2 -t 3`（宿主对端跑 `iperf3 -s`）：
 
 ```text
-net-events: attached 6 net:* tracepoint(s) through the perf/BPF gate
-  queue_poll_round queue_rearm queue_backpressure tx_submit rx_publish proto_yield
-  enable state read back: queue_poll_round=1 queue_rearm=1 queue_backpressure=1 tx_submit=1 rx_publish=1 proto_yield=1
-  pid 166
-  ask for a reading: kill -USR1 166   (or press Enter in the foreground)
-  this tool never generates traffic: run iperf3 yourself, then ask again
-
-  each reading shows the cumulative count and the window's growth since
-  the previous one.  Events can be disabled or dropped, so a reading does
-  not replace the counters in /sys/kernel/debug/net_queue or /proc/net/dev.
-
-[1] baseline — attached, nothing counted yet
-  queue_poll_round=19  queue_rearm=10  queue_backpressure=0  tx_submit=366  rx_publish=354  proto_yield=12
-
-[2] +3.0s since [1]
-  queue_poll_round           1195        +1176   idle=1176 more=0 blocked=0 failed=0   work_units=117855 (100.2/round)
-  queue_rearm                 628         +618   race=618 work_pending=0 retry_at=0 failed=0
+[1]
+  queue_poll_round             10          +10   idle=10 more=0 blocked=0 failed=0   work_units=540 (54.0/round)
+  queue_rearm                   4           +4   race=4 work_pending=0 retry_at=0 failed=0
   queue_backpressure            0           +0   not driven in this window (needs a busy device)
-  tx_submit                 23862       +23496   frames=23496 bytes=35481514 (avg 1510 B/frame)
-  rx_publish                23873       +23519   frames=23519 bytes=1270357 (avg 54 B/frame)
-  proto_yield                 655         +643   poll_count=0 deadline=643 both=0   work_pending=602
+  tx_submit                   134         +134   frames=134 bytes=204390 (avg 1525 B/frame)
+  rx_publish                  114         +114   frames=114 bytes=6210 (avg 54 B/frame)
+  proto_yield                   4           +4   poll_count=0 deadline=4 both=0   work_pending=3
 
-[3] +1.1s since [2], final reading
-  queue_poll_round           1195           +0   not seen in this window
-  queue_rearm                 628           +0   not driven in this window (needs a race at rearm)
+[2] +3.1s since [1]
+  queue_poll_round           1353        +1343   idle=1343 more=0 blocked=0 failed=0   work_units=127095 (94.6/round)
+  queue_rearm                 698         +694   race=692 work_pending=2 retry_at=0 failed=0
   queue_backpressure            0           +0   not driven in this window (needs a busy device)
-  tx_submit                 23862           +0   not seen in this window
-  rx_publish                23873           +0   not seen in this window
-  proto_yield                 655           +0   not seen in this window
-NET_EVENTS_PASSED
+  tx_submit                 25466       +25332   frames=25332 bytes=38253143 (avg 1510 B/frame)
+  rx_publish                25470       +25356   frames=25356 bytes=1369501 (avg 54 B/frame)
+  proto_yield                 709         +705   poll_count=0 deadline=705 both=0   work_pending=640
+
+[3] +1.0s since [2]
+  queue_poll_round           1353           +0   not seen in this window
+  queue_rearm                 698           +0   not driven in this window (needs a race at rearm)
+  queue_backpressure            0           +0   not driven in this window (needs a busy device)
+  tx_submit                 25466           +0   not seen in this window
+  rx_publish                25470           +0   not seen in this window
+  proto_yield                 709           +0   not seen in this window
 ```
 
 这一屏把 iperf3 的流量形状说清楚了：发送侧 23496 帧、平均 1510 字节（满载数据帧），接收侧 23519 帧、平均 54 字节（14 以太网 + 20 IP + 20 TCP 的纯 ACK），队列每轮做 100 个工作单位、618 次 rearm 全部是竞态结局，协议执行器让出 643 次、其中 602 次仍有工作。
 
 和接口侧对得上：宿主 `iperf3 -s` 报收到 34.0 MB，而事件里的发送字节是 35.5 MB，差额是逐帧的以太网/IP/TCP 头部。
 
-基线不是绝对零：附着完成到读基线之间已经可能有记录落进来（上面那次是 366 帧），读数是「自这一步起」的窗口。
 
 ## 状态
 
@@ -67,7 +61,8 @@ NET_EVENTS_PASSED
 
 ## 设计要点
 
-- **挂载即开闸**：perf 事件附着本身就是打开该事件 gate 的动作，不需要写 tracefs 的 `enable`。装载后工具把每个事件的 `enable` 读回来打印，作为「闸确实开了」的观察量，而不是工具的自我声明。
+- **挂载即开闸**：perf 事件附着本身就是打开该事件 gate 的动作，不需要写 tracefs 的 `enable`。
+- **输出只有读数**：装载后立刻打印第一份读数，之后每次触发打印一份同样形状的读数；没有启动横幅、没有基线块，屏幕上从头到尾都是同一形态的读数。
 - **附着前校验字段顺序**：读取每个事件的 `format`，确认它声明的字段与 eBPF 程序按偏移读取的顺序一致；不一致就拒绝挂载。字段挪位而偏移照读，会把邻居的字节当成合法读数。
 - **每个读数是窗口口径**：内核里是累计计数，打印时减去上一份。帧长记「帧数 + 字节数」，窗口平均帧长由增量算——全局 min/max 描述的是「自挂载以来」，跨窗口会误导。
 - **计数按 owner_cpu 分区**：见下节。

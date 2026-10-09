@@ -64,6 +64,10 @@ pub(crate) fn create_guest_fdt(
     })?;
     prune_cpu_references(fdt, &mut guest_tree)?;
     super::disabled::apply(&mut guest_tree, crate_config)?;
+    // With vCPU over-subscription (more guest vCPUs than host physical CPUs)
+    // the host FDT does not carry a CPU node for every guest virtual CPU id,
+    // so clone the missing ones to keep the guest SMP bootstrap functional.
+    guest_tree.ensure_guest_cpu_nodes(fdt, phys_cpu_ids)?;
     Ok(guest_tree.finish())
 }
 
@@ -603,7 +607,7 @@ pub(crate) fn calculate_dtb_load_addr(vm: AxVMRef, fdt_size: usize) -> AxVmResul
 
 #[cfg(test)]
 mod tests {
-    use std::sync::Arc;
+    use std::{collections::BTreeMap, sync::Arc};
 
     use axdevice::*;
     use axdevice_base::{
@@ -1338,5 +1342,102 @@ mod tests {
                 "{property_name} references missing guest phandle {phandle:#x}"
             );
         }
+    }
+
+    /// Builds a host FDT that advertises its CPUs with `phandle` and a
+    /// `/cpus/cpu-map` referencing them.
+    fn host_fdt_with_cpu_map_phandles() -> Fdt {
+        let mut fdt = Fdt::new();
+        let root = fdt.root_id();
+        let cpus = fdt.add_node(root, Node::new("cpus"));
+        fdt.node_mut(cpus)
+            .unwrap()
+            .set_property(prop_u32("#address-cells", 1));
+        fdt.node_mut(cpus)
+            .unwrap()
+            .set_property(prop_u32("#size-cells", 0));
+        let cpu_map = fdt.add_node(cpus, Node::new("cpu-map"));
+
+        for (cluster_name, cpu_name, reg, phandle) in [
+            ("cluster0", "cpu@0", 0u64, 7u32),
+            ("cluster1", "cpu@100", 0x100, 8),
+        ] {
+            let cluster = fdt.add_node(cpu_map, Node::new(cluster_name));
+            let core = fdt.add_node(cluster, Node::new("core0"));
+            fdt.node_mut(core)
+                .unwrap()
+                .set_property(prop_u32("cpu", phandle));
+
+            let cpu = fdt.add_node(cpus, Node::new(cpu_name));
+            let node = fdt.node_mut(cpu).unwrap();
+            node.set_property(prop_string("device_type", "cpu"));
+            node.set_property(prop_string("enable-method", "psci"));
+            node.set_property(prop_u32("phandle", phandle));
+            fdt.view_typed_mut(cpu)
+                .unwrap()
+                .set_regs(&[RegInfo::new(reg, None)]);
+        }
+
+        fdt
+    }
+
+    fn phandle_owners(fdt: &Fdt) -> std::vec::Vec<(u32, std::string::String)> {
+        fdt.iter_node_ids()
+            .filter_map(|node_id| {
+                let node = fdt.node(node_id)?;
+                let phandle = node
+                    .get_property("phandle")
+                    .or_else(|| node.get_property("linux,phandle"))
+                    .and_then(Property::get_u32)?;
+                Some((phandle, fdt.path_of(node_id)))
+            })
+            .collect()
+    }
+
+    fn cpu_phandle(fdt: &Fdt, path: &str) -> u32 {
+        fdt.get_by_path(path)
+            .unwrap_or_else(|| panic!("{path} is missing"))
+            .as_node()
+            .get_property("phandle")
+            .and_then(Property::get_u32)
+            .unwrap_or_else(|| panic!("{path} has no phandle"))
+    }
+
+    #[test]
+    fn generated_fdt_over_subscription_keeps_cpu_phandles_unique_and_drops_host_cpu_map() {
+        let host = host_fdt_with_cpu_map_phandles();
+        let cfg = GuestConfig {
+            base: axvmconfig::VMBaseConfig {
+                phys_cpu_ids: Some(std::vec![0, 1, 2]),
+                ..Default::default()
+            },
+            ..Default::default()
+        };
+
+        let dtb = super::create_guest_fdt(&host, &[], &cfg, &[]).unwrap();
+        let guest = Fdt::from_bytes(&dtb).unwrap();
+
+        // `cpu@1` and `cpu@2` have no host CPU node, so they are cloned from
+        // `cpu@0` and must not inherit its phandle.
+        let mut seen = BTreeMap::new();
+        for (phandle, path) in phandle_owners(&guest) {
+            let previous = seen.insert(phandle, path.clone());
+            assert!(
+                previous.is_none(),
+                "phandle {phandle:#x} is defined by both {previous:?} and {path}"
+            );
+        }
+        assert_eq!(cpu_phandle(&guest, "/cpus/cpu@0"), 7);
+        let first = cpu_phandle(&guest, "/cpus/cpu@1");
+        let second = cpu_phandle(&guest, "/cpus/cpu@2");
+        assert!(
+            first > 8 && second > 8,
+            "clones reused a host phandle: {first:#x} and {second:#x}"
+        );
+        assert_ne!(first, second);
+
+        // CPU projection drops the host-only `cpu-map`; guest startup
+        // enumerates the projected CPU nodes by their `reg` values instead.
+        assert!(guest.get_by_path_id("/cpus/cpu-map").is_none());
     }
 }
